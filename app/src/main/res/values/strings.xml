@@ -1,5 +1,0 @@
-<resources>
-    <string name="app_name">My Application</string>
-    <string name="hello_w">0</string>
-    <string name="random_heading">"Это случайное чесло от 0 до %1d"</string>
-</resources>
