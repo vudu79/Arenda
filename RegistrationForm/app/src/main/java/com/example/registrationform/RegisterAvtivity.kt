@@ -39,56 +39,56 @@ class RegisterAvtivity : AppCompatActivity() {
     }
 
     fun onClickDone(view: View) {
-        val intent = Intent()
-        when (state) {
-            Constants.SING_UP -> {
-                if (binding.etLogin.text.toString().isNotEmpty()
-                    && binding.edPass.text.toString().isNotEmpty()
-                    && binding.etName.text.toString().isNotEmpty()
-                    && binding.etLastName.text.toString().isNotEmpty()
-                ) {
-                    Log.d("myTag", binding.etLogin.text.toString())
-                    val user = User(
-                        binding.etLogin.text.toString(),
-                        binding.edPass.text.toString(),
-                        binding.etName.text.toString(),
-                        binding.etLastName.text.toString()
-                    )
-                    intent.putExtra(Constants.SING_STATE, Constants.SING_UP)
-                    intent.putExtra(Constants.USER, user)
-                    setResult(RESULT_OK, intent)
-                    finish()
-                } else {
-                    val toast = Toast.makeText(
-                        applicationContext,
-                        "Все поля должны быть заполнены!",
-                        Toast.LENGTH_SHORT
-                    )
-                    toast.show()
-                }
-            }
-
-
-            Constants.SING_IN -> {
-                if (binding.etLogin.text.toString().isNotEmpty()
-                    && binding.edPass.text.toString().isNotEmpty()
-                ){
-                    val creds = Creds(binding.etLogin.toString(), binding.edPass.toString())
-                    intent.putExtra(Constants.SING_STATE, Constants.SING_IN)
-                    intent.putExtra(Constants.CREDS, creds)
-                    setResult(RESULT_OK, intent)
-                    finish()
-                }else{
-                    val toast = Toast.makeText(
-                        applicationContext,
-                        "Все поля должны быть заполнены!",
-                        Toast.LENGTH_SHORT
-                    )
-                    toast.show()
-                }
-
-            }
-        }
+//        val intent = Intent()
+//        when (state) {
+//            Constants.SING_UP -> {
+//                if (binding.etLogin.text.toString().isNotEmpty()
+//                    && binding.edPass.text.toString().isNotEmpty()
+//                    && binding.etName.text.toString().isNotEmpty()
+//                    && binding.etLastName.text.toString().isNotEmpty()
+//                ) {
+//                    Log.d("myTag", binding.etLogin.text.toString())
+//                    val user = User(
+//                        binding.etLogin.text.toString(),
+//                        binding.edPass.text.toString(),
+//                        binding.etName.text.toString(),
+//                        binding.etLastName.text.toString()
+//                    )
+//                    intent.putExtra(Constants.SING_STATE, Constants.SING_UP)
+//                    intent.putExtra(Constants.USER, user)
+//                    setResult(RESULT_OK, intent)
+//                    finish()
+//                } else {
+//                    val toast = Toast.makeText(
+//                        applicationContext,
+//                        "Все поля должны быть заполнены!",
+//                        Toast.LENGTH_SHORT
+//                    )
+//                    toast.show()
+//                }
+//            }
+//
+//
+//            Constants.SING_IN -> {
+//                if (binding.etLogin.text.toString().isNotEmpty()
+//                    && binding.edPass.text.toString().isNotEmpty()
+//                ){
+//                    val creds = Creds(binding.etLogin.toString(), binding.edPass.toString())
+//                    intent.putExtra(Constants.SING_STATE, Constants.SING_IN)
+//                    intent.putExtra(Constants.CREDS, creds)
+//                    setResult(RESULT_OK, intent)
+//                    finish()
+//                }else{
+//                    val toast = Toast.makeText(
+//                        applicationContext,
+//                        "Все поля должны быть заполнены!",
+//                        Toast.LENGTH_SHORT
+//                    )
+//                    toast.show()
+//                }
+//
+//            }
+//        }
 
 
     }

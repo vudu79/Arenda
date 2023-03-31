@@ -1,50 +1,50 @@
 package com.example.registrationform
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.registrationform.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var bindingClass : ActivityMainBinding
-
-    private var launcher : ActivityResultLauncher<Intent>? = null
-    lateinit var user: User
+    private lateinit var bindingClass: ActivityMainBinding
+    private val adapter = ApartmentRCAdapter()
+    private var launcher: ActivityResultLauncher<Intent>? = null
+    lateinit var apatmant: Apartmant
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingClass = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindingClass.root)
 
-        launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            result: ActivityResult ->
-            if (result.resultCode == RESULT_OK){
-                val state = result.data?.getStringExtra(Constants.SING_STATE)
-                if (state == Constants.SING_UP){
-                    user = result.data!!.getSerializableExtra(Constants.USER) as User
-                    bindingClass.tvResult.text = "${user.name} ${user.lastName} ${user.login} ${user.password}"
-                } else if (state == Constants.SING_IN){
-                    bindingClass.tvResult.text = "${user.login} ${user.password}"
+        launcher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                if (result.resultCode == RESULT_OK) {
+                    val state = result.data?.getStringExtra(Constants.NEW_APATMANT)
+                    if (state == Constants.SING_UP) {
+                        apatmant = result.data!!.getSerializableExtra(Constants.USER) as Apartmant
+                        addApatmant(apatmant)
+
+                    }
                 }
-
             }
+    }
+
+    fun onClickAddAppatmant(view: View) {
+        intent = Intent(this, AddApatmantAvtivity::class.java)
+        launcher?.launch(intent)
+    }
+
+    private fun addApatmant(ap: Apartmant) {
+        bindingClass.apply {
+            rvApatmans.layoutManager = LinearLayoutManager(this@MainActivity)
+            rvApatmans.adapter = adapter
+            adapter.addAppatmant(ap)
+
         }
-    }
-
-    fun onClickSignUp(view: View) {
-        intent = Intent(this, RegisterAvtivity::class.java)
-        intent.putExtra(Constants.SING_STATE, Constants.SING_UP)
-        launcher?.launch(intent)
-    }
-
-    fun onClickSignIn(view: View){
-        intent = Intent(this, RegisterAvtivity::class.java)
-        intent.putExtra(Constants.SING_STATE, Constants.SING_IN)
-        launcher?.launch(intent)
     }
 }
