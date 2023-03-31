@@ -24,12 +24,9 @@ class MainActivity : AppCompatActivity() {
         launcher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode == RESULT_OK) {
-                    val state = result.data?.getStringExtra(Constants.NEW_APATMANT)
-                    if (state == Constants.SING_UP) {
-                        apatmant = result.data!!.getSerializableExtra(Constants.USER) as Apartmant
-                        addApatmant(apatmant)
-
-                    }
+                    apatmant =
+                        result.data!!.getSerializableExtra(Constants.NEW_APATMANT) as Apartmant
+                    addApatmant(apatmant)
                 }
             }
     }
