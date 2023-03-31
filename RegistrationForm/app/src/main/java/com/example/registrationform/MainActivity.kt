@@ -14,15 +14,24 @@ class MainActivity : AppCompatActivity() {
     private lateinit var bindingClass : ActivityMainBinding
 
     private var launcher : ActivityResultLauncher<Intent>? = null
+    lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingClass = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindingClass.root)
+
         launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             result: ActivityResult ->
             if (result.resultCode == RESULT_OK){
-                bindingClass.tvResult.text = result.data?.getStringExtra(Constants.SING_STATE)
+                val state = result.data?.getStringExtra(Constants.SING_STATE)
+                if (state == Constants.SING_UP){
+                    user = result.data!!.getSerializableExtra(Constants.USER) as User
+                    bindingClass.tvResult.text = "${user.name} ${user.lastName} ${user.login} ${user.password}"
+                } else if (state == Constants.SING_IN){
+                    bindingClass.tvResult.text = "${user.login} ${user.password}"
+                }
+
             }
         }
     }
