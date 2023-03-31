@@ -12,21 +12,32 @@ import com.example.registrationform.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bindingClass: ActivityMainBinding
-    private val adapter = ApartmentRCAdapter()
-    private var launcher: ActivityResultLauncher<Intent>? = null
+
     lateinit var apatmant: Apartmant
+    var apatmantsList = ArrayList<Apartmant>()
+    lateinit var adapter: ApartmentRCAdapter
+
+    private var launcher: ActivityResultLauncher<Intent>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingClass = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindingClass.root)
 
+        adapter = ApartmentRCAdapter(apatmantsList)
+        bindingClass.apply {
+            rvApatmans.layoutManager = LinearLayoutManager(this@MainActivity)
+            rvApatmans.adapter = adapter
+
+        }
+
         launcher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode == RESULT_OK) {
                     apatmant =
                         result.data!!.getSerializableExtra(Constants.NEW_APATMANT) as Apartmant
-                    addApatmant(apatmant)
+                    apatmantsList.add(apatmant)
+                    adapter.notifyDataSetChanged()
                 }
             }
     }
@@ -36,12 +47,4 @@ class MainActivity : AppCompatActivity() {
         launcher?.launch(intent)
     }
 
-    private fun addApatmant(ap: Apartmant) {
-        bindingClass.apply {
-            rvApatmans.layoutManager = LinearLayoutManager(this@MainActivity)
-            rvApatmans.adapter = adapter
-            adapter.addAppatmant(ap)
-
-        }
-    }
 }

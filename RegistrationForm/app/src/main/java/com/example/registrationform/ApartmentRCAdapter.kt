@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.registrationform.databinding.ApartmantitemBinding
 
 
-class ApartmentRCAdapter: RecyclerView.Adapter<ApartmentRCAdapter.PlantHolder>() {
-    val plantList = ArrayList<Apartmant>()
-    class PlantHolder(item: View): RecyclerView.ViewHolder(item) {
+class ApartmentRCAdapter(private var apatmansList: ArrayList<Apartmant>,): RecyclerView.Adapter<ApartmentRCAdapter.ApatmantsHolder>() {
+
+    class ApatmantsHolder(item: View): RecyclerView.ViewHolder(item) {
         val binding = ApartmantitemBinding.bind(item)
         fun bind(apatmant: Apartmant) = with(binding){
             tname.text = apatmant.name
@@ -20,21 +20,21 @@ class ApartmentRCAdapter: RecyclerView.Adapter<ApartmentRCAdapter.PlantHolder>()
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlantHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ApatmantsHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.apartmantitem, parent, false)
-        return PlantHolder(view)
+        return ApatmantsHolder(view)
     }
 
-    override fun onBindViewHolder(holder: PlantHolder, position: Int) {
-        holder.bind(plantList[position])
+    override fun onBindViewHolder(holder: ApatmantsHolder, position: Int) {
+        holder.bind(apatmansList[position])
     }
 
     override fun getItemCount(): Int {
-        return plantList.size
+        return apatmansList.size
     }
 
-    fun addAppatmant(apatmant: Apartmant){
-        plantList.add(apatmant)
-        notifyDataSetChanged()
-    }
+//    fun addAppatmant(apatmant: Apartmant){
+//        apatmansList.add(apatmant)
+//        notifyDataSetChanged()
+//    }
 }
