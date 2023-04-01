@@ -1,5 +1,7 @@
 package com.example.registrationform
 
+import android.os.Parcelable
+
 class Apartmant(
     val name: String,
     val address: String,

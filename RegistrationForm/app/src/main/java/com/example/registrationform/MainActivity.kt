@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     var apatmantsList = ArrayList<Apartmant>()
     lateinit var adapter: ApartmentRCAdapter
 
-    private var launcher: ActivityResultLauncher<Intent>? = null
+    private var addApatmantLauncher: ActivityResultLauncher<Intent>? = null
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,13 +33,19 @@ class MainActivity : AppCompatActivity() {
             rvApatmans.adapter = adapter
 
         }
+
         adapter.onItemClick = { apat ->
 
             // do something with your item
             Log.d("myTag", apat.name)
         }
 
-        launcher =
+        fun onRVItemClick(ap: Apartmant){
+
+        }
+
+
+        addApatmantLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode == RESULT_OK) {
                     apatmant =
@@ -56,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
     fun onClickAddAppatmant(view: View) {
         intent = Intent(this, AddApatmantAvtivity::class.java)
-        launcher?.launch(intent)
+        addApatmantLauncher?.launch(intent)
     }
 
 }
