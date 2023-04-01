@@ -1,5 +1,6 @@
 package com.example.registrationform
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,9 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.registrationform.databinding.ApartmantitemBinding
 
 
-class ApartmentRCAdapter(private var apatmansList: ArrayList<Apartmant>,): RecyclerView.Adapter<ApartmentRCAdapter.ApatmantsHolder>() {
+class ApartmentRCAdapter(): RecyclerView.Adapter<ApartmentRCAdapter.ApatmantsHolder>() {
+    var apatmans= mutableListOf<Apartmant>()
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+    var onItemClick: ((Apartmant) -> Unit)? = null
 
-    class ApatmantsHolder(item: View): RecyclerView.ViewHolder(item) {
+    inner class ApatmantsHolder(item: View): RecyclerView.ViewHolder(item) {
         val binding = ApartmantitemBinding.bind(item)
         fun bind(apatmant: Apartmant) = with(binding){
             tname.text = apatmant.name
@@ -17,6 +25,11 @@ class ApartmentRCAdapter(private var apatmansList: ArrayList<Apartmant>,): Recyc
             tsquare.text=apatmant.square.toString()
             tplus.text = apatmant.plus.toString()
             tminus.text = apatmant.minus.toString()
+        }
+        init {
+            itemView.setOnClickListener {
+                onItemClick?.invoke(apatmans[adapterPosition])
+            }
         }
     }
 
@@ -26,11 +39,11 @@ class ApartmentRCAdapter(private var apatmansList: ArrayList<Apartmant>,): Recyc
     }
 
     override fun onBindViewHolder(holder: ApatmantsHolder, position: Int) {
-        holder.bind(apatmansList[position])
+        holder.bind(apatmans[position])
     }
 
     override fun getItemCount(): Int {
-        return apatmansList.size
+        return apatmans.size
     }
 
 //    fun addAppatmant(apatmant: Apartmant){
