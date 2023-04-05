@@ -1,5 +1,7 @@
 package com.example.composeex.screens
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,8 +24,7 @@ import com.example.composeex.models.Item
 
 
 @Composable
-@Preview
-fun MainScreen() {
+fun MainScreen(launcher: ActivityResultLauncher<Intent>?, intent: Intent) {
     Image(
         painter = painterResource(
             id = R.drawable.sky
@@ -57,7 +58,10 @@ fun MainScreen() {
                 ItemRow(item = item)
             }
         }
-        Button(onClick = {}, modifier = Modifier
+        Button(onClick = {
+            launcher?.launch(intent)
+
+        }, modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .padding(6.dp)) {

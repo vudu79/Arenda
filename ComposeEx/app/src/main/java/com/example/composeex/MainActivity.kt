@@ -1,8 +1,13 @@
 package com.example.composeex
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,13 +20,24 @@ import androidx.compose.ui.unit.dp
 import com.example.composeex.screens.MainScreen
 
 class MainActivity : ComponentActivity() {
+    private var addApatmantLauncher: ActivityResultLauncher<Intent>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        addApatmantLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                if (result.resultCode == RESULT_OK) {
+                    Log.d("myTag", "kdsflskdlskdjfslkdfjslkdjf")
+                }
+            }
+        intent = Intent(this, AddApatmentActivity::class.java)
+
         setContent {
-            MainScreen()
+            MainScreen(launcher = addApatmantLauncher, intent = intent)
         }
+
+
     }
 }
 

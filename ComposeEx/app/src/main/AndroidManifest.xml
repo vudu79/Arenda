@@ -11,13 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ComposeEx"
         tools:targetApi="31">
+
         <activity
-            android:name=".AddApatmentScreen"
-            android:exported="false"
-            android:label="@string/title_activity_add_apatment_screen"
-            android:theme="@style/Theme.ComposeEx" />
-        <activity
-            android:name=".AddApatmentAct"
+            android:name=".AddApatmentActivity"
             android:exported="false"
             android:label="@string/title_activity_add_apatment"
             android:theme="@style/Theme.ComposeEx" />
