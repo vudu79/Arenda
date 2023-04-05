@@ -24,9 +24,7 @@ class AddApatmantAvtivity : AppCompatActivity() {
     fun onClickDone(view: View) {
         val intent = Intent()
 
-        if (binding.etName.text.toString().isNotEmpty()
-            && binding.tAddress.text.toString().isNotEmpty()
-        ) {
+        if (binding.etName.text.toString().isNotEmpty()) {
             val sq: String = binding.etSquare.text.toString()
             val sqF: Float? = sq.toFloatOrNull()
             val apartmant = Apartmant(

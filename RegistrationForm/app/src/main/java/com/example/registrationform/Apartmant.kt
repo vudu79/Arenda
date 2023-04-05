@@ -4,7 +4,7 @@ import android.os.Parcelable
 
 class Apartmant(
     val name: String,
-    val address: String,
+    val address: String?,
     val square: Float?,
     val cadastrNumber: String?
 ): java.io.Serializable {

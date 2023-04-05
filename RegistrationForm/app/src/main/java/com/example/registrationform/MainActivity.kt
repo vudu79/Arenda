@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var adapter: ApartmentRCAdapter
 
     private var addApatmantLauncher: ActivityResultLauncher<Intent>? = null
+    private var calecdarLauncher: ActivityResultLauncher<Intent>? = null
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,13 +37,11 @@ class MainActivity : AppCompatActivity() {
 
         adapter.onItemClick = { apat ->
 
-            // do something with your item
+            intent = Intent(this, CalendarActivity::class.java)
+            addApatmantLauncher?.launch(intent)
             Log.d("myTag", apat.name)
         }
 
-        fun onRVItemClick(ap: Apartmant){
-
-        }
 
 
         addApatmantLauncher =
@@ -53,6 +52,15 @@ class MainActivity : AppCompatActivity() {
                     apatmantsList.add(apatmant)
                     Log.d("myTag", "$apatmantsList")
                     adapter.apatmans =apatmantsList
+
+                }
+            }
+
+        calecdarLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                if (result.resultCode == RESULT_OK) {
+                    Log.d("myTag", ";asdjfkasjdfak.sjhd")
+
 
                 }
             }

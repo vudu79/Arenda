@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ComposeEx</string>
+    <string name="title_activity_add_apatment">AddApatmentAct</string>
+    <string name="title_activity_add_apatment_screen">AddApatmentScreen</string>
+</resources>
