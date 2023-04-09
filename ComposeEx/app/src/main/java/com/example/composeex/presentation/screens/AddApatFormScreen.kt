@@ -1,4 +1,4 @@
-package com.example.composeex.screens
+package com.example.composeex.presentation.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -23,6 +23,8 @@ fun AddApatFormScreen() {
             onValueChange = { textState.value = it }
         )
         Text("The textfield has this text: " + textState.value.text)
+
+
     }
 
 }

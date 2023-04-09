@@ -9,10 +9,15 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.registrationform.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var  vm: MainViewModel
+
     private lateinit var bindingClass: ActivityMainBinding
 
     lateinit var apatmant: Apartmant
@@ -28,7 +33,9 @@ class MainActivity : AppCompatActivity() {
         bindingClass = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindingClass.root)
 
+        vm = ViewModelProvider(this).get(MainViewModel::class.java)
         adapter = ApartmentRCAdapter()
+
         bindingClass.apply {
             rvApatmans.layoutManager = LinearLayoutManager(this@MainActivity)
             rvApatmans.adapter = adapter
@@ -41,8 +48,6 @@ class MainActivity : AppCompatActivity() {
             addApatmantLauncher?.launch(intent)
             Log.d("myTag", apat.name)
         }
-
-
 
         addApatmantLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->

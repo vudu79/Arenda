@@ -1,8 +1,8 @@
 package com.example.composeex
 
+import android.content.ClipData
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,11 +16,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.composeex.models.Item
-import com.example.composeex.ui.theme.Purple300
+import com.example.navigationexample.R
+import com.example.navigationexample.domain.models.Item
+
 
 @Composable
 fun ItemRow(item: Item) {
@@ -36,8 +36,8 @@ fun ItemRow(item: Item) {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(Purple300),
+                .fillMaxWidth().background(Color.Gray)
+                .background(Color.Cyan),
 
             )
         {

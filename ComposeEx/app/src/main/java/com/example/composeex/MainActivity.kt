@@ -17,7 +17,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.composeex.screens.MainScreen
+import com.example.composeex.presentation.screens.MainScreen
 
 class MainActivity : ComponentActivity() {
     private var addApatmantLauncher: ActivityResultLauncher<Intent>? = null

@@ -1,30 +1,28 @@
-package com.example.composeex.screens
+package com.example.navigationexample.presentation.screens
 
-import android.content.Intent
-import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.composeex.ItemRow
-import com.example.composeex.R
-import com.example.composeex.models.Item
+import com.example.navigationexample.R
+import com.example.navigationexample.domain.models.Item
+import com.example.navigationexample.presentation.navigation.Routs
 
 
 @Composable
-fun MainScreen(launcher: ActivityResultLauncher<Intent>?, intent: Intent) {
+fun MainScreen(navController: NavHostController) {
     Image(
         painter = painterResource(
             id = R.drawable.sky
@@ -49,7 +47,8 @@ fun MainScreen(launcher: ActivityResultLauncher<Intent>?, intent: Intent) {
         ) {
             itemsIndexed(
                 listOf(
-                    Item(R.drawable.house1, "sdfsdfsdf", "asjfasda sda sda s da sd"
+                    Item(
+                        R.drawable.house1, "sdfsdfsdf", "asjfasda sda sda s da sd"
                     ),
                     Item(R.drawable.house1, "sdfsdfsdf", "asjfdgasjdgfasdgfasdf"),
                     Item(R.drawable.house1, "sdfsdfsdf", "asjfdgasjdgfasdgfasdf"),
@@ -58,15 +57,34 @@ fun MainScreen(launcher: ActivityResultLauncher<Intent>?, intent: Intent) {
                 ItemRow(item = item)
             }
         }
-        Button(onClick = {
-            launcher?.launch(intent)
 
-        }, modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(6.dp)) {
-            Text("Добавить объект")
+        Button(
+            onClick = {navController.navigate(Routs.addAppatmentScreen)},
+            shape = RoundedCornerShape(50.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+        ) {
+            Text(text = "Добавить объект")
         }
+
+
+
+//        Button(
+//            onClick = {
+//                navController.navigate(Routs.addAppatmentScreen)
+//            }, modifier = Modifier
+//                .fillMaxWidth()
+//                .fillMaxHeight()
+//                .padding(6.dp)
+//        ) {
+//            Text("Добавить объект")
+//        }
+
+
+
+
+
     }
 
 }
