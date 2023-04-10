@@ -5,19 +5,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.navigationexample.presentation.screens.AddAppatmentScreen
+import com.example.navigationexample.presentation.screens.AppatmentViewModel
 import com.example.navigationexample.presentation.screens.MainScreen
 
 
 @Composable
-fun NavHostView() {
+fun NavHostView(viewModel: AppatmentViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Routs.home) {
         composable(Routs.home) {
-            MainScreen(navController)
+            MainScreen(navController, viewModel)
         }
 
         composable(Routs.addAppatmentScreen) {
-            AddAppatmentScreen(navController=navController, onHome = { navController.navigate(Routs.home) })
+            AddAppatmentScreen(navController=navController, viewModel, onHome = { navController.navigate(Routs.home) })
 
         }
 //

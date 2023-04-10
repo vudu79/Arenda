@@ -19,11 +19,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.navigationexample.R
-import com.example.navigationexample.domain.models.Item
+import com.example.navigationexample.data.entity.Appatment
 
 
 @Composable
-fun ItemRow(item: Item) {
+fun ItemRow(appatmentItem: Appatment) {
     var isExpanded by remember {
         mutableStateOf(false)
     }
@@ -36,13 +36,13 @@ fun ItemRow(item: Item) {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth().background(Color.Gray)
-                .background(Color.Cyan),
+                .fillMaxWidth().background(Color(R.color.apatItem1))
+                .background(Color(R.color.apatItem1)),
 
             )
         {
             Image(
-                painter = painterResource(id = item.id),
+                painter = painterResource(R.drawable.house1),
                 contentDescription = "asd",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -56,11 +56,10 @@ fun ItemRow(item: Item) {
 
 
             ) {
-                Text(item.title, modifier = Modifier.padding(3.dp),fontSize = 20.sp, textAlign = TextAlign.Justify)
-                Text(
-                    item.content, modifier = Modifier
-                        .padding(3.dp), maxLines = 1, fontSize = 10.sp
-                )
+                Text(appatmentItem.name, modifier = Modifier.padding(3.dp),fontSize = 20.sp, textAlign = TextAlign.Justify)
+                Text(appatmentItem.address, modifier = Modifier.padding(3.dp), maxLines = 1, fontSize = 10.sp)
+                Text(appatmentItem.type, modifier = Modifier.padding(3.dp), maxLines = 1, fontSize = 10.sp)
+                Text(appatmentItem.square.toString(), modifier = Modifier.padding(3.dp), maxLines = 1, fontSize = 10.sp)
             }
 
 
