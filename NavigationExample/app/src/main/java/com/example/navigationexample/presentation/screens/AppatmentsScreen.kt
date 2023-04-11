@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.composeex.ItemRow
 import com.example.navigationexample.R
@@ -43,10 +45,12 @@ fun MainScreen(navController: NavHostController, viewModel: AppatmentViewModel) 
 //    )
     Column(
         modifier = Modifier
-            .background(Color(R.color.purple_500))
+            .background(Color(red = 41, green = 41, blue = 41))
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        Text("Арендуемые объекты", modifier = Modifier.padding(10.dp), fontSize = 20.sp, color = Color(223,75,0))
         LazyColumn(
 
             modifier = Modifier
@@ -64,10 +68,11 @@ fun MainScreen(navController: NavHostController, viewModel: AppatmentViewModel) 
 
         Button(
             onClick = { navController.navigate(Routs.addAppatmentScreen) },
-            shape = RoundedCornerShape(50.dp),
+            shape = RoundedCornerShape(30.dp),
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
+                .fillMaxWidth(0.6f)
+                .fillMaxHeight(),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(223,75,0))
         ) {
             Text(text = "Добавить объект")
         }

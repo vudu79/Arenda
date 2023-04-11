@@ -77,7 +77,7 @@ fun AddAppatmentScreen(
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(R.color.back1))
+                .background(Color(41,41,41))
         ) {
             Box(
                 modifier = Modifier
@@ -99,7 +99,10 @@ fun AddAppatmentScreen(
                     text = "Новый объект",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 10.dp, bottom = 10.dp)
+                    modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
+                    color = Color.White
+
+
                 )
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -114,7 +117,7 @@ fun AddAppatmentScreen(
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black,
                             textColor = Black,
-                            backgroundColor = Color(R.color.inputBack)
+                            backgroundColor = Color(142,143,138)
                         )
                     )
                     OutlinedTextField(
@@ -126,7 +129,8 @@ fun AddAppatmentScreen(
                         modifier = Modifier.fillMaxWidth(0.8f),
 //                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = Black, textColor = Black
+                            unfocusedBorderColor = Black, textColor = Black,
+                            backgroundColor = Color(142,143,138)
                         )
                     )
                     OutlinedTextField(
@@ -140,7 +144,8 @@ fun AddAppatmentScreen(
                             .fillMaxHeight(0.5f),
 //                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = Black, textColor = Black
+                            unfocusedBorderColor = Black, textColor = Black,
+                            backgroundColor = Color(142,143,138)
                         )
                     )
                     OutlinedTextField(
@@ -152,14 +157,15 @@ fun AddAppatmentScreen(
                         modifier = Modifier.fillMaxWidth(0.8f),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = Black, textColor = Black
+                            unfocusedBorderColor = Black, textColor = Black,
+                            backgroundColor = Color(142,143,138)
                         )
                     )
 
                     Spacer(modifier = Modifier.padding(10.dp))
                     Button(modifier = Modifier
                         .fillMaxWidth(0.8f),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(223,75,0)),
                         onClick = {
                             if (nameAppat.value.isEmpty()) {
                                 Toast.makeText(
@@ -208,9 +214,10 @@ fun AddAppatmentScreen(
 
                     Spacer(modifier = Modifier.padding(5.dp))
 
-                    Text(text = "Назад", color = Black,
+                    Text(text = "Назад", color = Color.White,
                         modifier = Modifier.clickable {
                             navController.navigate(Routs.home)
+
                         }
                     )
                 }

@@ -3,6 +3,7 @@ package com.example.composeex
 import android.content.ClipData
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,8 +37,9 @@ fun ItemRow(appatmentItem: Appatment) {
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth().background(Color(R.color.apatItem1))
-                .background(Color(R.color.apatItem1)),
+                .fillMaxWidth()
+                .background(Color(128, 107, 90))
+//                .border(3.dp, Color(223,75,0))
 
             )
         {
@@ -52,14 +54,37 @@ fun ItemRow(appatmentItem: Appatment) {
             )
             Column(
                 horizontalAlignment = Alignment.Start,
-                modifier = Modifier.fillMaxWidth(0.70f).padding(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth(0.70f)
+                    .padding(10.dp),
 
 
-            ) {
-                Text(appatmentItem.name, modifier = Modifier.padding(3.dp),fontSize = 20.sp, textAlign = TextAlign.Justify)
-                Text(appatmentItem.address, modifier = Modifier.padding(3.dp), maxLines = 1, fontSize = 10.sp)
-                Text(appatmentItem.type, modifier = Modifier.padding(3.dp), maxLines = 1, fontSize = 10.sp)
-                Text(appatmentItem.square.toString(), modifier = Modifier.padding(3.dp), maxLines = 1, fontSize = 10.sp)
+                ) {
+                Text(
+                    appatmentItem.name,
+                    modifier = Modifier.padding(3.dp),
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Justify,
+                    color = Color(0, 0, 0)
+                )
+                Text(
+                    appatmentItem.address,
+                    modifier = Modifier.padding(3.dp),
+                    maxLines = 1,
+                    fontSize = 10.sp
+                )
+                Text(
+                    appatmentItem.type,
+                    modifier = Modifier.padding(3.dp),
+                    maxLines = 1,
+                    fontSize = 10.sp
+                )
+                Text(
+                    appatmentItem.square.toString(),
+                    modifier = Modifier.padding(3.dp),
+                    maxLines = 1,
+                    fontSize = 10.sp
+                )
             }
 
 

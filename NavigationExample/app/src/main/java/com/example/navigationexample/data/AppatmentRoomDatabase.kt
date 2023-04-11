@@ -6,12 +6,15 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.navigationexample.data.entity.Appatment
 import com.example.navigationexample.data.dao.AppatmentDao
+import com.example.navigationexample.data.dao.ClientDao
+import com.example.navigationexample.data.entity.Client
 
 
-@Database(entities = [(Appatment::class)], version = 1)
+@Database(entities = [(Appatment::class), (Client::class)], version = 2)
 abstract class AppatmentRoomDatabase: RoomDatabase() {
 
     abstract fun appatmentDao(): AppatmentDao
+    abstract fun ClientDao(): ClientDao
 
     companion object {
 
