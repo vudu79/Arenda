@@ -2,34 +2,54 @@ package com.example.navigationexample.presentation.screens
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.navigationexample.data.AppatmentRoomDatabase
 import com.example.navigationexample.data.entity.Appatment
+import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.data.repository.AppatmentRepositoryImpl
+import com.example.navigationexample.data.repository.ClientsRepositoryImpl
 
 
 class AppatmentViewModel(application: Application) : ViewModel() {
 
+    private val appatmentRepository: AppatmentRepositoryImpl
+    private val clientRepository: ClientsRepositoryImpl
     val allAppatments: LiveData<List<Appatment>>
-
-    private val repository: AppatmentRepositoryImpl
-
+    val allClients: LiveData<List<Client>>
+    var allAppatmentClients: MutableLiveData<List<Client>>
 
     init {
         val appatmentDb = AppatmentRoomDatabase.getInstance(application)
         val appatmentDao = appatmentDb.appatmentDao()
-        repository = AppatmentRepositoryImpl(appatmentDao = appatmentDao)
+        val clientDao = appatmentDb.ClientDao()
+        appatmentRepository = AppatmentRepositoryImpl(appatmentDao = appatmentDao)
+        clientRepository = ClientsRepositoryImpl(clientDao = clientDao)
 
-        allAppatments = repository.allAppatment
+        allAppatments = appatmentRepository.allAppatment
 
+        allClients = clientRepository.allClients
+        allAppatmentClients = clientRepository.allAppatmentClients
     }
 
     fun insertAppatment(appatment: Appatment) {
-        repository.insertAppatment(appatment)
+        appatmentRepository.insertAppatment(appatment)
     }
 
     fun deleteAppatment(name: String) {
-        repository.deleteAppatment(name)
+        appatmentRepository.deleteAppatment(name)
+    }
+
+    fun addClient(client: Client) {
+        clientRepository.insertClient(client)
+    }
+
+    fun deleteClient(name: String) {
+        clientRepository.deleteClient(name)
+    }
+
+    fun getAppatmentClients(appatmentName: String) {
+        clientRepository.getAppatmentClients(appatmentName)
     }
 
 }
