@@ -1,9 +1,7 @@
 package com.example.composeex
 
-import android.content.ClipData
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,13 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.navigationexample.R
-import com.example.navigationexample.data.entity.Appatment
+import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.presentation.navigation.Routs
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ItemRow(appatmentItem: Appatment, navcontroller: NavController) {
+fun ClientRow(client: Client, navcontroller: NavController) {
     var isExpanded by remember {
         mutableStateOf(false)
     }
@@ -51,7 +49,7 @@ fun ItemRow(appatmentItem: Appatment, navcontroller: NavController) {
             )
         {
             Image(
-                painter = painterResource(R.drawable.house1),
+                painter = painterResource(R.drawable.cat),
                 contentDescription = "asd",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -68,40 +66,31 @@ fun ItemRow(appatmentItem: Appatment, navcontroller: NavController) {
 
                 ) {
                 Text(
-                    appatmentItem.name,
+                    "sdfsdfsdfsdf",
+//                    client.name,
                     modifier = Modifier.padding(3.dp),
-                    fontSize = 20.sp,
+                    fontSize = 25.sp,
                     textAlign = TextAlign.Justify,
                     color = Color(0, 0, 0)
                 )
                 Text(
-                    appatmentItem.address,
+                    "sdfsdfsdfsdfsdfsfd",
+//                    client.phone,
                     modifier = Modifier.padding(3.dp),
                     maxLines = 1,
                     fontSize = 10.sp
                 )
-                Text(
-                    appatmentItem.type,
-                    modifier = Modifier.padding(3.dp),
-                    maxLines = 1,
-                    fontSize = 10.sp
-                )
-                Text(
-                    appatmentItem.square.toString(),
-                    modifier = Modifier.padding(3.dp),
-                    maxLines = 1,
-                    fontSize = 10.sp
-                )
+
             }
 
-
-            Column(
-                horizontalAlignment = Alignment.End,
-                modifier = Modifier.padding(top = 10.dp, end = 5.dp, bottom = 5.dp)
-            ) {
-                Text("500000", modifier = Modifier.padding(3.dp), Color.Green, fontSize = 15.sp)
-                Text("1000", modifier = Modifier.padding(3.dp), Color.Red, fontSize = 15.sp)
-            }
+//
+//            Column(
+//                horizontalAlignment = Alignment.End,
+//                modifier = Modifier.padding(top = 10.dp, end = 5.dp, bottom = 5.dp)
+//            ) {
+//                Text("500000", modifier = Modifier.padding(3.dp), Color.Green, fontSize = 15.sp)
+//                Text("1000", modifier = Modifier.padding(3.dp), Color.Red, fontSize = 15.sp)
+//            }
 
         }
     }

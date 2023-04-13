@@ -1,0 +1,29 @@
+package com.example.navigationexample.presentation.navigation.batton_navigation
+
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.example.navigationexample.presentation.screens.*
+
+@Composable
+fun NavigationGraph(
+    mainNavController: NavHostController,
+    clientNavController: NavHostController,
+    viewModel: AppatmentViewModel
+) {
+    NavHost(clientNavController, startDestination = BottomNavItems.Clients.screen_route) {
+        composable(BottomNavItems.Clients.screen_route) {
+            ClientsScreen(mainNavController = mainNavController, viewModel = viewModel)
+        }
+        composable(BottomNavItems.Calendar.screen_route) {
+            CalendarScreen()
+        }
+        composable(BottomNavItems.Ballance.screen_route) {
+            BallanceScreen()
+        }
+        composable(BottomNavItems.Appatments.screen_route) {
+            MainScreen(mainNavController = mainNavController, viewModel = viewModel)
+        }
+    }
+}
