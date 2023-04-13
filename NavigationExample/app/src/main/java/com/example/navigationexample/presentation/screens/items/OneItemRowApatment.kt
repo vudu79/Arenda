@@ -39,7 +39,7 @@ fun ItemRow(appatmentItem: Appatment, navcontroller: NavController) {
         shape = RoundedCornerShape(10.dp),
         elevation = 8.dp,
         onClick = {
-            navcontroller.navigate(Routs.mainScreenClients)
+            navcontroller.navigate(route = "${Routs.mainScreenClients}?appatment_name={${appatmentItem.name}}")
         }
     ) {
         Row(

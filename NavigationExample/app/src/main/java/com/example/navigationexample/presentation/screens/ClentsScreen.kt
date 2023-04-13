@@ -23,7 +23,11 @@ import com.example.navigationexample.presentation.navigation.Routs
 
 
 @Composable
-fun ClientsScreen(mainNavController: NavHostController, viewModel: AppatmentViewModel) {
+fun ClientsScreen(
+    mainNavController: NavHostController,
+    viewModel: AppatmentViewModel,
+    appatmentName: String
+) {
 
     val appatmentClients by viewModel.allAppatmentClients.observeAsState(listOf())
 
@@ -44,12 +48,17 @@ fun ClientsScreen(mainNavController: NavHostController, viewModel: AppatmentView
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text("Клиенты объекта <<  >>", modifier = Modifier.padding(10.dp), fontSize = 20.sp, color = Color(223,75,0))
+        Text(
+            "Клиенты объекта <<  >>",
+            modifier = Modifier.padding(10.dp),
+            fontSize = 20.sp,
+            color = Color(223, 75, 0)
+        )
         LazyColumn(
 
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.90f)
+
                 .padding(3.dp)
 
         ) {
@@ -61,12 +70,16 @@ fun ClientsScreen(mainNavController: NavHostController, viewModel: AppatmentView
         }
 
         Button(
-            onClick = { mainNavController.navigate(Routs.addAppatmentScreen) },
+            onClick = {
+                mainNavController.navigate(
+                    route = "${Routs.addClientScreen}?appatment_name={${appatmentName}}"
+                )
+            },
             shape = RoundedCornerShape(30.dp),
             modifier = Modifier
                 .fillMaxWidth(0.6f)
-                .fillMaxHeight(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(223,75,0))
+                .wrapContentHeight(),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(223, 75, 0))
         ) {
             Text(text = "Новый клиент")
         }

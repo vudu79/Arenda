@@ -37,6 +37,8 @@ fun MainScreen(mainNavController: NavHostController, viewModel: AppatmentViewMod
 //            .alpha(0.5f),
 //        contentScale = ContentScale.FillBounds
 //    )
+
+
     Column(
         modifier = Modifier
             .background(Color(red = 41, green = 41, blue = 41))

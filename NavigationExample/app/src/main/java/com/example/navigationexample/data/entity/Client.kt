@@ -26,13 +26,11 @@ class Client {
     @ColumnInfo(name = "members")
     var members: String?= ""
 
-    @NonNull
     @ColumnInfo(name = "in_date")
-    var inDate: Long = 0
+    var inDate: Long? = 0
 
-    @NonNull
     @ColumnInfo(name = "out_date")
-    var outDate: Long = 0
+    var outDate: Long? = 0
 
     @ColumnInfo(name = "totalDays")
     var totalDays: Int? = 0
@@ -48,29 +46,29 @@ class Client {
 
     @NonNull
     @ColumnInfo(name = "appatment_name")
-    var appatment_id: Int = 0
+    var appatment_name: Int = 0
 
     constructor() {}
 
-    constructor(name: String, phone: String, inDate: Long, outDate: Long, appatment_id: Int) {
+    constructor(name: String, phone: String, inDate: Long?, outDate: Long?, appatment_name: Int) {
         this.name = name
         this.phone = phone
         this.inDate = inDate
         this.outDate = outDate
-        this.appatment_id = appatment_id
+        this.appatment_name = appatment_name
     }
 
     constructor(
         name: String,
         phone: String,
         members: String?,
-        inDate: Long,
-        outDate: Long,
+        inDate: Long?,
+        outDate: Long?,
         totalDays: Int?,
         prepayment: Int?,
         payment: Int?,
         sity: String?,
-        appatment_id: Int
+        appatment_name: Int
     ) {
         this.name = name
         this.phone = phone
@@ -81,7 +79,15 @@ class Client {
         this.prepayment = prepayment
         this.payment = payment
         this.sity = sity
-        this.appatment_id = appatment_id
+        this.appatment_name = appatment_name
     }
+
+    constructor(
+        name: String,
+        phone: String,
+        inDate: String,
+        outDate: String,
+        appatment_name: String
+    )
 
 }

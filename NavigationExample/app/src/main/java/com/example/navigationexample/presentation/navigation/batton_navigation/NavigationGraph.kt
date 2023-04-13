@@ -10,11 +10,12 @@ import com.example.navigationexample.presentation.screens.*
 fun NavigationGraph(
     mainNavController: NavHostController,
     clientNavController: NavHostController,
-    viewModel: AppatmentViewModel
+    viewModel: AppatmentViewModel,
+    appatment_name: String
 ) {
     NavHost(clientNavController, startDestination = BottomNavItems.Clients.screen_route) {
         composable(BottomNavItems.Clients.screen_route) {
-            ClientsScreen(mainNavController = mainNavController, viewModel = viewModel)
+            ClientsScreen(mainNavController = mainNavController, viewModel = viewModel, appatmentName=appatment_name)
         }
         composable(BottomNavItems.Calendar.screen_route) {
             CalendarScreen()

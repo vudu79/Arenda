@@ -8,10 +8,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.navigationexample.R
+import kotlin.math.round
 
 
 @Composable
@@ -23,20 +25,21 @@ fun BottomNavigation(navController: NavController) {
         BottomNavItems.Appatments,
     )
     androidx.compose.material.BottomNavigation(
-        backgroundColor = Color(red = 41, green = 41, blue = 41),
-
-        contentColor = Color.Black
+        backgroundColor = Color(223,75,0).copy(0.4f),
+        contentColor = Color.Black,
+        elevation = 5.dp
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         items.forEach { item ->
             BottomNavigationItem(
-                icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
+                icon = { },
+//                icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
 
                 label = { Text(text = item.title,
-                    fontSize = 9.sp) },
+                    fontSize = 15.sp) },
                 selectedContentColor = Color.Black,
-                unselectedContentColor = Color.Black.copy(0.4f),
+                unselectedContentColor = Color.Black.copy(0.5f),
                 alwaysShowLabel = true,
                 selected = currentRoute == item.screen_route,
                 onClick = {

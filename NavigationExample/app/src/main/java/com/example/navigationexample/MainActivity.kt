@@ -35,6 +35,8 @@ class MainActivity : ComponentActivity() {
                     )
                 )
 
+
+
                 NavHostView(viewModel)
             }
         }

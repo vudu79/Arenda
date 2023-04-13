@@ -46,7 +46,7 @@ fun ClientRow(client: Client, navcontroller: NavController) {
                 .background(Color(128, 107, 90))
 //                .border(3.dp, Color(223,75,0))
 
-            )
+        )
         {
             Image(
                 painter = painterResource(R.drawable.cat),
@@ -66,31 +66,28 @@ fun ClientRow(client: Client, navcontroller: NavController) {
 
                 ) {
                 Text(
-                    "sdfsdfsdfsdf",
-//                    client.name,
+                    client.name,
                     modifier = Modifier.padding(3.dp),
                     fontSize = 25.sp,
                     textAlign = TextAlign.Justify,
                     color = Color(0, 0, 0)
                 )
+
                 Text(
-                    "sdfsdfsdfsdfsdfsfd",
-//                    client.phone,
+                    client.phone,
+                    modifier = Modifier.padding(3.dp),
+                    maxLines = 1,
+                    fontSize = 10.sp
+                )
+
+                Text(
+                    text = client.appatment_name.toString(),
                     modifier = Modifier.padding(3.dp),
                     maxLines = 1,
                     fontSize = 10.sp
                 )
 
             }
-
-//
-//            Column(
-//                horizontalAlignment = Alignment.End,
-//                modifier = Modifier.padding(top = 10.dp, end = 5.dp, bottom = 5.dp)
-//            ) {
-//                Text("500000", modifier = Modifier.padding(3.dp), Color.Green, fontSize = 15.sp)
-//                Text("1000", modifier = Modifier.padding(3.dp), Color.Red, fontSize = 15.sp)
-//            }
 
         }
     }
