@@ -24,11 +24,12 @@ import androidx.navigation.NavController
 import com.example.navigationexample.R
 import com.example.navigationexample.data.entity.Appatment
 import com.example.navigationexample.presentation.navigation.Routs
+import com.example.navigationexample.presentation.screens.AppatmentViewModel
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ItemRow(appatmentItem: Appatment, navcontroller: NavController) {
+fun ItemRow(appatmentItem: Appatment, navcontroller: NavController, viewModel:AppatmentViewModel) {
     var isExpanded by remember {
         mutableStateOf(false)
     }
@@ -39,7 +40,8 @@ fun ItemRow(appatmentItem: Appatment, navcontroller: NavController) {
         shape = RoundedCornerShape(10.dp),
         elevation = 8.dp,
         onClick = {
-            navcontroller.navigate(route = "${Routs.mainScreenClients}?appatment_name={${appatmentItem.name}}")
+            viewModel.getAppatmentClients(appatmentItem.name)
+            navcontroller.navigate(route = "${Routs.mainScreenClients}?appatment_name=${appatmentItem.name}")
         }
     ) {
         Row(

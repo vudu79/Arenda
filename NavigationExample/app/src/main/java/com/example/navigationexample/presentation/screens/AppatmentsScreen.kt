@@ -46,7 +46,12 @@ fun MainScreen(mainNavController: NavHostController, viewModel: AppatmentViewMod
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text("Арендуемые объекты", modifier = Modifier.padding(10.dp), fontSize = 20.sp, color = Color(223,75,0))
+        Text(
+            "Арендуемые объекты",
+            modifier = Modifier.padding(10.dp),
+            fontSize = 20.sp,
+            color = Color(223, 75, 0)
+        )
         LazyColumn(
 
             modifier = Modifier
@@ -56,18 +61,25 @@ fun MainScreen(mainNavController: NavHostController, viewModel: AppatmentViewMod
 
         ) {
             items(allAppatment) { item ->
-                Log.d("myTag", allAppatment.toString())
-                ItemRow(appatmentItem = item, navcontroller = mainNavController)
+//                Log.d("myTag", allAppatment.toString())
+                ItemRow(
+                    appatmentItem = item,
+                    navcontroller = mainNavController,
+                    viewModel
+                )
             }
         }
 
         Button(
-            onClick = { mainNavController.navigate(Routs.addAppatmentScreen) },
+            onClick = {
+
+                mainNavController.navigate(Routs.addAppatmentScreen)
+            },
             shape = RoundedCornerShape(30.dp),
             modifier = Modifier
                 .fillMaxWidth(0.6f)
                 .fillMaxHeight(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(223,75,0))
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(223, 75, 0))
         ) {
             Text(text = "Добавить объект")
         }

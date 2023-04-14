@@ -46,48 +46,23 @@ class Client {
 
     @NonNull
     @ColumnInfo(name = "appatment_name")
-    var appatment_name: Int = 0
+    var appatment_name: String=""
 
-    constructor() {}
-
-    constructor(name: String, phone: String, inDate: Long?, outDate: Long?, appatment_name: Int) {
-        this.name = name
-        this.phone = phone
-        this.inDate = inDate
-        this.outDate = outDate
-        this.appatment_name = appatment_name
-    }
-
+    constructor()
     constructor(
         name: String,
         phone: String,
-        members: String?,
         inDate: Long?,
         outDate: Long?,
-        totalDays: Int?,
-        prepayment: Int?,
-        payment: Int?,
-        sity: String?,
-        appatment_name: Int
+        appatment_name: String
     ) {
         this.name = name
         this.phone = phone
-        this.members = members
         this.inDate = inDate
         this.outDate = outDate
-        this.totalDays = totalDays
-        this.prepayment = prepayment
-        this.payment = payment
-        this.sity = sity
         this.appatment_name = appatment_name
     }
 
-    constructor(
-        name: String,
-        phone: String,
-        inDate: String,
-        outDate: String,
-        appatment_name: String
-    )
+
 
 }

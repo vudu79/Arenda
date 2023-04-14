@@ -106,7 +106,7 @@ fun AddClientScreen(
                         label = { Text(text = "ФИО", color = Black) },
                         placeholder = { Text(text = "ФИО", color = Black) },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.9f),
+                        modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black,
                             textColor = Black,
@@ -119,7 +119,7 @@ fun AddClientScreen(
                         label = { Text(text = "Контактный телефон", color = Black) },
                         placeholder = { Text(text = "Контактный телефон", color = Black) },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
+                        modifier = Modifier.fillMaxWidth(),
 //                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black, textColor = Black,
@@ -133,7 +133,7 @@ fun AddClientScreen(
                         placeholder = { Text(text = "Количество человек", color = Black) },
                         singleLine = true,
                         modifier = Modifier
-                            .fillMaxWidth(0.8f)
+                            .fillMaxWidth()
                             .fillMaxHeight(0.5f),
 //                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -247,15 +247,9 @@ fun AddClientScreen(
 //                                ).show()
                             } else {
                                 viewModel.addClient(
-                                    Client(
-                                        name = name.value,
-                                        phone = phone.value,
-//                                        inDate = inDate.value,
-//                                        outDate = outDate.value,
-                                        inDate = "123",
-                                        outDate = "345",
-                                        appatment_name =appatmentName
-                                    )
+                                    Client(name.value,
+                                        phone.value,0,0,
+                                        appatmentName)
                                 )
                                 Toast.makeText(
                                     context,
@@ -263,6 +257,8 @@ fun AddClientScreen(
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
+                            viewModel.getAppatmentClients(appatmentName)
+                            navController.navigate(route = "${Routs.mainScreenClients}?appatment_name=$appatmentName")
                         }
 
                     ) {
@@ -273,6 +269,7 @@ fun AddClientScreen(
 
                     Text(text = "Назад", color = Color.White,
                         modifier = Modifier.clickable {
+                            viewModel.getAppatmentClients(appatmentName)
                             navController.navigate(Routs.home)
 
                         }
