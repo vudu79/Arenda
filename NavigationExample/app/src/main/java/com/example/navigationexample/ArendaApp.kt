@@ -1,4 +1,12 @@
 package com.example.navigationexample
 
-class ArendaApp {
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
+
+
+@HiltAndroidApp
+class ArendaApp: Application() {
+
 }
+
+
