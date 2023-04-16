@@ -14,7 +14,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
 @Composable
-fun CustomAlertDialog(onDismiss: () -> Unit, onExit: () -> Unit) {
+fun CustomAlertDialog(onDismiss: () -> Unit, onOk: () -> Unit, message: String) {
 
     Dialog(onDismissRequest = { onDismiss() }, properties = DialogProperties(
         dismissOnBackPress = false,dismissOnClickOutside = false
@@ -55,7 +55,7 @@ fun CustomAlertDialog(onDismiss: () -> Unit, onExit: () -> Unit) {
                 }
 
                 Text(
-                    text = "Клиент будет безвозвратно удален. Вы уверены?",
+                    text =message ,
                     modifier = Modifier.padding(8.dp), fontSize = 20.sp
                 )
 
@@ -77,7 +77,7 @@ fun CustomAlertDialog(onDismiss: () -> Unit, onExit: () -> Unit) {
 
 
                     Button(
-                        onClick = { onExit() },
+                        onClick = { onOk() },
                         Modifier
                             .fillMaxWidth()
                             .padding(8.dp)

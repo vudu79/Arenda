@@ -29,7 +29,7 @@ import com.example.navigationexample.presentation.screens.common.CustomAlertDial
 
 
 @Composable
-fun ClientRow(client: Client, navcontroller: NavController, viewModel: AppatmentViewModel) {
+fun ClientItemRow(client: Client, navcontroller: NavController, viewModel: AppatmentViewModel) {
     var showCustomDialog by remember {
         mutableStateOf(false)
     }
@@ -104,11 +104,12 @@ fun ClientRow(client: Client, navcontroller: NavController, viewModel: Appatment
     if (showCustomDialog) {
         CustomAlertDialog(onDismiss = {
             showCustomDialog = !showCustomDialog
-        }, onExit = {
+        }, onOk = {
             showCustomDialog = !showCustomDialog
             viewModel.deleteClient(client.name)
             viewModel.getAppatmentClients(client.appatment_name)
-        })
+        },
+        message = "Клиент будет безвозвратно удален. Вы уверены?")
     }
 
 }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,11 +15,10 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.composeex.ClientRow
+import com.example.composeex.ClientItemRow
 import com.example.navigationexample.presentation.navigation.Routs
 
 
@@ -71,7 +69,7 @@ fun ClientsScreen(
 
                 Log.d("myTag", item.toString())
 
-                ClientRow(client = item, navcontroller = mainNavController, viewModel)
+                ClientItemRow(client = item, navcontroller = mainNavController, viewModel)
 
             }
         }

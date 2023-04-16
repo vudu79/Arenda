@@ -47,8 +47,6 @@ fun AddClientScreen(
     val name = remember { mutableStateOf("") }
     val phone = remember { mutableStateOf("") }
     val members = remember { mutableStateOf("") }
-    val inDate = remember { mutableStateOf(0L) }
-    val outDate = remember { mutableStateOf(0L) }
     val payment = remember { mutableStateOf("") }
     val prepayment = remember { mutableStateOf("") }
     val sity = remember { mutableStateOf("") }
@@ -158,8 +156,6 @@ fun AddClientScreen(
                             focusManager.moveFocus(FocusDirection.Down)
                         }),
                     )
-
-                    val context = LocalContext.current
                     OutlinedTextField(
                         value = viewModel.dateInString,
                         onValueChange = {
@@ -193,7 +189,6 @@ fun AddClientScreen(
                         value = viewModel.dateOutString,
                         onValueChange = {
                             viewModel.dateOutString = it
-                            outDate.value = viewModel.dateOutLong
                         },
                         label = { Text(text = "Дата убытия", color = Black) },
                         placeholder = { Text(text = "Дата убытия", color = Black) },

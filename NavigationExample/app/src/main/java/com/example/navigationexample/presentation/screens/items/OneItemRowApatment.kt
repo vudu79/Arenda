@@ -1,9 +1,9 @@
 package com.example.composeex
 
-import android.content.ClipData
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,14 +25,24 @@ import com.example.navigationexample.R
 import com.example.navigationexample.data.entity.Appatment
 import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.AppatmentViewModel
+import com.example.navigationexample.presentation.screens.common.CustomAlertDialog
 
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun ItemRow(appatmentItem: Appatment, navcontroller: NavController, viewModel:AppatmentViewModel) {
+fun AppatmentItemRow(
+    appatmentItem: Appatment,
+    navcontroller: NavController,
+    viewModel: AppatmentViewModel
+) {
     var isExpanded by remember {
         mutableStateOf(false)
     }
+    var showCustomDialog by remember {
+        mutableStateOf(false)
+    }
+
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -48,7 +58,16 @@ fun ItemRow(appatmentItem: Appatment, navcontroller: NavController, viewModel:Ap
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(128, 107, 90))
-//                .border(3.dp, Color(223,75,0))
+                .combinedClickable(
+                    onClick = {
+                        viewModel.getAppatmentClients(appatmentItem.name)
+                        navcontroller.navigate(route = "${Routs.mainScreenClients}?appatment_name=${appatmentItem.name}")
+
+                    },
+                    onLongClick = {
+                        showCustomDialog = !showCustomDialog
+                    }),
+
 
             )
         {
@@ -106,6 +125,16 @@ fun ItemRow(appatmentItem: Appatment, navcontroller: NavController, viewModel:Ap
             }
 
         }
+    }
+
+    if (showCustomDialog) {
+        CustomAlertDialog(onDismiss = {
+            showCustomDialog = !showCustomDialog
+        }, onOk = {
+            showCustomDialog = !showCustomDialog
+            viewModel.deleteAppatment(appatmentItem.name)
+        },
+        message = "Объект недвижимости будет безвозвратно удален. Вы уверены?")
     }
 
 }
