@@ -1,5 +1,4 @@
-package com.example.navigationexample.presentation.screens
-
+package com.kizitonwose.calendar.sample.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,10 +24,6 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.sample.compose.Example2Page
-import com.kizitonwose.calendar.sample.compose.StatusBarColorUpdateEffect
-import com.kizitonwose.calendar.sample.compose.backgroundHighlight
-import com.kizitonwose.calendar.sample.compose.clickable
 import com.kizitonwose.calendar.sample.shared.ContinuousSelectionHelper.getSelection
 import com.kizitonwose.calendar.sample.shared.DateSelection
 import com.kizitonwose.calendar.sample.shared.displayText
@@ -38,10 +33,10 @@ import java.time.YearMonth
 
 private val primaryColor = Color.Black.copy(alpha = 0.9f)
 private val selectionColor = primaryColor
-private val continuousSelectionColor = Color.LightGray.copy(alpha = 0.3f)
+private val continuousSelectionColor = Color.LightGray.copy(alpha = 0.85f)
 
 @Composable
-fun Example22Page(
+fun Example2Page(
     close: () -> Unit = {},
     dateSelected: (startDate: LocalDate, endDate: LocalDate) -> Unit = { _, _ -> },
 ) {

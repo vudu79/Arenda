@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.navigationexample.presentation.screens.*
+import com.kizitonwose.calendar.sample.compose.*
 
 @Composable
 fun NavigationGraph(
@@ -18,7 +19,7 @@ fun NavigationGraph(
             ClientsScreen(mainNavController = mainNavController, viewModel = viewModel, appatmentName=appatment_name)
         }
         composable(BottomNavItems.Calendar.screen_route) {
-            CalendarScreen()
+            Example3Page()
         }
         composable(BottomNavItems.Ballance.screen_route) {
             BallanceScreen()
