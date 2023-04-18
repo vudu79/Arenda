@@ -19,7 +19,7 @@ fun NavigationGraph(
             ClientsScreen(mainNavController = mainNavController, viewModel = viewModel, appatmentName=appatment_name)
         }
         composable(BottomNavItems.Calendar.screen_route) {
-            Example3Page()
+            CalendarScreen()
         }
         composable(BottomNavItems.Ballance.screen_route) {
             BallanceScreen()

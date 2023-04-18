@@ -11,12 +11,20 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
@@ -24,6 +32,8 @@ import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.Week
+import com.kizitonwose.calendar.sample.shared.StatusBarColorLifecycleObserver
+import com.kizitonwose.calendar.sample.shared.findActivity
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 
@@ -44,18 +54,18 @@ fun Modifier.clickable(
     )
 }
 
-//@Composable
-//fun StatusBarColorUpdateEffect(color: Color) {
-//    if (LocalInspectionMode.current) return // findActivity() will not work in preview.
-//    val activity = LocalContext.current.findActivity()
-//    val lifecycleOwner = LocalLifecycleOwner.current
-//    val observer = remember {
-//        StatusBarColorLifecycleObserver(activity, color.toArgb())
-//    }
-//    LaunchedEffect(lifecycleOwner) {
-//        lifecycleOwner.lifecycle.addObserver(observer)
-//    }
-//}
+@Composable
+fun StatusBarColorUpdateEffect(color: Color) {
+    if (LocalInspectionMode.current) return // findActivity() will not work in preview.
+    val activity = LocalContext.current.findActivity()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val observer = remember {
+        StatusBarColorLifecycleObserver(activity, color.toArgb())
+    }
+    LaunchedEffect(lifecycleOwner) {
+        lifecycleOwner.lifecycle.addObserver(observer)
+    }
+}
 
 @Composable
 fun NavigationIcon(onBackClick: () -> Unit) {

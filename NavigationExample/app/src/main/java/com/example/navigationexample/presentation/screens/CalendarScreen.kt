@@ -1,17 +1,25 @@
 package com.example.navigationexample.presentation.screens
 
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Divider
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.Text
+import androidx.compose.material.darkColors
+import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -19,94 +27,114 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.navigationexample.R
-import com.kizitonwose.calendar.compose.VerticalCalendar
+import com.example.navigationexample.presentation.screens.common.SimpleCalendarTitle
+import com.example.navigationexample.presentation.screens.common.StatusBarColorUpdateEffect
+import com.example.navigationexample.presentation.screens.common.rememberFirstCompletelyVisibleMonth
+import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
-import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.CalendarMonth
-import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.sample.compose.Example2Page
-import com.kizitonwose.calendar.sample.compose.StatusBarColorUpdateEffect
-import com.kizitonwose.calendar.sample.compose.backgroundHighlight
-import com.kizitonwose.calendar.sample.compose.clickable
-import com.kizitonwose.calendar.sample.shared.ContinuousSelectionHelper.getSelection
-import com.kizitonwose.calendar.sample.shared.DateSelection
+import com.kizitonwose.calendar.core.*
+import com.kizitonwose.calendar.sample.compose.Example3Page
+import com.kizitonwose.calendar.sample.shared.Flight
+import com.kizitonwose.calendar.sample.shared.Flight.Airport
 import com.kizitonwose.calendar.sample.shared.displayText
+import com.kizitonwose.calendar.sample.shared.flightDateTimeFormatter
+import com.kizitonwose.calendar.sample.shared.generateFlights
+import kotlinx.coroutines.launch
 import java.time.DayOfWeek
-import java.time.LocalDate
 import java.time.YearMonth
+import java.util.*
 
-private val primaryColor = Color.Black.copy(alpha = 0.9f)
-private val selectionColor = primaryColor
-private val continuousSelectionColor = Color.LightGray.copy(alpha = 0.3f)
+private val flights = generateFlights().groupBy { it.time.toLocalDate() }
+
+private val pageBackgroundColor: Color @Composable get() = colorResource(R.color.example_5_page_bg_color)
+private val itemBackgroundColor: Color @Composable get() = colorResource(R.color.example_5_item_view_bg_color)
+private val toolbarColor: Color @Composable get() = colorResource(R.color.example_5_toolbar_color)
+private val selectedItemColor: Color @Composable get() = colorResource(R.color.example_5_text_grey)
+private val inActiveTextColor: Color @Composable get() = colorResource(R.color.example_5_text_grey_light)
 
 @Composable
-fun Example22Page(
-    close: () -> Unit = {},
-    dateSelected: (startDate: LocalDate, endDate: LocalDate) -> Unit = { _, _ -> },
-) {
+fun CalendarScreen() {
     val currentMonth = remember { YearMonth.now() }
-    val startMonth = remember { currentMonth }
-    val endMonth = remember { currentMonth.plusMonths(12) }
-    val today = remember { LocalDate.now() }
-    var selection by remember { mutableStateOf(DateSelection()) }
+    val startMonth = remember { currentMonth.minusMonths(500) }
+    val endMonth = remember { currentMonth.plusMonths(500) }
+    var selection by remember { mutableStateOf<CalendarDay?>(null) }
     val daysOfWeek = remember { daysOfWeek() }
-    StatusBarColorUpdateEffect(Color.White)
-    MaterialTheme(colors = MaterialTheme.colors.copy(primary = primaryColor)) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White),
-        ) {
-            Column {
-                val state = rememberCalendarState(
-                    startMonth = startMonth,
-                    endMonth = endMonth,
-                    firstVisibleMonth = currentMonth,
-                    firstDayOfWeek = daysOfWeek.first(),
-                )
-                CalendarTop(
-                    daysOfWeek = daysOfWeek,
-                    selection = selection,
-                    close = close,
-                    clearDates = { selection = DateSelection() },
-                )
-                VerticalCalendar(
-                    state = state,
-                    contentPadding = PaddingValues(bottom = 100.dp),
-                    dayContent = { value ->
-                        Day(
-                            value,
-                            today = today,
-                            selection = selection,
-                        ) { day ->
-                            if (day.position == DayPosition.MonthDate &&
-                                (day.date == today || day.date.isAfter(today))
-                            ) {
-                                selection = getSelection(
-                                    clickedDate = day.date,
-                                    dateSelection = selection,
-                                )
-                            }
-                        }
-                    },
-                    monthHeader = { month -> MonthHeader(month) },
-                )
-            }
-            CalendarBottom(
+    val flightsInSelectedDate = remember {
+        derivedStateOf {
+            val date = selection?.date
+            if (date == null) emptyList() else flights[date].orEmpty()
+        }
+    }
+    StatusBarColorUpdateEffect(toolbarColor)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(pageBackgroundColor),
+    ) {
+        val state = rememberCalendarState(
+            startMonth = startMonth,
+            endMonth = endMonth,
+            firstVisibleMonth = currentMonth,
+            firstDayOfWeek = daysOfWeek.first(),
+            outDateStyle = OutDateStyle.EndOfGrid,
+        )
+        val coroutineScope = rememberCoroutineScope()
+        val visibleMonth = rememberFirstCompletelyVisibleMonth(state)
+        LaunchedEffect(visibleMonth) {
+            // Clear selection if we scroll to a new month.
+            selection = null
+        }
+
+        // Draw light content on dark background.
+        CompositionLocalProvider(LocalContentColor provides darkColors().onSurface) {
+            SimpleCalendarTitle(
                 modifier = Modifier
-                    .wrapContentHeight()
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .align(Alignment.BottomCenter),
-                selection = selection,
-                save = {
-                    val (startDate, endDate) = selection
-                    if (startDate != null && endDate != null) {
-                        dateSelected(startDate, endDate)
+                    .background(toolbarColor)
+                    .padding(horizontal = 8.dp, vertical = 12.dp),
+                currentMonth = visibleMonth.yearMonth,
+                goToPrevious = {
+                    coroutineScope.launch {
+                        state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)
+                    }
+                },
+                goToNext = {
+                    coroutineScope.launch {
+                        state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.nextMonth)
                     }
                 },
             )
+            HorizontalCalendar(
+                modifier = Modifier.wrapContentWidth(),
+                state = state,
+                dayContent = { day ->
+                    CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
+                        val colors = if (day.position == DayPosition.MonthDate) {
+                            flights[day.date].orEmpty().map { colorResource(it.color) }
+                        } else {
+                            emptyList()
+                        }
+                        Day(
+                            day = day,
+                            isSelected = selection == day,
+                            colors = colors,
+                        ) { clicked ->
+                            selection = clicked
+                        }
+                    }
+                },
+                monthHeader = {
+                    MonthHeader(
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        daysOfWeek = daysOfWeek,
+                    )
+                },
+            )
+            Divider(color = pageBackgroundColor)
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                items(items = flightsInSelectedDate.value) { flight ->
+                    FlightInformation(flight)
+                }
+            }
         }
     }
 }
@@ -114,158 +142,174 @@ fun Example22Page(
 @Composable
 private fun Day(
     day: CalendarDay,
-    today: LocalDate,
-    selection: DateSelection,
-    onClick: (CalendarDay) -> Unit,
+    isSelected: Boolean = false,
+    colors: List<Color> = emptyList(),
+    onClick: (CalendarDay) -> Unit = {},
 ) {
-    var textColor = Color.Transparent
     Box(
         modifier = Modifier
             .aspectRatio(1f) // This is important for square-sizing!
-            .clickable(
-                enabled = day.position == DayPosition.MonthDate && day.date >= today,
-                showRipple = false,
-                onClick = { onClick(day) },
+            .border(
+                width = if (isSelected) 1.dp else 0.dp,
+                color = if (isSelected) selectedItemColor else Color.Transparent,
             )
-            .backgroundHighlight(
-                day = day,
-                today = today,
-                selection = selection,
-                selectionColor = selectionColor,
-                continuousSelectionColor = continuousSelectionColor,
-            ) { textColor = it },
-        contentAlignment = Alignment.Center,
+            .padding(1.dp)
+            .background(color = itemBackgroundColor)
+            // Disable clicks on inDates/outDates
+            .clickable(
+                enabled = day.position == DayPosition.MonthDate,
+                onClick = { onClick(day) },
+            ),
     ) {
+        val textColor = when (day.position) {
+            DayPosition.MonthDate -> Color.Unspecified
+            DayPosition.InDate, DayPosition.OutDate -> inActiveTextColor
+        }
         Text(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(top = 3.dp, end = 4.dp),
             text = day.date.dayOfMonth.toString(),
             color = textColor,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
+            fontSize = 12.sp,
         )
-    }
-}
-
-@Composable
-private fun MonthHeader(calendarMonth: CalendarMonth) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 12.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
-    ) {
-        Text(
-            textAlign = TextAlign.Center,
-            text = calendarMonth.yearMonth.displayText(),
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-        )
-    }
-}
-
-@Composable
-private fun CalendarTop(
-    modifier: Modifier = Modifier,
-    daysOfWeek: List<DayOfWeek>,
-    selection: DateSelection,
-    close: () -> Unit,
-    clearDates: () -> Unit,
-) {
-    Column(modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier
+                .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .padding(top = 6.dp, bottom = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+                .padding(bottom = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            Row(
-                modifier = Modifier.height(IntrinsicSize.Max),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
+            for (color in colors) {
+                Box(
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .aspectRatio(1f)
-                        .clip(CircleShape)
-                        .clickable(onClick = close)
-                        .padding(12.dp),
-                    painter = painterResource(id = R.drawable.ic_close),
-                    contentDescription = "Close",
+                        .fillMaxWidth()
+                        .height(5.dp)
+                        .background(color),
                 )
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(percent = 50))
-                        .clickable(onClick = clearDates)
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    text = "Clear",
-                    fontWeight = FontWeight.Medium,
-                    textAlign = TextAlign.End,
-                )
-            }
-            val daysBetween = selection.daysBetween
-            val text = if (daysBetween == null) {
-                "Select dates"
-            } else {
-                // Ideally you'd do this using the strings.xml file
-                "$daysBetween ${if (daysBetween == 1L) "night" else "nights"} in Munich"
-            }
-            Text(
-                modifier = Modifier.padding(horizontal = 14.dp),
-                text = text,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp),
-            ) {
-                for (dayOfWeek in daysOfWeek) {
-                    Text(
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center,
-                        color = Color.DarkGray,
-                        text = dayOfWeek.displayText(),
-                        fontSize = 15.sp,
-                    )
-                }
             }
         }
-        Divider()
     }
 }
 
 @Composable
-private fun CalendarBottom(
+private fun MonthHeader(
     modifier: Modifier = Modifier,
-    selection: DateSelection,
-    save: () -> Unit,
+    daysOfWeek: List<DayOfWeek> = emptyList(),
 ) {
-    Column(modifier.fillMaxWidth()) {
-        Divider()
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
+    Row(modifier.fillMaxWidth()) {
+        for (dayOfWeek in daysOfWeek) {
             Text(
-                text = "€75 night",
-                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Center,
+                fontSize = 12.sp,
+                color = Color.White,
+                text = dayOfWeek.displayText(uppercase = true),
+                fontWeight = FontWeight.Light,
             )
-            Spacer(modifier = Modifier.weight(1f))
-            Button(
-                modifier = Modifier
-                    .height(40.dp)
-                    .width(100.dp),
-                onClick = save,
-                enabled = selection.daysBetween != null,
-            ) {
-                Text(text = "Save")
-            }
         }
     }
 }
 
-@Preview(heightDp = 800)
 @Composable
-private fun Example2Preview() {
-    Example2Page()
+private fun LazyItemScope.FlightInformation(flight: Flight) {
+    Row(
+        modifier = Modifier
+            .fillParentMaxWidth()
+            .height(IntrinsicSize.Max),
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Box(
+            modifier = Modifier
+                .background(color = colorResource(flight.color))
+                .fillParentMaxWidth(1 / 7f)
+                .aspectRatio(1f),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = flightDateTimeFormatter.format(flight.time).uppercase(Locale.ENGLISH),
+                textAlign = TextAlign.Center,
+                lineHeight = 17.sp,
+                fontSize = 12.sp,
+            )
+        }
+        Box(
+            modifier = Modifier
+                .background(color = itemBackgroundColor)
+                .weight(1f)
+                .fillMaxHeight(),
+        ) {
+            AirportInformation(flight.departure, isDeparture = true)
+        }
+        Box(
+            modifier = Modifier
+                .background(color = itemBackgroundColor)
+                .weight(1f)
+                .fillMaxHeight(),
+        ) {
+            AirportInformation(flight.destination, isDeparture = false)
+        }
+    }
+    Divider(color = pageBackgroundColor, thickness = 2.dp)
+}
+
+@Composable
+private fun AirportInformation(airport: Airport, isDeparture: Boolean) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+    ) {
+        val resource = if (isDeparture) {
+            R.drawable.ic_airplane_takeoff
+        } else {
+            R.drawable.ic_airplane_landing
+        }
+        Box(
+            modifier = Modifier
+                .weight(0.3f)
+                .fillMaxHeight()
+                .fillMaxHeight(),
+            contentAlignment = Alignment.CenterEnd,
+        ) {
+            Image(painter = painterResource(resource), contentDescription = null)
+        }
+        Column(
+            modifier = Modifier
+                .weight(0.7f)
+                .fillMaxHeight()
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = airport.code,
+                textAlign = TextAlign.Center,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Black,
+            )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = airport.city,
+                textAlign = TextAlign.Center,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Light,
+            )
+        }
+    }
+}
+
+// The default dark them ripple is too bright so we tone it down.
+private object Example3RippleTheme : RippleTheme {
+    @Composable
+    override fun defaultColor() = RippleTheme.defaultRippleColor(Color.Gray, lightTheme = false)
+
+    @Composable
+    override fun rippleAlpha() = RippleTheme.defaultRippleAlpha(Color.Gray, lightTheme = false)
+}
+
+@Preview(heightDp = 600)
+@Composable
+private fun Example3Preview() {
+    Example3Page()
 }
