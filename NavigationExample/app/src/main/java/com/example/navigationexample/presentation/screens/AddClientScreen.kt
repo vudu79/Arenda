@@ -21,17 +21,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.navigationexample.R
 import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.common.*
+import com.godaddy.android.colorpicker.ClassicColorPicker
+import com.godaddy.android.colorpicker.HsvColor
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -49,7 +54,21 @@ fun AddClientScreen(
     val members = remember { mutableStateOf("") }
     val payment = remember { mutableStateOf("") }
     val prepayment = remember { mutableStateOf("") }
+    val colorClient = remember { mutableStateOf(0) }
     val sity = remember { mutableStateOf("") }
+
+
+    val colors = listOf(
+        Color(0xFFEF9A9A),
+        Color(0xFFF48FB1),
+        Color(0xFF80CBC4),
+        Color(0xFFA5D6A7),
+        Color(0xFFFFCC80),
+        Color(0xFFFFAB91),
+        Color(0xFF81D4FA),
+        Color(0xFFCE93D8),
+        Color(0xFFB39DDB)
+    )
 
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter
@@ -132,6 +151,13 @@ fun AddClientScreen(
                         }),
                     )
 
+
+                    ColourButton(colors, onColorSelected = {
+                        colorClient.value = it.toArgb()
+//                        Log.d("myTag", it.toArgb().toString())
+                    })
+
+
                     OutlinedTextField(
                         value = members.value,
                         onValueChange = {
@@ -212,7 +238,7 @@ fun AddClientScreen(
                         keyboardActions = KeyboardActions(onNext = {
                             focusManager.moveFocus(FocusDirection.Down)
                         }),
-                        )
+                    )
 
                     OutlinedTextField(
                         value = prepayment.value,
@@ -329,6 +355,7 @@ fun AddClientScreen(
                                         members = members.value.trim().toInt(),
                                         prepayment = prepayment.value.trim().toInt(),
                                         payment = payment.value.trim().toInt(),
+                                        clientColor = colorClient.value,
                                         sity = sity.value,
                                         appatment_name = appatmentName
                                     )

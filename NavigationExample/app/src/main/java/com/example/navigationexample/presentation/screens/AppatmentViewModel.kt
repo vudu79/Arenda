@@ -2,7 +2,6 @@ package com.example.navigationexample.presentation.screens
 
 import android.app.Application
 import android.app.DatePickerDialog
-import android.app.ProgressDialog.show
 import android.content.Context
 import android.icu.util.Calendar
 import androidx.compose.runtime.getValue
@@ -17,6 +16,7 @@ import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.data.repository.AppatmentRepositoryImpl
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 
 
 class AppatmentViewModel(
@@ -28,6 +28,8 @@ class AppatmentViewModel(
     val allAppatments: LiveData<List<Appatment>>
     val allClients: LiveData<List<Client>>
     var allAppatmentClients: MutableLiveData<List<Client>>
+    lateinit var dateClientMapForObserve: Map<LocalDate, Client>
+
     var currentAppatment = mutableStateOf("")
     var dateOutString by mutableStateOf("")
     var dateOutLong by mutableStateOf(0L)
@@ -46,6 +48,7 @@ class AppatmentViewModel(
 
         allClients = clientRepository.allClients
         allAppatmentClients = clientRepository.allAppatmentClients
+        dateClientMapForObserve = clientRepository.dateClientMap
     }
 
     fun insertAppatment(appatment: Appatment) {
@@ -77,11 +80,11 @@ class AppatmentViewModel(
                 when(dateType){
                     "in" -> {
                         dateInString = getPickedDateAsString(year, month, day)
-                        dateInLong = getPickedDateAsLong(year, month, day)
+                        dateInLong = getPickedDateAsLocalDate(year, month, day)
                     }
                     "out" -> {
                         dateOutString = getPickedDateAsString(year, month, day)
-                        dateOutLong = getPickedDateAsLong(year, month, day)
+                        dateOutLong = getPickedDateAsLocalDate(year, month, day)
                     }
                 }
 
@@ -121,6 +124,8 @@ class AppatmentViewModel(
         return calendar.timeInMillis
     }
 
-
+    private fun getPickedDateAsLocalDate(year: Int, month: Int, day: Int): Long {
+        return LocalDate.of(year, month, day).toEpochDay()
+    }
 
 }

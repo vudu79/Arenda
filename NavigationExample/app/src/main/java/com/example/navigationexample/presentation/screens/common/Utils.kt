@@ -36,6 +36,8 @@ import com.kizitonwose.calendar.sample.shared.StatusBarColorLifecycleObserver
 import com.kizitonwose.calendar.sample.shared.findActivity
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 fun Modifier.clickable(
     enabled: Boolean = true,
@@ -53,6 +55,24 @@ fun Modifier.clickable(
         onClick = onClick,
     )
 }
+
+@Composable
+fun listDaysBetween(
+    startDate: LocalDate? = null,
+    endDate: LocalDate? = null
+): MutableList<LocalDate> {
+    val listDays: MutableList<LocalDate> = mutableListOf()
+    val numOfDaysBetween = (ChronoUnit.DAYS.between(startDate, endDate)).toInt()
+    (0..numOfDaysBetween).forEach {
+        val date: LocalDate? = startDate?.plusDays(it.toLong())
+        if (date != null) {
+            listDays.add(date)
+        }
+    }
+    return listDays
+}
+
+
 
 @Composable
 fun StatusBarColorUpdateEffect(color: Color) {

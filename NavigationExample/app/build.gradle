@@ -68,6 +68,8 @@ dependencies {
     implementation "androidx.room:room-runtime:2.4.2"
     implementation "androidx.room:room-ktx:2.4.2"
     implementation "androidx.compose.runtime:runtime-livedata:1.1.1"
+
+    implementation 'com.godaddy.android.colorpicker:compose-color-picker-android:0.7.0'
     annotationProcessor "androidx.room:room-compiler:2.4.2"
     def nav_compose_version = "1.0.0-alpha01"
     implementation "androidx.navigation:navigation-compose:$nav_compose_version"
@@ -77,6 +79,10 @@ dependencies {
     implementation 'com.kizitonwose.calendar:compose:2.3.0'
     implementation 'com.kizitonwose.calendar:view:2.3.0'
 
+    implementation("androidx.compose.material3:material3:1.0.1")
+    implementation("androidx.compose.material3:material3-window-size-class:1.0.1")
+
+    implementation "com.github.skydoves:colorpicker-compose:1.0.0"
     kapt "androidx.room:room-compiler:2.4.2"
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

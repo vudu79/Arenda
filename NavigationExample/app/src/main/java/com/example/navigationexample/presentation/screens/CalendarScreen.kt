@@ -46,6 +46,7 @@ import java.util.*
 
 private val flights = generateFlights().groupBy { it.time.toLocalDate() }
 
+
 private val pageBackgroundColor: Color @Composable get() = colorResource(R.color.example_5_page_bg_color)
 private val itemBackgroundColor: Color @Composable get() = colorResource(R.color.example_5_item_view_bg_color)
 private val toolbarColor: Color @Composable get() = colorResource(R.color.example_5_toolbar_color)
@@ -53,7 +54,8 @@ private val selectedItemColor: Color @Composable get() = colorResource(R.color.e
 private val inActiveTextColor: Color @Composable get() = colorResource(R.color.example_5_text_grey_light)
 
 @Composable
-fun CalendarScreen() {
+fun CalendarScreen(viewModel: AppatmentViewModel) {
+    val dateClientMap = remember { viewModel.dateClientMapForObserve }
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
     val endMonth = remember { currentMonth.plusMonths(500) }
@@ -109,7 +111,8 @@ fun CalendarScreen() {
                 dayContent = { day ->
                     CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
                         val colors = if (day.position == DayPosition.MonthDate) {
-                            flights[day.date].orEmpty().map { colorResource(it.color) }
+//                            flights[day.date].orEmpty().map { colorResource(it.color) }
+                            listOf(dateClientMap[day.date]?.clientColor)
                         } else {
                             emptyList()
                         }
@@ -143,7 +146,7 @@ fun CalendarScreen() {
 private fun Day(
     day: CalendarDay,
     isSelected: Boolean = false,
-    colors: List<Color> = emptyList(),
+    colors: List<Int?> = emptyList(),
     onClick: (CalendarDay) -> Unit = {},
 ) {
     Box(
@@ -181,11 +184,12 @@ private fun Day(
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             for (color in colors) {
+                val colorT = if (color!=null) Color(color)else Color(1,1,1)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(5.dp)
-                        .background(color),
+                        .background(colorT),
                 )
             }
         }

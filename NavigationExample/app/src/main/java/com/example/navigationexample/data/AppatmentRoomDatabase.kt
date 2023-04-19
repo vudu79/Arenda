@@ -10,7 +10,7 @@ import com.example.navigationexample.data.dao.ClientDao
 import com.example.navigationexample.data.entity.Client
 
 
-@Database(entities = [(Appatment::class), (Client::class)], version = 6)
+@Database(entities = [(Appatment::class), (Client::class)], version = 8)
 abstract class AppatmentRoomDatabase: RoomDatabase() {
 
     abstract fun appatmentDao(): AppatmentDao
