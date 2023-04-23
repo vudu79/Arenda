@@ -17,16 +17,20 @@ import com.example.navigationexample.data.entity.Appatment
 import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.data.repository.AppatmentRepositoryImpl
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import javax.inject.Inject
 
 
-class AppatmentViewModel(
-    application: Application
+@HiltViewModel
+class AppatmentViewModel @Inject constructor(
+    private val appatmentRepository: AppatmentRepositoryImpl,
+    private val clientRepository: ClientsRepositoryImpl,
 ) : ViewModel() {
 
-    private val appatmentRepository: AppatmentRepositoryImpl
-    private val clientRepository: ClientsRepositoryImpl
+//    private val appatmentRepository: AppatmentRepositoryImpl
+//    private val clientRepository: ClientsRepositoryImpl
     val allAppatments: LiveData<List<Appatment>>
     val allClients: LiveData<List<Client>>
     var allAppatmentClients: MutableLiveData<List<Client>>
@@ -40,11 +44,11 @@ class AppatmentViewModel(
 
 
     init {
-        val appatmentDb = AppatmentRoomDatabase.getInstance(application)
-        val appatmentDao = appatmentDb.appatmentDao()
-        val clientDao = appatmentDb.ClientDao()
-        appatmentRepository = AppatmentRepositoryImpl(appatmentDao = appatmentDao)
-        clientRepository = ClientsRepositoryImpl(clientDao = clientDao)
+//        val appatmentDb = AppatmentRoomDatabase.getInstance(application)
+//        val appatmentDao = appatmentDb.appatmentDao()
+//        val clientDao = appatmentDb.ClientDao()
+//        appatmentRepository = AppatmentRepositoryImpl(appatmentDao = appatmentDao)
+//        clientRepository = ClientsRepositoryImpl(clientDao = clientDao)
 
         allAppatments = appatmentRepository.allAppatment
 

@@ -9,9 +9,10 @@ import com.example.navigationexample.presentation.screens.common.listDaysBetween
 import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import javax.inject.Inject
 
 
-class ClientsRepositoryImpl(private val clientDao: ClientDao) {
+class ClientsRepositoryImpl @Inject constructor (private val clientDao: ClientDao) {
 
 
     var dateClientMap: MutableMap<LocalDate, MutableSet<Client>> = mutableMapOf()

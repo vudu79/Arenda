@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,27 +19,28 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.navigationexample.presentation.navigation.NavHostView
 import com.example.navigationexample.presentation.screens.AppatmentViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val viewModel: AppatmentViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val owner = LocalViewModelStoreOwner.current
-
-            owner?.let {
-                val viewModel: AppatmentViewModel = viewModel(
-                    it,
-                    "MainViewModel",
-                    AppatmentViewModelFactory(
-                        LocalContext.current.applicationContext
-                                as Application
-                    )
-                )
-
-
-
-                NavHostView(viewModel)
-            }
+//            val owner = LocalViewModelStoreOwner.current
+//            owner?.let {
+//                val viewModel: AppatmentViewModel = viewModel(
+//                    it,
+//                    "MainViewModel",
+//                    AppatmentViewModelFactory(
+//                        LocalContext.current.applicationContext
+//                                as Application
+//                    )
+//                )
+//            }
+            NavHostView(viewModel)
         }
     }
 }

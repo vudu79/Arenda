@@ -6,9 +6,10 @@ import com.example.navigationexample.data.entity.Appatment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class AppatmentRepositoryImpl(private val appatmentDao: AppatmentDao) {
+class AppatmentRepositoryImpl @Inject constructor(private val appatmentDao: AppatmentDao) {
 
     val allAppatment: LiveData<List<Appatment>> = appatmentDao.getAllAppatment()
 
