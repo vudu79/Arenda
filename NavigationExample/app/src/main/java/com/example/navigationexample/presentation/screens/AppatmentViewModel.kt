@@ -1,9 +1,11 @@
 package com.example.navigationexample.presentation.screens
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.app.DatePickerDialog
 import android.content.Context
 import android.icu.util.Calendar
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -28,7 +30,7 @@ class AppatmentViewModel(
     val allAppatments: LiveData<List<Appatment>>
     val allClients: LiveData<List<Client>>
     var allAppatmentClients: MutableLiveData<List<Client>>
-    lateinit var dateClientMapForObserve: Map<LocalDate, Client>
+    lateinit var dateClientMapForObserve: Map<LocalDate, MutableSet<Client>>
 
     var currentAppatment = mutableStateOf("")
     var dateOutString by mutableStateOf("")
@@ -77,7 +79,7 @@ class AppatmentViewModel(
         val calendar = Calendar.getInstance()
         DatePickerDialog(
             context, { _, year, month, day ->
-                when(dateType){
+                when (dateType) {
                     "in" -> {
                         dateInString = getPickedDateAsString(year, month, day)
                         dateInLong = getPickedDateAsLocalDate(year, month, day)
@@ -111,6 +113,7 @@ class AppatmentViewModel(
 //    }
 
 
+    @SuppressLint("SimpleDateFormat")
     private fun getPickedDateAsString(year: Int, month: Int, day: Int): String {
         val calendar = Calendar.getInstance()
         calendar.set(year, month, day)
@@ -125,7 +128,7 @@ class AppatmentViewModel(
     }
 
     private fun getPickedDateAsLocalDate(year: Int, month: Int, day: Int): Long {
-        return LocalDate.of(year, month, day).toEpochDay()
+        return LocalDate.of(year, month + 1, day).toEpochDay()
     }
 
 }

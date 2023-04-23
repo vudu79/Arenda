@@ -162,7 +162,6 @@ fun AddClientScreen(
                         value = members.value,
                         onValueChange = {
                             members.value = it
-                            Log.d("myTag", members.value)
                         },
                         label = { Text(text = "Количество человек", color = Black) },
                         placeholder = { Text(text = "Количество человек", color = Black) },

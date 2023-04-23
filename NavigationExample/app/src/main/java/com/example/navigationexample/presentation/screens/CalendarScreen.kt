@@ -1,6 +1,7 @@
 package com.example.navigationexample.presentation.screens
 
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -67,6 +68,9 @@ fun CalendarScreen(viewModel: AppatmentViewModel) {
             if (date == null) emptyList() else flights[date].orEmpty()
         }
     }
+
+
+
     StatusBarColorUpdateEffect(toolbarColor)
     Column(
         modifier = Modifier
@@ -109,10 +113,12 @@ fun CalendarScreen(viewModel: AppatmentViewModel) {
                 modifier = Modifier.wrapContentWidth(),
                 state = state,
                 dayContent = { day ->
+                    Log.d("myTag", dateClientMap[day.date].toString())
                     CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
                         val colors = if (day.position == DayPosition.MonthDate) {
 //                            flights[day.date].orEmpty().map { colorResource(it.color) }
-                            listOf(dateClientMap[day.date]?.clientColor)
+                            dateClientMap[day.date].orEmpty().map { it.clientColor }
+
                         } else {
                             emptyList()
                         }
@@ -183,8 +189,9 @@ private fun Day(
                 .padding(bottom = 8.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
+
             for (color in colors) {
-                val colorT = if (color!=null) Color(color)else Color(1,1,1)
+                val colorT = if (color != null) Color(color) else Color(1, 1, 1)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()

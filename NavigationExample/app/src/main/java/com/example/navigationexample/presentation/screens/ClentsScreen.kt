@@ -66,11 +66,7 @@ fun ClientsScreen(
 
         ) {
             items(appatmentClients) { item ->
-
-                Log.d("myTag", item.toString())
-
                 ClientItemRow(client = item, navcontroller = mainNavController, viewModel)
-
             }
         }
 
@@ -80,7 +76,6 @@ fun ClientsScreen(
                     route = "${Routs.addClientScreen}?appatment_name=$appatmentName"
 
                 )
-                Log.d("myTag", appatmentName)
             },
             shape = RoundedCornerShape(30.dp),
             modifier = Modifier

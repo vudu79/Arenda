@@ -1,9 +1,11 @@
 package com.example.navigationexample.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.navigationexample.data.dao.ClientDao
 import com.example.navigationexample.data.entity.Client
+import com.example.navigationexample.presentation.screens.common.listDaysBetween
 import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -12,7 +14,7 @@ import java.time.temporal.ChronoUnit
 class ClientsRepositoryImpl(private val clientDao: ClientDao) {
 
 
-    var dateClientMap: MutableMap<LocalDate, Client> = mutableMapOf()
+    var dateClientMap: MutableMap<LocalDate, MutableSet<Client>> = mutableMapOf()
     val allClients: LiveData<List<Client>> = clientDao.getAllClients()
     val allAppatmentClients = MutableLiveData<List<Client>>()
 
@@ -34,17 +36,40 @@ class ClientsRepositoryImpl(private val clientDao: ClientDao) {
     fun getAppatmentClients(appatmentName: String) {
         coroutineScope.launch(Dispatchers.Main) {
             allAppatmentClients.value = asyncFind(appatmentName).await()
+            dateClientMap.clear()
             val clients = allAppatmentClients.value
             clients?.let { it ->
+                val fff: MutableList<Client> = mutableListOf()
                 it.forEach { client ->
                     val startDay = LocalDate.ofEpochDay(client.inDate!!)
                     val endDay = LocalDate.ofEpochDay(client.outDate!!)
                     val clientPeriod = listDaysBetween(startDay, endDay)
-                    clientPeriod.forEach { day -> dateClientMap.put(day, client) }
+                    clientPeriod.forEach { day ->
+                        run {
+                            if (dateClientMap.containsKey(day)) {
+                                Log.d("myTag", "условие сработало мап = $dateClientMap")
+                                fff.addAll(dateClientMap[day]!!)
+                                Log.d("myTag", "добавил в fff лист из мапы = $fff")
+                                fff.add(client)
+                                Log.d("myTag", "добавил в fff клиента = $fff")
+                                dateClientMap[day]?.addAll(fff)
+                                Log.d("myTag", "обновил мапу = $dateClientMap")
+
+                                fff.clear()
+//                                Log.d("myTag", " fff -----  $fff")
+//                                Log.d("myTag", " map -----  ${dateClientMap[day]?.size}")
+                            } else{
+                                dateClientMap.put(day, mutableSetOf(client))
+                            }
+
+
+                        }
+                    }
                 }
             }
         }
     }
+
 
 //
 //    fun getDateClientMap(appatmentName: String) {

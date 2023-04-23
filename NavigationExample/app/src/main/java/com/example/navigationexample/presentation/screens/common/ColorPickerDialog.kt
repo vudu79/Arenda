@@ -155,7 +155,7 @@ private fun TwoColorDialog(
         onDismissRequest = onDismiss,
         text = {
             LazyVerticalGrid(
-                columns = GridCells.Fixed(3),
+                columns = GridCells.Fixed(4),
                 state = gridState
             ) {
                 items(colorList) { color ->
