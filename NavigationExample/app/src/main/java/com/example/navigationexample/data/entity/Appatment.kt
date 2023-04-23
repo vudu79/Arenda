@@ -22,6 +22,10 @@ class Appatment {
     @ColumnInfo(name = "type")
     var type: String= ""
 
+    @ColumnInfo(name = "rental_period")
+    var rentalPeriod: String= ""
+
+
     @ColumnInfo(name = "square")
     var square: Float = 0f
 
@@ -32,6 +36,14 @@ class Appatment {
         this.name = name
         this.address = address
         this.type = type
+        this.square = square
+    }
+
+    constructor(name: String, address: String, type: String, rentalPeriod: String, square: Float){
+        this.name = name
+        this.address = address
+        this.type = type
+        this.rentalPeriod = rentalPeriod
         this.square = square
     }
 

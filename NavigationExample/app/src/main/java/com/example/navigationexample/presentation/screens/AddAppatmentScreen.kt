@@ -39,8 +39,19 @@ fun AddAppatmentScreen(
 //    val scaffoldState = rememberScaffoldState()
     val nameAppat = remember { mutableStateOf("") }
     val typeAppat = remember { mutableStateOf("") }
+    val rentatypeAppat = remember { mutableStateOf("") }
     val addressAppat = remember { mutableStateOf("") }
     val squearAppat = remember { mutableStateOf("") }
+
+    val expanded = remember { mutableStateOf(false) }
+    val items = listOf("Апартаменты", "Квартира", "комерческий")
+    val disabledValue = "B"
+    val selectedIndex = remember { mutableStateOf(0) }
+
+    val expandedRenta = remember { mutableStateOf(false) }
+    val itemsRenta = listOf("Помесячно", "Посуточно", "Почасовая")
+    val disabledValueRenta = "B"
+    val selectedIndexRenta = remember { mutableStateOf(0) }
 
 
 //    Image(
@@ -64,7 +75,7 @@ fun AddAppatmentScreen(
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(41,41,41))
+                .background(Color(41, 41, 41))
         ) {
             Box(
                 modifier = Modifier
@@ -100,26 +111,132 @@ fun AddAppatmentScreen(
                         label = { Text(text = "Название", color = Black) },
                         placeholder = { Text(text = "Название", color = Black) },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
+                        modifier = Modifier.fillMaxWidth(0.79f),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black,
                             textColor = Black,
-                            backgroundColor = Color(142,143,138)
+                            backgroundColor = Color(142, 143, 138)
                         )
                     )
-                    OutlinedTextField(
-                        value = typeAppat.value,
-                        onValueChange = { typeAppat.value = it },
-                        label = { Text(text = "Тип помещения", color = Black) },
-                        placeholder = { Text(text = "Тип помещения", color = Black) },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
+//                    OutlinedTextField(
+//                        value = typeAppat.value,
+//                        onValueChange = { typeAppat.value = it },
+//                        label = { Text(text = "Тип помещения", color = Black) },
+//                        placeholder = { Text(text = "Тип помещения", color = Black) },
+//                        singleLine = true,
+//                        modifier = Modifier.fillMaxWidth(0.8f),
 //                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = Black, textColor = Black,
-                            backgroundColor = Color(142,143,138)
+//                        colors = TextFieldDefaults.outlinedTextFieldColors(
+//                            unfocusedBorderColor = Black, textColor = Black,
+//                            backgroundColor = Color(142,143,138)
+//                        )
+//                    )
+
+
+                    Box(
+
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .padding(bottom = 10.dp, top = 10.dp),
+//                            .wrapContentSize(Alignment.Center),
+                        contentAlignment = Alignment.TopCenter
+
+                    ) {
+                        Text(
+                            text = "Тип объекта- ${items[selectedIndex.value]}",
+
+                            modifier = Modifier
+
+                                .fillMaxWidth()
+//                                .padding(top = 5.dp, start = 5.dp)
+                                .height(56.dp)
+                                .clickable(onClick = { expanded.value = true })
+                                .background(
+                                    Color(142, 143, 138)
+                                ),
+                            fontSize=16.sp,
+                            color = Black,
+
                         )
-                    )
+                        DropdownMenu(
+                            expanded = expanded.value,
+                            onDismissRequest = { expanded.value = false },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    Color.Transparent
+                                )
+                        ) {
+                            items.forEachIndexed { index, s ->
+                                DropdownMenuItem(onClick = {
+                                    selectedIndex.value = index
+                                    expanded.value = false
+                                    typeAppat.value = s
+                                }) {
+                                    val disabledText = if (s == disabledValue) {
+                                        " (Disabled)"
+                                    } else {
+                                        ""
+                                    }
+                                    Text(text = s + disabledText)
+                                }
+                            }
+                        }
+                    }
+
+
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(0.79f),
+//                            .wrapContentSize(Alignment.Center),
+                        contentAlignment = Alignment.TopCenter
+                    ) {
+                        Text(
+                            text = "Срок аренды- ${itemsRenta[selectedIndexRenta.value]}",
+
+                            modifier = Modifier
+
+                                .fillMaxWidth()
+//                                .padding(top = 5.dp, start = 5.dp)
+                                .height(56.dp)
+                                .clickable(onClick = { expandedRenta.value = true })
+                                .background(
+                                    Color(142, 143, 138)
+                                ),
+                            fontSize=16.sp,
+                            color = Black,
+
+                            )
+                        DropdownMenu(
+                            expanded = expandedRenta.value,
+                            onDismissRequest = { expandedRenta.value = false },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    Color.Transparent
+                                )
+                        ) {
+                            itemsRenta.forEachIndexed { index, s ->
+                                DropdownMenuItem(onClick = {
+                                    selectedIndexRenta.value = index
+                                    expandedRenta.value = false
+                                    rentatypeAppat.value = s
+                                }) {
+                                    val disabledText = if (s == disabledValueRenta) {
+                                        " (Disabled)"
+                                    } else {
+                                        ""
+                                    }
+                                    Text(text = s + disabledText)
+                                }
+                            }
+                        }
+                    }
+
+
+
+
                     OutlinedTextField(
                         value = addressAppat.value,
                         onValueChange = { addressAppat.value = it },
@@ -132,7 +249,7 @@ fun AddAppatmentScreen(
 //                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black, textColor = Black,
-                            backgroundColor = Color(142,143,138)
+                            backgroundColor = Color(142, 143, 138)
                         )
                     )
                     OutlinedTextField(
@@ -145,14 +262,14 @@ fun AddAppatmentScreen(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black, textColor = Black,
-                            backgroundColor = Color(142,143,138)
+                            backgroundColor = Color(142, 143, 138)
                         )
                     )
 
                     Spacer(modifier = Modifier.padding(10.dp))
                     Button(modifier = Modifier
                         .fillMaxWidth(0.8f),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(223,75,0)),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(223, 75, 0)),
                         onClick = {
                             if (nameAppat.value.isEmpty()) {
                                 Toast.makeText(
@@ -175,7 +292,13 @@ fun AddAppatmentScreen(
                             } else if (typeAppat.value.isEmpty()) {
                                 Toast.makeText(
                                     context,
-                                    "Введите площадь объекта!",
+                                    "Введите тип объекта!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else if (rentatypeAppat.value.isEmpty()) {
+                                Toast.makeText(
+                                    context,
+                                    "Введите срок аренды!",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
@@ -184,6 +307,7 @@ fun AddAppatmentScreen(
                                         nameAppat.value,
                                         addressAppat.value,
                                         typeAppat.value,
+                                        rentatypeAppat.value,
                                         squearAppat.value.toFloat()
                                     )
                                 )
@@ -193,6 +317,7 @@ fun AddAppatmentScreen(
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
+                            navController.navigate(Routs.home)
                         }
 
                     ) {
@@ -228,3 +353,7 @@ fun AddAppatmentScreen(
 //
 //    }
 
+//@Composable
+//fun DropdownDemo(): String{
+//
+//}

@@ -23,7 +23,8 @@ object AppModule {
         app,
         AppatmentRoomDatabase::class.java,
         "product_database"
-    ).build() // The reason we can construct a database for the repo
+    ).fallbackToDestructiveMigration()
+        .build() // The reason we can construct a database for the repo
 
     @Singleton
     @Provides
