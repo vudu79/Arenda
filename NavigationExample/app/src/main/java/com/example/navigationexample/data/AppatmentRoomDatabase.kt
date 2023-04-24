@@ -7,14 +7,17 @@ import androidx.room.RoomDatabase
 import com.example.navigationexample.data.entity.Appatment
 import com.example.navigationexample.data.dao.AppatmentDao
 import com.example.navigationexample.data.dao.ClientDao
+import com.example.navigationexample.data.dao.RentalDaysDao
 import com.example.navigationexample.data.entity.Client
+import com.example.navigationexample.data.entity.RentalDay
 
 
-@Database(entities = [(Appatment::class), (Client::class)], version = 10)
+@Database(entities = [(Appatment::class), (Client::class), (RentalDay::class)], version = 12)
 abstract class AppatmentRoomDatabase: RoomDatabase() {
 
-    abstract fun appatmentDao(): AppatmentDao
-    abstract fun ClientDao(): ClientDao
+    abstract fun getAppatmentDao(): AppatmentDao
+    abstract fun getClientDao(): ClientDao
+    abstract fun getRentalDayDao(): RentalDaysDao
 
     companion object {
 

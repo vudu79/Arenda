@@ -17,6 +17,7 @@ import com.example.navigationexample.data.entity.Appatment
 import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.data.repository.AppatmentRepositoryImpl
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
+import com.example.navigationexample.data.repository.DaysRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -27,6 +28,7 @@ import javax.inject.Inject
 class AppatmentViewModel @Inject constructor(
     private val appatmentRepository: AppatmentRepositoryImpl,
     private val clientRepository: ClientsRepositoryImpl,
+    private val daysRepository: DaysRepositoryImpl,
 ) : ViewModel() {
 
 //    private val appatmentRepository: AppatmentRepositoryImpl

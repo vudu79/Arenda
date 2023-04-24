@@ -28,9 +28,14 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideAppatmentDao(db: AppatmentRoomDatabase) = db.appatmentDao()
+    fun provideAppatmentDao(db: AppatmentRoomDatabase) = db.getAppatmentDao()
 
     @Singleton
     @Provides
-    fun provideClientDao(db: AppatmentRoomDatabase) = db.ClientDao()
+    fun provideClientDao(db: AppatmentRoomDatabase) = db.getClientDao()
+
+    @Singleton
+    @Provides
+    fun provideRentalDayDao(db: AppatmentRoomDatabase) = db.getRentalDayDao()
+
 }

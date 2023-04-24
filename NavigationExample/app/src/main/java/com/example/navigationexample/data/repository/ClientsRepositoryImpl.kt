@@ -72,15 +72,6 @@ class ClientsRepositoryImpl @Inject constructor (private val clientDao: ClientDa
     }
 
 
-//
-//    fun getDateClientMap(appatmentName: String) {
-//        coroutineScope.launch(Dispatchers.Main) {
-//            allAppatmentClients.value = asyncFind(appatmentName).await()
-//
-//        }
-//    }
-
-
     private fun asyncFind(appatmentName: String): Deferred<List<Client>?> =
         coroutineScope.async(Dispatchers.IO) {
             return@async clientDao.getAppatmentClients(appatmentName)
