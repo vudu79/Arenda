@@ -17,6 +17,9 @@ interface ClientDao {
     @Query("DELETE FROM clients WHERE name = :name")
     fun deleteClient(name: String)
 
+    @Query("SELECT * FROM clients WHERE name = :clientName")
+    fun getClient(clientName: String): Client
+
     @Query("SELECT * FROM clients")
     fun getAllClients(): LiveData<List<Client>>
 

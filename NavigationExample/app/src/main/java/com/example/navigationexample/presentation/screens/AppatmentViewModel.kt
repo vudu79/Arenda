@@ -18,6 +18,7 @@ import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.data.repository.AppatmentRepositoryImpl
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
 import com.example.navigationexample.data.repository.DaysRepositoryImpl
+import com.example.navigationexample.domain.usecase.GetDayClientMapUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -29,14 +30,15 @@ class AppatmentViewModel @Inject constructor(
     private val appatmentRepository: AppatmentRepositoryImpl,
     private val clientRepository: ClientsRepositoryImpl,
     private val daysRepository: DaysRepositoryImpl,
+    private val getDayClientMapUseCase: GetDayClientMapUseCase
 ) : ViewModel() {
 
-//    private val appatmentRepository: AppatmentRepositoryImpl
+    //    private val appatmentRepository: AppatmentRepositoryImpl
 //    private val clientRepository: ClientsRepositoryImpl
     val allAppatments: LiveData<List<Appatment>>
     val allClients: LiveData<List<Client>>
     var allAppatmentClients: MutableLiveData<List<Client>>
-    lateinit var dateClientMapForObserve: Map<LocalDate, MutableSet<Client>>
+    var dateClientMapForObserve: MutableLiveData<MutableMap<LocalDate, MutableSet<Client>>>? = null
 
     var currentAppatment = mutableStateOf("")
     var dateOutString by mutableStateOf("")
@@ -56,7 +58,7 @@ class AppatmentViewModel @Inject constructor(
 
         allClients = clientRepository.allClients
         allAppatmentClients = clientRepository.allAppatmentClients
-        dateClientMapForObserve = clientRepository.dateClientMap
+//        dateClientMapForObserve?.value = getDayClientMapUseCase.invoke()
     }
 
     fun insertAppatment(appatment: Appatment) {
@@ -79,6 +81,10 @@ class AppatmentViewModel @Inject constructor(
 
     fun getAppatmentClients(appatmentName: String) {
         clientRepository.getAppatmentClients(appatmentName)
+    }
+
+    fun updateDaysMapForCalendar(appatmentName: String){
+        dateClientMapForObserve?.value =  getDayClientMapUseCase.invoke(appatmentName)
     }
 
 

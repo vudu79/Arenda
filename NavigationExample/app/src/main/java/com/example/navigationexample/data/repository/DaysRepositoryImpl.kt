@@ -14,7 +14,7 @@ class DaysRepositoryImpl @Inject constructor(private val rentalDaysDao: RentalDa
 
 
     val allClientDays = MutableLiveData<List<RentalDay>>()
-    val allAppatmentDays = MutableLiveData<List<RentalDay>>()
+    var allAppatmentDays: List<RentalDay>? = listOf()
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
@@ -64,7 +64,8 @@ class DaysRepositoryImpl @Inject constructor(private val rentalDaysDao: RentalDa
 
     fun getAppatmentDays(appatmentName: String) {
         coroutineScope.launch(Dispatchers.Main) {
-            allAppatmentDays.value = asyncFindAppatmentDays(appatmentName).await()
+            allAppatmentDays = asyncFindAppatmentDays(appatmentName).await()
+
         }
     }
 

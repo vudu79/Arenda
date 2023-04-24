@@ -55,8 +55,9 @@ private val selectedItemColor: Color @Composable get() = colorResource(R.color.e
 private val inActiveTextColor: Color @Composable get() = colorResource(R.color.example_5_text_grey_light)
 
 @Composable
-fun CalendarScreen(viewModel: AppatmentViewModel) {
-    val dateClientMap = remember { viewModel.dateClientMapForObserve }
+fun CalendarScreen(viewModel: AppatmentViewModel, appatmentName: String) {
+    viewModel.updateDaysMapForCalendar(appatmentName)
+    val dateClientMap = remember { viewModel.dateClientMapForObserve?.value }
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
     val endMonth = remember { currentMonth.plusMonths(500) }
@@ -113,11 +114,11 @@ fun CalendarScreen(viewModel: AppatmentViewModel) {
                 modifier = Modifier.wrapContentWidth(),
                 state = state,
                 dayContent = { day ->
-                    Log.d("myTag", dateClientMap[day.date].toString())
+                    dateClientMap?.get(day.date)?.let { Log.d("myTag", it.toString()) }
                     CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
                         val colors = if (day.position == DayPosition.MonthDate) {
 //                            flights[day.date].orEmpty().map { colorResource(it.color) }
-                            dateClientMap[day.date].orEmpty().map { it.clientColor }
+                            dateClientMap?.get(day.date).orEmpty().map { it.clientColor }
 
                         } else {
                             emptyList()
