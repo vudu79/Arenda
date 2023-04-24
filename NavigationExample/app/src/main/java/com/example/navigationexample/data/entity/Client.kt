@@ -39,7 +39,7 @@ class Client {
     var payment: Int? = 0
 
     @ColumnInfo(name = "client_color")
-    var clientColor: Int? = 0
+    var clientColor: Int = 0
 
     @ColumnInfo(name = "sity")
     var sity: String? = ""

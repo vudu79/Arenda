@@ -2,6 +2,7 @@ package com.example.navigationexample.data.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.example.navigationexample.data.dao.RentalDaysDao
+import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.data.entity.RentalDay
 import kotlinx.coroutines.*
 import java.time.LocalDate
@@ -17,13 +18,33 @@ class DaysRepositoryImpl @Inject constructor(private val rentalDaysDao: RentalDa
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    fun insertClient(newDay: RentalDay) {
+    fun insertOneDay(newDay: RentalDay) {
         coroutineScope.launch(Dispatchers.IO) {
             rentalDaysDao.insertDay(newDay)
         }
     }
 
-    fun deleteClient(clientName: String) {
+    fun insertClientDays(client: Client) {
+        val startDay = LocalDate.ofEpochDay(client.inDate!!)
+        val endDay = LocalDate.ofEpochDay(client.outDate!!)
+        val clientPeriod = listDaysBetween(startDay, endDay)
+
+        coroutineScope.launch(Dispatchers.IO) {
+            clientPeriod.forEach {
+                rentalDaysDao.insertDay(
+                    RentalDay(
+                        it.toEpochDay(),
+                        client.clientColor,
+                        client.name,
+                        client.appatment_name
+                    )
+                )
+            }
+        }
+    }
+
+
+    fun deleteClientDays(clientName: String) {
         coroutineScope.launch(Dispatchers.IO) {
             rentalDaysDao.deleteClientDays(clientName)
         }

@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,16 +48,6 @@ fun AddClientScreen(
     appatmentName: String,
 
     ) {
-    val focusManager = LocalFocusManager.current
-    val context = LocalContext.current
-    val name = remember { mutableStateOf("") }
-    val phone = remember { mutableStateOf("") }
-    val members = remember { mutableStateOf("") }
-    val payment = remember { mutableStateOf("") }
-    val prepayment = remember { mutableStateOf("") }
-    val colorClient = remember { mutableStateOf(0) }
-    val sity = remember { mutableStateOf("") }
-
 
     val colors = listOf(
         Color(0xFFEF9A9A),
@@ -69,6 +60,17 @@ fun AddClientScreen(
         Color(0xFFCE93D8),
         Color(0xFFB39DDB)
     )
+    val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
+    val name = remember { mutableStateOf("") }
+    val phone = remember { mutableStateOf("") }
+    val members = remember { mutableStateOf("") }
+    val payment = remember { mutableStateOf("") }
+    val prepayment = remember { mutableStateOf("") }
+    val colorClient = remember { mutableStateOf(colors[0].toArgb()) }
+    val sity = remember { mutableStateOf("") }
+
+
 
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter
@@ -360,7 +362,7 @@ fun AddClientScreen(
                                     )
                                 )
                                 Toast.makeText(
-                                    context, "Объект недвижимости добавлен!", Toast.LENGTH_SHORT
+                                    context, "Новый клиент зарегестрирован!", Toast.LENGTH_SHORT
                                 ).show()
                                 viewModel.getAppatmentClients(appatmentName)
                                 navController.navigate(route = "${Routs.mainScreenClients}?appatment_name=$appatmentName")

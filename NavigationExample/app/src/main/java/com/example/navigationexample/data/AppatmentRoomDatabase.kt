@@ -12,7 +12,7 @@ import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.data.entity.RentalDay
 
 
-@Database(entities = [(Appatment::class), (Client::class), (RentalDay::class)], version = 12)
+@Database(entities = [(Appatment::class), (Client::class), (RentalDay::class)], version = 13)
 abstract class AppatmentRoomDatabase: RoomDatabase() {
 
     abstract fun getAppatmentDao(): AppatmentDao

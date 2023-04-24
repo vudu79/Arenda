@@ -69,9 +69,11 @@ class AppatmentViewModel @Inject constructor(
 
     fun addClient(client: Client) {
         clientRepository.insertClient(client)
+        daysRepository.insertClientDays(client)
     }
 
     fun deleteClient(name: String) {
+        daysRepository.deleteClientDays(name)
         clientRepository.deleteClient(name)
     }
 

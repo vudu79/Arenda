@@ -106,6 +106,7 @@ fun ClientItemRow(client: Client, navcontroller: NavController, viewModel: Appat
             showCustomDialog = !showCustomDialog
         }, onOk = {
             showCustomDialog = !showCustomDialog
+
             viewModel.deleteClient(client.name)
             viewModel.getAppatmentClients(client.appatment_name)
         },

@@ -136,7 +136,7 @@ fun AddAppatmentScreen(
                     Box(
 
                         modifier = Modifier
-                            .fillMaxWidth(0.8f)
+                            .fillMaxWidth(0.79f)
                             .padding(bottom = 10.dp, top = 10.dp),
 //                            .wrapContentSize(Alignment.Center),
                         contentAlignment = Alignment.TopCenter
