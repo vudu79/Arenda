@@ -1,6 +1,5 @@
 package com.example.navigationexample.data.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -18,7 +17,7 @@ interface RentalDaysDao {
 
 
     @Query("SELECT * FROM rentaldays WHERE appatment_name=:appatmentName")
-    fun getAllAppatmentDays(appatmentName: String): List<RentalDay>
+    fun getAppatmentDays(appatmentName: String): List<RentalDay>
 
 
     @Query("SELECT * FROM rentaldays WHERE client_name = :clientName")

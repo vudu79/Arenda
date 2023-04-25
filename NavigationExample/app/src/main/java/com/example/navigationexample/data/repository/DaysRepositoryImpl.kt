@@ -1,5 +1,6 @@
 package com.example.navigationexample.data.repository
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.navigationexample.data.dao.RentalDaysDao
 import com.example.navigationexample.data.entity.Client
@@ -14,8 +15,7 @@ class DaysRepositoryImpl @Inject constructor(private val rentalDaysDao: RentalDa
 
 
     val allClientDays = MutableLiveData<List<RentalDay>>()
-    var allAppatmentDays: List<RentalDay>? = listOf()
-
+    var allAppatmentDays = MutableLiveData<List<RentalDay>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     fun insertOneDay(newDay: RentalDay) {
@@ -62,16 +62,18 @@ class DaysRepositoryImpl @Inject constructor(private val rentalDaysDao: RentalDa
         }
 
 
-    fun getAppatmentDays(appatmentName: String) {
+    fun getAppatmentDays(appatmentName: String): List<RentalDay>? {
         coroutineScope.launch(Dispatchers.Main) {
-            allAppatmentDays = asyncFindAppatmentDays(appatmentName).await()
+            allAppatmentDays.value =  asyncFindAppatmentDays(appatmentName).await()
 
         }
+        Log.d("myTag", "сработал allAppatmentDays - -   ${allAppatmentDays.value}")
+        return allAppatmentDays.value
     }
 
     private fun asyncFindAppatmentDays(appatmentName: String): Deferred<List<RentalDay>?> =
         coroutineScope.async(Dispatchers.IO) {
-            return@async rentalDaysDao.getAllAppatmentDays(appatmentName)
+            return@async rentalDaysDao.getAppatmentDays(appatmentName)
         }
 
 

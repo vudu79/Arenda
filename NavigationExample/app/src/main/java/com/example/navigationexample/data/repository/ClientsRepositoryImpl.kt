@@ -41,37 +41,37 @@ class ClientsRepositoryImpl @Inject constructor(private val clientDao: ClientDao
     fun getAppatmentClients(appatmentName: String) {
         coroutineScope.launch(Dispatchers.Main) {
             allAppatmentClients.value = asyncFind(appatmentName).await()
-            dateClientMap.clear()
-            val clients = allAppatmentClients.value
-            clients?.let { it ->
-                val fff: MutableList<Client> = mutableListOf()
-                it.forEach { client ->
-                    val startDay = LocalDate.ofEpochDay(client.inDate!!)
-                    val endDay = LocalDate.ofEpochDay(client.outDate!!)
-                    val clientPeriod = listDaysBetween(startDay, endDay)
-                    clientPeriod.forEach { day ->
-                        run {
-                            if (dateClientMap.containsKey(day)) {
-                                Log.d("myTag", "условие сработало мап = $dateClientMap")
-                                fff.addAll(dateClientMap[day]!!)
-                                Log.d("myTag", "добавил в fff лист из мапы = $fff")
-                                fff.add(client)
-                                Log.d("myTag", "добавил в fff клиента = $fff")
-                                dateClientMap[day]?.addAll(fff)
-                                Log.d("myTag", "обновил мапу = $dateClientMap")
-
-                                fff.clear()
-//                                Log.d("myTag", " fff -----  $fff")
-//                                Log.d("myTag", " map -----  ${dateClientMap[day]?.size}")
-                            } else {
-                                dateClientMap.put(day, mutableSetOf(client))
-                            }
-
-
-                        }
-                    }
-                }
-            }
+//            dateClientMap.clear()
+//            val clients = allAppatmentClients.value
+//            clients?.let { it ->
+//                val fff: MutableList<Client> = mutableListOf()
+//                it.forEach { client ->
+//                    val startDay = LocalDate.ofEpochDay(client.inDate!!)
+//                    val endDay = LocalDate.ofEpochDay(client.outDate!!)
+//                    val clientPeriod = listDaysBetween(startDay, endDay)
+//                    clientPeriod.forEach { day ->
+//                        run {
+//                            if (dateClientMap.containsKey(day)) {
+//                                Log.d("myTag", "условие сработало мап = $dateClientMap")
+//                                fff.addAll(dateClientMap[day]!!)
+//                                Log.d("myTag", "добавил в fff лист из мапы = $fff")
+//                                fff.add(client)
+//                                Log.d("myTag", "добавил в fff клиента = $fff")
+//                                dateClientMap[day]?.addAll(fff)
+//                                Log.d("myTag", "обновил мапу = $dateClientMap")
+//
+//                                fff.clear()
+////                                Log.d("myTag", " fff -----  $fff")
+////                                Log.d("myTag", " map -----  ${dateClientMap[day]?.size}")
+//                            } else {
+//                                dateClientMap.put(day, mutableSetOf(client))
+//                            }
+//
+//
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 

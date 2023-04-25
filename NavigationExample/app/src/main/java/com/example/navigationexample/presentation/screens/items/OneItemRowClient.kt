@@ -109,6 +109,7 @@ fun ClientItemRow(client: Client, navcontroller: NavController, viewModel: Appat
 
             viewModel.deleteClient(client.name)
             viewModel.getAppatmentClients(client.appatment_name)
+            viewModel.updateDaysMapForCalendar(client.appatment_name)
         },
         message = "Клиент будет безвозвратно удален. Вы уверены?")
     }

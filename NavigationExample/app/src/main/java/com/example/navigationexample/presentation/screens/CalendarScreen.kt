@@ -118,7 +118,7 @@ fun CalendarScreen(viewModel: AppatmentViewModel, appatmentName: String) {
                     CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
                         val colors = if (day.position == DayPosition.MonthDate) {
 //                            flights[day.date].orEmpty().map { colorResource(it.color) }
-                            dateClientMap?.get(day.date).orEmpty().map { it.clientColor }
+                            dateClientMap?.get(day.date).orEmpty().map { it.color }
 
                         } else {
                             emptyList()

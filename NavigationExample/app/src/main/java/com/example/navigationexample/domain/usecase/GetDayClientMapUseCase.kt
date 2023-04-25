@@ -7,6 +7,7 @@ import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.data.entity.RentalDay
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
 import com.example.navigationexample.data.repository.DaysRepositoryImpl
+import com.example.navigationexample.domain.models.ClientMonk
 import com.example.navigationexample.presentation.screens.common.listDaysBetween
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,20 +17,25 @@ import javax.inject.Inject
 
 class GetDayClientMapUseCase @Inject constructor(
     private val daysRepositoryImpl: DaysRepositoryImpl,
-    private val clientsRepositoryImpl: ClientsRepositoryImpl
 ) {
 
-
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private var allAppatmentDays: List<RentalDay>? = listOf()
-    fun invoke(appatmentName: String): MutableMap<LocalDate, MutableSet<Client>>{
-        val dateClientMap: MutableMap<LocalDate, MutableSet<Client>> = mutableMapOf()
-        daysRepositoryImpl.getAppatmentDays(appatmentName)
-        allAppatmentDays = daysRepositoryImpl.allAppatmentDays
+    private var dateClientMap: MutableMap<LocalDate, MutableSet<ClientMonk>> = mutableMapOf()
+    fun invoke(appatmentName: String): MutableMap<LocalDate, MutableSet<ClientMonk>> {
+
+        allAppatmentDays = daysRepositoryImpl.getAppatmentDays(appatmentName)
+
+
         allAppatmentDays?.forEach {
             val localDay = LocalDate.ofEpochDay(it.epochDay)
-            val client = clientsRepositoryImpl.getClient(it.clientName)
-            dateClientMap[localDay]?.add(client)
+            Log.d("myTag", "День  - $localDay")
+            val clientMonk = ClientMonk(it.clientName, it.appatmentName, it.clientColor)
+
+            if (dateClientMap.containsKey(localDay)) {
+                dateClientMap[localDay]?.add(clientMonk)
+            } else {
+                dateClientMap.put(localDay, mutableSetOf(clientMonk))
+            }
         }
         return dateClientMap
     }
