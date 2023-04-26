@@ -1,7 +1,6 @@
 package com.example.navigationexample.presentation.screens
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,7 +11,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,19 +23,15 @@ import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.navigationexample.R
 import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.common.*
-import com.godaddy.android.colorpicker.ClassicColorPicker
-import com.godaddy.android.colorpicker.HsvColor
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -62,14 +56,13 @@ fun AddClientScreen(
     )
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
-    val name = remember { mutableStateOf("") }
-    val phone = remember { mutableStateOf("") }
-    val members = remember { mutableStateOf("") }
-    val payment = remember { mutableStateOf("") }
-    val prepayment = remember { mutableStateOf("") }
-    val colorClient = remember { mutableStateOf(colors[0].toArgb()) }
-    val sity = remember { mutableStateOf("") }
-
+    val name = remember { mutableStateOf(viewModel.clientName.value) }
+    val phone = remember { mutableStateOf(viewModel.phone.value) }
+    val members = remember { mutableStateOf(viewModel.members.value) }
+    val payment = remember { mutableStateOf(viewModel.payment.value) }
+    val prepayment = remember { mutableStateOf(viewModel.prepayment.value) }
+    val colorClient = remember { mutableStateOf(viewModel.colorClient.value) }
+    val sity = remember { mutableStateOf(viewModel.sity.value) }
 
 
     Box(
@@ -111,8 +104,11 @@ fun AddClientScreen(
                         .fillMaxWidth()
                 ) {
                     OutlinedTextField(
-                        value = name.value,
-                        onValueChange = { name.value = it },
+                        value = name.value!!,
+                        onValueChange = {
+                            name.value = it
+                            viewModel.clientName.value = it
+                        },
                         label = { Text(text = "ФИО", color = Black) },
                         placeholder = { Text(text = "ФИО", color = Black) },
                         singleLine = true,
@@ -132,8 +128,12 @@ fun AddClientScreen(
                         }),
                     )
                     OutlinedTextField(
-                        value = phone.value,
-                        onValueChange = { phone.value = it },
+                        value = phone.value!!,
+                        onValueChange = {
+                            viewModel.phone.value = it
+                            phone.value = it
+                        },
+
                         label = { Text(text = "Контактный телефон", color = Black) },
                         placeholder = { Text(text = "Контактный телефон", color = Black) },
                         singleLine = true,
@@ -155,16 +155,18 @@ fun AddClientScreen(
 
 
                     ColourButton(colors, onColorSelected = {
-                        colorClient.value = it.toArgb()
+                        viewModel.colorClient.value = it.toArgb()
 //                        Log.d("myTag", it.toArgb().toString())
                     })
 
 
                     OutlinedTextField(
-                        value = members.value,
+                        value = members.value!!,
                         onValueChange = {
+                            viewModel.members.value = it
                             members.value = it
                         },
+
                         label = { Text(text = "Количество человек", color = Black) },
                         placeholder = { Text(text = "Количество человек", color = Black) },
                         singleLine = true,
@@ -186,18 +188,18 @@ fun AddClientScreen(
 
 
                     OutlinedTextField(
-                        value = viewModel.dateInString,
+                        value = "c ${viewModel.dateInString1.value.toString()} по ${viewModel.dateOutString1.value.toString()} ",
                         onValueChange = {
                             viewModel.dateInString = it
                         },
-                        label = { Text(text = "Дата прибытия", color = Black) },
-                        placeholder = { Text(text = "Дата прибытия", color = Black) },
+                        label = { Text(text = "Период проживания", color = Black) },
+                        placeholder = { Text(text = "Период проживания", color = Black) },
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(5.dp)
                             .clickable {
-                                    navController.navigate(route = "${Routs.setClientPeriod}?appatment_name=$appatmentName")
+                                navController.navigate(route = "${Routs.setClientPeriod}?appatment_name=$appatmentName")
 //                                viewModel.showDatePickerDialog(context, "in")
 
                             },
@@ -215,38 +217,41 @@ fun AddClientScreen(
                         }),
                     )
 
+//                    OutlinedTextField(
+//                        value = viewModel.dateOutString,
+//                        onValueChange = {
+//                            viewModel.dateOutString = it
+//                        },
+//                        label = { Text(text = "Дата убытия", color = Black) },
+//                        placeholder = { Text(text = "Дата убытия", color = Black) },
+//                        singleLine = true,
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(5.dp)
+//                            .clickable {
+//                                viewModel.showDatePickerDialog(context, "out")
+//
+//                            },
+//                        keyboardOptions = KeyboardOptions(
+//                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+//                        ),
+//                        colors = TextFieldDefaults.outlinedTextFieldColors(
+//                            unfocusedBorderColor = Black,
+//                            textColor = Black,
+//                            backgroundColor = Color(142, 143, 138)
+//                        ),
+//                        enabled = false,
+//                        keyboardActions = KeyboardActions(onNext = {
+//                            focusManager.moveFocus(FocusDirection.Down)
+//                        }),
+//                    )
+
                     OutlinedTextField(
-                        value = viewModel.dateOutString,
+                        value = prepayment.value!!,
                         onValueChange = {
-                            viewModel.dateOutString = it
+                            viewModel.prepayment.value = it
+                            prepayment.value = it
                         },
-                        label = { Text(text = "Дата убытия", color = Black) },
-                        placeholder = { Text(text = "Дата убытия", color = Black) },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(5.dp)
-                            .clickable {
-                                viewModel.showDatePickerDialog(context, "out")
-
-                            },
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
-                        ),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = Black,
-                            textColor = Black,
-                            backgroundColor = Color(142, 143, 138)
-                        ),
-                        enabled = false,
-                        keyboardActions = KeyboardActions(onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }),
-                    )
-
-                    OutlinedTextField(
-                        value = prepayment.value,
-                        onValueChange = { prepayment.value = it },
                         label = { Text(text = "Внесенный залог", color = Black) },
                         placeholder = { Text(text = "Внесенный залог", color = Black) },
                         singleLine = true,
@@ -266,9 +271,13 @@ fun AddClientScreen(
                             focusManager.moveFocus(FocusDirection.Down)
                         }),
                     )
+
                     OutlinedTextField(
-                        value = payment.value,
-                        onValueChange = { payment.value = it },
+                        value = payment.value!!,
+                        onValueChange = {
+                            viewModel.payment.value = it
+                            payment.value = it
+                        },
                         label = { Text(text = "Стоимость суток", color = Black) },
                         placeholder = { Text(text = "Стоимость суток", color = Black) },
                         singleLine = true,
@@ -287,9 +296,13 @@ fun AddClientScreen(
                             focusManager.moveFocus(FocusDirection.Down)
                         }),
                     )
+
                     OutlinedTextField(
-                        value = sity.value,
-                        onValueChange = { sity.value = it },
+                        value = sity.value!!,
+                        onValueChange = {
+                            viewModel.sity.value = it
+                            sity.value = it
+                        },
                         label = { Text(text = "Пункт отправления", color = Black) },
                         placeholder = { Text(text = "Пункт отправления", color = Black) },
                         singleLine = true,
@@ -316,51 +329,51 @@ fun AddClientScreen(
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color(223, 75, 0)),
                         onClick = {
-                            if (name.value.isEmpty()) {
+                            if (viewModel.clientName.value.isNullOrEmpty()) {
                                 Toast.makeText(
                                     context, "ФИО клиента - обязательное поле!", Toast.LENGTH_SHORT
                                 ).show()
-                            } else if (phone.value.isEmpty()) {
+                            } else if (viewModel.phone.value.isNullOrEmpty()) {
                                 Toast.makeText(
                                     context,
                                     "Контатный телефон клиента - обязательное поле!",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                            } else if (viewModel.dateInLong == 0L) {
+                            } else if (viewModel.dateInString1.value.isNullOrEmpty() && viewModel.dateOutString1.value.isNullOrEmpty()) {
                                 Toast.makeText(
                                     context,
-                                    "Дата прибытия  - обязательное поле!",
+                                    "Период проживания  - обязательное поле!",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                            } else if (viewModel.dateOutLong == 0L) {
-                                Toast.makeText(
-                                    context, "Дата убытия  - обязательное поле!", Toast.LENGTH_SHORT
-                                ).show()
-                            } else if (prepayment.value == "") {
+//                            } else if (viewModel.dateOutLong == 0L) {
+//                                Toast.makeText(
+//                                    context, "Дата убытия  - обязательное поле!", Toast.LENGTH_SHORT
+//                                ).show()
+                            } else if (viewModel.prepayment.value.isNullOrEmpty()) {
                                 Toast.makeText(
                                     context,
                                     "Внесеный залог - обязательное поле!",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                            } else if (payment.value == "") {
+                            } else if (viewModel.payment.value.isNullOrEmpty()) {
                                 Toast.makeText(
                                     context,
-                                    "Стоимость суток - обязательное поле!",
+                                    "Стwоимость суток - обязательное поле!",
                                     Toast.LENGTH_SHORT
                                 ).show()
 
                             } else {
                                 viewModel.addClient(
                                     Client(
-                                        name = name.value,
-                                        phone = phone.value,
-                                        inDate = viewModel.dateInLong,
-                                        outDate = viewModel.dateOutLong,
-                                        members = members.value.trim().toInt(),
-                                        prepayment = prepayment.value.trim().toInt(),
-                                        payment = payment.value.trim().toInt(),
-                                        clientColor = colorClient.value,
-                                        sity = sity.value,
+                                        name = viewModel.clientName.value!!,
+                                        phone = viewModel.phone.value!!,
+                                        inDate = viewModel.dateInLong1.value!!,
+                                        outDate = viewModel.dateOutLong1.value!!,
+                                        members = viewModel.members.value!!.trim().toInt(),
+                                        prepayment = viewModel.prepayment.value!!.trim().toInt(),
+                                        payment = viewModel.payment.value!!.trim().toInt(),
+                                        clientColor = viewModel.colorClient.value!!,
+                                        sity = viewModel.sity.value,
                                         appatment_name = appatmentName
                                     )
                                 )

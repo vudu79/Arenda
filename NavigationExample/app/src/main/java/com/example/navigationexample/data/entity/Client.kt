@@ -66,12 +66,12 @@ class Client {
     constructor(
         name: String,
         phone: String,
-        inDate: Long,
-        outDate: Long,
+        inDate: Long?,
+        outDate: Long?,
         members: Int,
         prepayment: Int,
         payment: Int,
-        sity: String,
+        sity: String?,
         clientColor: Int,
         appatment_name: String
     ){

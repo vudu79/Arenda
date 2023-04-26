@@ -5,9 +5,13 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.icu.util.Calendar
 import android.util.Log
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -44,9 +48,18 @@ class AppatmentViewModel @Inject constructor(
     var dateInString by mutableStateOf("")
     var dateInLong by mutableStateOf(0L)
 
-    var dateOutString1 = MutableLiveData<String>()
+    val clientName = MutableLiveData<String>("qwe")
+    val phone = MutableLiveData<String>("")
+    val members = MutableLiveData<String>("")
+    val payment = MutableLiveData<String>("")
+    val prepayment = MutableLiveData<String>("")
+    val colorClient = MutableLiveData<Int>(Color(0xFFEF9A9A).toArgb())
+    val sity = MutableLiveData<String>("")
+
+
+    var dateOutString1 = MutableLiveData<String>("__.__.____")
     var dateOutLong1 = MutableLiveData<Long>()
-    var dateInString1 = MutableLiveData<String>()
+    var dateInString1 = MutableLiveData<String>("__.__.____")
     var dateInLong1 = MutableLiveData<Long>()
 
 
@@ -87,9 +100,9 @@ class AppatmentViewModel @Inject constructor(
         clientRepository.getAppatmentClients(appatmentName)
     }
 
-    fun updateDaysMapForCalendar(appatmentName: String){
+    fun updateDaysMapForCalendar(appatmentName: String) {
         dateClientMapForObserve.value?.clear()
-        dateClientMapForObserve.value =  getDayClientMapUseCase.invoke(appatmentName)
+        dateClientMapForObserve.value = getDayClientMapUseCase.invoke(appatmentName)
         Log.d("myTag", "asdfsdfsfd   ${getDayClientMapUseCase.invoke(appatmentName)}")
 
         Log.d("myTag", "asdfsdfsfd   ${dateClientMapForObserve.value}")
