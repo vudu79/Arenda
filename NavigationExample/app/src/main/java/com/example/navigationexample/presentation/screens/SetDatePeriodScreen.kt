@@ -17,7 +17,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.navigationexample.R
+import com.example.navigationexample.presentation.navigation.Routs
+import com.example.navigationexample.presentation.screens.AppatmentViewModel
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
@@ -37,15 +40,21 @@ private val continuousSelectionColor = Color.LightGray.copy(alpha = 0.85f)
 
 @Composable
 fun SetDatePeriodScreen(
+    navController: NavHostController,
+    viewModel: AppatmentViewModel,
+    appatmentName: String,
     close: () -> Unit = {},
     dateSelected: (startDate: LocalDate, endDate: LocalDate) -> Unit = { _, _ -> },
-) {
+
+    ) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth }
     val endMonth = remember { currentMonth.plusMonths(12) }
     val today = remember { LocalDate.now() }
     var selection by remember { mutableStateOf(DateSelection()) }
     val daysOfWeek = remember { daysOfWeek() }
+
+
     StatusBarColorUpdateEffect(Color.White)
     MaterialTheme(colors = MaterialTheme.colors.copy(primary = primaryColor)) {
         Box(
@@ -60,12 +69,37 @@ fun SetDatePeriodScreen(
                     firstVisibleMonth = currentMonth,
                     firstDayOfWeek = daysOfWeek.first(),
                 )
+
+
+
+
+
                 CalendarTop(
                     daysOfWeek = daysOfWeek,
                     selection = selection,
                     close = close,
                     clearDates = { selection = DateSelection() },
                 )
+
+                CalendarBottom(
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .fillMaxWidth()
+                        .background(Color.White),
+//                        .align(Alignment.BottomCenter),
+                    selection = selection,
+                    save = {
+                        val (startDate, endDate) = selection
+                        if (startDate != null && endDate != null) {
+                            dateSelected(startDate, endDate)
+                            viewModel.dateInString1.value = startDate.toString()
+                            viewModel.dateOutString1.value = endDate.toString()
+                            navController.navigate(Routs.addClientScreen)
+                        }
+                    },
+                )
+
+
                 VerticalCalendar(
                     state = state,
                     contentPadding = PaddingValues(bottom = 100.dp),
@@ -88,20 +122,7 @@ fun SetDatePeriodScreen(
                     monthHeader = { month -> MonthHeader(month) },
                 )
             }
-            CalendarBottom(
-                modifier = Modifier
-                    .wrapContentHeight()
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .align(Alignment.BottomCenter),
-                selection = selection,
-                save = {
-                    val (startDate, endDate) = selection
-                    if (startDate != null && endDate != null) {
-                        dateSelected(startDate, endDate)
-                    }
-                },
-            )
+
         }
     }
 }
@@ -242,10 +263,7 @@ private fun CalendarBottom(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(
-                text = "€75 night",
-                fontWeight = FontWeight.Bold,
-            )
+
             Spacer(modifier = Modifier.weight(1f))
             Button(
                 modifier = Modifier

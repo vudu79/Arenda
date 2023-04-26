@@ -44,6 +44,11 @@ class AppatmentViewModel @Inject constructor(
     var dateInString by mutableStateOf("")
     var dateInLong by mutableStateOf(0L)
 
+    var dateOutString1 = MutableLiveData<String>()
+    var dateOutLong1 = MutableLiveData<Long>()
+    var dateInString1 = MutableLiveData<String>()
+    var dateInLong1 = MutableLiveData<Long>()
+
 
     init {
 //        val appatmentDb = AppatmentRoomDatabase.getInstance(application)
@@ -56,6 +61,7 @@ class AppatmentViewModel @Inject constructor(
 
         allClients = clientRepository.allClients
         allAppatmentClients = clientRepository.allAppatmentClients
+
 
     }
 

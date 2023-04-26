@@ -7,5 +7,6 @@ sealed class Routs() {
         val addAppatmentScreen: String = "add_appatment_screen"
         val mainScreenClients: String = "clients_screen"
         val addClientScreen: String = "add_clients_screen"
+        val setClientPeriod: String = "set_clients_period"
     }
 }

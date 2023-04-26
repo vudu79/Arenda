@@ -11,6 +11,7 @@ import com.example.navigationexample.presentation.screens.AddAppatmentScreen
 import com.example.navigationexample.presentation.screens.AddClientScreen
 import com.example.navigationexample.presentation.screens.AppatmentViewModel
 import com.example.navigationexample.presentation.screens.MainScreen
+import com.kizitonwose.calendar.sample.compose.SetDatePeriodScreen
 
 
 @Composable
@@ -56,6 +57,23 @@ fun NavHostView(viewModel: AppatmentViewModel) {
             val appatment_name = navBackStackEntry.arguments?.getString("appatment_name")
             appatment_name?.let {
                 AddClientScreen(mainNavController, viewModel, appatment_name)
+            }
+        }
+
+
+
+        composable(
+            route = "${Routs.setClientPeriod}?appatment_name={appatment_name}",
+            arguments = listOf(
+                navArgument("appatment_name") {
+                    defaultValue = ""
+                    type = NavType.StringType
+                }
+            )
+        ) { navBackStackEntry ->
+            val appatment_name = navBackStackEntry.arguments?.getString("appatment_name")
+            appatment_name?.let {
+                SetDatePeriodScreen(mainNavController, viewModel, appatment_name)
             }
         }
 

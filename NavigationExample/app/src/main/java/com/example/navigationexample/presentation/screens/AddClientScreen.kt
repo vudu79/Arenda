@@ -183,6 +183,8 @@ fun AddClientScreen(
                             focusManager.moveFocus(FocusDirection.Down)
                         }),
                     )
+
+
                     OutlinedTextField(
                         value = viewModel.dateInString,
                         onValueChange = {
@@ -195,7 +197,8 @@ fun AddClientScreen(
                             .fillMaxWidth()
                             .padding(5.dp)
                             .clickable {
-                                viewModel.showDatePickerDialog(context, "in")
+                                    navController.navigate(route = "${Routs.setClientPeriod}?appatment_name=$appatmentName")
+//                                viewModel.showDatePickerDialog(context, "in")
 
                             },
                         keyboardOptions = KeyboardOptions(
