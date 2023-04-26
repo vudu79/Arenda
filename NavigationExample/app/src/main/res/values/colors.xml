@@ -32,7 +32,6 @@
     <color name="example_3_blue_light">#D2E3FC</color>
     <color name="example_3_toolbar_color">#607D8B</color>
     <color name="example_3_statusbar_color">#455A64</color>
-    <color name="example_4_grey">#474747</color>
     <color name="example_4_green">#008489</color>
     <color name="example_4_continuous_selection">#0F000000</color>
     <color name="example_4_grey_past">#BEBEBE</color>
@@ -57,6 +56,7 @@
     <color name="example_7_white">#D9FFFFFF</color>
     <color name="example_7_yellow">#FFEB3B</color>
     <color name="example_1_selection_color">#FCCA3E</color>
-    <color name="inactive_text_color">#BEBEBE</color>
     <color name="i_color">#ffffab91</color>
+    <color name="inactive_text_color">#474747</color>
+    <color name="example_4_grey">#BEBEBE</color>
 </resources>

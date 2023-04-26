@@ -1,17 +1,16 @@
-package com.kizitonwose.calendar.sample.compose
+package com.example.navigationexample.presentation.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,30 +19,41 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.navigationexample.R
 import com.example.navigationexample.presentation.navigation.Routs
-import com.example.navigationexample.presentation.screens.AppatmentViewModel
+import com.example.navigationexample.presentation.screens.common.*
+import com.example.navigationexample.presentation.screens.common.ContinuousSelectionHelper.getSelection
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.sample.shared.ContinuousSelectionHelper.getSelection
-import com.kizitonwose.calendar.sample.shared.DateSelection
-import com.kizitonwose.calendar.sample.shared.displayText
+import com.kizitonwose.calendar.sample.compose.Example2Page
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
-private val primaryColor = Color.Black.copy(alpha = 0.9f)
+//private val primaryColor = Color.White.copy(alpha = 0.2f)
+private val primaryColor = Color(223, 75, 0)
 private val selectionColor = primaryColor
-private val continuousSelectionColor = Color.LightGray.copy(alpha = 0.85f)
+
+//private val continuousSelectionColor = Color.Red.copy(alpha = 0.2f)
+private val continuousSelectionColor = Color(223, 75, 0).copy(alpha = 0.3f)
+private val orangeColor = Color(223, 75, 0)
+
+
+private val pageBackgroundColor: Color @Composable get() = colorResource(R.color.example_5_page_bg_color)
+private val itemBackgroundColor: Color @Composable get() = colorResource(R.color.example_5_item_view_bg_color)
+private val toolbarColor: Color @Composable get() = colorResource(R.color.example_5_toolbar_color)
+private val selectedItemColor: Color @Composable get() = colorResource(R.color.example_5_text_grey)
+private val inActiveTextColor: Color @Composable get() = colorResource(R.color.example_5_text_grey_light)
+
 
 @Composable
 fun SetDatePeriodScreen(
     navController: NavHostController,
     viewModel: AppatmentViewModel,
     appatmentName: String,
-    close: () -> Unit = {},
+    close: () -> Unit = { navController.navigate(Routs.addClientScreen) },
     dateSelected: (startDate: LocalDate, endDate: LocalDate) -> Unit = { _, _ -> },
 
     ) {
@@ -54,13 +64,18 @@ fun SetDatePeriodScreen(
     var selection by remember { mutableStateOf(DateSelection()) }
     val daysOfWeek = remember { daysOfWeek() }
 
+    viewModel.getAppatmentPlanedDays(appatmentName)
+    val planedAppatmentDays = remember {
+        viewModel.allAppatmentPlanedDays.value
+    }
 
-    StatusBarColorUpdateEffect(Color.White)
+
+    StatusBarColorUpdateEffect(toolbarColor)
     MaterialTheme(colors = MaterialTheme.colors.copy(primary = primaryColor)) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White),
+                .background(pageBackgroundColor),
         ) {
             Column {
                 val state = rememberCalendarState(
@@ -70,41 +85,24 @@ fun SetDatePeriodScreen(
                     firstDayOfWeek = daysOfWeek.first(),
                 )
 
-
-
-
-
                 CalendarTop(
                     daysOfWeek = daysOfWeek,
                     selection = selection,
                     close = close,
                     clearDates = { selection = DateSelection() },
-                )
-
-                CalendarBottom(
-                    modifier = Modifier
-                        .wrapContentHeight()
-                        .fillMaxWidth()
-                        .background(Color.White),
-//                        .align(Alignment.BottomCenter),
-                    selection = selection,
                     save = {
                         val (startDate, endDate) = selection
                         if (startDate != null && endDate != null) {
                             dateSelected(startDate, endDate)
-
                             viewModel.dateInString1.value = startDate.toString()
                             viewModel.dateOutString1.value = endDate.toString()
-
                             viewModel.dateInLong1.value = startDate.toEpochDay()
                             viewModel.dateOutLong1.value = endDate.toEpochDay()
 
                             navController.navigate(Routs.addClientScreen)
-
                         }
                     },
                 )
-
 
                 VerticalCalendar(
                     state = state,
@@ -114,6 +112,7 @@ fun SetDatePeriodScreen(
                             value,
                             today = today,
                             selection = selection,
+                            planedDays = planedAppatmentDays!!
                         ) { day ->
                             if (day.position == DayPosition.MonthDate &&
                                 (day.date == today || day.date.isAfter(today))
@@ -137,6 +136,7 @@ fun SetDatePeriodScreen(
 private fun Day(
     day: CalendarDay,
     today: LocalDate,
+    planedDays: List<LocalDate>,
     selection: DateSelection,
     onClick: (CalendarDay) -> Unit,
 ) {
@@ -145,7 +145,9 @@ private fun Day(
         modifier = Modifier
             .aspectRatio(1f) // This is important for square-sizing!
             .clickable(
-                enabled = day.position == DayPosition.MonthDate && day.date >= today,
+                enabled = day.position == DayPosition.MonthDate
+                        && day.date >= today
+                        && (!planedDays.contains(day.date)),
                 showRipple = false,
                 onClick = { onClick(day) },
             )
@@ -155,6 +157,7 @@ private fun Day(
                 selection = selection,
                 selectionColor = selectionColor,
                 continuousSelectionColor = continuousSelectionColor,
+                planedDays = planedDays
             ) { textColor = it },
         contentAlignment = Alignment.Center,
     ) {
@@ -190,6 +193,7 @@ private fun CalendarTop(
     selection: DateSelection,
     close: () -> Unit,
     clearDates: () -> Unit,
+    save: () -> Unit,
 ) {
     Column(modifier.fillMaxWidth()) {
         Column(
@@ -199,29 +203,63 @@ private fun CalendarTop(
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Row(
-                modifier = Modifier.height(IntrinsicSize.Max),
+                modifier = Modifier
+                    .height(IntrinsicSize.Max)
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Icon(
+//                Icon(
+//                    modifier = Modifier
+//                        .fillMaxHeight()
+//                        .aspectRatio(1f)
+//                        .clip(CircleShape)
+//                        .clickable(onClick = close)
+//                        .padding(12.dp),
+//                    painter = painterResource(id = R.drawable.ic_close),
+//                    contentDescription = "Close",
+//                )
+
+
+                Button(
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .aspectRatio(1f)
-                        .clip(CircleShape)
-                        .clickable(onClick = close)
-                        .padding(12.dp),
-                    painter = painterResource(id = R.drawable.ic_close),
-                    contentDescription = "Close",
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
+                        .height(40.dp)
+                        .width(100.dp),
+                    onClick = close,
+                ) {
+                    Text(text = "Close")
+                }
+
+                Button(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(percent = 50))
-                        .clickable(onClick = clearDates)
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    text = "Clear",
-                    fontWeight = FontWeight.Medium,
-                    textAlign = TextAlign.End,
-                )
+                        .height(40.dp)
+                        .width(100.dp),
+                    onClick = save,
+                    enabled = selection.daysBetween != null,
+                ) {
+                    Text(text = "Save")
+                }
+
+                Button(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .width(100.dp),
+                    onClick = clearDates,
+                ) {
+                    Text(text = "Clear")
+                }
+
+
+//                Text(
+//                    modifier = Modifier
+//                        .clip(RoundedCornerShape(percent = 50))
+//                        .clickable(onClick = clearDates)
+//                        .padding(horizontal = 16.dp, vertical = 8.dp),
+//                    text = "Clear",
+//                    fontWeight = FontWeight.Medium,
+//                    textAlign = TextAlign.End,
+//                    color = Color.White
+//                )
             }
             val daysBetween = selection.daysBetween
             val text = if (daysBetween == null) {

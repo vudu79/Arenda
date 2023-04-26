@@ -11,7 +11,7 @@ import com.example.navigationexample.presentation.screens.AddAppatmentScreen
 import com.example.navigationexample.presentation.screens.AddClientScreen
 import com.example.navigationexample.presentation.screens.AppatmentViewModel
 import com.example.navigationexample.presentation.screens.MainScreen
-import com.kizitonwose.calendar.sample.compose.SetDatePeriodScreen
+import com.example.navigationexample.presentation.screens.SetDatePeriodScreen
 
 
 @Composable

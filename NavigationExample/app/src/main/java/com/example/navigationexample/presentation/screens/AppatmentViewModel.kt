@@ -17,11 +17,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.navigationexample.data.entity.Appatment
 import com.example.navigationexample.data.entity.Client
+import com.example.navigationexample.data.entity.RentalDay
 import com.example.navigationexample.data.repository.AppatmentRepositoryImpl
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
 import com.example.navigationexample.data.repository.DaysRepositoryImpl
 import com.example.navigationexample.domain.models.ClientMonk
 import com.example.navigationexample.domain.usecase.GetDayClientMapUseCase
+import com.example.navigationexample.domain.usecase.getAppatmentPlanedDaysUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -33,7 +35,9 @@ class AppatmentViewModel @Inject constructor(
     private val appatmentRepository: AppatmentRepositoryImpl,
     private val clientRepository: ClientsRepositoryImpl,
     private val daysRepository: DaysRepositoryImpl,
-    private val getDayClientMapUseCase: GetDayClientMapUseCase
+    private val getDayClientMapUseCase: GetDayClientMapUseCase,
+    private val getAppatmentPlanedDaysUseCase: getAppatmentPlanedDaysUseCase
+
 ) : ViewModel() {
 
     //    private val appatmentRepository: AppatmentRepositoryImpl
@@ -41,6 +45,7 @@ class AppatmentViewModel @Inject constructor(
     val allAppatments: LiveData<List<Appatment>>
     val allClients: LiveData<List<Client>>
     var allAppatmentClients: MutableLiveData<List<Client>>
+    var allAppatmentPlanedDays = MutableLiveData<List<LocalDate>>()
     var dateClientMapForObserve = MutableLiveData<MutableMap<LocalDate, MutableSet<ClientMonk>>>()
 
     var dateOutString by mutableStateOf("")
@@ -74,8 +79,6 @@ class AppatmentViewModel @Inject constructor(
 
         allClients = clientRepository.allClients
         allAppatmentClients = clientRepository.allAppatmentClients
-
-
     }
 
     fun insertAppatment(appatment: Appatment) {
@@ -103,9 +106,13 @@ class AppatmentViewModel @Inject constructor(
     fun updateDaysMapForCalendar(appatmentName: String) {
         dateClientMapForObserve.value?.clear()
         dateClientMapForObserve.value = getDayClientMapUseCase.invoke(appatmentName)
-        Log.d("myTag", "asdfsdfsfd   ${getDayClientMapUseCase.invoke(appatmentName)}")
+//        Log.d("myTag", "asdfsdfsfd   ${getDayClientMapUseCase.invoke(appatmentName)}")
+//
+//        Log.d("myTag", "asdfsdfsfd   ${dateClientMapForObserve.value}")
+    }
 
-        Log.d("myTag", "asdfsdfsfd   ${dateClientMapForObserve.value}")
+    fun getAppatmentPlanedDays(appatmentName: String) {
+        allAppatmentPlanedDays.value = getAppatmentPlanedDaysUseCase.invoke(appatmentName)
     }
 
 
