@@ -15,11 +15,11 @@ class Client {
     @ColumnInfo(name = "clientId")
     var id: Int = 0
 
-    @NonNull
+
     @ColumnInfo(name = "name")
     var name: String = ""
 
-    @NonNull
+
     @ColumnInfo(name = "phone")
     var phone: String= ""
 
@@ -44,7 +44,6 @@ class Client {
     @ColumnInfo(name = "sity")
     var sity: String? = ""
 
-    @NonNull
     @ColumnInfo(name = "appatment_name")
     var appatment_name: String=""
 

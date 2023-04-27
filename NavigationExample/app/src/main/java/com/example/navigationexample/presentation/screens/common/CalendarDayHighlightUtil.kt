@@ -101,7 +101,7 @@ fun Modifier.backgroundHighlight(
                             color = colorResource(R.color.inactive_text_color),
                         )
                 }
-                day.date in planedDays-> {
+                 planedDays.contains(day.date)-> {
                     textColor(colorResource(R.color.inactive_text_color))
                     this
                 }
@@ -113,6 +113,12 @@ fun Modifier.backgroundHighlight(
             }
         }
         DayPosition.InDate -> {
+            when{
+                planedDays.contains(day.date)-> {
+                    textColor(colorResource(R.color.inactive_text_color))
+                    this
+                }
+            }
             textColor(Color.Transparent)
             if (startDate != null && endDate != null &&
                 isInDateBetweenSelection(day.date, startDate, endDate)

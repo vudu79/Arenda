@@ -12,6 +12,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -54,6 +56,9 @@ fun AddClientScreen(
         Color(0xFFCE93D8),
         Color(0xFFB39DDB)
     )
+
+
+    val currentAppatment by viewModel.currentAppatment.observeAsState()
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val name = remember { mutableStateOf(viewModel.clientName.value) }
@@ -63,6 +68,7 @@ fun AddClientScreen(
     val prepayment = remember { mutableStateOf(viewModel.prepayment.value) }
     val colorClient = remember { mutableStateOf(viewModel.colorClient.value) }
     val sity = remember { mutableStateOf(viewModel.sity.value) }
+    val appatmentNameState = remember { mutableStateOf(currentAppatment) }
 
 
     Box(
@@ -89,7 +95,7 @@ fun AddClientScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Новый клиент",
+                    text = "Новый клиент для ${viewModel.currentAppatment.value}",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
@@ -374,13 +380,13 @@ fun AddClientScreen(
                                         payment = viewModel.payment.value!!.trim().toInt(),
                                         clientColor = viewModel.colorClient.value!!,
                                         sity = viewModel.sity.value,
-                                        appatment_name = appatmentName
+                                        appatment_name = currentAppatment?.name ?: "222"
                                     )
                                 )
                                 Toast.makeText(
                                     context, "Новый клиент зарегестрирован!", Toast.LENGTH_SHORT
                                 ).show()
-                                viewModel.getAppatmentClients(appatmentName)
+                                viewModel.getAppatmentClients(currentAppatment?.name ?: "")
                                 navController.navigate(route = "${Routs.mainScreenClients}?appatment_name=$appatmentName")
                             }
                         }

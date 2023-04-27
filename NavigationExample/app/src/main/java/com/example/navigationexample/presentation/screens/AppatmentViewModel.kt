@@ -5,10 +5,8 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.icu.util.Calendar
 import android.util.Log
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -17,7 +15,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.navigationexample.data.entity.Appatment
 import com.example.navigationexample.data.entity.Client
-import com.example.navigationexample.data.entity.RentalDay
 import com.example.navigationexample.data.repository.AppatmentRepositoryImpl
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
 import com.example.navigationexample.data.repository.DaysRepositoryImpl
@@ -42,6 +39,8 @@ class AppatmentViewModel @Inject constructor(
 
     //    private val appatmentRepository: AppatmentRepositoryImpl
 //    private val clientRepository: ClientsRepositoryImpl
+
+    var currentAppatment = MutableLiveData<Appatment>()
     val allAppatments: LiveData<List<Appatment>>
     val allClients: LiveData<List<Client>>
     var allAppatmentClients: MutableLiveData<List<Client>>
@@ -79,6 +78,11 @@ class AppatmentViewModel @Inject constructor(
 
         allClients = clientRepository.allClients
         allAppatmentClients = clientRepository.allAppatmentClients
+    }
+
+    fun setCurrentAppatment(appatment: Appatment){
+        currentAppatment.value = appatment
+        Log.d("myTag", "alskslkdfjls   -   ${currentAppatment.value}")
     }
 
     fun insertAppatment(appatment: Appatment) {

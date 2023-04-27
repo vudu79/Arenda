@@ -1,5 +1,6 @@
 package com.example.composeex
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -50,7 +51,7 @@ fun AppatmentItemRow(
         shape = RoundedCornerShape(10.dp),
         elevation = 8.dp,
         onClick = {
-            viewModel.getAppatmentClients(appatmentItem.name)
+
             navcontroller.navigate(route = "${Routs.mainScreenClients}?appatment_name=${appatmentItem.name}")
         }
     ) {
@@ -61,6 +62,11 @@ fun AppatmentItemRow(
                 .combinedClickable(
                     onClick = {
                         viewModel.getAppatmentClients(appatmentItem.name)
+                        viewModel.setCurrentAppatment(appatmentItem)
+
+                        Log.d("myTag","Имя обьекта -  ${appatmentItem.name}")
+                        Log.d("myTag","Стейт -  ${viewModel.currentAppatment.value}")
+
                         navcontroller.navigate(route = "${Routs.mainScreenClients}?appatment_name=${appatmentItem.name}")
 
                     },

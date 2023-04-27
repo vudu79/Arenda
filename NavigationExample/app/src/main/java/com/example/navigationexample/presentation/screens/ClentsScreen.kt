@@ -28,7 +28,7 @@ fun ClientsScreen(
     viewModel: AppatmentViewModel,
     appatmentName: String
 ) {
-
+    val currentAppatment by viewModel.currentAppatment.observeAsState()
     val appatmentClients by viewModel.allAppatmentClients.observeAsState(listOf())
     val allClients by viewModel.allClients.observeAsState(listOf())
 
@@ -50,7 +50,7 @@ fun ClientsScreen(
     ) {
 
         Text(
-            text = appatmentName,
+            text = currentAppatment?.name ?: "111",
             modifier = Modifier.padding(top = 5.dp, bottom = 10.dp),
             fontSize = 20.sp,
             color = Color(223, 75, 0)

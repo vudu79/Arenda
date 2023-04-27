@@ -71,7 +71,6 @@ fun MainScreen(mainNavController: NavHostController, viewModel: AppatmentViewMod
 
         Button(
             onClick = {
-
                 mainNavController.navigate(Routs.addAppatmentScreen)
             },
             shape = RoundedCornerShape(30.dp),
