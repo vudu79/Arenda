@@ -82,6 +82,7 @@ class AppatmentViewModel @Inject constructor(
 
     fun setCurrentAppatment(appatment: Appatment){
         currentAppatment.value = appatment
+        getAppatmentPlanedDays(appatment.name)
         Log.d("myTag", "alskslkdfjls   -   ${currentAppatment.value}")
     }
 

@@ -52,7 +52,7 @@ fun AppatmentItemRow(
         elevation = 8.dp,
         onClick = {
 
-            navcontroller.navigate(route = "${Routs.mainScreenClients}?appatment_name=${appatmentItem.name}")
+//            navcontroller.navigate(route = "${Routs.mainScreenClients}?appatment_name=${appatmentItem.name}")
         }
     ) {
         Row(
@@ -63,9 +63,6 @@ fun AppatmentItemRow(
                     onClick = {
                         viewModel.getAppatmentClients(appatmentItem.name)
                         viewModel.setCurrentAppatment(appatmentItem)
-
-                        Log.d("myTag","Имя обьекта -  ${appatmentItem.name}")
-                        Log.d("myTag","Стейт -  ${viewModel.currentAppatment.value}")
 
                         navcontroller.navigate(route = "${Routs.mainScreenClients}?appatment_name=${appatmentItem.name}")
 
