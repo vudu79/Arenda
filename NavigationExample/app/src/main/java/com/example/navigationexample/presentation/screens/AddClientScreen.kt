@@ -58,7 +58,7 @@ fun AddClientScreen(
     )
 
 
-    val currentAppatment by viewModel.currentAppatment.observeAsState()
+    val currentAppatment by viewModel.currentApartment.observeAsState()
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val name = remember { mutableStateOf(viewModel.clientName.value) }
@@ -95,7 +95,7 @@ fun AddClientScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Новый клиент для ${viewModel.currentAppatment.value}",
+                    text = "Новый клиент для ${viewModel.currentApartment.value}",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
@@ -387,6 +387,7 @@ fun AddClientScreen(
                                     context, "Новый клиент зарегестрирован!", Toast.LENGTH_SHORT
                                 ).show()
                                 viewModel.getAppatmentClients(currentAppatment?.name ?: "")
+                                currentAppatment?.name?.let { viewModel.updateDaysMapForCalendar(it) }
                                 navController.navigate(route = "${Routs.mainScreenClients}?appatment_name=$appatmentName")
                             }
                         }

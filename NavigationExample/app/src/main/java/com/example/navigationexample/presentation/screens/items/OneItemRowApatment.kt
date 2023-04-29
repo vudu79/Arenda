@@ -63,7 +63,7 @@ fun AppatmentItemRow(
                     onClick = {
                         viewModel.getAppatmentClients(appatmentItem.name)
                         viewModel.setCurrentAppatment(appatmentItem)
-
+                        viewModel.updateDaysMapForCalendar(appatmentItem.name)
                         navcontroller.navigate(route = "${Routs.mainScreenClients}?appatment_name=${appatmentItem.name}")
 
                     },

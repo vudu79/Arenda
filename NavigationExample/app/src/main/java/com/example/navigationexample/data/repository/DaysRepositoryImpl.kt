@@ -115,24 +115,23 @@ class DaysRepositoryImpl @Inject constructor(private val rentalDaysDao: RentalDa
                     dateClientMap[localDay] = mutableSetOf(clientMonk)
                 }
             }
-
             emit(dateClientMap)
         }
     }.onStart { onStart() }.onCompletion { onCompletion() }.flowOn(Dispatchers.IO)
 
 
     //
-    fun getAppatmentDays(appatmentName: String) {
-        coroutineScope.launch(Dispatchers.Main) {
-            allAppatmentDays.value = asyncFindAppatmentDays(appatmentName).await()
-        }
-
-    }
-
-    private fun asyncFindAppatmentDays(appatmentName: String): Deferred<List<RentalDay>?> =
-        coroutineScope.async(Dispatchers.IO) {
-            return@async rentalDaysDao.getAppatmentDays(appatmentName)
-        }
+//    fun getAppatmentDays(appatmentName: String) {
+//        coroutineScope.launch(Dispatchers.Main) {
+//            allAppatmentDays.value = asyncFindAppatmentDays(appatmentName).await()
+//        }
+//
+//    }
+//
+//    private fun asyncFindAppatmentDays(appatmentName: String): Deferred<List<RentalDay>?> =
+//        coroutineScope.async(Dispatchers.IO) {
+//            return@async rentalDaysDao.getAppatmentDays(appatmentName)
+//        }
 
 
     fun listDaysBetween(

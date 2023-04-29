@@ -1,6 +1,5 @@
 package com.example.navigationexample.presentation.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,8 +27,8 @@ fun ClientsScreen(
     viewModel: AppatmentViewModel,
     appatmentName: String
 ) {
-    val currentAppatment by viewModel.currentAppatment.observeAsState()
-    val appatmentClients by viewModel.allAppatmentClients.observeAsState(listOf())
+    val currentAppatment by viewModel.currentApartment.observeAsState()
+    val appatmentClients by viewModel.allApartmentClients.observeAsState(listOf())
     val allClients by viewModel.allClients.observeAsState(listOf())
 
 //    Image(

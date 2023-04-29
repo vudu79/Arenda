@@ -10,10 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.Text
-import androidx.compose.material.darkColors
+import androidx.compose.material.*
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.*
@@ -28,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.navigationexample.R
+import com.example.navigationexample.domain.models.ClientMonk
 import com.example.navigationexample.presentation.screens.common.SimpleCalendarTitle
 import com.example.navigationexample.presentation.screens.common.StatusBarColorUpdateEffect
 import com.example.navigationexample.presentation.screens.common.rememberFirstCompletelyVisibleMonth
@@ -42,6 +40,7 @@ import com.kizitonwose.calendar.sample.shared.flightDateTimeFormatter
 import com.kizitonwose.calendar.sample.shared.generateFlights
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.YearMonth
 import java.util.*
 
@@ -56,8 +55,15 @@ private val inActiveTextColor: Color @Composable get() = colorResource(R.color.e
 
 @Composable
 fun CalendarScreen(viewModel: AppatmentViewModel, appatmentName: String) {
-    viewModel.updateDaysMapForCalendar(appatmentName)
-    val dateClientMap = remember { viewModel.dateClientMapForObserve.value }
+//    viewModel.updateDaysMapForCalendar(appatmentName)
+//    val dateClientMap = remember { viewModel.dateClientMapForObserve.value }
+
+    val localDateClientMap: MutableMap<LocalDate, MutableSet<ClientMonk>> by viewModel.localDayClientMocKMap.collectAsState(
+        initial = mutableMapOf()
+    )
+
+    val isLoading: Boolean by viewModel.isLoadingForCalendarScreen
+
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
     val endMonth = remember { currentMonth.plusMonths(500) }
@@ -110,35 +116,42 @@ fun CalendarScreen(viewModel: AppatmentViewModel, appatmentName: String) {
                     }
                 },
             )
-            HorizontalCalendar(
-                modifier = Modifier.wrapContentWidth(),
-                state = state,
-                dayContent = { day ->
-                    dateClientMap?.get(day.date)?.let { Log.d("myTag", it.toString()) }
-                    CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
-                        val colors = if (day.position == DayPosition.MonthDate) {
-//                            flights[day.date].orEmpty().map { colorResource(it.color) }
-                            dateClientMap?.get(day.date).orEmpty().map { it.color }
 
-                        } else {
-                            emptyList()
+            if (isLoading) {
+                CircularProgressIndicator()
+            } else {
+                HorizontalCalendar(
+                    modifier = Modifier.wrapContentWidth(),
+                    state = state,
+                    dayContent = { day ->
+//                        localDateClientMap?.get(day.date)?.let { Log.d("myTag", it.toString()) }
+                        CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
+                            val colors = if (day.position == DayPosition.MonthDate) {
+//                            flights[day.date].orEmpty().map { colorResource(it.color) }
+                                localDateClientMap[day.date].orEmpty().map { it.color }
+
+                            } else {
+                                emptyList()
+                            }
+                            Day(
+                                day = day,
+                                isSelected = selection == day,
+                                colors = colors,
+                            ) { clicked ->
+                                selection = clicked
+                            }
                         }
-                        Day(
-                            day = day,
-                            isSelected = selection == day,
-                            colors = colors,
-                        ) { clicked ->
-                            selection = clicked
-                        }
-                    }
-                },
-                monthHeader = {
-                    MonthHeader(
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        daysOfWeek = daysOfWeek,
-                    )
-                },
-            )
+                    },
+                    monthHeader = {
+                        MonthHeader(
+                            modifier = Modifier.padding(vertical = 8.dp),
+                            daysOfWeek = daysOfWeek,
+                        )
+                    },
+                )
+
+            }
+
             Divider(color = pageBackgroundColor)
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(items = flightsInSelectedDate.value) { flight ->

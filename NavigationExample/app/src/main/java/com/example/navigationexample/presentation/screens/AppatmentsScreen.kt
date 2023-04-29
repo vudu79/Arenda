@@ -24,7 +24,7 @@ import com.example.navigationexample.presentation.navigation.Routs
 @Composable
 fun MainScreen(mainNavController: NavHostController, viewModel: AppatmentViewModel) {
 
-    val allAppatment by viewModel.allAppatments.observeAsState(listOf())
+    val allAppatment by viewModel.allApartments.observeAsState(listOf())
 
 //    Image(
 //        painter = painterResource(

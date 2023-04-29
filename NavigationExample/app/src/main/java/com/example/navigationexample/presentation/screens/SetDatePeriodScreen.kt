@@ -55,11 +55,11 @@ fun SetDatePeriodScreen(
 
     ) {
 
-    val planedApartmentDays: Map<String, List<LocalDate>> by viewModel.allAppatmentPlanedDays.collectAsState(
+    val planedApartmentDays: Map<String, List<LocalDate>> by viewModel.allApartmentPlanedDays.collectAsState(
         initial = mapOf()
     )
 
-    val isLoading: Boolean by viewModel.isLoading
+    val isLoading: Boolean by viewModel.isLoadingForSetPeriodScreen
 
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth }

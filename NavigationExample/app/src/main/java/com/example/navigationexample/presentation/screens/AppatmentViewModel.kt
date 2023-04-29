@@ -17,33 +17,41 @@ import com.example.navigationexample.domain.usecase.GetDayClientMapUseCase
 import com.example.navigationexample.domain.usecase.getAppatmentPlanedDaysUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDate
 import javax.inject.Inject
 
 
 @HiltViewModel
 class AppatmentViewModel @Inject constructor(
-    private val appatmentRepository: AppatmentRepositoryImpl,
+    private val apartmentRepository: AppatmentRepositoryImpl,
     private val clientRepository: ClientsRepositoryImpl,
     private val daysRepository: DaysRepositoryImpl,
     private val getDayClientMapUseCase: GetDayClientMapUseCase,
-    private val getAppatmentPlanedDaysUseCase: getAppatmentPlanedDaysUseCase
+    private val getApartmentPlanedDaysUseCase: getAppatmentPlanedDaysUseCase
 
 ) : ViewModel() {
 
-    private val _isLoading: MutableState<Boolean> = mutableStateOf(false)
-    val isLoading: State<Boolean> get() = _isLoading
+    private val _isLoadingForSetPeriodScreen: MutableState<Boolean> = mutableStateOf(false)
+    val isLoadingForSetPeriodScreen: State<Boolean> get() = _isLoadingForSetPeriodScreen
 
-    val allAppatmentPlanedDays: Flow<Map<String, List<LocalDate>>> = daysRepository.fetchAppatmentRentalDaysMap(
-        onStart = { _isLoading.value = true },
-        onCompletion = { _isLoading.value = false },
-        onError = { },
-    )
+    private val _isLoadingForCalendarScreen: MutableState<Boolean> = mutableStateOf(false)
+    val isLoadingForCalendarScreen: State<Boolean> get() = _isLoadingForCalendarScreen
 
-    var currentAppatment = MutableLiveData<Appatment>()
-    val allAppatments: LiveData<List<Appatment>>
+    val allApartmentPlanedDays: Flow<Map<String, List<LocalDate>>> =
+        daysRepository.fetchAppatmentRentalDaysMap(
+            onStart = { _isLoadingForSetPeriodScreen.value = true },
+            onCompletion = { _isLoadingForSetPeriodScreen.value = false },
+            onError = { },
+        )
+
+    var localDayClientMocKMap: Flow<MutableMap<LocalDate, MutableSet<ClientMonk>>> = flowOf()
+
+
+    var currentApartment = MutableLiveData<Appatment>()
+    val allApartments: LiveData<List<Appatment>>
     val allClients: LiveData<List<Client>>
-    var allAppatmentClients: MutableLiveData<List<Client>>
+    var allApartmentClients: MutableLiveData<List<Client>>
     var dateClientMapForObserve = MutableLiveData<MutableMap<LocalDate, MutableSet<ClientMonk>>>()
 
     var dateOutString by mutableStateOf("")
@@ -72,22 +80,22 @@ class AppatmentViewModel @Inject constructor(
 //        appatmentRepository = AppatmentRepositoryImpl(appatmentDao = appatmentDao)
 //        clientRepository = ClientsRepositoryImpl(clientDao = clientDao)
 
-        allAppatments = appatmentRepository.allAppatment
+        allApartments = apartmentRepository.allAppatment
         allClients = clientRepository.allClients
-        allAppatmentClients = clientRepository.allAppatmentClients
+        allApartmentClients = clientRepository.allAppatmentClients
     }
 
     fun setCurrentAppatment(appatment: Appatment) {
-        currentAppatment.value = appatment
-        Log.d("myTag", "щелчок по объекту   -   ${currentAppatment.value!!.name}")
+        currentApartment.value = appatment
+        Log.d("myTag", "щелчок по объекту   -   ${currentApartment.value!!.name}")
     }
 
     fun insertAppatment(appatment: Appatment) {
-        appatmentRepository.insertAppatment(appatment)
+        apartmentRepository.insertAppatment(appatment)
     }
 
     fun deleteAppatment(name: String) {
-        appatmentRepository.deleteAppatment(name)
+        apartmentRepository.deleteAppatment(name)
     }
 
     fun addClient(client: Client) {
@@ -105,9 +113,16 @@ class AppatmentViewModel @Inject constructor(
     }
 
     fun updateDaysMapForCalendar(appatmentName: String) {
+        localDayClientMocKMap = daysRepository.fetchRentalDayClientMocKMap(
+            onStart = { _isLoadingForSetPeriodScreen.value = true },
+            onCompletion = { _isLoadingForSetPeriodScreen.value = false },
+            onError = { },
+            apartmentName = appatmentName
+        )
 
-        dateClientMapForObserve.value?.clear()
-        dateClientMapForObserve.value = getDayClientMapUseCase.invoke(appatmentName)
+
+//        dateClientMapForObserve.value?.clear()
+//        dateClientMapForObserve.value = getDayClientMapUseCase.invoke(appatmentName)
     }
 }
 
