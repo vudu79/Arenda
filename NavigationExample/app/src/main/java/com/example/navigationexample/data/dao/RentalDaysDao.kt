@@ -20,6 +20,10 @@ interface RentalDaysDao {
     fun getAppatmentDays(appatmentName: String): List<RentalDay>
 
 
+    @Query("SELECT * FROM rentaldays")
+    fun getAllRentalDays(): List<RentalDay>
+
+
     @Query("SELECT * FROM rentaldays WHERE client_name = :clientName")
     fun getClientDays(clientName: String): List<RentalDay>
 }

@@ -23,9 +23,9 @@ class GetDayClientMapUseCase @Inject constructor(
     private var dateClientMap: MutableMap<LocalDate, MutableSet<ClientMonk>> = mutableMapOf()
     fun invoke(appatmentName: String): MutableMap<LocalDate, MutableSet<ClientMonk>> {
 
-        allAppatmentDays = daysRepositoryImpl.getAppatmentDays(appatmentName)
+        allAppatmentDays = daysRepositoryImpl.allAppatmentDays.value
 
-
+        Log.d("myTag", "from UseCase  - $allAppatmentDays")
         allAppatmentDays?.forEach {
             val localDay = LocalDate.ofEpochDay(it.epochDay)
             Log.d("myTag", "День  - $localDay")
@@ -34,7 +34,7 @@ class GetDayClientMapUseCase @Inject constructor(
             if (dateClientMap.containsKey(localDay)) {
                 dateClientMap[localDay]?.add(clientMonk)
             } else {
-                dateClientMap.put(localDay, mutableSetOf(clientMonk))
+                dateClientMap[localDay] = mutableSetOf(clientMonk)
             }
         }
         return dateClientMap

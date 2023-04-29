@@ -1,13 +1,7 @@
 package com.example.navigationexample.presentation.screens
 
-import android.annotation.SuppressLint
-import android.app.DatePickerDialog
-import android.content.Context
-import android.icu.util.Calendar
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.LiveData
@@ -22,7 +16,7 @@ import com.example.navigationexample.domain.models.ClientMonk
 import com.example.navigationexample.domain.usecase.GetDayClientMapUseCase
 import com.example.navigationexample.domain.usecase.getAppatmentPlanedDaysUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.text.SimpleDateFormat
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -37,14 +31,19 @@ class AppatmentViewModel @Inject constructor(
 
 ) : ViewModel() {
 
-    //    private val appatmentRepository: AppatmentRepositoryImpl
-//    private val clientRepository: ClientsRepositoryImpl
+    private val _isLoading: MutableState<Boolean> = mutableStateOf(false)
+    val isLoading: State<Boolean> get() = _isLoading
+
+    val allAppatmentPlanedDays: Flow<Map<String, List<LocalDate>>> = daysRepository.fetchAppatmentRentalDaysMap(
+        onStart = { _isLoading.value = true },
+        onCompletion = { _isLoading.value = false },
+        onError = { },
+    )
 
     var currentAppatment = MutableLiveData<Appatment>()
     val allAppatments: LiveData<List<Appatment>>
     val allClients: LiveData<List<Client>>
     var allAppatmentClients: MutableLiveData<List<Client>>
-    var allAppatmentPlanedDays = MutableLiveData<List<LocalDate>>()
     var dateClientMapForObserve = MutableLiveData<MutableMap<LocalDate, MutableSet<ClientMonk>>>()
 
     var dateOutString by mutableStateOf("")
@@ -60,7 +59,6 @@ class AppatmentViewModel @Inject constructor(
     val colorClient = MutableLiveData<Int>(Color(0xFFEF9A9A).toArgb())
     val sity = MutableLiveData<String>("")
 
-
     var dateOutString1 = MutableLiveData<String>("__.__.____")
     var dateOutLong1 = MutableLiveData<Long>()
     var dateInString1 = MutableLiveData<String>("__.__.____")
@@ -75,15 +73,13 @@ class AppatmentViewModel @Inject constructor(
 //        clientRepository = ClientsRepositoryImpl(clientDao = clientDao)
 
         allAppatments = appatmentRepository.allAppatment
-
         allClients = clientRepository.allClients
         allAppatmentClients = clientRepository.allAppatmentClients
     }
 
-    fun setCurrentAppatment(appatment: Appatment){
+    fun setCurrentAppatment(appatment: Appatment) {
         currentAppatment.value = appatment
-        getAppatmentPlanedDays(appatment.name)
-        Log.d("myTag", "alskslkdfjls   -   ${currentAppatment.value}")
+        Log.d("myTag", "щелчок по объекту   -   ${currentAppatment.value!!.name}")
     }
 
     fun insertAppatment(appatment: Appatment) {
@@ -109,41 +105,35 @@ class AppatmentViewModel @Inject constructor(
     }
 
     fun updateDaysMapForCalendar(appatmentName: String) {
+
         dateClientMapForObserve.value?.clear()
         dateClientMapForObserve.value = getDayClientMapUseCase.invoke(appatmentName)
-//        Log.d("myTag", "asdfsdfsfd   ${getDayClientMapUseCase.invoke(appatmentName)}")
+    }
+}
+
+//private var dateFormat = "yyyy-MM-dd"
+//fun showDatePickerDialog(context: Context, dateType: String) {
+//    val calendar = Calendar.getInstance()
+//    DatePickerDialog(
+//        context, { _, year, month, day ->
+//            when (dateType) {
+//                "in" -> {
+//                    dateInString = getPickedDateAsString(year, month, day)
+//                    dateInLong = getPickedDateAsLocalDate(year, month, day)
+//                }
+//                "out" -> {
+//                    dateOutString = getPickedDateAsString(year, month, day)
+//                    dateOutLong = getPickedDateAsLocalDate(year, month, day)
+//                }
+//            }
 //
-//        Log.d("myTag", "asdfsdfsfd   ${dateClientMapForObserve.value}")
-    }
-
-    fun getAppatmentPlanedDays(appatmentName: String) {
-        allAppatmentPlanedDays.value = getAppatmentPlanedDaysUseCase.invoke(appatmentName)
-    }
-
-
-    private var dateFormat = "yyyy-MM-dd"
-    fun showDatePickerDialog(context: Context, dateType: String) {
-        val calendar = Calendar.getInstance()
-        DatePickerDialog(
-            context, { _, year, month, day ->
-                when (dateType) {
-                    "in" -> {
-                        dateInString = getPickedDateAsString(year, month, day)
-                        dateInLong = getPickedDateAsLocalDate(year, month, day)
-                    }
-                    "out" -> {
-                        dateOutString = getPickedDateAsString(year, month, day)
-                        dateOutLong = getPickedDateAsLocalDate(year, month, day)
-                    }
-                }
-
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-            .show()
-    }
+//        },
+//        calendar.get(Calendar.YEAR),
+//        calendar.get(Calendar.MONTH),
+//        calendar.get(Calendar.DAY_OF_MONTH)
+//    )
+//        .show()
+//}
 
 //    private fun getCalendar(): Calendar {
 //        return if (dateString.isEmpty())
@@ -159,23 +149,23 @@ class AppatmentViewModel @Inject constructor(
 //        return calendar
 //    }
 
+//
+//@SuppressLint("SimpleDateFormat")
+//private fun getPickedDateAsString(year: Int, month: Int, day: Int): String {
+//    val calendar = Calendar.getInstance()
+//    calendar.set(year, month, day)
+//    val dateFormat = SimpleDateFormat(dateFormat)
+//    return dateFormat.format(calendar.time)
+//}
+//
+//private fun getPickedDateAsLong(year: Int, month: Int, day: Int): Long {
+//    val calendar = Calendar.getInstance()
+//    calendar.set(year, month, day)
+//    return calendar.timeInMillis
+//}
 
-    @SuppressLint("SimpleDateFormat")
-    private fun getPickedDateAsString(year: Int, month: Int, day: Int): String {
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month, day)
-        val dateFormat = SimpleDateFormat(dateFormat)
-        return dateFormat.format(calendar.time)
-    }
+//private fun getPickedDateAsLocalDate(year: Int, month: Int, day: Int): Long {
+//    return LocalDate.of(year, month + 1, day).toEpochDay()
+//}
 
-    private fun getPickedDateAsLong(year: Int, month: Int, day: Int): Long {
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month, day)
-        return calendar.timeInMillis
-    }
-
-    private fun getPickedDateAsLocalDate(year: Int, month: Int, day: Int): Long {
-        return LocalDate.of(year, month + 1, day).toEpochDay()
-    }
-
-}
+//}

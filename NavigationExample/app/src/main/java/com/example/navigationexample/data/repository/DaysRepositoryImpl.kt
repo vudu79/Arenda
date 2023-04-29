@@ -1,11 +1,17 @@
 package com.example.navigationexample.data.repository
 
 import android.util.Log
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.MutableLiveData
 import com.example.navigationexample.data.dao.RentalDaysDao
 import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.data.entity.RentalDay
+import com.example.navigationexample.domain.models.ClientMonk
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
@@ -62,13 +68,65 @@ class DaysRepositoryImpl @Inject constructor(private val rentalDaysDao: RentalDa
         }
 
 
-    fun getAppatmentDays(appatmentName: String): List<RentalDay>? {
-        coroutineScope.launch(Dispatchers.Main) {
-            allAppatmentDays.value =  asyncFindAppatmentDays(appatmentName).await()
+    @WorkerThread
+    fun fetchAppatmentRentalDaysMap(
+        onStart: () -> Unit,
+        onCompletion: () -> Unit,
+        onError: () -> Unit
+    ) = flow {
+        val rentalDaysList: List<RentalDay> = rentalDaysDao.getAllRentalDays()
+        if (rentalDaysList.isEmpty()) {
+            onError()
 
+        } else {
+            val localDays: Map<String, List<LocalDate>> = rentalDaysList.let { day ->
+                day.groupBy(
+                    keySelector = { it.appatmentName },
+                    valueTransform = { LocalDate.ofEpochDay(it.epochDay) }
+                )
+            }
+            emit(localDays)
         }
-        Log.d("myTag", "сработал allAppatmentDays - -   ${allAppatmentDays.value}")
-        return allAppatmentDays.value
+    }.onStart { onStart() }.onCompletion { onCompletion() }.flowOn(Dispatchers.IO)
+
+
+    @WorkerThread
+    fun fetchRentalDayClientMocKMap(
+        onStart: () -> Unit,
+        onCompletion: () -> Unit,
+        onError: () -> Unit,
+        apartmentName: String
+    ) = flow {
+        val rentalDaysList: List<RentalDay> = rentalDaysDao.getAppatmentDays(apartmentName)
+        if (rentalDaysList.isEmpty()) {
+            onError()
+
+        } else {
+            val dateClientMap: MutableMap<LocalDate, MutableSet<ClientMonk>> = mutableMapOf()
+
+            rentalDaysList.forEach {
+                val localDay = LocalDate.ofEpochDay(it.epochDay)
+                Log.d("myTag", "День  - $localDay")
+                val clientMonk = ClientMonk(it.clientName, it.appatmentName, it.clientColor)
+
+                if (dateClientMap.containsKey(localDay)) {
+                    dateClientMap[localDay]?.add(clientMonk)
+                } else {
+                    dateClientMap[localDay] = mutableSetOf(clientMonk)
+                }
+            }
+
+            emit(dateClientMap)
+        }
+    }.onStart { onStart() }.onCompletion { onCompletion() }.flowOn(Dispatchers.IO)
+
+
+    //
+    fun getAppatmentDays(appatmentName: String) {
+        coroutineScope.launch(Dispatchers.Main) {
+            allAppatmentDays.value = asyncFindAppatmentDays(appatmentName).await()
+        }
+
     }
 
     private fun asyncFindAppatmentDays(appatmentName: String): Deferred<List<RentalDay>?> =
@@ -91,6 +149,5 @@ class DaysRepositoryImpl @Inject constructor(private val rentalDaysDao: RentalDa
         }
         return listDays
     }
-
-
 }
+

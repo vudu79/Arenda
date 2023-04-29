@@ -57,7 +57,7 @@ private val inActiveTextColor: Color @Composable get() = colorResource(R.color.e
 @Composable
 fun CalendarScreen(viewModel: AppatmentViewModel, appatmentName: String) {
     viewModel.updateDaysMapForCalendar(appatmentName)
-    val dateClientMap = remember { viewModel.dateClientMapForObserve?.value }
+    val dateClientMap = remember { viewModel.dateClientMapForObserve.value }
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
     val endMonth = remember { currentMonth.plusMonths(500) }

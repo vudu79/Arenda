@@ -1,14 +1,9 @@
 package com.example.navigationexample.presentation.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -59,7 +54,13 @@ fun SetDatePeriodScreen(
     dateSelected: (startDate: LocalDate, endDate: LocalDate) -> Unit = { _, _ -> },
 
     ) {
-    val planedAppatmentDays by viewModel.allAppatmentPlanedDays.observeAsState()
+
+    val planedApartmentDays: Map<String, List<LocalDate>> by viewModel.allAppatmentPlanedDays.collectAsState(
+        initial = mapOf()
+    )
+
+    val isLoading: Boolean by viewModel.isLoading
+
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth }
     val endMonth = remember { currentMonth.plusMonths(12) }
@@ -67,12 +68,7 @@ fun SetDatePeriodScreen(
     var selection by remember { mutableStateOf(DateSelection()) }
     val daysOfWeek = remember { daysOfWeek() }
 
-//    viewModel.getAppatmentPlanedDays(appatmentName)
-//    val planedAppatmentDays = remember {
-//        viewModel.allAppatmentPlanedDays.value
-//    }
 
-    Log.d("myTag", "${planedAppatmentDays}")
     StatusBarColorUpdateEffect(toolbarColor)
     MaterialTheme(colors = MaterialTheme.colors.copy(primary = primaryColor)) {
         Box(
@@ -107,28 +103,34 @@ fun SetDatePeriodScreen(
                     },
                 )
 
-                VerticalCalendar(
-                    state = state,
-                    contentPadding = PaddingValues(bottom = 100.dp),
-                    dayContent = { value ->
-                        Day(
-                            value,
-                            today = today,
-                            selection = selection,
-                            planedDays = planedAppatmentDays ?: listOf()
-                        ) { day ->
-                            if (day.position == DayPosition.MonthDate &&
-                                (day.date == today || day.date.isAfter(today))
-                            ) {
-                                selection = getSelection(
-                                    clickedDate = day.date,
-                                    dateSelection = selection,
-                                )
+                if (isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    VerticalCalendar(
+                        state = state,
+                        contentPadding = PaddingValues(bottom = 100.dp),
+                        dayContent = { value ->
+                            Day(
+                                value,
+                                today = today,
+                                selection = selection,
+                                planedDays = planedApartmentDays.get(appatmentName) ?: listOf()
+
+                            ) { day ->
+                                if (day.position == DayPosition.MonthDate &&
+                                    (day.date == today || day.date.isAfter(today))
+                                ) {
+                                    selection = getSelection(
+                                        clickedDate = day.date,
+                                        dateSelection = selection,
+                                    )
+                                }
                             }
-                        }
-                    },
-                    monthHeader = { month -> MonthHeader(month) },
-                )
+                        },
+                        monthHeader = { month -> MonthHeader(month) },
+                    )
+                }
+
             }
 
         }
