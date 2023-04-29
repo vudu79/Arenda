@@ -55,8 +55,8 @@ fun SetDatePeriodScreen(
 
     ) {
 
-    val planedApartmentDays: Map<String, List<LocalDate>> by viewModel.allApartmentPlanedDays.collectAsState(
-        initial = mapOf()
+    val planedApartmentDays: List<LocalDate> by viewModel.allApartmentPlanedDays.collectAsState(
+        initial = listOf()
     )
 
     val isLoading: Boolean by viewModel.isLoadingForSetPeriodScreen
@@ -114,7 +114,7 @@ fun SetDatePeriodScreen(
                                 value,
                                 today = today,
                                 selection = selection,
-                                planedDays = planedApartmentDays.get(appatmentName) ?: listOf()
+                                planedDays = planedApartmentDays ?: listOf()
 
                             ) { day ->
                                 if (day.position == DayPosition.MonthDate &&

@@ -63,6 +63,7 @@ fun AppatmentItemRow(
                     onClick = {
                         viewModel.getAppatmentClients(appatmentItem.name)
                         viewModel.setCurrentAppatment(appatmentItem)
+                        viewModel.updateApartmentPlanedDays(appatmentItem.name)
                         viewModel.updateDaysMapForCalendar(appatmentItem.name)
                         navcontroller.navigate(route = "${Routs.mainScreenClients}?appatment_name=${appatmentItem.name}")
 
@@ -136,6 +137,7 @@ fun AppatmentItemRow(
         }, onOk = {
             showCustomDialog = !showCustomDialog
             viewModel.deleteAppatment(appatmentItem.name)
+            viewModel.updateApartmentPlanedDays(appatmentItem.name)
         },
         message = "Объект недвижимости будет безвозвратно удален. Вы уверены?")
     }

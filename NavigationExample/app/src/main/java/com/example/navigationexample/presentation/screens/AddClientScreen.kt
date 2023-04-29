@@ -388,6 +388,7 @@ fun AddClientScreen(
                                 ).show()
                                 viewModel.getAppatmentClients(currentAppatment?.name ?: "")
                                 currentAppatment?.name?.let { viewModel.updateDaysMapForCalendar(it) }
+                                currentAppatment?.name?.let { viewModel.updateApartmentPlanedDays(it) }
                                 navController.navigate(route = "${Routs.mainScreenClients}?appatment_name=$appatmentName")
                             }
                         }

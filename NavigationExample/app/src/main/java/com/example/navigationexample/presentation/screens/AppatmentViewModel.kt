@@ -38,13 +38,14 @@ class AppatmentViewModel @Inject constructor(
     private val _isLoadingForCalendarScreen: MutableState<Boolean> = mutableStateOf(false)
     val isLoadingForCalendarScreen: State<Boolean> get() = _isLoadingForCalendarScreen
 
-    val allApartmentPlanedDays: Flow<Map<String, List<LocalDate>>> =
-        daysRepository.fetchAppatmentRentalDaysMap(
-            onStart = { _isLoadingForSetPeriodScreen.value = true },
-            onCompletion = { _isLoadingForSetPeriodScreen.value = false },
-            onError = { },
-        )
+//    val allApartmentPlanedDays: Flow<Map<String, List<LocalDate>>> =
+//        daysRepository.fetchAppatmentRentalDaysMap(
+//            onStart = { _isLoadingForSetPeriodScreen.value = true },
+//            onCompletion = { _isLoadingForSetPeriodScreen.value = false },
+//            onError = { },
+//        )
 
+    var allApartmentPlanedDays: Flow<List<LocalDate>> = flowOf()
     var localDayClientMocKMap: Flow<MutableMap<LocalDate, MutableSet<ClientMonk>>> = flowOf()
 
 
@@ -112,6 +113,16 @@ class AppatmentViewModel @Inject constructor(
         clientRepository.getAppatmentClients(appatmentName)
     }
 
+
+    fun updateApartmentPlanedDays(apartmentName: String) {
+        allApartmentPlanedDays = daysRepository.fetchAppatmentRentalDays(
+            appatmentName = apartmentName,
+            onStart = { _isLoadingForSetPeriodScreen.value = true },
+            onCompletion = { _isLoadingForSetPeriodScreen.value = false },
+            onError = { },
+        )
+    }
+
     fun updateDaysMapForCalendar(appatmentName: String) {
         localDayClientMocKMap = daysRepository.fetchRentalDayClientMocKMap(
             onStart = { _isLoadingForSetPeriodScreen.value = true },
@@ -119,7 +130,6 @@ class AppatmentViewModel @Inject constructor(
             onError = { },
             apartmentName = appatmentName
         )
-
 
 //        dateClientMapForObserve.value?.clear()
 //        dateClientMapForObserve.value = getDayClientMapUseCase.invoke(appatmentName)

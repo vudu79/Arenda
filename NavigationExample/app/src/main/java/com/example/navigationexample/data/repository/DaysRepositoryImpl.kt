@@ -69,21 +69,29 @@ class DaysRepositoryImpl @Inject constructor(private val rentalDaysDao: RentalDa
 
 
     @WorkerThread
-    fun fetchAppatmentRentalDaysMap(
+    fun fetchAppatmentRentalDays(
         onStart: () -> Unit,
         onCompletion: () -> Unit,
-        onError: () -> Unit
+        onError: () -> Unit,
+        appatmentName: String
     ) = flow {
-        val rentalDaysList: List<RentalDay> = rentalDaysDao.getAllRentalDays()
+        val rentalDaysList: List<RentalDay> = rentalDaysDao.getAppatmentDays(appatmentName)
         if (rentalDaysList.isEmpty()) {
             onError()
 
         } else {
-            val localDays: Map<String, List<LocalDate>> = rentalDaysList.let { day ->
-                day.groupBy(
-                    keySelector = { it.appatmentName },
-                    valueTransform = { LocalDate.ofEpochDay(it.epochDay) }
-                )
+//            val localDays: Map<String, List<LocalDate>> = rentalDaysList.let { day ->
+//                day.groupBy(
+//                    keySelector = { it.appatmentName },
+//                    valueTransform = { LocalDate.ofEpochDay(it.epochDay) }
+//                )
+//            }
+
+            val localDays: MutableList<LocalDate> = mutableListOf()
+            rentalDaysList.let {
+                it.forEach {
+                    localDays.add(LocalDate.ofEpochDay(it.epochDay))
+                }
             }
             emit(localDays)
         }
