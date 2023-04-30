@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleTheme
@@ -20,7 +21,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.navigationexample.R
@@ -31,11 +31,8 @@ import com.example.navigationexample.presentation.screens.common.rememberFirstCo
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.*
-import com.kizitonwose.calendar.sample.compose.Example3Page
-import com.kizitonwose.calendar.sample.shared.Flight
 import com.kizitonwose.calendar.sample.shared.Flight.Airport
 import com.kizitonwose.calendar.sample.shared.displayText
-import com.kizitonwose.calendar.sample.shared.flightDateTimeFormatter
 import com.kizitonwose.calendar.sample.shared.generateFlights
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
@@ -68,10 +65,10 @@ fun CalendarScreen(viewModel: AppatmentViewModel, appatmentName: String) {
     val endMonth = remember { currentMonth.plusMonths(500) }
     var selection by remember { mutableStateOf<CalendarDay?>(null) }
     val daysOfWeek = remember { daysOfWeek() }
-    val flightsInSelectedDate = remember {
+    val clientsInSelectedDate = remember {
         derivedStateOf {
             val date = selection?.date
-            if (date == null) emptyList() else flights[date].orEmpty()
+            if (date == null) emptyList() else localDateClientMap[date].orEmpty().toList()
         }
     }
 
@@ -153,8 +150,8 @@ fun CalendarScreen(viewModel: AppatmentViewModel, appatmentName: String) {
 
             Divider(color = pageBackgroundColor)
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                items(items = flightsInSelectedDate.value) { flight ->
-                    FlightInformation(flight)
+                items(items = clientsInSelectedDate.value) { client ->
+                    ClientInformation(client)
                 }
             }
         }
@@ -278,22 +275,23 @@ private fun MonthHeader(
 }
 
 @Composable
-private fun LazyItemScope.FlightInformation(flight: Flight) {
+private fun LazyItemScope.ClientInformation(clientMonk: ClientMonk) {
     Row(
         modifier = Modifier
             .fillParentMaxWidth()
-            .height(IntrinsicSize.Max),
+//            .height(IntrinsicSize.Max)
+            .fillMaxHeight(0.8f),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         Box(
             modifier = Modifier
-                .background(color = colorResource(flight.color))
-                .fillParentMaxWidth(1 / 7f)
+                .border(width = 3.dp, color = Color(clientMonk.color), RoundedCornerShape(8.dp) )
+                .fillParentMaxWidth(1 / 5f)
                 .aspectRatio(1f),
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = flightDateTimeFormatter.format(flight.time).uppercase(Locale.ENGLISH),
+                text = clientMonk.name,
                 textAlign = TextAlign.Center,
                 lineHeight = 17.sp,
                 fontSize = 12.sp,
@@ -305,16 +303,16 @@ private fun LazyItemScope.FlightInformation(flight: Flight) {
                 .weight(1f)
                 .fillMaxHeight(),
         ) {
-            AirportInformation(flight.departure, isDeparture = true)
+//            AirportInformation(flight.departure, isDeparture = true)
         }
-        Box(
-            modifier = Modifier
-                .background(color = itemBackgroundColor)
-                .weight(1f)
-                .fillMaxHeight(),
-        ) {
-            AirportInformation(flight.destination, isDeparture = false)
-        }
+//        Box(
+//            modifier = Modifier
+//                .background(color = itemBackgroundColor)
+//                .weight(1f)
+//                .fillMaxHeight(),
+//        ) {
+//            AirportInformation(flight.destination, isDeparture = false)
+//        }
     }
     Divider(color = pageBackgroundColor, thickness = 2.dp)
 }
@@ -374,8 +372,3 @@ private object Example3RippleTheme : RippleTheme {
     override fun rippleAlpha() = RippleTheme.defaultRippleAlpha(Color.Gray, lightTheme = false)
 }
 
-@Preview(heightDp = 600)
-@Composable
-private fun Example3Preview() {
-    Example3Page()
-}
