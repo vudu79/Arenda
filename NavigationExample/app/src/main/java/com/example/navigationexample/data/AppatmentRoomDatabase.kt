@@ -21,6 +21,7 @@ abstract class AppatmentRoomDatabase: RoomDatabase() {
 
     companion object {
 
+
         private var INSTANCE: AppatmentRoomDatabase? = null
 
         fun getInstance(context: Context): AppatmentRoomDatabase {
