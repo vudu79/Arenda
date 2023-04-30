@@ -44,14 +44,19 @@ class DaysRepositoryImpl @Inject constructor(private val rentalDaysDao: RentalDa
             clientPeriod.forEach {
                 val isStart: Boolean = if (it == startDay) true else false
                 val isEnd: Boolean = if (it == endDay) true else false
+                val isEnable: Boolean =
+                    if ((it == startDay && !allLocalDays.contains(startDay.minusDays(1))) ||
+                        (it == endDay && !allLocalDays.contains(endDay.plusDays(1)))
+                    ) true else false
                 rentalDaysDao.insertDay(
                     RentalDay(
-                        it.toEpochDay(),
-                        client.clientColor,
-                        client.name,
-                        isStart,
-                        isEnd,
-                        client.appatment_name
+                        epochDay = it.toEpochDay(),
+                        clientColor = client.clientColor,
+                        clientName = client.name,
+                        isStartDay = isStart,
+                        isEndDay = isEnd,
+                        isEnable = isEnable,
+                        appatmentName = client.appatment_name
                     )
                 )
             }
@@ -99,7 +104,7 @@ class DaysRepositoryImpl @Inject constructor(private val rentalDaysDao: RentalDa
             val localDays: MutableList<LocalDate> = mutableListOf()
             rentalDaysList.let {
                 it.forEach {
-                    localDays.add(LocalDate.ofEpochDay(it.epochDay))
+                    if (!it.isEnable) localDays.add(LocalDate.ofEpochDay(it.epochDay))
                 }
             }
             emit(localDays)
