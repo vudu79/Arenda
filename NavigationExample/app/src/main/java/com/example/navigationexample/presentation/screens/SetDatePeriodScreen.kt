@@ -87,6 +87,7 @@ fun SetDatePeriodScreen(
                 CalendarTop(
                     daysOfWeek = daysOfWeek,
                     selection = selection,
+                    planedApartmentDays = planedApartmentDays,
                     close = close,
                     clearDates = { selection = DateSelection() },
                     save = {
@@ -122,7 +123,8 @@ fun SetDatePeriodScreen(
                                 ) {
                                     selection = getSelection(
                                         clickedDate = day.date,
-                                        dateSelection = selection,
+                                        dateSelection = selection
+//                                        planedApaertmenDays = planedApartmentDays
                                     )
                                 }
                             }
@@ -196,10 +198,13 @@ private fun CalendarTop(
     modifier: Modifier = Modifier,
     daysOfWeek: List<DayOfWeek>,
     selection: DateSelection,
+    planedApartmentDays: List<LocalDate>,
     close: () -> Unit,
     clearDates: () -> Unit,
     save: () -> Unit,
 ) {
+    val isEnabledSave: Boolean = isRightSelection(selection, planedApartmentDays)
+
     Column(modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier
@@ -240,7 +245,9 @@ private fun CalendarTop(
                         .height(40.dp)
                         .width(100.dp),
                     onClick = save,
-                    enabled = selection.daysBetween != null,
+//                    enabled = selection.daysBetween != null,
+                    enabled = isEnabledSave,
+
                 ) {
                     Text(text = "Save")
                 }

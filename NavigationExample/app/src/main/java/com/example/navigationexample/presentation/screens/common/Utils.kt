@@ -56,21 +56,6 @@ fun Modifier.clickable(
     )
 }
 
-@Composable
-fun listDaysBetween(
-    startDate: LocalDate? = null,
-    endDate: LocalDate? = null
-): MutableList<LocalDate> {
-    val listDays: MutableList<LocalDate> = mutableListOf()
-    val numOfDaysBetween = (ChronoUnit.DAYS.between(startDate, endDate)).toInt()
-    (0..numOfDaysBetween).forEach {
-        val date: LocalDate? = startDate?.plusDays(it.toLong())
-        if (date != null) {
-            listDays.add(date)
-        }
-    }
-    return listDays
-}
 
 
 

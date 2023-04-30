@@ -55,6 +55,7 @@ fun Modifier.backgroundHighlight(
 ): Modifier = composed {
     val (startDate, endDate) = selection
     val padding = 4.dp
+
     when (day.position) {
         DayPosition.MonthDate -> {
             when {

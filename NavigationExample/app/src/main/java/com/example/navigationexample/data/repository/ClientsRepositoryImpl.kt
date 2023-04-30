@@ -1,12 +1,9 @@
 package com.example.navigationexample.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.room.Query
 import com.example.navigationexample.data.dao.ClientDao
 import com.example.navigationexample.data.entity.Client
-import com.example.navigationexample.presentation.screens.common.listDaysBetween
 import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit

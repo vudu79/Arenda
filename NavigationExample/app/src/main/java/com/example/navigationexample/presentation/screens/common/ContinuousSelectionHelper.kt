@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlin.LazyThreadSafetyMode.NONE
 
+
 data class DateSelection(val startDate: LocalDate? = null, val endDate: LocalDate? = null) {
     val daysBetween by lazy(NONE) {
         if (startDate == null || endDate == null) null else {
@@ -26,12 +27,20 @@ object ContinuousSelectionHelper {
     fun getSelection(
         clickedDate: LocalDate,
         dateSelection: DateSelection,
+//        planedApaertmenDays: List<LocalDate>
     ): DateSelection {
         val (selectionStartDate, selectionEndDate) = dateSelection
+
+//        val selectionPeriod = listDaysBetween1(
+//            startDate = selectionStartDate,
+//            endDate = selectionEndDate
+//        )
+
         return if (selectionStartDate != null) {
             if (clickedDate < selectionStartDate || selectionEndDate != null) {
                 DateSelection(startDate = clickedDate, endDate = null)
             } else if (clickedDate != selectionStartDate) {
+
                 DateSelection(startDate = selectionStartDate, endDate = clickedDate)
             } else {
                 DateSelection(startDate = clickedDate, endDate = null)
@@ -62,4 +71,29 @@ object ContinuousSelectionHelper {
         val lastDateInThisMonth = outDate.yearMonth.previousMonth.atEndOfMonth()
         return lastDateInThisMonth in startDate..endDate && endDate != lastDateInThisMonth
     }
+}
+
+
+fun getDaysBetweenList(
+    startDate: LocalDate? = null,
+    endDate: LocalDate? = null
+): MutableList<LocalDate> {
+    val listDays: MutableList<LocalDate> = mutableListOf()
+    val numOfDaysBetween = (ChronoUnit.DAYS.between(startDate, endDate)).toInt()
+    (0..numOfDaysBetween).forEach {
+        val date: LocalDate? = startDate?.plusDays(it.toLong())
+        if (date != null) {
+            listDays.add(date)
+        }
+    }
+    return listDays
+}
+
+fun isRightSelection(selection: DateSelection, rentalList: List<LocalDate>): Boolean {
+    if (selection.daysBetween != null) {
+        val (startDate, endDate) = selection
+        val selectedDatesList = getDaysBetweenList(startDate, endDate)
+        val intersectSet = selectedDatesList.intersect(rentalList)
+        return intersectSet.isEmpty()
+    } else return false
 }

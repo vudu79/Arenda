@@ -1,17 +1,9 @@
 package com.example.navigationexample.domain.usecase
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import com.example.navigationexample.data.entity.Appatment
-import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.data.entity.RentalDay
-import com.example.navigationexample.data.repository.ClientsRepositoryImpl
 import com.example.navigationexample.data.repository.DaysRepositoryImpl
 import com.example.navigationexample.domain.models.ClientMonk
-import com.example.navigationexample.presentation.screens.common.listDaysBetween
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
