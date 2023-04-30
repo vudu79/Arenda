@@ -34,14 +34,23 @@ class DaysRepositoryImpl @Inject constructor(private val rentalDaysDao: RentalDa
         val startDay = LocalDate.ofEpochDay(client.inDate!!)
         val endDay = LocalDate.ofEpochDay(client.outDate!!)
         val clientPeriod = listDaysBetween(startDay, endDay)
-
+//        val startDayEpoch = startDay.toEpochDay()
+//        val endDayEpoch = endDay.toEpochDay()
         coroutineScope.launch(Dispatchers.IO) {
+            val allApartmentRentalDate = rentalDaysDao.getAppatmentDays(client.appatment_name)
+            val allLocalDays = allApartmentRentalDate.map {
+                LocalDate.ofEpochDay(it.epochDay)
+            }
             clientPeriod.forEach {
+                val isStart: Boolean = if (it == startDay) true else false
+                val isEnd: Boolean = if (it == endDay) true else false
                 rentalDaysDao.insertDay(
                     RentalDay(
                         it.toEpochDay(),
                         client.clientColor,
                         client.name,
+                        isStart,
+                        isEnd,
                         client.appatment_name
                     )
                 )
