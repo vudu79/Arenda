@@ -21,7 +21,14 @@ class GetDayClientMapUseCase @Inject constructor(
         allAppatmentDays?.forEach {
             val localDay = LocalDate.ofEpochDay(it.epochDay)
             Log.d("myTag", "День  - $localDay")
-            val clientMonk = ClientMonk(it.clientName, it.appatmentName, it.clientColor)
+            val clientMonk = ClientMonk(
+                it.clientName,
+                it.appatmentName,
+                it.clientColor,
+                it.isEnable,
+                it.isStartDay,
+                it.isEndDay
+            )
 
             if (dateClientMap.containsKey(localDay)) {
                 dateClientMap[localDay]?.add(clientMonk)

@@ -1,7 +1,6 @@
 package com.example.navigationexample.presentation.screens
 
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -126,9 +125,9 @@ fun CalendarScreen(viewModel: AppatmentViewModel, appatmentName: String) {
                     dayContent = { day ->
 //                        localDateClientMap?.get(day.date)?.let { Log.d("myTag", it.toString()) }
                         CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
-                            val colors = if (day.position == DayPosition.MonthDate) {
+                            val clientMonkList = if (day.position == DayPosition.MonthDate) {
 //                            flights[day.date].orEmpty().map { colorResource(it.color) }
-                                localDateClientMap[day.date].orEmpty().map { it.color }
+                                localDateClientMap[day.date].orEmpty().map { it }
 
                             } else {
                                 emptyList()
@@ -136,7 +135,7 @@ fun CalendarScreen(viewModel: AppatmentViewModel, appatmentName: String) {
                             Day(
                                 day = day,
                                 isSelected = selection == day,
-                                colors = colors,
+                                clientMonks = clientMonkList,
                             ) { clicked ->
                                 selection = clicked
                             }
@@ -166,7 +165,7 @@ fun CalendarScreen(viewModel: AppatmentViewModel, appatmentName: String) {
 private fun Day(
     day: CalendarDay,
     isSelected: Boolean = false,
-    colors: List<Int?> = emptyList(),
+    clientMonks: List<ClientMonk?> = emptyList(),
     onClick: (CalendarDay) -> Unit = {},
 ) {
     Box(
@@ -196,26 +195,68 @@ private fun Day(
             color = textColor,
             fontSize = 12.sp,
         )
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(bottom = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
-        ) {
 
-            for (color in colors) {
-                val colorT = if (color != null) Color(color) else Color(1, 1, 1)
+
+        if (clientMonks.size == 2) {
+            val left = clientMonks.first { it?.ieEndDay == true }
+            val right = clientMonks.first { it?.ieStartDay == true }
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(0.dp),
+            ) {
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .height(8.dp)
+                        .background(Color(left?.color ?: 1)),
+                )
+
+                Box(
+                    modifier = with(Modifier) {
+                        fillMaxWidth()
+                            .height(8.dp)
+                            .background(Color(right?.color ?: 1))
+                    },
+                )
+            }
+        } else if (clientMonks.size == 1) {
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                horizontalArrangement = Arrangement.Center,
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(5.dp)
-                        .background(colorT),
+                        .height(8.dp)
+                        .background(Color(clientMonks[0]?.color ?: 1)),
                 )
             }
         }
+
     }
 }
+
+
+//
+//
+//            for (clientMock in clientMonks) {
+//                val color = clientMock?.color ?: 1
+//
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(5.dp)
+//                        .background(Color(color)),
+//                )
+//            }
+
 
 @Composable
 private fun MonthHeader(
