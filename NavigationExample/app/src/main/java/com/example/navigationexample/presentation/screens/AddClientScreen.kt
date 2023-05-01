@@ -11,11 +11,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,6 +55,8 @@ fun AddClientScreen(
         Color(0xFFB39DDB)
     )
 
+
+    var phoneNumber by rememberSaveable { mutableStateOf(viewModel.phone.value) }
 
     val currentAppatment by viewModel.currentApartment.observeAsState()
     val focusManager = LocalFocusManager.current
@@ -132,32 +132,47 @@ fun AddClientScreen(
                         keyboardActions = KeyboardActions(onNext = {
                             focusManager.moveFocus(FocusDirection.Down)
                         }),
-                    )
-                    OutlinedTextField(
-                        value = phone.value!!,
-                        onValueChange = {
-                            viewModel.phone.value = it
-                            phone.value = it
-                        },
 
-                        label = { Text(text = "Контактный телефон", color = Black) },
-                        placeholder = { Text(text = "Контактный телефон", color = Black) },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(5.dp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = Black,
-                            textColor = Black,
-                            backgroundColor = Color(142, 143, 138)
-                        ),
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Phone
-                        ),
-                        keyboardActions = KeyboardActions(onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }),
-                    )
+                        )
+
+
+                    phoneNumber?.let {
+                        PhoneField(
+                            it,
+                            mask = "+7(000)-000-00-00",
+                            maskNumber = '0',
+                            onPhoneChanged = {
+                                phoneNumber = it
+                                viewModel.phone.value = it
+                            })
+                    }
+
+
+//                    OutlinedTextField(
+//                        value = phone.value!!,
+//                        onValueChange = {
+//                            viewModel.phone.value = it
+//                            phone.value = it
+//                        },
+//
+//                        label = { Text(text = "Контактный телефон", color = Black) },
+//                        placeholder = { Text(text = "Контактный телефон", color = Black) },
+//                        singleLine = true,
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(5.dp),
+//                        colors = TextFieldDefaults.outlinedTextFieldColors(
+//                            unfocusedBorderColor = Black,
+//                            textColor = Black,
+//                            backgroundColor = Color(142, 143, 138)
+//                        ),
+//                        keyboardOptions = KeyboardOptions(
+//                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Phone
+//                        ),
+//                        keyboardActions = KeyboardActions(onNext = {
+//                            focusManager.moveFocus(FocusDirection.Down)
+//                        }),
+//                    )
 
 
                     ColourButton(colors, onColorSelected = {
@@ -345,6 +360,7 @@ fun AddClientScreen(
                                     "Контатный телефон клиента - обязательное поле!",
                                     Toast.LENGTH_SHORT
                                 ).show()
+
                             } else if (viewModel.dateInString1.value.isNullOrEmpty() && viewModel.dateOutString1.value.isNullOrEmpty()) {
                                 Toast.makeText(
                                     context,
@@ -372,7 +388,8 @@ fun AddClientScreen(
                                 viewModel.addClient(
                                     Client(
                                         name = viewModel.clientName.value!!,
-                                        phone = viewModel.phone.value!!,
+                                        phone = phoneNumber.toString(),
+//                                        phone = viewModel.phone.value!!,
                                         inDate = viewModel.dateInLong1.value!!,
                                         outDate = viewModel.dateOutLong1.value!!,
                                         members = viewModel.members.value!!.trim().toInt(),

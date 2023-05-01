@@ -18,7 +18,7 @@ fun NavigationGraph(
             ClientsScreen(mainNavController = mainNavController, viewModel = viewModel, appatmentName=appatmentName)
         }
         composable(BottomNavItems.Calendar.screen_route) {
-            CalendarScreen(viewModel = viewModel, appatmentName=appatmentName)
+            CalendarScreen(navController = mainNavController, viewModel = viewModel, appatmentName=appatmentName)
         }
         composable(BottomNavItems.Ballance.screen_route) {
             SetDatePeriodScreen(navController = mainNavController, viewModel = viewModel, appatmentName=appatmentName)

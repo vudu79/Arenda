@@ -20,6 +20,7 @@ import androidx.navigation.NavHostController
 import com.example.navigationexample.presentation.navigation.NavHostView
 import com.example.navigationexample.presentation.screens.AppatmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.security.AccessController.getContext
 
 
 @AndroidEntryPoint
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
 //            val owner = LocalViewModelStoreOwner.current
 //            owner?.let {
 //                val viewModel: AppatmentViewModel = viewModel(

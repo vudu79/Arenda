@@ -23,6 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.navigationexample.R
 import com.example.navigationexample.domain.models.ClientMonk
 import com.example.navigationexample.presentation.screens.common.SimpleCalendarTitle
@@ -50,7 +52,7 @@ private val selectedItemColor: Color @Composable get() = colorResource(R.color.e
 private val inActiveTextColor: Color @Composable get() = colorResource(R.color.example_5_text_grey_light)
 
 @Composable
-fun CalendarScreen(viewModel: AppatmentViewModel, appatmentName: String) {
+fun CalendarScreen(navController: NavHostController, viewModel: AppatmentViewModel, appatmentName: String) {
 //    viewModel.updateDaysMapForCalendar(appatmentName)
 //    val dateClientMap = remember { viewModel.dateClientMapForObserve.value }
 
@@ -151,7 +153,8 @@ fun CalendarScreen(viewModel: AppatmentViewModel, appatmentName: String) {
             Divider(color = pageBackgroundColor)
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(items = clientsInSelectedDate.value) { client ->
-                    ClientInformation(client)
+//                    ClientInformation(client)
+                    ClientItemRow(client.client, navController, viewModel)
                 }
             }
         }
@@ -291,7 +294,7 @@ private fun LazyItemScope.ClientInformation(clientMonk: ClientMonk) {
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = clientMonk.name,
+                text = clientMonk.client.name,
                 textAlign = TextAlign.Center,
                 lineHeight = 17.sp,
                 fontSize = 12.sp,

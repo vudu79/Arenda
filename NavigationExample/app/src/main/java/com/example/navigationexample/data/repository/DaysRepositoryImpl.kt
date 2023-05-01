@@ -17,7 +17,10 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 
-class DaysRepositoryImpl @Inject constructor(private val rentalDaysDao: RentalDaysDao) {
+class DaysRepositoryImpl @Inject constructor(
+    private val rentalDaysDao: RentalDaysDao,
+    private val clientsRepositoryImpl: ClientsRepositoryImpl
+) {
 
 
     val allClientDays = MutableLiveData<List<RentalDay>>()
@@ -129,8 +132,9 @@ class DaysRepositoryImpl @Inject constructor(private val rentalDaysDao: RentalDa
             rentalDaysList.forEach {
                 val localDay = LocalDate.ofEpochDay(it.epochDay)
                 Log.d("myTag", "День  - $localDay")
+                val client = clientsRepositoryImpl.getClient(it.clientName)
                 val clientMonk = ClientMonk(
-                    it.clientName,
+                    client,
                     it.appatmentName,
                     it.clientColor,
                     it.isEnable,

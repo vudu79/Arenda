@@ -1,24 +1,43 @@
 package com.example.navigationexample.presentation.screens
 
-import androidx.compose.foundation.background
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.example.composeex.ClientItemRow
+//import com.example.composeex.ClientItemRow
+import com.example.navigationexample.R
+import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.presentation.navigation.Routs
+import com.example.navigationexample.presentation.screens.common.CustomAlertDialog
+import java.security.AccessController.getContext
+import java.time.LocalDate
 
 
 @Composable
@@ -102,4 +121,129 @@ fun ClientsScreen(
 
     }
 
+}
+
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun LazyItemScope.ClientItemRow(
+    client: Client,
+    navcontroller: NavController,
+    viewModel: AppatmentViewModel
+) {
+
+    var showCustomDialog by remember {
+        mutableStateOf(false)
+    }
+
+    val context = LocalContext.current
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(3.dp),
+        shape = RoundedCornerShape(7.dp),
+        elevation = 8.dp,
+    ) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(128, 107, 90))
+                .combinedClickable(
+                    onClick = {
+
+                        makeCall(context, client.phone)
+                    },
+                    onLongClick = {
+                        showCustomDialog = !showCustomDialog
+                    }),
+//                .border(3.dp, Color(223,75,0))
+
+        )
+        {
+
+            Box(
+                modifier = Modifier
+
+                    .fillMaxHeight()
+                    .border(
+                        width = 2.dp,
+                        color = Color(client.clientColor).copy(alpha = 0.5f),
+                        shape = RoundedCornerShape(7.dp),
+
+                        ),
+
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.client1_foreground),
+                    contentDescription = "asd",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .padding(top = 2.dp)
+                        .size(70.dp)
+                        .clip(CircleShape)
+                )
+            }
+
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier
+                    .fillMaxWidth(0.70f)
+                    .padding(start = 15.dp),
+
+
+                ) {
+                Text(
+                    text = client.name,
+                    modifier = Modifier.padding(2.dp),
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Justify,
+                    color = Color(red = 41, green = 41, blue = 41),
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.width(1.dp))
+                Text(
+                    text = client.phone,
+                    modifier = Modifier.padding(2.dp),
+                    maxLines = 1,
+                    color = Color(red = 41, green = 41, blue = 41),
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = "${LocalDate.ofEpochDay(client.inDate ?: 0 )} - ${LocalDate.ofEpochDay(client.inDate ?: 0 )}",
+                    modifier = Modifier.padding(2.dp),
+                    maxLines = 1,
+                    color = Color(red = 41, green = 41, blue = 41),
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+            }
+
+        }
+    }
+
+    if (showCustomDialog) {
+        CustomAlertDialog(onDismiss = {
+            showCustomDialog = !showCustomDialog
+        }, onOk = {
+            showCustomDialog = !showCustomDialog
+
+            viewModel.deleteClient(client.name)
+            viewModel.getAppatmentClients(client.appatment_name)
+            viewModel.updateDaysMapForCalendar(client.appatment_name)
+        },
+            message = "Клиент будет безвозвратно удален. Вы уверены?"
+        )
+    }
+
+}
+
+fun makeCall(context: Context, number: String ){
+    val intent = Intent(Intent.ACTION_DIAL);
+    intent.data = Uri.parse("tel:$number")
+    startActivity(context, intent, null)
 }
