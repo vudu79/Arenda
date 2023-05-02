@@ -5,19 +5,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.composeex.AppatmentItemRow
+import com.example.navigationexample.R
 import com.example.navigationexample.presentation.navigation.Routs
 
 
@@ -55,7 +55,7 @@ fun MainScreen(mainNavController: NavHostController, viewModel: AppatmentViewMod
 
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.90f)
+                .fillMaxHeight(0.85f)
                 .padding(3.dp)
 
         ) {
@@ -69,18 +69,36 @@ fun MainScreen(mainNavController: NavHostController, viewModel: AppatmentViewMod
             }
         }
 
-        Button(
-            onClick = {
-                mainNavController.navigate(Routs.addAppatmentScreen)
-            },
-            shape = RoundedCornerShape(30.dp),
-            modifier = Modifier
-                .fillMaxWidth(0.6f)
-                .fillMaxHeight(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(223, 75, 0))
-        ) {
-            Text(text = "Добавить объект")
+
+        IconButton(onClick = {
+            mainNavController.navigate(Routs.addAppatmentScreen)
+        }) {
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_add_circle_24),
+                contentDescription = "Добавить объект",
+
+                modifier = Modifier
+                    .size(60.dp)
+                    .padding(bottom = 10.dp),
+                tint = Color(223, 75, 0)
+
+            )
+
         }
+
+
+//        Button(
+//            onClick = {
+//                mainNavController.navigate(Routs.addAppatmentScreen)
+//            },
+//            shape = RoundedCornerShape(30.dp),
+//            modifier = Modifier
+//                .fillMaxWidth(0.6f)
+//                .fillMaxHeight(),
+//            colors = ButtonDefaults.buttonColors(backgroundColor = Color(223, 75, 0))
+//        ) {
+//            Text(text = "Добавить объект")
+//        }
 
 
 //        Button(

@@ -89,17 +89,22 @@ fun ClientsScreen(
         }
 
 
-        IconButton(onClick = { }) {
+        IconButton(onClick = {
+            mainNavController.navigate(
+                route = "${Routs.addClientScreen}?appatment_name=$appatmentName"
+
+            )
+        }) {
             Icon(
                 painter = painterResource(id = R.drawable.baseline_add_circle_24),
                 contentDescription = "Добавить клиента",
 
-            modifier = Modifier.size(55.dp),
+                modifier = Modifier.size(55.dp),
                 tint = Color(223, 75, 0)
 
             )
-        }
 
+        }
 
 
 //        Button(
