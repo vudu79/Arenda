@@ -11,6 +11,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -23,12 +25,14 @@ import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.navigationexample.R
 import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.common.*
@@ -346,6 +350,9 @@ fun AddClientScreen(
 
 
                     Spacer(modifier = Modifier.padding(10.dp))
+
+
+
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color(223, 75, 0)),
@@ -388,7 +395,7 @@ fun AddClientScreen(
                                 viewModel.addClient(
                                     Client(
                                         name = viewModel.clientName.value!!,
-                                        phone = phoneNumber.toString(),
+                                        phone = "+7${phoneNumber.toString()}",
 //                                        phone = viewModel.phone.value!!,
                                         inDate = viewModel.dateInLong1.value!!,
                                         outDate = viewModel.dateOutLong1.value!!,
