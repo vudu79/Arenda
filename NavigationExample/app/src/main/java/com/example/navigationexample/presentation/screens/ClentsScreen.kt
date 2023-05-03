@@ -101,41 +101,7 @@ fun ClientsScreen(
                 tint = Color(223, 75, 0)
             )
         }
-
-
-//        Button(
-//            onClick = {
-//                mainNavController.navigate(
-//                    route = "${Routs.addClientScreen}?appatment_name=$appatmentName"
-//
-//                )
-//            },
-//            shape = RoundedCornerShape(30.dp),
-//            modifier = Modifier
-//                .padding(top = 9.dp)
-//
-//
-//                .wrapContentHeight(),
-//            colors = ButtonDefaults.buttonColors(backgroundColor = Color(223, 75, 0))
-//        ) {
-//            Text(text = "Добавить клиента")
-//        }
-
-
-//        Button(
-//            onClick = {
-//                navController.navigate(Routs.addAppatmentScreen)
-//            }, modifier = Modifier
-//                .fillMaxWidth()
-//                .fillMaxHeight()
-//                .padding(6.dp)
-//        ) {
-//            Text("Добавить объект")
-//        }
-
-
     }
-
 }
 
 
@@ -234,7 +200,7 @@ fun LazyItemScope.ClientItemRow(
                         horizontalAlignment = Alignment.Start
                     ) {
                         Text(
-                            text = client.name,
+                            text = client.firstName,
                             modifier = Modifier.padding(1.dp),
                             fontSize = 20.sp,
                             textAlign = TextAlign.Justify,
@@ -276,7 +242,7 @@ fun LazyItemScope.ClientItemRow(
         }, onOk = {
             showCustomDialog = !showCustomDialog
 
-            viewModel.deleteClient(client.name)
+            viewModel.deleteClient(client.firstName)
             viewModel.getAppatmentClients(client.appatment_name)
             viewModel.updateDaysMapForCalendar(client.appatment_name)
         },

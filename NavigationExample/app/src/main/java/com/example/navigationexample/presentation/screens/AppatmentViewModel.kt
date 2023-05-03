@@ -60,17 +60,21 @@ class AppatmentViewModel @Inject constructor(
     var dateInString by mutableStateOf("")
     var dateInLong by mutableStateOf(0L)
 
-    val clientName = MutableLiveData<String>("qwe")
+    val clientFirstName = MutableLiveData<String>("")
+    val clientSecondName = MutableLiveData<String>("")
+    val clientLastName = MutableLiveData<String>("")
     val phone = MutableLiveData<String>("")
+    val documentNumber = MutableLiveData<String>("")
+    val documentDitails = MutableLiveData<String>("")
     val members = MutableLiveData<String>("")
     val payment = MutableLiveData<String>("")
     val prepayment = MutableLiveData<String>("")
     val colorClient = MutableLiveData<Int>(Color(0xFFEF9A9A).toArgb())
     val sity = MutableLiveData<String>("")
 
-    var dateOutString1 = MutableLiveData<String>("__.__.____")
+    var dateOutString1 = MutableLiveData<String>("")
     var dateOutLong1 = MutableLiveData<Long>()
-    var dateInString1 = MutableLiveData<String>("__.__.____")
+    var dateInString1 = MutableLiveData<String>("")
     var dateInLong1 = MutableLiveData<Long>()
 
 

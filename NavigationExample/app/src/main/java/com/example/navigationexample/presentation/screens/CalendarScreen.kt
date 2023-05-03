@@ -294,7 +294,7 @@ private fun LazyItemScope.ClientInformation(clientMonk: ClientMonk) {
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = clientMonk.client.name,
+                text = clientMonk.client.firstName,
                 textAlign = TextAlign.Center,
                 lineHeight = 17.sp,
                 fontSize = 12.sp,

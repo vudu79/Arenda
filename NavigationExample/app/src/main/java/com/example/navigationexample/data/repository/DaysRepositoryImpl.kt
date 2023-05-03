@@ -55,7 +55,7 @@ class DaysRepositoryImpl @Inject constructor(
                     RentalDay(
                         epochDay = it.toEpochDay(),
                         clientColor = client.clientColor,
-                        clientName = client.name,
+                        clientName = client.firstName,
                         isStartDay = isStart,
                         isEndDay = isEnd,
                         isEnable = isEnable,

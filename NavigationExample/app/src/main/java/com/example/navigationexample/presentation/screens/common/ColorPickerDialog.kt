@@ -30,13 +30,13 @@ fun ColourButton(colors: List<Color>, onColorSelected: (Color) -> Unit) {
 
     Box(
         modifier = Modifier
-            .padding(top = 10.dp, start = 5.dp, end = 5.dp, bottom = 5.dp)
-            .fillMaxWidth(0.99f)
-            .clip(RoundedCornerShape(20))
+            .padding( bottom = 5.dp, start = 5.dp, end = 5.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(5))
             .border(
                 2.dp,
                 MaterialTheme.colorScheme.onBackground.copy(alpha = 0.99f),
-                RoundedCornerShape(20)
+                RoundedCornerShape(5)
             )
             .clickable {
                 colorPickerOpen = true
@@ -47,20 +47,19 @@ fun ColourButton(colors: List<Color>, onColorSelected: (Color) -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-
                 .padding(16.dp)
                 .background(Color(142, 143, 138)),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Выберите цвет клиента",
+                text = "Цвет для календаря",
             )
 
             Canvas(
                 modifier = Modifier
                     .size(30.dp)
-                    .clip(RoundedCornerShape(20))
+                    .clip(RoundedCornerShape(5))
                     .border(
                         1.dp,
                         MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f),

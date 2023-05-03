@@ -62,14 +62,11 @@ fun PhoneField(
         onValueChange = { it ->
             onPhoneChanged(it.take(mask.count { it == maskNumber }))
         },
-        label = { Text(text = "Контактный телефон", color = Color.Black) },
-        placeholder = { Text(text = "Контактный телефон", color = Color.Black) },
-
-
+        placeholder = { Text(text = "Паспорт - серия, номер", color = Color.Black) },
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp),
+            .padding( bottom = 5.dp, start = 5.dp, end = 5.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             unfocusedBorderColor = Color.Black,
             textColor = Color.Black,

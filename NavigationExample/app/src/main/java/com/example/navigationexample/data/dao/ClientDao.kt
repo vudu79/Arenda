@@ -14,10 +14,10 @@ interface ClientDao {
     @Insert
     fun insertClient(client: Client)
 
-    @Query("DELETE FROM clients WHERE name = :name")
+    @Query("DELETE FROM clients WHERE first_name = :name")
     fun deleteClient(name: String)
 
-    @Query("SELECT * FROM clients WHERE name = :clientName")
+    @Query("SELECT * FROM clients WHERE first_name = :clientName")
     fun getClient(clientName: String): Client
 
     @Query("SELECT * FROM clients")

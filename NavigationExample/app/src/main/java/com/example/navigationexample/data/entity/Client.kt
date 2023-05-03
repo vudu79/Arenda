@@ -6,7 +6,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-
 @Entity(tableName = "clients")
 class Client {
 
@@ -16,27 +15,39 @@ class Client {
     var id: Int = 0
 
 
-    @ColumnInfo(name = "name")
-    var name: String = ""
+    @ColumnInfo(name = "first_name")
+    var firstName: String = ""
 
+
+    @ColumnInfo(name = "second_name")
+    var secondName: String? = ""
+
+    @ColumnInfo(name = "last_name")
+    var lastName: String? = ""
 
     @ColumnInfo(name = "phone")
-    var phone: String= ""
+    var phone: String = ""
+
+    @ColumnInfo(name = "document_number")
+    var documentNamber: String? = ""
+
+    @ColumnInfo(name = "document_ditails")
+    var documentDitails: String? = ""
 
     @ColumnInfo(name = "members")
-    var members: Int?= 0
+    var members: Int? = 0
 
     @ColumnInfo(name = "in_date")
-    var inDate: Long? = 0
+    var inDate: Long = 0
 
     @ColumnInfo(name = "out_date")
-    var outDate: Long? = 0
+    var outDate: Long = 0
 
     @ColumnInfo(name = "prepayment")
-    var prepayment: Int? = 0
+    var prepayment: Int = 0
 
     @ColumnInfo(name = "payment")
-    var payment: Int? = 0
+    var payment: Int = 0
 
     @ColumnInfo(name = "client_color")
     var clientColor: Int = 0
@@ -45,17 +56,17 @@ class Client {
     var sity: String? = ""
 
     @ColumnInfo(name = "appatment_name")
-    var appatment_name: String=""
+    var appatment_name: String = ""
 
     constructor()
     constructor(
-        name: String,
+        firstName: String,
         phone: String,
-        inDate: Long?,
-        outDate: Long?,
+        inDate: Long,
+        outDate: Long,
         appatment_name: String
     ) {
-        this.name = name
+        this.firstName = firstName
         this.phone = phone
         this.inDate = inDate
         this.outDate = outDate
@@ -63,19 +74,27 @@ class Client {
     }
 
     constructor(
-        name: String,
+        firstName: String,
+        secondName: String?,
+        lastName: String?,
         phone: String,
-        inDate: Long?,
-        outDate: Long?,
-        members: Int,
+        documentNunber: String,
+        documentDitails: String,
+        inDate: Long,
+        outDate: Long,
+        members: Int?,
         prepayment: Int,
         payment: Int,
-        sity: String?,
         clientColor: Int,
+        sity: String?,
         appatment_name: String
-    ){
-        this.name = name
+    ) {
+        this.firstName = firstName
+        this.secondName = secondName
+        this.lastName = lastName
         this.phone = phone
+        this.documentNamber = documentNunber
+        this.documentDitails = documentDitails
         this.members = members
         this.inDate = inDate
         this.outDate = outDate
@@ -84,7 +103,6 @@ class Client {
         this.clientColor = clientColor
         this.sity = sity
         this.appatment_name = appatment_name
+
     }
-
-
 }
