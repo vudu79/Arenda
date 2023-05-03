@@ -90,20 +90,16 @@ fun ClientsScreen(
 
 
         IconButton(onClick = {
-            mainNavController.navigate(
-                route = "${Routs.addClientScreen}?appatment_name=$appatmentName"
-
-            )
-        }) {
+            mainNavController.navigate(route = "${Routs.addClientScreen}?appatment_name=$appatmentName")
+        })
+        {
             Icon(
-                painter = painterResource(id = R.drawable.baseline_add_circle_24),
+                painter = painterResource(id = R.drawable.baseline_group_add_24),
                 contentDescription = "Добавить клиента",
 
                 modifier = Modifier.size(55.dp),
                 tint = Color(223, 75, 0)
-
             )
-
         }
 
 
@@ -174,7 +170,7 @@ fun LazyItemScope.ClientItemRow(
                 .combinedClickable(
                     onClick = {
 
-                        makeCall(context, client.phone)
+//                        makeCall(context, client.phone)
                     },
                     onLongClick = {
                         showCustomDialog = !showCustomDialog
@@ -268,16 +264,9 @@ fun LazyItemScope.ClientItemRow(
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold
                         )
-
-
                     }
-
-
                 }
-
-
             }
-
         }
     }
 

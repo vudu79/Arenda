@@ -13,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -48,14 +50,15 @@ fun MainScreen(mainNavController: NavHostController, viewModel: AppatmentViewMod
         Text(
             "Арендуемые объекты",
             modifier = Modifier.padding(10.dp),
-            fontSize = 20.sp,
-            color = Color(223, 75, 0)
+            fontSize = 22.sp,
+            color = Color(223, 75, 0).copy(alpha = 0.5f),
+            fontWeight = FontWeight.Bold,
         )
         LazyColumn(
 
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.85f)
+                .fillMaxHeight(0.87f)
                 .padding(3.dp)
 
         ) {
@@ -74,12 +77,12 @@ fun MainScreen(mainNavController: NavHostController, viewModel: AppatmentViewMod
             mainNavController.navigate(Routs.addAppatmentScreen)
         }) {
             Icon(
-                painter = painterResource(id = R.drawable.baseline_add_circle_24),
+                painter = painterResource(id = R.drawable.baseline_add_home_work_24),
                 contentDescription = "Добавить объект",
 
                 modifier = Modifier
-                    .size(60.dp)
-                    .padding(bottom = 10.dp),
+                    .size(50.dp)
+                    .padding(bottom = 3.dp),
                 tint = Color(223, 75, 0)
 
             )

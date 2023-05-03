@@ -17,11 +17,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.navigationexample.R
 import com.example.navigationexample.data.entity.Appatment
 import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.common.*
@@ -44,7 +46,7 @@ fun AddAppatmentScreen(
     val squearAppat = remember { mutableStateOf("") }
 
     val expanded = remember { mutableStateOf(false) }
-    val items = listOf("Апартаменты", "Квартира", "комерческий")
+    val items = listOf("Аппартаменты", "Квартира", "Комерческое")
     val disabledValue = "B"
     val selectedIndex = remember { mutableStateOf(0) }
 
@@ -154,10 +156,10 @@ fun AddAppatmentScreen(
                                 .background(
                                     Color(142, 143, 138)
                                 ),
-                            fontSize=16.sp,
+                            fontSize = 16.sp,
                             color = Black,
 
-                        )
+                            )
                         DropdownMenu(
                             expanded = expanded.value,
                             onDismissRequest = { expanded.value = false },
@@ -204,7 +206,7 @@ fun AddAppatmentScreen(
                                 .background(
                                     Color(142, 143, 138)
                                 ),
-                            fontSize=16.sp,
+                            fontSize = 16.sp,
                             color = Black,
 
                             )
@@ -265,12 +267,33 @@ fun AddAppatmentScreen(
                             backgroundColor = Color(142, 143, 138)
                         )
                     )
-
                     Spacer(modifier = Modifier.padding(10.dp))
-                    Button(modifier = Modifier
-                        .fillMaxWidth(0.8f),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(223, 75, 0)),
-                        onClick = {
+
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentSize(Alignment.Center),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        IconButton(modifier = Modifier.padding(end = 80.dp),
+                            onClick = {
+                            navController.navigate(Routs.home)
+                        })
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_arrow_back_24),
+                                contentDescription = "Назад",
+
+                                modifier = Modifier.size(55.dp),
+                                tint = Color(223, 75, 0)
+                            )
+                        }
+
+
+                        IconButton(onClick = {
                             if (nameAppat.value.isEmpty()) {
                                 Toast.makeText(
                                     context,
@@ -318,20 +341,86 @@ fun AddAppatmentScreen(
                                 ).show()
                             }
                             navController.navigate(Routs.home)
+                        })
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_check_24),
+                                contentDescription = "Добавить объект недвижимости",
+
+                                modifier = Modifier.size(55.dp),
+                                tint = Color(223, 75, 0)
+                            )
                         }
 
-                    ) {
-                        Text(text = "Добавить", fontSize = 20.sp, color = Black)
+//                        Button(modifier = Modifier
+//                            .fillMaxWidth(0.8f),
+//                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(223, 75, 0)),
+//                            onClick = {
+//                                if (nameAppat.value.isEmpty()) {
+//                                    Toast.makeText(
+//                                        context,
+//                                        "Введите название объекта недвижимости!",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                } else if (addressAppat.value.isEmpty()) {
+//                                    Toast.makeText(
+//                                        context,
+//                                        "Введите адрес объекта!",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                } else if (squearAppat.value.isEmpty()) {
+//                                    Toast.makeText(
+//                                        context,
+//                                        "Введите площадь объекта!",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                } else if (typeAppat.value.isEmpty()) {
+//                                    Toast.makeText(
+//                                        context,
+//                                        "Введите тип объекта!",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                } else if (rentatypeAppat.value.isEmpty()) {
+//                                    Toast.makeText(
+//                                        context,
+//                                        "Введите срок аренды!",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                } else {
+//                                    viewModel.insertAppatment(
+//                                        Appatment(
+//                                            nameAppat.value,
+//                                            addressAppat.value,
+//                                            typeAppat.value,
+//                                            rentatypeAppat.value,
+//                                            squearAppat.value.toFloat()
+//                                        )
+//                                    )
+//                                    Toast.makeText(
+//                                        context,
+//                                        "Объект недвижимости добавлен!",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                }
+//                                navController.navigate(Routs.home)
+//                            }
+//
+//                        ) {
+//                            Text(text = "Добавить", fontSize = 20.sp, color = Black)
+//                        }
+
+//                        Spacer(modifier = Modifier.padding(5.dp))
+
+
+//                        Text(text = "Назад", color = Color.White,
+//                            modifier = Modifier.clickable {
+//                                navController.navigate(Routs.home)
+//
+//                            }
+//                        )
                     }
 
-                    Spacer(modifier = Modifier.padding(5.dp))
 
-                    Text(text = "Назад", color = Color.White,
-                        modifier = Modifier.clickable {
-                            navController.navigate(Routs.home)
-
-                        }
-                    )
                 }
             }
 

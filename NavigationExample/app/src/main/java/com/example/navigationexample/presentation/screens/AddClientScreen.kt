@@ -11,8 +11,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -44,8 +42,7 @@ fun AddClientScreen(
     navController: NavHostController,
     viewModel: AppatmentViewModel,
     appatmentName: String,
-
-    ) {
+) {
 
     val colors = listOf(
         Color(0xFFEF9A9A),
@@ -61,7 +58,6 @@ fun AddClientScreen(
 
 
     var phoneNumber by rememberSaveable { mutableStateOf(viewModel.phone.value) }
-
     val currentAppatment by viewModel.currentApartment.observeAsState()
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
@@ -99,14 +95,22 @@ fun AddClientScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Новый клиент для ${viewModel.currentApartment.value}",
+                    text = "Регистрация клиента",
+                    modifier = Modifier.padding(top = 1.dp, bottom = 1.dp),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
-                    color = Color.White
-
+                    color = Color(223, 75, 0).copy(alpha = 0.9f)
+                )
+                Text(
+                    text = "объект: \"${viewModel.currentApartment.value?.name ?: ""}\" | срок: " +
+                            (viewModel.currentApartment.value?.rentalPeriod ?: ""),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 1.dp, bottom = 1.dp),
+                    color = Color(223, 75, 0).copy(alpha = 0.9f)
 
                 )
+
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
@@ -119,12 +123,11 @@ fun AddClientScreen(
                             name.value = it
                             viewModel.clientName.value = it
                         },
-                        label = { Text(text = "ФИО", color = Black) },
-                        placeholder = { Text(text = "ФИО", color = Black) },
+                        placeholder = { Text(text = "Имя", color = Black) },
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(5.dp),
+                            .padding(top = 15.dp, bottom = 5.dp, start = 5.dp, end = 5.dp),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black,
                             textColor = Black,
@@ -351,12 +354,29 @@ fun AddClientScreen(
 
                     Spacer(modifier = Modifier.padding(10.dp))
 
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentSize(Alignment.Center),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(modifier = Modifier.padding(end = 80.dp),
+                            onClick = {
+                                viewModel.getAppatmentClients(appatmentName)
+                                navController.navigate(Routs.home)
+                            })
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_arrow_back_24),
+                                contentDescription = "Назад",
 
+                                modifier = Modifier.size(55.dp),
+                                tint = Color(223, 75, 0)
+                            )
+                        }
 
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(223, 75, 0)),
-                        onClick = {
+                        IconButton(onClick = {
                             if (viewModel.clientName.value.isNullOrEmpty()) {
                                 Toast.makeText(
                                     context, "ФИО клиента - обязательное поле!", Toast.LENGTH_SHORT
@@ -415,23 +435,20 @@ fun AddClientScreen(
                                 currentAppatment?.name?.let { viewModel.updateApartmentPlanedDays(it) }
                                 navController.navigate(route = "${Routs.mainScreenClients}?appatment_name=$appatmentName")
                             }
-                        }
-                    ) {
-                        Text(text = "Добавить", fontSize = 20.sp, color = Black)
-                    }
-
-                    Spacer(modifier = Modifier.padding(3.dp))
-
-                    Text(
-                        text = "Назад",
-                        color = Color.White,
-                        modifier = Modifier.clickable {
-                            viewModel.getAppatmentClients(appatmentName)
-                            navController.navigate(Routs.home)
                         })
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_check_24),
+                                contentDescription = "Добавить объект недвижимости",
+
+                                modifier = Modifier.size(55.dp),
+                                tint = Color(223, 75, 0)
+                            )
+                        }
+
+                    }
                 }
             }
-
         }
     }
 }

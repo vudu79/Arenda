@@ -43,6 +43,16 @@ fun AppatmentItemRow(
         mutableStateOf(false)
     }
 
+    var iconHomeType by remember {
+        mutableStateOf<Int>(0)
+    }
+
+    iconHomeType =  when(appatmentItem.type){
+        "Квартира" -> R.drawable.baseline_cottage_24
+        "Аппартаменты" ->  R.drawable.baseline_apartment_24
+        "Комерческое" -> R.drawable.baseline_home_work_24
+        else -> R.drawable.baseline_cottage_24
+    }
 
     Card(
         modifier = Modifier
@@ -66,54 +76,53 @@ fun AppatmentItemRow(
                         viewModel.updateApartmentPlanedDays(appatmentItem.name)
                         viewModel.updateDaysMapForCalendar(appatmentItem.name)
                         navcontroller.navigate(route = "${Routs.mainScreenClients}?appatment_name=${appatmentItem.name}")
-
                     },
                     onLongClick = {
                         showCustomDialog = !showCustomDialog
                     }),
+            verticalAlignment = Alignment.CenterVertically
 
 
             )
         {
             Image(
-                painter = painterResource(R.drawable.house1),
+                painter = painterResource(iconHomeType),
                 contentDescription = "asd",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .padding(3.dp)
-                    .size(64.dp)
-                    .clip(CircleShape)
+                    .padding(start = 10.dp, end = 5.dp)
+                    .size(50.dp)
             )
             Column(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth(0.70f)
-                    .padding(10.dp),
+                    .padding(3.dp),
 
 
                 ) {
                 Text(
                     appatmentItem.name,
-                    modifier = Modifier.padding(3.dp),
-                    fontSize = 20.sp,
+                    modifier = Modifier.padding(1.dp),
+                    fontSize = 25.sp,
                     textAlign = TextAlign.Justify,
                     color = Color(0, 0, 0)
                 )
                 Text(
                     appatmentItem.address,
-                    modifier = Modifier.padding(3.dp),
-                    maxLines = 1,
+                    modifier = Modifier.padding(1.dp),
+                    maxLines = 2,
                     fontSize = 10.sp
                 )
                 Text(
                     appatmentItem.type,
-                    modifier = Modifier.padding(3.dp),
+                    modifier = Modifier.padding(1.dp),
                     maxLines = 1,
                     fontSize = 10.sp
                 )
                 Text(
-                    appatmentItem.square.toString(),
-                    modifier = Modifier.padding(3.dp),
+                    appatmentItem.rentalPeriod,
+                    modifier = Modifier.padding(bottom = 5.dp, start = 1.dp, end = 1.dp, top = 1.dp ),
                     maxLines = 1,
                     fontSize = 10.sp
                 )
