@@ -58,7 +58,7 @@ fun SetDatePeriodScreen(
     val planedApartmentDays: List<LocalDate> by viewModel.allApartmentPlanedDays.collectAsState(
         initial = listOf()
     )
-
+    val clientFormState = viewModel.validateFormState
     val isLoading: Boolean by viewModel.isLoadingForSetPeriodScreen
 
     val currentMonth = remember { YearMonth.now() }
@@ -98,6 +98,11 @@ fun SetDatePeriodScreen(
                             viewModel.dateOutString1.value = endDate.toString()
                             viewModel.dateInLong1.value = startDate.toEpochDay()
                             viewModel.dateOutLong1.value = endDate.toEpochDay()
+
+                            viewModel.validateFormState.dateInString=startDate.toString()
+                            viewModel.validateFormState.dateInLong=startDate.toEpochDay()
+                            viewModel.validateFormState.dateOutString=endDate.toString()
+                            viewModel.validateFormState.dateOutLong=endDate.toEpochDay()
 
                             navController.navigate(Routs.addClientScreen)
                         }

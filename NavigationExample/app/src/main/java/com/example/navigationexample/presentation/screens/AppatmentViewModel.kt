@@ -15,11 +15,19 @@ import com.example.navigationexample.data.repository.DaysRepositoryImpl
 import com.example.navigationexample.domain.models.ClientMonk
 import com.example.navigationexample.domain.usecase.GetDayClientMapUseCase
 import com.example.navigationexample.domain.usecase.getAppatmentPlanedDaysUseCase
+import com.example.navigationexample.domain.usecase.validation.ValidationFormState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDate
 import javax.inject.Inject
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewModelScope
+import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
+import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 
 @HiltViewModel
@@ -77,6 +85,11 @@ class AppatmentViewModel @Inject constructor(
     var dateInString1 = MutableLiveData<String>("")
     var dateInLong1 = MutableLiveData<Long>()
 
+    var validateFormState by mutableStateOf(ValidationFormState())
+    private val validationEventChannel = Channel<ValidatAllFieldsResultEvent>()
+    val validationEvents = validationEventChannel.receiveAsFlow()
+
+
 
     init {
 //        val appatmentDb = AppatmentRoomDatabase.getInstance(application)
@@ -89,6 +102,7 @@ class AppatmentViewModel @Inject constructor(
         allClients = clientRepository.allClients
         allApartmentClients = clientRepository.allAppatmentClients
     }
+
 
     fun setCurrentAppatment(appatment: Appatment) {
         currentApartment.value = appatment
@@ -135,66 +149,96 @@ class AppatmentViewModel @Inject constructor(
             apartmentName = appatmentName
         )
 
-//        dateClientMapForObserve.value?.clear()
-//        dateClientMapForObserve.value = getDayClientMapUseCase.invoke(appatmentName)
+    }
+
+
+    fun onFormEvent(event: ValidationFormEvent) {
+        when(event) {
+            is ValidationFormEvent.FirstNameChanged -> {
+                validateFormState = validateFormState.copy(firstName = event.firstName)
+            }
+            is ValidationFormEvent.SecondNameChanged -> {
+                validateFormState = validateFormState.copy(secondName = event.secondName)
+            }
+            is ValidationFormEvent.LastNameChanged -> {
+                validateFormState = validateFormState.copy(lastName = event.lastName)
+            }
+            is ValidationFormEvent.PhoneChanged -> {
+                validateFormState = validateFormState.copy(phone = event.phone)
+            }
+            is ValidationFormEvent.DocumentNamberChanged -> {
+                validateFormState = validateFormState.copy(documentNamber = event.documentNamber)
+            }
+            is ValidationFormEvent.DocumentDitailsChanged -> {
+                validateFormState = validateFormState.copy(documentDitails = event.documentDitails)
+            }
+            is ValidationFormEvent.MembersChanged -> {
+                validateFormState = validateFormState.copy(members = event.members)
+            }
+            is ValidationFormEvent.InStringDateChanged -> {
+                validateFormState = validateFormState.copy(dateInString = event.inDateString)
+            }
+            is ValidationFormEvent.InLongDateChanged -> {
+                validateFormState = validateFormState.copy(dateInLong = event.inDateLong)
+            }
+            is ValidationFormEvent.OutStringDateChanged -> {
+                validateFormState = validateFormState.copy(dateOutString = event.outDateString)
+            }
+            is ValidationFormEvent.OutLongDateChanged -> {
+                validateFormState = validateFormState.copy(dateOutLong = event.outDateLong)
+            }
+            is ValidationFormEvent.PrepaymentChanged -> {
+                validateFormState = validateFormState.copy(prepayment = event.prepayment)
+            }
+            is ValidationFormEvent.PaymentChanged -> {
+                validateFormState = validateFormState.copy(payment = event.payment)
+            }
+            is ValidationFormEvent.SityChanged -> {
+                validateFormState = validateFormState.copy(sity = event.sity)
+            }
+
+            is ValidationFormEvent.onSubmit -> {
+                submitData()
+            }
+        }
+    }
+
+    private fun submitData() {
+        val emailResult = validateEmail.execute(state.email)
+        val passwordResult = validatePassword.execute(state.password)
+        val repeatedPasswordResult = validateRepeatedPassword.execute(
+            state.password, state.repeatedPassword
+        )
+        val termsResult = validateTerms.execute(state.acceptedTerms)
+
+
+
+
+
+
+
+
+        val hasError = listOf(
+            emailResult,
+            passwordResult,
+            repeatedPasswordResult,
+            termsResult
+        ).any { !it.successful }
+
+        if(hasError) {
+            state = state.copy(
+                emailError = emailResult.errorMessage,
+                passwordError = passwordResult.errorMessage,
+                repeatedPasswordError = repeatedPasswordResult.errorMessage,
+                termsError = termsResult.errorMessage
+            )
+            return
+        }
+        viewModelScope.launch {
+            validationEventChannel.send(ValidatAllFieldsResultEvent.Success)
+        }
     }
 }
 
-//private var dateFormat = "yyyy-MM-dd"
-//fun showDatePickerDialog(context: Context, dateType: String) {
-//    val calendar = Calendar.getInstance()
-//    DatePickerDialog(
-//        context, { _, year, month, day ->
-//            when (dateType) {
-//                "in" -> {
-//                    dateInString = getPickedDateAsString(year, month, day)
-//                    dateInLong = getPickedDateAsLocalDate(year, month, day)
-//                }
-//                "out" -> {
-//                    dateOutString = getPickedDateAsString(year, month, day)
-//                    dateOutLong = getPickedDateAsLocalDate(year, month, day)
-//                }
-//            }
-//
-//        },
-//        calendar.get(Calendar.YEAR),
-//        calendar.get(Calendar.MONTH),
-//        calendar.get(Calendar.DAY_OF_MONTH)
-//    )
-//        .show()
-//}
 
-//    private fun getCalendar(): Calendar {
-//        return if (dateString.isEmpty())
-//            Calendar.getInstance()
-//        else
-//            getLastPickedDateCalendar()
-//    }
-//
-//    private fun getLastPickedDateCalendar(): Calendar {
-//        val dateFormat = SimpleDateFormat(dateFormat)
-//        val calendar = Calendar.getInstance()
-//        calendar.time = dateFormat.parse(dateString)
-//        return calendar
-//    }
 
-//
-//@SuppressLint("SimpleDateFormat")
-//private fun getPickedDateAsString(year: Int, month: Int, day: Int): String {
-//    val calendar = Calendar.getInstance()
-//    calendar.set(year, month, day)
-//    val dateFormat = SimpleDateFormat(dateFormat)
-//    return dateFormat.format(calendar.time)
-//}
-//
-//private fun getPickedDateAsLong(year: Int, month: Int, day: Int): Long {
-//    val calendar = Calendar.getInstance()
-//    calendar.set(year, month, day)
-//    return calendar.timeInMillis
-//}
-
-//private fun getPickedDateAsLocalDate(year: Int, month: Int, day: Int): Long {
-//    return LocalDate.of(year, month + 1, day).toEpochDay()
-//}
-
-//}

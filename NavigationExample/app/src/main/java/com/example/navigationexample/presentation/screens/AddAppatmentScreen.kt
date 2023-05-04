@@ -120,20 +120,6 @@ fun AddAppatmentScreen(
                             backgroundColor = Color(142, 143, 138)
                         )
                     )
-//                    OutlinedTextField(
-//                        value = typeAppat.value,
-//                        onValueChange = { typeAppat.value = it },
-//                        label = { Text(text = "Тип помещения", color = Black) },
-//                        placeholder = { Text(text = "Тип помещения", color = Black) },
-//                        singleLine = true,
-//                        modifier = Modifier.fillMaxWidth(0.8f),
-//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-//                        colors = TextFieldDefaults.outlinedTextFieldColors(
-//                            unfocusedBorderColor = Black, textColor = Black,
-//                            backgroundColor = Color(142,143,138)
-//                        )
-//                    )
-
 
                     Box(
 
@@ -187,7 +173,6 @@ fun AddAppatmentScreen(
                     }
 
 
-
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(0.79f),
@@ -235,8 +220,6 @@ fun AddAppatmentScreen(
                             }
                         }
                     }
-
-
 
 
                     OutlinedTextField(
