@@ -15,7 +15,6 @@ import com.example.navigationexample.data.repository.DaysRepositoryImpl
 import com.example.navigationexample.domain.models.ClientMonk
 import com.example.navigationexample.domain.usecase.GetDayClientMapUseCase
 import com.example.navigationexample.domain.usecase.getAppatmentPlanedDaysUseCase
-import com.example.navigationexample.domain.usecase.validation.ValidationFormState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -23,8 +22,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
-import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
+import com.example.navigationexample.domain.usecase.validation.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -36,7 +34,15 @@ class AppatmentViewModel @Inject constructor(
     private val clientRepository: ClientsRepositoryImpl,
     private val daysRepository: DaysRepositoryImpl,
     private val getDayClientMapUseCase: GetDayClientMapUseCase,
-    private val getApartmentPlanedDaysUseCase: getAppatmentPlanedDaysUseCase
+    private val getApartmentPlanedDaysUseCase: getAppatmentPlanedDaysUseCase,
+
+    private val nameValidationField: NameValidation = NameValidation(),
+    private val phoneValidationField: PhoneValidation = PhoneValidation(),
+    private val documentNumberValidationField: DocumentNumber = DocumentNumber(),
+    private val documentDitailsValidationField: DocumentDitails = DocumentDitails(),
+    private val membersValidationField: MembersValidation = MembersValidation(),
+    private val paymentValidationField: PaymentValidation = PaymentValidation()
+
 
 ) : ViewModel() {
 
@@ -88,7 +94,6 @@ class AppatmentViewModel @Inject constructor(
     var validateFormState by mutableStateOf(ValidationFormState())
     private val validationEventChannel = Channel<ValidatAllFieldsResultEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
-
 
 
     init {
@@ -153,7 +158,7 @@ class AppatmentViewModel @Inject constructor(
 
 
     fun onFormEvent(event: ValidationFormEvent) {
-        when(event) {
+        when (event) {
             is ValidationFormEvent.FirstNameChanged -> {
                 validateFormState = validateFormState.copy(firstName = event.firstName)
             }
@@ -204,29 +209,45 @@ class AppatmentViewModel @Inject constructor(
     }
 
     private fun submitData() {
-        val emailResult = validateEmail.execute(state.email)
-        val passwordResult = validatePassword.execute(state.password)
-        val repeatedPasswordResult = validateRepeatedPassword.execute(
-            state.password, state.repeatedPassword
-        )
-        val termsResult = validateTerms.execute(state.acceptedTerms)
+        val firstNameResult = nameValidationField.execute(validateFormState.firstName, true)
+        val secondNameResult =
+            validateFormState.secondName?.let { nameValidationField.execute(it, false) }
+        val lastNameResult =
+            validateFormState.lastName?.let { nameValidationField.execute(it, false) }
+        val phoneResult = phoneValidationField.execute(validateFormState.phone)
+        val documentNumberResult = validateFormState.documentNamber?.let {
+            documentNumberValidationField.execute(
+                it
+            )
+        }
 
-
-
-
-
-
-
+        val documentDitailsResult = validateFormState.documentDitails?.let {
+            documentDitailsValidationField.execute(
+                it, false
+            )
+        }
+        val membersResult = validateFormState.members?.let {
+            membersValidationField.execute(
+                it
+            )
+        }
+        val prePaymentResult = paymentValidationField.execute(validateFormState.prepayment)
+        val paymentResult = paymentValidationField.execute(validateFormState.payment)
 
         val hasError = listOf(
-            emailResult,
-            passwordResult,
-            repeatedPasswordResult,
-            termsResult
-        ).any { !it.successful }
+            firstNameResult,
+            secondNameResult,
+            lastNameResult,
+            phoneResult,
+            documentNumberResult,
+            documentDitailsResult,
+            membersResult,
+            prePaymentResult,
+            paymentResult
+        ).any { !it!!.successful }
 
-        if(hasError) {
-            state = state.copy(
+        if (hasError) {
+            validateFormState = validateFormState.copy(
                 emailError = emailResult.errorMessage,
                 passwordError = passwordResult.errorMessage,
                 repeatedPasswordError = repeatedPasswordResult.errorMessage,
