@@ -1,6 +1,9 @@
-package com.example.navigationexample.domain.usecase.validation
+package com.example.navigationexample.domain.usecase.validation.validators
 
-class DocumentNumber {
+import com.example.navigationexample.domain.usecase.validation.ValidationResult
+import javax.inject.Inject
+
+class DocumentNumber @Inject constructor(){
 
     fun execute(documentNumber: String): ValidationResult {
         val hasOnliDigits = documentNumber.all { it.isDigit() }

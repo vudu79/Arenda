@@ -23,6 +23,7 @@ import javax.inject.Inject
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.example.navigationexample.domain.usecase.validation.*
+import com.example.navigationexample.domain.usecase.validation.validators.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -42,8 +43,6 @@ class AppatmentViewModel @Inject constructor(
     private val documentDitailsValidationField: DocumentDitails = DocumentDitails(),
     private val membersValidationField: MembersValidation = MembersValidation(),
     private val paymentValidationField: PaymentValidation = PaymentValidation()
-
-
 ) : ViewModel() {
 
     private val _isLoadingForSetPeriodScreen: MutableState<Boolean> = mutableStateOf(false)
@@ -248,10 +247,20 @@ class AppatmentViewModel @Inject constructor(
 
         if (hasError) {
             validateFormState = validateFormState.copy(
-                emailError = emailResult.errorMessage,
-                passwordError = passwordResult.errorMessage,
-                repeatedPasswordError = repeatedPasswordResult.errorMessage,
-                termsError = termsResult.errorMessage
+             firstNameError=firstNameResult.errorMessage,
+             secondNameError=secondNameResult?.errorMessage,
+             lastNameError=lastNameResult?.errorMessage,
+             phoneError=phoneResult.errorMessage,
+             documentNamberError=documentNumberResult?.errorMessage,
+             documentDitailsError=documentDitailsResult?.errorMessage,
+             membersError=membersResult?.errorMessage,
+//             dateOutStringError=,
+//             dateInStringError=,
+//             dateOutLongError=,
+//             dateInLongError=,
+             prepaymentError=prePaymentResult.errorMessage,
+             paymentError=paymentResult.errorMessage,
+//             sityError=,
             )
             return
         }

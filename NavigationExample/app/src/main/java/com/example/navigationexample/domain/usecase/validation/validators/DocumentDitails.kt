@@ -1,7 +1,10 @@
-package com.example.navigationexample.domain.usecase.validation
+package com.example.navigationexample.domain.usecase.validation.validators
+
+import com.example.navigationexample.domain.usecase.validation.ValidationResult
+import javax.inject.Inject
 
 
-class DocumentDitails {
+class DocumentDitails @Inject constructor(){
     fun execute(documentDitails: String, mastHave: Boolean): ValidationResult {
         val specSimbols = "!#$%&'()*+-/:;<=>?@[]^_`{|}~".toList()
         val docList = documentDitails.toList()

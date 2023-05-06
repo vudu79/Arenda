@@ -1,52 +1,46 @@
 package com.example.navigationexample.presentation.screens.common
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.*
+import androidx.compose.ui.unit.dp
 
 
-@Composable
-fun LoginScreen() {
-    var phoneNumber by rememberSaveable { mutableStateOf("") }
-    Column {
-        PhoneField(phoneNumber,
-            mask = "000 000 00 00",
-            maskNumber = '0',
-            onPhoneChanged = { phoneNumber = it })
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        PhoneField(phoneNumber,
-            mask = "(000) 000 00 00",
-            maskNumber = '0',
-            onPhoneChanged = { phoneNumber = it })
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        PhoneField(phoneNumber,
-            mask = "+7-000-000-00-00",
-            maskNumber = '0',
-            onPhoneChanged = { phoneNumber = it })
-    }
-}
+//@Composable
+//fun LoginScreen() {
+//    var phoneNumber by rememberSaveable { mutableStateOf("") }
+//    Column {
+//        PhoneField(phoneNumber,
+//            mask = "000 000 00 00",
+//            maskNumber = '0',
+//            onPhoneChanged = { phoneNumber = it })
+//        Spacer(modifier = Modifier.padding(8.dp))
+//
+//        PhoneField(phoneNumber,
+//            mask = "(000) 000 00 00",
+//            maskNumber = '0',
+//            onPhoneChanged = { phoneNumber = it })
+//        Spacer(modifier = Modifier.padding(8.dp))
+//
+//        PhoneField(phoneNumber,
+//            mask = "+7-000-000-00-00",
+//            maskNumber = '0',
+//            onPhoneChanged = { phoneNumber = it })
+//    }
+//}
 
 @Composable
 fun PhoneField(
@@ -54,7 +48,8 @@ fun PhoneField(
     modifier: Modifier = Modifier,
     mask: String = "000 000 00 00",
     maskNumber: Char = '0',
-    onPhoneChanged: (String) -> Unit
+    onPhoneChanged: (String) -> Unit,
+    errorMessage: String?
 ) {
     val focusManager = LocalFocusManager.current
     OutlinedTextField(
@@ -63,6 +58,7 @@ fun PhoneField(
             onPhoneChanged(it.take(mask.count { it == maskNumber }))
         },
         placeholder = { Text(text = "Паспорт - серия, номер", color = Color.Black) },
+        isError = errorMessage != null,
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
@@ -81,6 +77,13 @@ fun PhoneField(
 
         visualTransformation = PhoneVisualTransformation(mask, maskNumber),
     )
+
+    if (errorMessage != null) {
+        Text(
+            text = errorMessage,
+            color = MaterialTheme.colors.error,
+        )
+    }
 }
 
 class PhoneVisualTransformation(val mask: String, val maskNumber: Char) : VisualTransformation {

@@ -1,8 +1,9 @@
-package com.example.navigationexample.domain.usecase.validation
+package com.example.navigationexample.domain.usecase.validation.validators
 
-import android.util.Patterns
+import com.example.navigationexample.domain.usecase.validation.ValidationResult
+import javax.inject.Inject
 
-class MembersValidation {
+class MembersValidation@Inject constructor() {
 
     fun execute(members: String): ValidationResult {
         val hasOnliDigits = members.all { it.isDigit() }

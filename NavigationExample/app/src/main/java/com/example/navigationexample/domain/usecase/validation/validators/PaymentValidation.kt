@@ -1,8 +1,9 @@
-package com.example.navigationexample.domain.usecase.validation
+package com.example.navigationexample.domain.usecase.validation.validators
 
-import android.util.Patterns
+import com.example.navigationexample.domain.usecase.validation.ValidationResult
+import javax.inject.Inject
 
-class PaymentValidation {
+class PaymentValidation @Inject constructor(){
 
     fun execute(payment: String): ValidationResult {
         val hasOnliDigits = payment.all { it.isDigit() }

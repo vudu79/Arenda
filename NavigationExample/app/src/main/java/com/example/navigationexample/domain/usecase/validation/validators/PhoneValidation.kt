@@ -1,8 +1,10 @@
-package com.example.navigationexample.domain.usecase.validation
+package com.example.navigationexample.domain.usecase.validation.validators
 
 import android.util.Patterns
+import com.example.navigationexample.domain.usecase.validation.ValidationResult
+import javax.inject.Inject
 
-class PhoneValidation {
+class PhoneValidation @Inject constructor(){
 
     fun execute(phone: String): ValidationResult {
         val hasOnliDigits = phone.all { it.isDigit() }

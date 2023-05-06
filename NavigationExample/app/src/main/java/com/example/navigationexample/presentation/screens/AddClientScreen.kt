@@ -142,6 +142,7 @@ fun AddClientScreen(
                             viewModel.onFormEvent(ValidationFormEvent.FirstNameChanged(it))
                         },
                         placeholder = { Text(text = "Имя", color = Black) },
+                        isError = state.firstNameError != null,
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -158,6 +159,13 @@ fun AddClientScreen(
                             focusManager.moveFocus(FocusDirection.Down)
                         }),
                     )
+                    if (state.firstNameError != null) {
+                        Text(
+                            text = state.firstNameError!!,
+                            color = MaterialTheme.colors.error,
+                            modifier = Modifier.align(Alignment.End)
+                        )
+                    }
 
                     state.secondName?.let {
                         OutlinedTextField(
@@ -167,6 +175,7 @@ fun AddClientScreen(
                             },
 
                             placeholder = { Text(text = "Отчество", color = Black) },
+                            isError = state.secondNameError != null,
                             singleLine = true,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -184,6 +193,15 @@ fun AddClientScreen(
                             }),
                         )
                     }
+                    if (state.secondNameError != null) {
+                        Text(
+                            text = state.secondNameError!!,
+                            color = MaterialTheme.colors.error,
+                            modifier = Modifier.align(Alignment.End)
+                        )
+                    }
+
+
                     state.lastName?.let {
                         OutlinedTextField(
                             value = it,
@@ -191,6 +209,7 @@ fun AddClientScreen(
                                 viewModel.onFormEvent(ValidationFormEvent.LastNameChanged(it))
                             },
                             placeholder = { Text(text = "Фамилия", color = Black) },
+                            isError = state.lastNameError != null,
                             singleLine = true,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -208,6 +227,14 @@ fun AddClientScreen(
                             }),
                         )
                     }
+                    if (state.lastNameError != null) {
+                        Text(
+                            text = state.lastNameError!!,
+                            color = MaterialTheme.colors.error,
+                            modifier = Modifier.align(Alignment.End)
+                        )
+                    }
+
 
                     PhoneField(
                         state.phone,
@@ -215,9 +242,10 @@ fun AddClientScreen(
                         maskNumber = '0',
                         onPhoneChanged = {
                             viewModel.onFormEvent(ValidationFormEvent.PhoneChanged(it))
-                        })
 
-
+                        },
+                        errorMessage = state.phoneError
+                    )
 
                     state.documentNamber?.let {
                         PhoneField(
@@ -230,7 +258,10 @@ fun AddClientScreen(
                                         phone
                                     )
                                 )
-                            })
+                            },
+                            errorMessage = state.documentNamberError
+                        )
+
                     }
 
 
@@ -246,6 +277,7 @@ fun AddClientScreen(
                                     color = Black
                                 )
                             },
+                            isError = state.documentDitailsError != null,
                             singleLine = true,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -265,6 +297,16 @@ fun AddClientScreen(
                         )
                     }
 
+                    if (state.documentDitailsError != null) {
+                        Text(
+                            text = state.documentDitailsError!!,
+                            color = MaterialTheme.colors.error,
+                            modifier = Modifier.align(Alignment.End)
+                        )
+                    }
+
+
+
                     ColourButton(colors, onColorSelected = {
                         viewModel.colorClient.value = it.toArgb()
 //                        Log.d("myTag", it.toArgb().toString())
@@ -277,6 +319,7 @@ fun AddClientScreen(
                                 viewModel.onFormEvent(ValidationFormEvent.MembersChanged(it))
                             },
                             placeholder = { Text(text = "Количество человек", color = Black) },
+                            isError = state.membersError != null,
                             singleLine = true,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -294,7 +337,13 @@ fun AddClientScreen(
                             }),
                         )
                     }
-
+                    if (state.membersError != null) {
+                        Text(
+                            text = state.membersError!!,
+                            color = MaterialTheme.colors.error,
+                            modifier = Modifier.align(Alignment.End)
+                        )
+                    }
 
                     OutlinedTextField(
                         value = "c ${state.dateInString} по ${state.dateOutString} ",
@@ -311,7 +360,10 @@ fun AddClientScreen(
                             .fillMaxWidth()
                             .padding(bottom = 5.dp, start = 5.dp, end = 5.dp)
                             .clickable {
-                                navController.navigate(route = "${Routs.setClientPeriod}?appatment_name=$appatmentName")
+                                navController.navigate(
+                                    route  =
+                                    "${Routs.setClientPeriod}?appatment_name=$appatmentName"
+                                )
 //                                viewModel.showDatePickerDialog(context, "in")
 
                             },
@@ -337,6 +389,7 @@ fun AddClientScreen(
                         },
 
                         placeholder = { Text(text = "Внесенный залог", color = Black) },
+                        isError = state.prepaymentError != null,
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -354,6 +407,14 @@ fun AddClientScreen(
                             focusManager.moveFocus(FocusDirection.Down)
                         }),
                     )
+
+                    if (state.prepaymentError != null) {
+                        Text(
+                            text = state.prepaymentError!!,
+                            color = MaterialTheme.colors.error,
+                            modifier = Modifier.align(Alignment.End)
+                        )
+                    }
 
                     OutlinedTextField(
                         value = state.payment,
@@ -362,6 +423,7 @@ fun AddClientScreen(
                         },
 
                         placeholder = { Text(text = "Стоимость суток", color = Black) },
+                        isError = state.paymentError != null,
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -378,6 +440,14 @@ fun AddClientScreen(
                             focusManager.moveFocus(FocusDirection.Down)
                         }),
                     )
+
+                    if (state.paymentError != null) {
+                        Text(
+                            text = state.paymentError!!,
+                            color = MaterialTheme.colors.error,
+                            modifier = Modifier.align(Alignment.End)
+                        )
+                    }
 
                     state.sity?.let {
                         OutlinedTextField(

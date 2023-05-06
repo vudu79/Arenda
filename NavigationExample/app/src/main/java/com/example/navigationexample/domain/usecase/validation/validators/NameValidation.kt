@@ -1,8 +1,9 @@
-package com.example.navigationexample.domain.usecase.validation
+package com.example.navigationexample.domain.usecase.validation.validators
 
-import android.util.Patterns
+import com.example.navigationexample.domain.usecase.validation.ValidationResult
+import javax.inject.Inject
 
-class NameValidation {
+class NameValidation @Inject constructor(){
 
     fun execute(name: String, mastHave: Boolean): ValidationResult {
         val hasDigit = name.any { it.isDigit() }
@@ -28,7 +29,7 @@ class NameValidation {
                 )
             }
         }
-        if(name.isNullOrEmpty() || name.length == 1) {
+        if(name.isEmpty() || name.length == 1) {
             return ValidationResult(
                 successful = false,
                 errorMessage = "Это обязательное поле"
