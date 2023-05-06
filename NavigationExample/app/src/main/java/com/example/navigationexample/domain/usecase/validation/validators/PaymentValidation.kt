@@ -15,17 +15,25 @@ class PaymentValidation @Inject constructor(){
             )
         }
 
+//        !payment.matches(Regex("""@"^[0-9]+${'$'}""""))
 
-        if (!hasOnliDigits || !payment.matches(Regex("""@"^[0-9]+${'$'}""""))) {
+        if (!hasOnliDigits) {
             return ValidationResult(
                 successful = false,
                 errorMessage = "Поле должно содержать только цифры"
             )
         }
 
-
-        return ValidationResult(
-            successful = true
-        )
+        return try {
+            val paymentInt = payment.toInt()
+            ValidationResult(
+                successful = true
+            )
+        }catch (e: Exception){
+            ValidationResult(
+                successful = false,
+                errorMessage = "Не корректные данные"
+            )
+        }
     }
 }

@@ -6,9 +6,16 @@ import javax.inject.Inject
 class MembersValidation@Inject constructor() {
 
     fun execute(members: String): ValidationResult {
-        val hasOnliDigits = members.all { it.isDigit() }
+        val hasOnlyDigits = members.all { it.isDigit() }
 
-        if (members.isNotEmpty() && !hasOnliDigits) {
+        if (members.isEmpty()) {
+            return ValidationResult(
+                successful = false,
+                errorMessage = "Это обязательное поле"
+            )
+        }
+
+        if (members.isNotEmpty() && !hasOnlyDigits) {
             return ValidationResult(
                 successful = false,
                 errorMessage = "Поле должно содержать только цифры"

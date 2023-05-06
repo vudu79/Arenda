@@ -44,7 +44,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun PhoneField(
-    phone: String,
+    value: String,
+    placeHolder: String,
     modifier: Modifier = Modifier,
     mask: String = "000 000 00 00",
     maskNumber: Char = '0',
@@ -53,11 +54,11 @@ fun PhoneField(
 ) {
     val focusManager = LocalFocusManager.current
     OutlinedTextField(
-        value = phone,
+        value = value,
         onValueChange = { it ->
             onPhoneChanged(it.take(mask.count { it == maskNumber }))
         },
-        placeholder = { Text(text = "Паспорт - серия, номер", color = Color.Black) },
+        placeholder = { Text(text = placeHolder, color = Color.Black) },
         isError = errorMessage != null,
         singleLine = true,
         modifier = Modifier
@@ -82,6 +83,7 @@ fun PhoneField(
         Text(
             text = errorMessage,
             color = MaterialTheme.colors.error,
+            modifier = modifier
         )
     }
 }

@@ -42,7 +42,9 @@ class AppatmentViewModel @Inject constructor(
     private val documentNumberValidationField: DocumentNumber = DocumentNumber(),
     private val documentDitailsValidationField: DocumentDitails = DocumentDitails(),
     private val membersValidationField: MembersValidation = MembersValidation(),
-    private val paymentValidationField: PaymentValidation = PaymentValidation()
+    private val paymentValidationField: PaymentValidation = PaymentValidation(),
+    private val dateStringValidationField: DateStringValidation = DateStringValidation(),
+    private val dateLongValidationField: DateLongValidation = DateLongValidation()
 ) : ViewModel() {
 
     private val _isLoadingForSetPeriodScreen: MutableState<Boolean> = mutableStateOf(false)
@@ -192,13 +194,16 @@ class AppatmentViewModel @Inject constructor(
                 validateFormState = validateFormState.copy(dateOutLong = event.outDateLong)
             }
             is ValidationFormEvent.PrepaymentChanged -> {
-                validateFormState = validateFormState.copy(prepayment = event.prepayment)
+                validateFormState = validateFormState.copy(prePayment = event.prepayment)
             }
             is ValidationFormEvent.PaymentChanged -> {
                 validateFormState = validateFormState.copy(payment = event.payment)
             }
             is ValidationFormEvent.SityChanged -> {
                 validateFormState = validateFormState.copy(sity = event.sity)
+            }
+            is ValidationFormEvent.ColorChanged -> {
+                validateFormState = validateFormState.copy(color = event.color)
             }
 
             is ValidationFormEvent.onSubmit -> {
@@ -209,28 +214,34 @@ class AppatmentViewModel @Inject constructor(
 
     private fun submitData() {
         val firstNameResult = nameValidationField.execute(validateFormState.firstName, true)
-        val secondNameResult =
-            validateFormState.secondName?.let { nameValidationField.execute(it, false) }
-        val lastNameResult =
-            validateFormState.lastName?.let { nameValidationField.execute(it, false) }
+
+        val dateInStringResult = dateStringValidationField.execute(validateFormState.dateInString)
+        val dateOutStringResult = dateStringValidationField.execute(validateFormState.dateOutString)
+        val dateInLongResult = dateLongValidationField.execute(validateFormState.dateInLong)
+        val dateOutLongResult = dateLongValidationField.execute(validateFormState.dateOutLong)
+
+        val secondNameResult = validateFormState.secondName?.let { nameValidationField.execute(it, false) }
+        val lastNameResult =validateFormState.lastName?.let { nameValidationField.execute(it, false) }
         val phoneResult = phoneValidationField.execute(validateFormState.phone)
         val documentNumberResult = validateFormState.documentNamber?.let {
             documentNumberValidationField.execute(
                 it
             )
         }
-
         val documentDitailsResult = validateFormState.documentDitails?.let {
             documentDitailsValidationField.execute(
                 it, false
             )
         }
+
+
+
         val membersResult = validateFormState.members?.let {
             membersValidationField.execute(
                 it
             )
         }
-        val prePaymentResult = paymentValidationField.execute(validateFormState.prepayment)
+        val prePaymentResult = paymentValidationField.execute(validateFormState.prePayment)
         val paymentResult = paymentValidationField.execute(validateFormState.payment)
 
         val hasError = listOf(
@@ -240,6 +251,10 @@ class AppatmentViewModel @Inject constructor(
             phoneResult,
             documentNumberResult,
             documentDitailsResult,
+            dateInLongResult,
+            dateInStringResult,
+            dateOutLongResult,
+            dateOutStringResult,
             membersResult,
             prePaymentResult,
             paymentResult
@@ -254,13 +269,12 @@ class AppatmentViewModel @Inject constructor(
              documentNamberError=documentNumberResult?.errorMessage,
              documentDitailsError=documentDitailsResult?.errorMessage,
              membersError=membersResult?.errorMessage,
-//             dateOutStringError=,
-//             dateInStringError=,
-//             dateOutLongError=,
-//             dateInLongError=,
-             prepaymentError=prePaymentResult.errorMessage,
+             dateOutStringError=dateOutStringResult.errorMessage,
+             dateInStringError=dateInStringResult.errorMessage,
+             dateOutLongError=dateOutLongResult.errorMessage,
+             dateInLongError=dateInLongResult.errorMessage,
+             prePaymentError=prePaymentResult.errorMessage,
              paymentError=paymentResult.errorMessage,
-//             sityError=,
             )
             return
         }

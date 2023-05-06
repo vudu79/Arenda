@@ -35,7 +35,7 @@ class Client {
     var documentDitails: String? = ""
 
     @ColumnInfo(name = "members")
-    var members: Int? = 0
+    var members: Int = 0
 
     @ColumnInfo(name = "in_date")
     var inDate: Long = 0
@@ -82,7 +82,7 @@ class Client {
         documentDitails: String,
         inDate: Long,
         outDate: Long,
-        members: Int?,
+        members: Int,
         prepayment: Int,
         payment: Int,
         clientColor: Int,

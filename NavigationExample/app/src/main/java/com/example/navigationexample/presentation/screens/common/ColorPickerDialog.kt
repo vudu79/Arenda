@@ -24,9 +24,9 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ColourButton(colors: List<Color>, onColorSelected: (Color) -> Unit) {
+fun ColourButton(colors: List<Color>, onColorSelected: (Color) -> Unit, currently: Color ) {
     var colorPickerOpen by rememberSaveable { mutableStateOf(false) }
-    var currentlySelected by rememberSaveable(saver = colourSaver()) { mutableStateOf(colors[0]) }
+    var currentlySelected by rememberSaveable(saver = colourSaver()) { mutableStateOf(currently) }
 
     Box(
         modifier = Modifier

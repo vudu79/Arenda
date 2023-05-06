@@ -1,7 +1,7 @@
 package com.example.navigationexample.domain.usecase.validation
 
-import androidx.lifecycle.MutableLiveData
-import androidx.room.ColumnInfo
+import androidx.compose.ui.graphics.Color
+import com.example.navigationexample.constants.Constans
 
 data class ValidationFormState(
     var firstName: String = "",
@@ -16,7 +16,7 @@ data class ValidationFormState(
     var documentNamberError: String? = null,
     var documentDitails: String? = "",
     var documentDitailsError: String? = null,
-    var members: String? = "",
+    var members: String = "",
     var membersError: String? = null,
     var dateOutString: String = "",
     var dateOutStringError: String? = null,
@@ -26,11 +26,13 @@ data class ValidationFormState(
     var dateOutLongError: String? = null,
     var dateInLong: Long = 0L,
     var dateInLongError: String? = null,
-    var prepayment: String = "",
-    var prepaymentError: String? = null,
+    var prePayment: String = "",
+    var prePaymentError: String? = null,
     var payment: String = "",
     var paymentError: String? = null,
     var sity: String? = "",
     var sityError: String? = null,
+    var color: Color = Constans.ClientColorsList.clientColorsList[0],
+    var colorError: String? = null,
 //    var appatmentName: String = ""
 )

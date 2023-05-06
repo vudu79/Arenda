@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -30,8 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.navigationexample.R
-import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
+import com.example.navigationexample.constants.Constans
+import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
+import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
 import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.common.*
 
@@ -44,18 +47,6 @@ fun AddClientScreen(
     appatmentName: String,
 ) {
 
-    val colors = listOf(
-        Color(0xFFEF9A9A),
-        Color(0xFFF48FB1),
-        Color(0xFF80CBC4),
-        Color(0xFFA5D6A7),
-        Color(0xFFFFCC80),
-        Color(0xFFFFAB91),
-        Color(0xFF81D4FA),
-        Color(0xFFCE93D8),
-        Color(0xFFB39DDB)
-    )
-
     val currentAppatment by viewModel.currentApartment.observeAsState()
     val focusManager = LocalFocusManager.current
     val state = viewModel.validateFormState
@@ -65,6 +56,35 @@ fun AddClientScreen(
         viewModel.validationEvents.collect { event ->
             when (event) {
                 is ValidatAllFieldsResultEvent.Success -> {
+                    viewModel.addClient(
+                        Client(
+                            firstName = state.firstName,
+                            secondName = state.secondName,
+                            lastName = state.lastName,
+                            phone = "+7${state.phone}",
+                            documentNunber = "${state.documentNamber}",
+                            documentDitails = "${state.documentDitails}",
+                            inDate = state.dateInLong,
+                            outDate = state.dateOutLong,
+                            members = state.members.trim().toInt(),
+                            prepayment = state.prePayment.trim().toInt(),
+                            payment = state.payment.trim().toInt(),
+                            clientColor = state.color.toArgb(),
+                            sity = state.sity,
+                            appatment_name = currentAppatment?.name ?: "_"
+                        )
+                    )
+                    Toast.makeText(
+                        context, "Новый клиент зарегестрирован!", Toast.LENGTH_SHORT
+                    ).show()
+                    viewModel.getAppatmentClients(currentAppatment?.name ?: "")
+                    currentAppatment?.name?.let { viewModel.updateDaysMapForCalendar(it) }
+                    currentAppatment?.name?.let { viewModel.updateApartmentPlanedDays(it) }
+                    navController.navigate(route = "${Routs.mainScreenClients}?appatment_name=$appatmentName")
+
+
+
+
                     Toast.makeText(
                         context,
                         "Registration successful",
@@ -99,10 +119,6 @@ fun AddClientScreen(
                 .fillMaxWidth()
                 .background(Color(41, 41, 41))
         ) {
-            Box(
-                modifier = Modifier.fillMaxWidth()
-
-            ) {}
 
             Column(
                 modifier = Modifier
@@ -163,7 +179,7 @@ fun AddClientScreen(
                         Text(
                             text = state.firstNameError!!,
                             color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.End)
+                            modifier = Modifier.align(Alignment.Start)
                         )
                     }
 
@@ -197,7 +213,7 @@ fun AddClientScreen(
                         Text(
                             text = state.secondNameError!!,
                             color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.End)
+                            modifier = Modifier.align(Alignment.Start)
                         )
                     }
 
@@ -231,25 +247,27 @@ fun AddClientScreen(
                         Text(
                             text = state.lastNameError!!,
                             color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.End)
+                            modifier = Modifier.align(Alignment.Start)
                         )
                     }
 
-
                     PhoneField(
                         state.phone,
+                        placeHolder = "Контактный телефон",
                         mask = "+7(000)-000-00-00",
                         maskNumber = '0',
                         onPhoneChanged = {
                             viewModel.onFormEvent(ValidationFormEvent.PhoneChanged(it))
 
                         },
-                        errorMessage = state.phoneError
+                        errorMessage = state.phoneError,
+                        modifier = Modifier.align(Alignment.Start)
                     )
 
                     state.documentNamber?.let {
                         PhoneField(
                             it,
+                            placeHolder = "Паспорт: серия и номер",
                             mask = "0000-000000",
                             maskNumber = '0',
                             onPhoneChanged = { phone ->
@@ -259,11 +277,11 @@ fun AddClientScreen(
                                     )
                                 )
                             },
-                            errorMessage = state.documentNamberError
+                            errorMessage = state.documentNamberError,
+                            modifier = Modifier.align(Alignment.Start)
                         )
 
                     }
-
 
                     state.documentDitails?.let {
                         OutlinedTextField(
@@ -301,67 +319,64 @@ fun AddClientScreen(
                         Text(
                             text = state.documentDitailsError!!,
                             color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.End)
+                            modifier = Modifier.align(Alignment.Start)
                         )
                     }
 
+                    ColourButton(
+                        Constans.ClientColorsList.clientColorsList, onColorSelected = {
+                            viewModel.onFormEvent(ValidationFormEvent.ColorChanged(it))
+                        }, state.color
+                    )
 
-
-                    ColourButton(colors, onColorSelected = {
-                        viewModel.colorClient.value = it.toArgb()
-//                        Log.d("myTag", it.toArgb().toString())
-                    })
-
-                    state.members?.let {
-                        OutlinedTextField(
-                            value = it,
-                            onValueChange = {
-                                viewModel.onFormEvent(ValidationFormEvent.MembersChanged(it))
-                            },
-                            placeholder = { Text(text = "Количество человек", color = Black) },
-                            isError = state.membersError != null,
-                            singleLine = true,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                unfocusedBorderColor = Black,
-                                textColor = Black,
-                                backgroundColor = Color(142, 143, 138)
-                            ),
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
-                            ),
-                            keyboardActions = KeyboardActions(onNext = {
-                                focusManager.moveFocus(FocusDirection.Down)
-                            }),
-                        )
-                    }
+                    OutlinedTextField(
+                        value = state.members,
+                        onValueChange = {
+                            viewModel.onFormEvent(ValidationFormEvent.MembersChanged(it))
+                        },
+                        placeholder = { Text(text = "Количество человек", color = Black) },
+                        isError = state.membersError != null,
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black,
+                            textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
+                    )
                     if (state.membersError != null) {
                         Text(
                             text = state.membersError!!,
                             color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.End)
+                            modifier = Modifier.align(Alignment.Start)
                         )
                     }
 
                     OutlinedTextField(
                         value = "c ${state.dateInString} по ${state.dateOutString} ",
                         onValueChange = {
-                            viewModel.onFormEvent(ValidationFormEvent.InLongDateChanged(viewModel.dateInLong1.value!!))
-                            viewModel.onFormEvent(ValidationFormEvent.InStringDateChanged(viewModel.dateInString1.value!!))
-                            viewModel.onFormEvent(ValidationFormEvent.OutLongDateChanged(viewModel.dateOutLong1.value!!))
-                            viewModel.onFormEvent(ValidationFormEvent.OutStringDateChanged(viewModel.dateOutString1.value!!))
+                            viewModel.onFormEvent(ValidationFormEvent.InLongDateChanged(state.dateInLong))
+                            viewModel.onFormEvent(ValidationFormEvent.InStringDateChanged(viewModel.dateInString))
+                            viewModel.onFormEvent(ValidationFormEvent.OutLongDateChanged(viewModel.dateOutLong))
+                            viewModel.onFormEvent(ValidationFormEvent.OutStringDateChanged(viewModel.dateOutString))
                         },
-
                         placeholder = { Text(text = "Период проживания", color = Black) },
+                        isError = (state.dateInStringError != null || state.dateOutStringError != null || state.dateInLongError != null || state.dateOutLongError != null),
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 5.dp, start = 5.dp, end = 5.dp)
                             .clickable {
                                 navController.navigate(
-                                    route  =
+                                    route =
                                     "${Routs.setClientPeriod}?appatment_name=$appatmentName"
                                 )
 //                                viewModel.showDatePickerDialog(context, "in")
@@ -371,6 +386,7 @@ fun AddClientScreen(
                             imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
                         ),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
+                            disabledTextColor = Black,
                             unfocusedBorderColor = Black, textColor = Black,
                             backgroundColor = Color(142, 143, 138),
 
@@ -381,15 +397,22 @@ fun AddClientScreen(
                         }),
                     )
 
+                    if (state.dateInStringError != null || state.dateOutStringError != null || state.dateInLongError != null || state.dateOutLongError != null) {
+                        Text(
+                            text = state.dateInStringError!!,
+                            color = MaterialTheme.colors.error,
+                            modifier = Modifier.align(Alignment.Start)
+                        )
+                    }
 
                     OutlinedTextField(
-                        value = state.prepayment,
+                        value = state.prePayment,
                         onValueChange = {
                             viewModel.onFormEvent(ValidationFormEvent.PrepaymentChanged(it))
                         },
 
                         placeholder = { Text(text = "Внесенный залог", color = Black) },
-                        isError = state.prepaymentError != null,
+                        isError = state.prePaymentError != null,
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -408,11 +431,11 @@ fun AddClientScreen(
                         }),
                     )
 
-                    if (state.prepaymentError != null) {
+                    if (state.prePaymentError != null) {
                         Text(
-                            text = state.prepaymentError!!,
+                            text = state.prePaymentError!!,
                             color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.End)
+                            modifier = Modifier.align(Alignment.Start)
                         )
                     }
 
@@ -445,7 +468,7 @@ fun AddClientScreen(
                         Text(
                             text = state.paymentError!!,
                             color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.End)
+                            modifier = Modifier.align(Alignment.Start)
                         )
                     }
 
@@ -475,7 +498,6 @@ fun AddClientScreen(
                         )
                     }
 
-
                     Spacer(modifier = Modifier.padding(10.dp))
 
                     Row(
@@ -499,43 +521,28 @@ fun AddClientScreen(
                                 tint = Color(223, 75, 0)
                             )
                         }
-
                         IconButton(
                             onClick = {
                                 viewModel.onFormEvent(ValidationFormEvent.onSubmit)
+                            }
+                        )
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_check_24),
+                                contentDescription = "Добавить объект недвижимости",
+
+                                modifier = Modifier.size(55.dp),
+                                tint = Color(223, 75, 0)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 
-//                            if (viewModel.clientFirstName.value.isNullOrEmpty()) {
-//                                Toast.makeText(
-//                                    context, "Имя клиента - обязательное поле!", Toast.LENGTH_SHORT
-//                                ).show()
-//                            } else if (viewModel.phone.value.isNullOrEmpty()) {
-//                                Toast.makeText(
-//                                    context,
-//                                    "Контатный телефон клиента - обязательное поле!",
-//                                    Toast.LENGTH_SHORT
-//                                ).show()
-//
-//                            } else if (viewModel.dateInString1.value.isNullOrEmpty() && viewModel.dateOutString1.value.isNullOrEmpty()) {
-//                                Toast.makeText(
-//                                    context,
-//                                    "Период проживания  - обязательное поле!",
-//                                    Toast.LENGTH_SHORT
-//                                ).show()
-//                            } else if (viewModel.prepayment.value.isNullOrEmpty()) {
-//                                Toast.makeText(
-//                                    context,
-//                                    "Внесеный залог - обязательное поле!",
-//                                    Toast.LENGTH_SHORT
-//                                ).show()
-//                            } else if (viewModel.payment.value.isNullOrEmpty()) {
-//                                Toast.makeText(
-//                                    context,
-//                                    "Стwоимость суток - обязательное поле!",
-//                                    Toast.LENGTH_SHORT
-//                                ).show()
-//
-//                            } else {
 //                                viewModel.addClient(
 //                                    Client(
 //                                        firstName = viewModel.clientFirstName.value!!,
@@ -562,36 +569,3 @@ fun AddClientScreen(
 //                                currentAppatment?.name?.let { viewModel.updateApartmentPlanedDays(it) }
 //                                navController.navigate(route = "${Routs.mainScreenClients}?appatment_name=$appatmentName")
 //                            }
-                            }
-                        )
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_check_24),
-                                contentDescription = "Добавить объект недвижимости",
-
-                                modifier = Modifier.size(55.dp),
-                                tint = Color(223, 75, 0)
-                            )
-                        }
-
-                    }
-                }
-            }
-        }
-    }
-}
-
-//    Column(Modifier.padding(16.dp)) {
-//        val textState = remember { mutableStateOf(TextFieldValue()) }
-//        TextField(
-//            value = textState.value,
-//            onValueChange = { textState.value = it }
-//        )
-//        Text("The textfield has this text: " + textState.value.text)
-//
-//        Button(onClick = onHome) {
-//            Text("Назад")
-//        }
-//
-//    }
-

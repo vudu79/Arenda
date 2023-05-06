@@ -9,7 +9,7 @@ class PhoneValidation @Inject constructor(){
     fun execute(phone: String): ValidationResult {
         val hasOnliDigits = phone.all { it.isDigit() }
 
-        if (phone.isNullOrEmpty()) {
+        if (phone.isEmpty()) {
             return ValidationResult(
                 successful = false,
                 errorMessage = "Это обязательное поле"
@@ -23,12 +23,12 @@ class PhoneValidation @Inject constructor(){
             )
         }
 
-        if (Patterns.PHONE.matcher(phone).matches()) {
-            return ValidationResult(
-                successful = false,
-                errorMessage = "Не корректный номер телефона"
-            )
-        }
+//        if (Patterns.PHONE.matcher(phone).matches()) {
+//            return ValidationResult(
+//                successful = false,
+//                errorMessage = "Не корректный номер телефона"
+//            )
+//        }
 
         return ValidationResult(
             successful = true
