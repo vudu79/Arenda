@@ -1,14 +1,15 @@
 package com.example.navigationexample.domain.usecase.validation.validators
 
+import android.util.Log
 import com.example.navigationexample.domain.usecase.validation.ValidationResult
 import javax.inject.Inject
 
-class PaymentValidation @Inject constructor(){
+class PaymentValidation @Inject constructor() {
 
     fun execute(payment: String): ValidationResult {
         val hasOnliDigits = payment.all { it.isDigit() }
 
-        if(payment.isEmpty()) {
+        if (payment.isEmpty()) {
             return ValidationResult(
                 successful = false,
                 errorMessage = "Это обязательное поле"
@@ -24,13 +25,15 @@ class PaymentValidation @Inject constructor(){
             )
         }
 
-        return try {
-            val paymentInt = payment.toInt()
-            ValidationResult(
+        try {
+            val paymentInt = payment.trim().toInt()
+            return ValidationResult(
                 successful = true
             )
-        }catch (e: Exception){
-            ValidationResult(
+        } catch (e: Exception) {
+            Log.d("myTag","sdfsdfsdfsdf ------- $e")
+            return ValidationResult(
+
                 successful = false,
                 errorMessage = "Не корректные данные"
             )

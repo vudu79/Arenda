@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.example.navigationexample.domain.usecase.validation.*
 import com.example.navigationexample.domain.usecase.validation.validators.*
+import com.example.navigationexample.presentation.navigation.Routs
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -98,12 +99,6 @@ class AppatmentViewModel @Inject constructor(
 
 
     init {
-//        val appatmentDb = AppatmentRoomDatabase.getInstance(application)
-//        val appatmentDao = appatmentDb.appatmentDao()
-//        val clientDao = appatmentDb.ClientDao()
-//        appatmentRepository = AppatmentRepositoryImpl(appatmentDao = appatmentDao)
-//        clientRepository = ClientsRepositoryImpl(clientDao = clientDao)
-
         allApartments = apartmentRepository.allAppatment
         allClients = clientRepository.allClients
         allApartmentClients = clientRepository.allAppatmentClients
@@ -179,6 +174,7 @@ class AppatmentViewModel @Inject constructor(
                 validateFormState = validateFormState.copy(documentDitails = event.documentDitails)
             }
             is ValidationFormEvent.MembersChanged -> {
+//                Log.d("myTag", "asasd --- ${event.members}")
                 validateFormState = validateFormState.copy(members = event.members)
             }
             is ValidationFormEvent.InStringDateChanged -> {
@@ -194,9 +190,11 @@ class AppatmentViewModel @Inject constructor(
                 validateFormState = validateFormState.copy(dateOutLong = event.outDateLong)
             }
             is ValidationFormEvent.PrepaymentChanged -> {
+//                Log.d("myTag", "asasd --- ${event.prepayment}")
                 validateFormState = validateFormState.copy(prePayment = event.prepayment)
             }
             is ValidationFormEvent.PaymentChanged -> {
+//                Log.d("myTag", "asasd --- ${event.payment}")
                 validateFormState = validateFormState.copy(payment = event.payment)
             }
             is ValidationFormEvent.SityChanged -> {
@@ -214,12 +212,10 @@ class AppatmentViewModel @Inject constructor(
 
     private fun submitData() {
         val firstNameResult = nameValidationField.execute(validateFormState.firstName, true)
-
         val dateInStringResult = dateStringValidationField.execute(validateFormState.dateInString)
         val dateOutStringResult = dateStringValidationField.execute(validateFormState.dateOutString)
         val dateInLongResult = dateLongValidationField.execute(validateFormState.dateInLong)
         val dateOutLongResult = dateLongValidationField.execute(validateFormState.dateOutLong)
-
         val secondNameResult = validateFormState.secondName?.let { nameValidationField.execute(it, false) }
         val lastNameResult =validateFormState.lastName?.let { nameValidationField.execute(it, false) }
         val phoneResult = phoneValidationField.execute(validateFormState.phone)
@@ -233,14 +229,7 @@ class AppatmentViewModel @Inject constructor(
                 it, false
             )
         }
-
-
-
-        val membersResult = validateFormState.members?.let {
-            membersValidationField.execute(
-                it
-            )
-        }
+        val membersResult =membersValidationField.execute(validateFormState.members)
         val prePaymentResult = paymentValidationField.execute(validateFormState.prePayment)
         val paymentResult = paymentValidationField.execute(validateFormState.payment)
 
@@ -279,6 +268,28 @@ class AppatmentViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
+
+            addClient(
+                Client(
+                    firstName = validateFormState.firstName,
+                    secondName = validateFormState.secondName,
+                    lastName = validateFormState.lastName,
+                    phone = "+7${validateFormState.phone}",
+                    documentNunber = "${validateFormState.documentNamber}",
+                    documentDitails = "${validateFormState.documentDitails}",
+                    inDate = validateFormState.dateInLong,
+                    outDate = validateFormState.dateOutLong,
+                    members = validateFormState.members.trim().toInt(),
+                    prepayment = validateFormState.prePayment.trim().toInt(),
+                    payment = validateFormState.payment.trim().toInt(),
+                    clientColor = validateFormState.color.toArgb(),
+                    sity = validateFormState.sity,
+                    appatment_name = currentApartment.value?.name ?: "_"
+                )
+            )
+            getAppatmentClients(currentApartment.value?.name ?: "_")
+            currentApartment.value?.name?.let { updateDaysMapForCalendar(it) }
+            currentApartment.value?.name?.let { updateApartmentPlanedDays(it) }
             validationEventChannel.send(ValidatAllFieldsResultEvent.Success)
         }
     }

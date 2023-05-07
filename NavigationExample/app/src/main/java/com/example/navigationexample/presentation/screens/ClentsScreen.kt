@@ -90,6 +90,7 @@ fun ClientsScreen(
 
 
         IconButton(onClick = {
+
             mainNavController.navigate(route = "${Routs.addClientScreen}?appatment_name=$appatmentName")
         })
         {

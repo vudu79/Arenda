@@ -1,6 +1,7 @@
 package com.example.navigationexample.presentation.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -56,58 +57,23 @@ fun AddClientScreen(
         viewModel.validationEvents.collect { event ->
             when (event) {
                 is ValidatAllFieldsResultEvent.Success -> {
-                    viewModel.addClient(
-                        Client(
-                            firstName = state.firstName,
-                            secondName = state.secondName,
-                            lastName = state.lastName,
-                            phone = "+7${state.phone}",
-                            documentNunber = "${state.documentNamber}",
-                            documentDitails = "${state.documentDitails}",
-                            inDate = state.dateInLong,
-                            outDate = state.dateOutLong,
-                            members = state.members.trim().toInt(),
-                            prepayment = state.prePayment.trim().toInt(),
-                            payment = state.payment.trim().toInt(),
-                            clientColor = state.color.toArgb(),
-                            sity = state.sity,
-                            appatment_name = currentAppatment?.name ?: "_"
-                        )
-                    )
+                    Log.d("myTag", "payment --- ${state.payment}")
+                    Log.d("myTag", "prePayment --- ${state.prePayment}")
+                    Log.d("myTag", "members --- ${state.members}")
+
                     Toast.makeText(
                         context, "Новый клиент зарегестрирован!", Toast.LENGTH_SHORT
                     ).show()
-                    viewModel.getAppatmentClients(currentAppatment?.name ?: "")
-                    currentAppatment?.name?.let { viewModel.updateDaysMapForCalendar(it) }
-                    currentAppatment?.name?.let { viewModel.updateApartmentPlanedDays(it) }
                     navController.navigate(route = "${Routs.mainScreenClients}?appatment_name=$appatmentName")
-
-
-
-
-                    Toast.makeText(
-                        context,
-                        "Registration successful",
-                        Toast.LENGTH_LONG
-                    ).show()
+//                    Toast.makeText(
+//                        context,
+//                        "Registration successful",
+//                        Toast.LENGTH_LONG
+//                    ).show()
                 }
             }
         }
     }
-
-
-//    val firstName = remember { mutableStateOf(viewModel.clientFirstName.value) }
-//    val secondName = remember { mutableStateOf(viewModel.clientSecondName.value) }
-//    val lastName = remember { mutableStateOf(viewModel.clientLastName.value) }
-//    var phoneNumber by rememberSaveable { mutableStateOf(viewModel.phone.value) }
-//    var documentNunber by rememberSaveable { mutableStateOf(viewModel.documentNumber.value) }
-//    var documentDitails by rememberSaveable { mutableStateOf(viewModel.documentDitails.value) }
-//    val members = remember { mutableStateOf(viewModel.members.value) }
-//    val payment = remember { mutableStateOf(viewModel.payment.value) }
-//    val prepayment = remember { mutableStateOf(viewModel.prepayment.value) }
-//    val colorClient = remember { mutableStateOf(viewModel.colorClient.value) }
-//    val sity = remember { mutableStateOf(viewModel.sity.value) }
-
 
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter
