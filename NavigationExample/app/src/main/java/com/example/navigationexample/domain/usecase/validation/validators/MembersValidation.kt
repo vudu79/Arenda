@@ -6,7 +6,8 @@ import javax.inject.Inject
 
 class MembersValidation@Inject constructor() {
 
-    fun execute(members: String): ValidationResult {
+    fun execute(memberswithTrimed: String): ValidationResult {
+        val members = memberswithTrimed.trim()
         val hasOnlyDigits = members.all { it.isDigit() }
 
         if (members.isEmpty()) {

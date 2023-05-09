@@ -6,7 +6,9 @@ import javax.inject.Inject
 
 class NameValidation @Inject constructor(){
 
-    fun execute(name: String, mastHave: Boolean): ValidationResult {
+    fun execute(namewithTrimed: String, mastHave: Boolean): ValidationResult {
+        val name = namewithTrimed.trim()
+
         val hasDigit = name.any { it.isDigit() }
 
         when(mastHave){

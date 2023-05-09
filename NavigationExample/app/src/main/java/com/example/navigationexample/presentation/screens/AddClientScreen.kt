@@ -1,5 +1,9 @@
 package com.example.navigationexample.presentation.screens
 
+
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+
 import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
@@ -25,6 +29,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,6 +53,7 @@ fun AddClientScreen(
     val currentAppatment by viewModel.currentApartment.observeAsState()
     val focusManager = LocalFocusManager.current
     val state = viewModel.validateFormState
+
     val context = LocalContext.current
 
     LaunchedEffect(key1 = context) {
@@ -110,12 +116,6 @@ fun AddClientScreen(
                         .verticalScroll(rememberScrollState())
                         .fillMaxWidth()
                 ) {
-
-                    TextField(value = "sldjf", onValueChange = {
-
-                        Log.d("tag"," asdasdasdasd {$it}")
-                    })
-
                     OutlinedTextField(
                         value = state.firstName,
                         onValueChange = {
@@ -133,7 +133,9 @@ fun AddClientScreen(
                             backgroundColor = Color(142, 143, 138)
                         ),
                         keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Text
+                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Text,
+                            capitalization = KeyboardCapitalization.None,
+                            autoCorrect = true,
                         ),
                         keyboardActions = KeyboardActions(onNext = {
                             focusManager.moveFocus(FocusDirection.Down)

@@ -5,7 +5,8 @@ import javax.inject.Inject
 
 class DocumentNumber @Inject constructor(){
 
-    fun execute(documentNumber: String): ValidationResult {
+    fun execute(documentNumberwithTrimed: String): ValidationResult {
+        val documentNumber = documentNumberwithTrimed.trim()
         val hasOnliDigits = documentNumber.all { it.isDigit() }
 
         if (documentNumber.isNotEmpty() && !hasOnliDigits) {

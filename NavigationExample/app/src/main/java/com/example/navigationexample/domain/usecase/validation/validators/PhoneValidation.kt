@@ -6,7 +6,8 @@ import javax.inject.Inject
 
 class PhoneValidation @Inject constructor(){
 
-    fun execute(phone: String): ValidationResult {
+    fun execute(phonewithTrimed: String): ValidationResult {
+        val phone = phonewithTrimed.trim()
         val hasOnliDigits = phone.all { it.isDigit() }
 
         if (phone.isEmpty()) {

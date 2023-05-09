@@ -156,26 +156,26 @@ class AppatmentViewModel @Inject constructor(
     fun onFormEvent(event: ValidationFormEvent) {
         when (event) {
             is ValidationFormEvent.FirstNameChanged -> {
-                validateFormState = validateFormState.copy(firstName = event.firstName.trim())
+                validateFormState = validateFormState.copy(firstName = event.firstName)
             }
             is ValidationFormEvent.SecondNameChanged -> {
-                validateFormState = validateFormState.copy(secondName = event.secondName.trim())
+                validateFormState = validateFormState.copy(secondName = event.secondName)
             }
             is ValidationFormEvent.LastNameChanged -> {
-                validateFormState = validateFormState.copy(lastName = event.lastName.trim())
+                validateFormState = validateFormState.copy(lastName = event.lastName)
             }
             is ValidationFormEvent.PhoneChanged -> {
-                validateFormState = validateFormState.copy(phone = event.phone.trim())
+                validateFormState = validateFormState.copy(phone = event.phone)
             }
             is ValidationFormEvent.DocumentNamberChanged -> {
-                validateFormState = validateFormState.copy(documentNamber = event.documentNamber.trim())
+                validateFormState = validateFormState.copy(documentNamber = event.documentNamber)
             }
             is ValidationFormEvent.DocumentDitailsChanged -> {
-                validateFormState = validateFormState.copy(documentDitails = event.documentDitails.trim())
+                validateFormState = validateFormState.copy(documentDitails = event.documentDitails)
             }
             is ValidationFormEvent.MembersChanged -> {
 //                Log.d("myTag", "asasd --- ${event.members}")
-                validateFormState = validateFormState.copy(members = event.members.trim())
+                validateFormState = validateFormState.copy(members = event.members)
             }
             is ValidationFormEvent.InStringDateChanged -> {
                 validateFormState = validateFormState.copy(dateInString = event.inDateString)
@@ -191,18 +191,18 @@ class AppatmentViewModel @Inject constructor(
             }
             is ValidationFormEvent.PrepaymentChanged -> {
 //                Log.d("myTag", "asasd --- ${event.prepayment}")
-                validateFormState = validateFormState.copy(prePayment = event.prepayment.trim())
+                validateFormState = validateFormState.copy(prePayment = event.prepayment)
             }
             is ValidationFormEvent.PaymentChanged -> {
 //                Log.d("myTag", "asasd --- ${event.payment}")
-                validateFormState = validateFormState.copy(payment = event.payment.trim())
+                validateFormState = validateFormState.copy(payment = event.payment)
             }
             is ValidationFormEvent.transferInfoChanged -> {
-                validateFormState = validateFormState.copy(transferInfo = event.transferInfo.trim())
+                validateFormState = validateFormState.copy(transferInfo = event.transferInfo)
             }
 
             is ValidationFormEvent.refererChanged -> {
-                validateFormState = validateFormState.copy(referer = event.referer.trim())
+                validateFormState = validateFormState.copy(referer = event.referer)
             }
 
             is ValidationFormEvent.ColorChanged -> {
@@ -277,12 +277,12 @@ class AppatmentViewModel @Inject constructor(
             addClient(
                 Client(
                     status = ClientStatus.waiting,
-                    firstName = validateFormState.firstName,
-                    secondName = validateFormState.secondName,
-                    lastName = validateFormState.lastName,
-                    phone = "+7${validateFormState.phone}",
-                    documentNumber = "${validateFormState.documentNamber}",
-                    documentDitails = "${validateFormState.documentDitails}",
+                    firstName = validateFormState.firstName.trim(),
+                    secondName = validateFormState.secondName?.trim(),
+                    lastName = validateFormState.lastName?.trim(),
+                    phone = "+7${validateFormState.phone.trim()}",
+                    documentNumber = validateFormState.documentNamber!!.trim(),
+                    documentDitails = validateFormState.documentDitails!!.trim(),
                     inDate = validateFormState.dateInLong,
                     outDate = validateFormState.dateOutLong,
                     members = validateFormState.members.trim().toInt(),
@@ -291,7 +291,7 @@ class AppatmentViewModel @Inject constructor(
                     clientColor = validateFormState.color.toArgb(),
                     transferInfo = validateFormState.transferInfo,
                     referer = validateFormState.referer,
-                    appatment_name = currentApartment.value?.name ?: "_"
+                    appatment_name = currentApartment.value?.name ?: ""
                 )
             )
             getAppatmentClients(currentApartment.value?.name ?: "_")

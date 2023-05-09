@@ -5,8 +5,8 @@ import com.example.navigationexample.domain.usecase.validation.ValidationResult
 import javax.inject.Inject
 
 class PaymentValidation @Inject constructor() {
-
-    fun execute(payment: String): ValidationResult {
+    fun execute(paymentwithTrimed: String): ValidationResult {
+        val payment = paymentwithTrimed.trim()
         val hasOnliDigits = payment.all { it.isDigit() }
 
         if (payment.isEmpty()) {
