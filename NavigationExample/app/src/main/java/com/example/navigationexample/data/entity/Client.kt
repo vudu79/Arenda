@@ -4,6 +4,7 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.navigationexample.domain.models.ClientStatus
 
 
 @Entity(tableName = "clients")
@@ -14,10 +15,11 @@ class Client {
     @ColumnInfo(name = "clientId")
     var id: Int = 0
 
+    @ColumnInfo(name = "status")
+    var status: String = ClientStatus.waiting
 
     @ColumnInfo(name = "first_name")
     var firstName: String = ""
-
 
     @ColumnInfo(name = "second_name")
     var secondName: String? = ""
@@ -29,7 +31,7 @@ class Client {
     var phone: String = ""
 
     @ColumnInfo(name = "document_number")
-    var documentNamber: String? = ""
+    var documentNumber: String? = ""
 
     @ColumnInfo(name = "document_ditails")
     var documentDitails: String? = ""
@@ -52,8 +54,11 @@ class Client {
     @ColumnInfo(name = "client_color")
     var clientColor: Int = 0
 
-    @ColumnInfo(name = "sity")
-    var sity: String? = ""
+    @ColumnInfo(name = "transfer_info")
+    var transferInfo: String? = ""
+
+    @ColumnInfo(name = "refer")
+    var referer: String? = ""
 
     @ColumnInfo(name = "appatment_name")
     var appatment_name: String = ""
@@ -74,11 +79,12 @@ class Client {
     }
 
     constructor(
+        status: String,
         firstName: String,
         secondName: String?,
         lastName: String?,
         phone: String,
-        documentNunber: String,
+        documentNumber: String,
         documentDitails: String,
         inDate: Long,
         outDate: Long,
@@ -86,14 +92,16 @@ class Client {
         prepayment: Int,
         payment: Int,
         clientColor: Int,
-        sity: String?,
+        transferInfo: String?,
+        referer: String?,
         appatment_name: String
-    ) {
+    ){
+        this.status = status
         this.firstName = firstName
         this.secondName = secondName
         this.lastName = lastName
         this.phone = phone
-        this.documentNamber = documentNunber
+        this.documentNumber = documentNumber
         this.documentDitails = documentDitails
         this.members = members
         this.inDate = inDate
@@ -101,8 +109,9 @@ class Client {
         this.prepayment = prepayment
         this.payment = payment
         this.clientColor = clientColor
-        this.sity = sity
+        this.transferInfo = transferInfo
+        this.referer = referer
         this.appatment_name = appatment_name
-
     }
+
 }

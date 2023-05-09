@@ -20,10 +20,7 @@ abstract class AppatmentRoomDatabase: RoomDatabase() {
     abstract fun getRentalDayDao(): RentalDaysDao
 
     companion object {
-
-
         private var INSTANCE: AppatmentRoomDatabase? = null
-
         fun getInstance(context: Context): AppatmentRoomDatabase {
             synchronized(this) {
                 var instance = INSTANCE

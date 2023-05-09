@@ -1,7 +1,7 @@
 package com.example.navigationexample.domain.usecase.validation.validators
 
-import android.util.Patterns
 import com.example.navigationexample.domain.usecase.validation.ValidationResult
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 class PhoneValidation @Inject constructor(){
@@ -23,12 +23,13 @@ class PhoneValidation @Inject constructor(){
             )
         }
 
-//        if (Patterns.PHONE.matcher(phone).matches()) {
-//            return ValidationResult(
-//                successful = false,
-//                errorMessage = "Не корректный номер телефона"
-//            )
-//        }
+//        if (phone.matches(Regex("""(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?"""))) {
+        if (!phone.matches(Regex("""^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}${'$'}"""))) {
+            return ValidationResult(
+                successful = false,
+                errorMessage = "Не корректный номер телефона"
+            )
+        }
 
         return ValidationResult(
             successful = true

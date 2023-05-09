@@ -16,7 +16,8 @@ sealed class ValidationFormEvent {
     data class OutLongDateChanged(val outDateLong: Long) : ValidationFormEvent()
     data class PrepaymentChanged(val prepayment: String) : ValidationFormEvent()
     data class PaymentChanged(val payment: String) : ValidationFormEvent()
-    data class SityChanged(val sity: String) : ValidationFormEvent()
+    data class transferInfoChanged(val transferInfo: String) : ValidationFormEvent()
+    data class refererChanged(val referer: String) : ValidationFormEvent()
     data class ColorChanged(val color: Color) : ValidationFormEvent()
     object onSubmit : ValidationFormEvent()
 }

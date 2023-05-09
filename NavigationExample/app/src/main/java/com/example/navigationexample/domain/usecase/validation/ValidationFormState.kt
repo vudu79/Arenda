@@ -30,8 +30,10 @@ data class ValidationFormState(
     var prePaymentError: String? = null,
     var payment: String = "",
     var paymentError: String? = null,
-    var sity: String? = "",
-    var sityError: String? = null,
+    var transferInfo: String? = "",
+    var transferInfoError: String? = null,
+    var referer: String? = "",
+    var refererError: String? = null,
     var color: Color = Constans.ClientColorsList.clientColorsList[0],
     var colorError: String? = null,
 //    var appatmentName: String = ""

@@ -1,6 +1,7 @@
 package com.example.navigationexample.domain.usecase.validation.validators
 
 import com.example.navigationexample.domain.usecase.validation.ValidationResult
+import com.example.navigationexample.presentation.screens.common.hasWrongSimbols
 import javax.inject.Inject
 
 class NameValidation @Inject constructor(){
@@ -9,7 +10,6 @@ class NameValidation @Inject constructor(){
         val hasDigit = name.any { it.isDigit() }
 
         when(mastHave){
-
             true -> {
                 if(name.isEmpty()) {
                     return ValidationResult(
@@ -27,6 +27,12 @@ class NameValidation @Inject constructor(){
                     return ValidationResult(
                         successful = false,
                         errorMessage = "Поле не может содержать цифры"
+                    )
+                }
+                if (hasWrongSimbols(name)){
+                    return ValidationResult(
+                        successful = false,
+                        errorMessage = "Недопустимые символы в поле"
                     )
                 }
             }

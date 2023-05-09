@@ -12,7 +12,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -21,7 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -33,7 +31,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.navigationexample.R
 import com.example.navigationexample.constants.Constans
-import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
 import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
 import com.example.navigationexample.presentation.navigation.Routs
@@ -65,11 +62,7 @@ fun AddClientScreen(
                         context, "Новый клиент зарегестрирован!", Toast.LENGTH_SHORT
                     ).show()
                     navController.navigate(route = "${Routs.mainScreenClients}?appatment_name=$appatmentName")
-//                    Toast.makeText(
-//                        context,
-//                        "Registration successful",
-//                        Toast.LENGTH_LONG
-//                    ).show()
+//
                 }
             }
         }
@@ -117,6 +110,11 @@ fun AddClientScreen(
                         .verticalScroll(rememberScrollState())
                         .fillMaxWidth()
                 ) {
+
+                    TextField(value = "sldjf", onValueChange = {
+
+                        Log.d("tag"," asdasdasdasd {$it}")
+                    })
 
                     OutlinedTextField(
                         value = state.firstName,
@@ -183,7 +181,6 @@ fun AddClientScreen(
                         )
                     }
 
-
                     state.lastName?.let {
                         OutlinedTextField(
                             value = it,
@@ -246,7 +243,6 @@ fun AddClientScreen(
                             errorMessage = state.documentNamberError,
                             modifier = Modifier.align(Alignment.Start)
                         )
-
                     }
 
                     state.documentDitails?.let {
@@ -438,14 +434,41 @@ fun AddClientScreen(
                         )
                     }
 
-                    state.sity?.let {
+                    state.transferInfo?.let {
                         OutlinedTextField(
                             value = it,
                             onValueChange = {
-                                viewModel.onFormEvent(ValidationFormEvent.SityChanged(it))
+                                viewModel.onFormEvent(ValidationFormEvent.transferInfoChanged(it))
                             },
 
-                            placeholder = { Text(text = "Пункт отправления", color = Black) },
+                            placeholder = { Text(text = "Сведения для трансфера", color = Black) },
+                            singleLine = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                unfocusedBorderColor = Black,
+                                textColor = Black,
+                                backgroundColor = Color(142, 143, 138)
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text
+                            ),
+                            keyboardActions = KeyboardActions(onNext = {
+                                focusManager.moveFocus(FocusDirection.Down)
+                            }),
+                        )
+                    }
+
+
+                    state.referer?.let {
+                        OutlinedTextField(
+                            value = it,
+                            onValueChange = {
+                                viewModel.onFormEvent(ValidationFormEvent.refererChanged(it))
+                            },
+
+                            placeholder = { Text(text = "Рекламный ресурс", color = Black) },
                             singleLine = true,
                             modifier = Modifier
                                 .fillMaxWidth()
