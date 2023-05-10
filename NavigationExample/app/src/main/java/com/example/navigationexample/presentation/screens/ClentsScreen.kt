@@ -136,8 +136,7 @@ fun LazyItemScope.ClientItemRow(
                 .background(Color(128, 107, 90))
                 .combinedClickable(
                     onClick = {
-
-//                        makeCall(context, client.phone)
+                        navcontroller.navigate("${Routs.clientDitailsScreen}/${client.phone}")
                     },
                     onLongClick = {
                         showCustomDialog = !showCustomDialog

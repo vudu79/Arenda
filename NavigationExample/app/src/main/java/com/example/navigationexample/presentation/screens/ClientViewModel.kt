@@ -31,12 +31,9 @@ import kotlinx.coroutines.launch
 
 
 @HiltViewModel
-class AppatmentViewModel @Inject constructor(
-    private val apartmentRepository: AppatmentRepositoryImpl,
+class ClientViewModel @Inject constructor(
     private val clientRepository: ClientsRepositoryImpl,
     private val daysRepository: DaysRepositoryImpl,
-    private val getDayClientMapUseCase: GetDayClientMapUseCase,
-    private val getApartmentPlanedDaysUseCase: getAppatmentPlanedDaysUseCase,
 
     private val nameValidationField: NameValidation = NameValidation(),
     private val phoneValidationField: PhoneValidation = PhoneValidation(),
@@ -48,33 +45,8 @@ class AppatmentViewModel @Inject constructor(
     private val dateLongValidationField: DateLongValidation = DateLongValidation()
 ) : ViewModel() {
 
-    private val _isLoadingForSetPeriodScreen: MutableState<Boolean> = mutableStateOf(false)
-    val isLoadingForSetPeriodScreen: State<Boolean> get() = _isLoadingForSetPeriodScreen
-
-    private val _isLoadingForCalendarScreen: MutableState<Boolean> = mutableStateOf(false)
-    val isLoadingForCalendarScreen: State<Boolean> get() = _isLoadingForCalendarScreen
-
-//    val allApartmentPlanedDays: Flow<Map<String, List<LocalDate>>> =
-//        daysRepository.fetchAppatmentRentalDaysMap(
-//            onStart = { _isLoadingForSetPeriodScreen.value = true },
-//            onCompletion = { _isLoadingForSetPeriodScreen.value = false },
-//            onError = { },
-//        )
-
-    var allApartmentPlanedDays: Flow<List<LocalDate>> = flowOf()
-    var localDayClientMocKMap: Flow<MutableMap<LocalDate, MutableSet<ClientMonk>>> = flowOf()
-
-
     var currentApartment = MutableLiveData<Appatment>()
-    val allApartments: LiveData<List<Appatment>>
-    val allClients: LiveData<List<Client>>
-    var allApartmentClients: MutableLiveData<List<Client>>
-    var dateClientMapForObserve = MutableLiveData<MutableMap<LocalDate, MutableSet<ClientMonk>>>()
 
-    var dateOutString by mutableStateOf("")
-    var dateOutLong by mutableStateOf(0L)
-    var dateInString by mutableStateOf("")
-    var dateInLong by mutableStateOf(0L)
 
     var validateFormState by mutableStateOf(ValidationFormState())
     private val validationEventChannel = Channel<ValidatAllFieldsResultEvent>()
@@ -82,59 +54,18 @@ class AppatmentViewModel @Inject constructor(
 
 
     init {
-        allApartments = apartmentRepository.allAppatment
-        allClients = clientRepository.allClients
-        allApartmentClients = clientRepository.allAppatmentClients
+
     }
 
-
-    fun setCurrentAppatment(appatment: Appatment) {
-        currentApartment.value = appatment
-        Log.d("myTag", "щелчок по объекту   -   ${currentApartment.value!!.name}")
-    }
-
-    fun insertAppatment(appatment: Appatment) {
-        apartmentRepository.insertAppatment(appatment)
-    }
-
-    fun deleteAppatment(name: String) {
-        apartmentRepository.deleteAppatment(name)
-    }
 
     fun addClient(client: Client) {
         clientRepository.insertClient(client)
         daysRepository.insertClientDays(client)
     }
 
-    fun deleteClient(name: String) {
-        daysRepository.deleteClientDays(name)
-        clientRepository.deleteClient(name)
-    }
-
-    fun getAppatmentClients(appatmentName: String) {
-        clientRepository.getAppatmentClients(appatmentName)
-    }
-
-
-    fun updateApartmentPlanedDays(apartmentName: String) {
-        allApartmentPlanedDays = daysRepository.fetchAppatmentRentalDays(
-            appatmentName = apartmentName,
-            onStart = { _isLoadingForSetPeriodScreen.value = true },
-            onCompletion = { _isLoadingForSetPeriodScreen.value = false },
-            onError = { },
-        )
-    }
-
-    fun updateDaysMapForCalendar(appatmentName: String) {
-        localDayClientMocKMap = daysRepository.fetchRentalDayClientMocKMap(
-            onStart = { _isLoadingForSetPeriodScreen.value = true },
-            onCompletion = { _isLoadingForSetPeriodScreen.value = false },
-            onError = { },
-            apartmentName = appatmentName
-        )
+    fun getClientByPhone(phone: String): Client{
 
     }
-
 
     fun onFormEvent(event: ValidationFormEvent) {
         when (event) {
@@ -277,9 +208,6 @@ class AppatmentViewModel @Inject constructor(
                     appatment_name = currentApartment.value?.name ?: ""
                 )
             )
-            getAppatmentClients(currentApartment.value?.name ?: "_")
-            currentApartment.value?.name?.let { updateDaysMapForCalendar(it) }
-            currentApartment.value?.name?.let { updateApartmentPlanedDays(it) }
             validationEventChannel.send(ValidatAllFieldsResultEvent.Success)
         }
     }

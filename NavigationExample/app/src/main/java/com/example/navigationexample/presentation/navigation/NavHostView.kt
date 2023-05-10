@@ -7,11 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.navigationexample.presentation.navigation.batton_navigation.AppatmentFinanceScreen
-import com.example.navigationexample.presentation.screens.AddAppatmentScreen
-import com.example.navigationexample.presentation.screens.AddClientScreen
-import com.example.navigationexample.presentation.screens.AppatmentViewModel
-import com.example.navigationexample.presentation.screens.MainScreen
-import com.example.navigationexample.presentation.screens.SetDatePeriodScreen
+import com.example.navigationexample.presentation.navigation.batton_navigation.BottomNavItems
+import com.example.navigationexample.presentation.screens.*
 
 
 @Composable
@@ -60,8 +57,6 @@ fun NavHostView(viewModel: AppatmentViewModel) {
             }
         }
 
-
-
         composable(
             route = "${Routs.setClientPeriod}?appatment_name={appatment_name}",
             arguments = listOf(
@@ -77,8 +72,20 @@ fun NavHostView(viewModel: AppatmentViewModel) {
             }
         }
 
-
-
+        composable(
+            route = "${Routs.clientDitailsScreen}/{client_phone}",
+            arguments = listOf (navArgument("client_phone") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val arguments = requireNotNull(backStackEntry.arguments)
+            arguments.getString("client_phone")?.let { client ->
+                val clientPhone = client
+                ClientDitailsScreen(
+                    mainNavController = mainNavController,
+                    viewModel = viewModel,
+                    clientPhone = clientPhone
+                )
+            }
+        }
 
 
 //        composable("settings") {

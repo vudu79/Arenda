@@ -22,7 +22,7 @@ class GetDayClientMapUseCase @Inject constructor(
         Log.d("myTag", "from UseCase  - $allAppatmentDays")
         allAppatmentDays?.forEach {
             val localDay = LocalDate.ofEpochDay(it.epochDay)
-            val client = clientsRepositoryImpl.getClient(it.clientName)
+            val client = clientsRepositoryImpl.getClientByName(it.clientName)
             Log.d("myTag", "День  - $localDay")
             val clientMonk = ClientMonk(
                 client,

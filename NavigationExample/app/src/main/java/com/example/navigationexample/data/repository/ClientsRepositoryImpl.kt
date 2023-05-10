@@ -1,5 +1,6 @@
 package com.example.navigationexample.data.repository
 
+import androidx.compose.ui.tooling.data.EmptyGroup.name
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.navigationexample.data.dao.ClientDao
@@ -24,8 +25,16 @@ class ClientsRepositoryImpl @Inject constructor(private val clientDao: ClientDao
         }
     }
 
-    fun getClient(name: String): Client {
-        return clientDao.getClient(name)
+    fun getClientByName(name: String): Client {
+        return clientDao.getClientByName(name)
+    }
+
+    fun getClientByPhone(phone: String): Client {
+        return clientDao.getClientByPhone(phone)
+    }
+
+    fun updateClientByPhone(client: Client): Int {
+        return clientDao.updateClient(client)
     }
 
     fun deleteClient(name: String) {

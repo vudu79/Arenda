@@ -5,7 +5,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.navigationexample.data.entity.Appatment
 import com.example.navigationexample.data.entity.Client
 
 
@@ -18,11 +17,17 @@ interface ClientDao {
     fun deleteClient(name: String)
 
     @Query("SELECT * FROM clients WHERE first_name = :clientName")
-    fun getClient(clientName: String): Client
+    fun getClientByName(clientName: String): Client
+
+    @Query("SELECT * FROM clients WHERE phone = :clientPhone")
+    fun getClientByPhone(clientPhone: String): Client
 
     @Query("SELECT * FROM clients")
     fun getAllClients(): LiveData<List<Client>>
 
     @Query("SELECT * FROM clients WHERE appatment_name = :appatmentName")
     fun getAppatmentClients(appatmentName: String): List<Client>
+
+    @Update
+    fun updateClient(client: Client): Int
 }
