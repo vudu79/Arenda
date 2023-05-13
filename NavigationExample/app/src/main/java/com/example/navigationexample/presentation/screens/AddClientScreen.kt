@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -231,7 +232,7 @@ fun AddClientScreen(
 
                     state.documentNamber?.let {
                         PhoneField(
-                            it,
+                            value = it,
                             placeHolder = "Паспорт: серия и номер",
                             mask = "0000-000000",
                             maskNumber = '0',
@@ -260,10 +261,10 @@ fun AddClientScreen(
                                 )
                             },
                             isError = state.documentDitailsError != null,
-                            singleLine = true,
+                            singleLine = false,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(5.dp),
+                                .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
                                 unfocusedBorderColor = Black,
                                 textColor = Black,
@@ -327,7 +328,7 @@ fun AddClientScreen(
                     OutlinedTextField(
                         value = "c ${state.dateInString} по ${state.dateOutString} ",
                         onValueChange = {
-                            viewModel.onFormEvent(ValidationFormEvent.InLongDateChanged(state.dateInLong))
+                            viewModel.onFormEvent(ValidationFormEvent.InLongDateChanged(viewModel.dateInLong))
                             viewModel.onFormEvent(ValidationFormEvent.InStringDateChanged(viewModel.dateInString))
                             viewModel.onFormEvent(ValidationFormEvent.OutLongDateChanged(viewModel.dateOutLong))
                             viewModel.onFormEvent(ValidationFormEvent.OutStringDateChanged(viewModel.dateOutString))

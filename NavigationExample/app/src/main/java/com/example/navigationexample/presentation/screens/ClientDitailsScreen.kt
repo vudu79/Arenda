@@ -19,11 +19,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.navigationexample.R
+import com.example.navigationexample.constants.Constans
 import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
+import com.example.navigationexample.presentation.screens.common.ColourButton
 import com.example.navigationexample.presentation.screens.common.PhoneField
 
 
@@ -103,8 +107,22 @@ fun ClientDitailsScreen(
     }
     val fieldDocumentDitailsHeight = remember { mutableStateOf(50) }
     fieldDocumentDitailsHeight.value = when (isDocumentDitailsEditActive.value) {
-        true -> 240
-        false -> 120
+        true -> {
+            if (state.documentDitails != "") 240 else 170
+        }
+        false -> {
+            if (state.documentDitails != "") 120 else 50
+        }
+    }
+
+
+    val isMembersEditActive = remember {
+        mutableStateOf(false)
+    }
+    val fieldMembersHeight = remember { mutableStateOf(50) }
+    fieldMembersHeight.value = when (isMembersEditActive.value) {
+        true -> 120
+        false -> 50
     }
 
 
@@ -157,6 +175,7 @@ fun ClientDitailsScreen(
                         ) {
                             Text(
                                 text = state.status,
+                                maxLines = 1,
                                 modifier = Modifier
                                     .align(Alignment.CenterStart)
                                     .background(Color(1, 1, 1))
@@ -167,7 +186,9 @@ fun ClientDitailsScreen(
                             )
 
                             IconButton(
-                                modifier = Modifier.align(Alignment.BottomEnd),
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(start = 10.dp, end = 10.dp),
                                 onClick = {
                                     isStatusEditActive.value = !isStatusEditActive.value
                                 }
@@ -263,6 +284,7 @@ fun ClientDitailsScreen(
                         ) {
                             Text(
                                 text = state.firstName,
+                                maxLines = 1,
                                 modifier = Modifier
                                     .align(Alignment.CenterStart)
                                     .background(Color(1, 1, 1))
@@ -370,7 +392,8 @@ fun ClientDitailsScreen(
                                 .heightIn(min = 60.dp, max = 200.dp)
                         ) {
                             Text(
-                                text = state.secondName!!,
+                                text = state.secondName ?: "не установлено",
+                                maxLines = 1,
                                 modifier = Modifier
                                     .align(Alignment.CenterStart)
                                     .background(Color(1, 1, 1))
@@ -397,7 +420,7 @@ fun ClientDitailsScreen(
                     Spacer(modifier = Modifier.padding(2.dp))
                     if (isSecondNameEditActive.value) {
                         OutlinedTextField(
-                            value = state.secondName!!,
+                            value = state.secondName ?: "не установлено",
                             onValueChange = {
                                 viewModel.onFormEvent(ValidationFormEvent.SecondNameChanged(it))
                             },
@@ -474,7 +497,8 @@ fun ClientDitailsScreen(
                                 .heightIn(min = 60.dp, max = 200.dp)
                         ) {
                             Text(
-                                text = state.lastName!!,
+                                text = state.lastName ?: "не установлено",
+                                maxLines = 1,
                                 modifier = Modifier
                                     .align(Alignment.CenterStart)
                                     .background(Color(1, 1, 1))
@@ -502,7 +526,7 @@ fun ClientDitailsScreen(
                     Spacer(modifier = Modifier.padding(2.dp))
                     if (isLastNameEditActive.value) {
                         OutlinedTextField(
-                            value = state.lastName!!,
+                            value = state.lastName ?: "не установлено",
                             onValueChange = {
                                 viewModel.onFormEvent(ValidationFormEvent.LastNameChanged(it))
                             },
@@ -580,6 +604,7 @@ fun ClientDitailsScreen(
                         ) {
                             Text(
                                 text = state.phone,
+                                maxLines = 1,
                                 modifier = Modifier
                                     .align(Alignment.CenterStart)
                                     .background(Color(1, 1, 1))
@@ -658,7 +683,8 @@ fun ClientDitailsScreen(
                                 .heightIn(min = 60.dp, max = 200.dp)
                         ) {
                             Text(
-                                text = state.documentNamber!!,
+                                text = state.documentNamber ?: "не установлено",
+                                maxLines = 1,
                                 modifier = Modifier
                                     .align(Alignment.CenterStart)
                                     .background(Color(1, 1, 1))
@@ -670,7 +696,8 @@ fun ClientDitailsScreen(
                             IconButton(
                                 modifier = Modifier.align(Alignment.BottomEnd),
                                 onClick = {
-                                    isDocumentNamberEditActive.value = !isDocumentNamberEditActive.value
+                                    isDocumentNamberEditActive.value =
+                                        !isDocumentNamberEditActive.value
                                 }
                             )
                             {
@@ -686,9 +713,9 @@ fun ClientDitailsScreen(
                     Spacer(modifier = Modifier.padding(2.dp))
                     if (isDocumentNamberEditActive.value) {
                         PhoneField(
-                            value = state.documentNamber!!,
-                            placeHolder = "Контактный телефон",
-                            mask = "+7(000)-000-00-00",
+                            value = state.documentNamber ?: "не установлено",
+                            placeHolder = "Паспорт: серия номер",
+                            mask = "0000-000000",
                             maskNumber = '0',
                             onPhoneChanged = {
                                 viewModel.onFormEvent(ValidationFormEvent.DocumentNamberChanged(it))
@@ -702,8 +729,134 @@ fun ClientDitailsScreen(
         }
 
 
-//        Имя+++++++++++++++++++++++++++++++++++++++++++++++
+//        паспортные данные+++++++++++++++++++++++++++++++++++++++++++++++
+        item {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(3.dp)
+                    .background(Color(red = 41, green = 41, blue = 41)),
+                shape = RoundedCornerShape(5.dp),
+                elevation = 8.dp,
+                onClick = {
 
+                }
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth(0.70f)
+                        .height(fieldDocumentDitailsHeight.value.dp)
+                        .border(width = 2.dp, color = Color(223, 75, 0))
+                        .background(Color(red = 41, 41, blue = 41)),
+                ) {
+
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(red = 41, green = 41, blue = 41))
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(0.85f)
+                                .background(Color(red = 41, green = 41, blue = 41))
+                        ) {
+                            Text(
+                                text = state.documentDitails ?: "не установлено",
+                                modifier = Modifier
+                                    .align(Alignment.CenterStart)
+                                    .background(Color(41, green = 41, blue = 41))
+                                    .padding(start = 5.dp),
+                                fontSize = 18.sp,
+                                color = Color(254, 253, 253, 255),
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 4,
+                                textAlign = TextAlign.Justify
+                            )
+                        }
+
+                        IconButton(
+//                            modifier = Modifier.align(Alignment.BottomEnd),
+                            onClick = {
+                                isDocumentDitailsEditActive.value =
+                                    !isDocumentDitailsEditActive.value
+                            }
+                        )
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_edit_24),
+                                contentDescription = "Редактировать",
+                                modifier = Modifier.size(30.dp),
+                                tint = Color(223, 75, 0)
+                            )
+                        }
+
+                    }
+
+                    Spacer(modifier = Modifier.padding(2.dp))
+                    if (isDocumentDitailsEditActive.value) {
+                        OutlinedTextField(
+                            value = state.documentDitails ?: "не установлено",
+                            onValueChange = {
+                                viewModel.onFormEvent(ValidationFormEvent.DocumentDitailsChanged(it))
+                            },
+                            placeholder = {
+                                Text(
+                                    text = "Паспор: кем и когда выдан",
+                                    color = Color.Black
+                                )
+                            },
+                            isError = state.documentDitailsError != null,
+                            singleLine = false,
+
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(120.dp)
+                                .padding(top = 1.dp, bottom = 5.dp, start = 5.dp, end = 5.dp),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                unfocusedBorderColor = Color.Black,
+                                textColor = Color.Black,
+                                backgroundColor = Color(142, 143, 138)
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text,
+                                capitalization = KeyboardCapitalization.None,
+                                autoCorrect = true,
+                            ),
+                            keyboardActions = KeyboardActions(onNext = {
+                                focusManager.moveFocus(FocusDirection.Down)
+                            }),
+                            minLines = 4
+                        )
+                    }
+                }
+                if (state.documentDitailsError != null) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text = state.documentDitailsError!!,
+                            color = MaterialTheme.colors.error,
+                            modifier = Modifier.align(Alignment.BottomStart)
+                        )
+                    }
+                }
+            }
+        }
+// цвет+++++++++++++++++++++++++++++++++++++
+        item {
+            ColourButton(
+                Constans.ClientColorsList.clientColorsList, onColorSelected = {
+                    viewModel.onFormEvent(ValidationFormEvent.ColorChanged(it))
+                }, state.color
+            )
+        }
+
+
+// количестов человек
 
         item {
             Card(
@@ -721,7 +874,7 @@ fun ClientDitailsScreen(
                     horizontalAlignment = Alignment.Start,
                     modifier = Modifier
                         .fillMaxWidth(0.70f)
-                        .height(fieldDocumentDitailsHeight.value.dp)
+                        .height(fieldMembersHeight.value.dp)
                         .border(width = 2.dp, color = Color(223, 75, 0))
                         .background(Color(red = 41, 41, blue = 41)),
                 ) {
@@ -739,12 +892,12 @@ fun ClientDitailsScreen(
                                 .heightIn(min = 60.dp, max = 200.dp)
                         ) {
                             Text(
-                                text = state.documentDitails!!,
+                                text = state.members,
+                                maxLines = 1,
                                 modifier = Modifier
                                     .align(Alignment.CenterStart)
                                     .background(Color(1, 1, 1))
                                     .padding(start = 5.dp),
-
                                 fontSize = 18.sp,
                                 color = Color(254, 253, 253, 255)
                             )
@@ -752,31 +905,33 @@ fun ClientDitailsScreen(
                             IconButton(
                                 modifier = Modifier.align(Alignment.BottomEnd),
                                 onClick = {
-                                    isDocumentDitailsEditActive.value = !isDocumentDitailsEditActive.value
+                                    isMembersEditActive.value = !isMembersEditActive.value
                                 }
                             )
                             {
                                 Icon(
                                     painter = painterResource(id = R.drawable.baseline_edit_24),
                                     contentDescription = "Редактировать",
-
                                     modifier = Modifier.size(30.dp),
                                     tint = Color(223, 75, 0)
                                 )
                             }
-
                         }
                     }
-
                     Spacer(modifier = Modifier.padding(2.dp))
-                    if (isFirstNameEditActive.value) {
+                    if (isMembersEditActive.value) {
                         OutlinedTextField(
-                            value = state.documentDitails,
+                            value = state.members,
                             onValueChange = {
-                                viewModel.onFormEvent(ValidationFormEvent.DocumentDitailsChanged(it))
+                                viewModel.onFormEvent(ValidationFormEvent.MembersChanged(it))
                             },
-                            placeholder = { Text(text = "Имя", color = Color.Black) },
-                            isError = state.documentDitailsError != null,
+                            placeholder = {
+                                Text(
+                                    text = "Количество человек",
+                                    color = Color.Black
+                                )
+                            },
+                            isError = state.membersError != null,
                             singleLine = false,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -797,20 +952,21 @@ fun ClientDitailsScreen(
                         )
                     }
                 }
-                if (state.documentDitailsError != null) {
+                if (state.membersError != null) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                     ) {
                         Text(
-                            text = state.documentDitailsError!!,
+                            text = state.membersError!!,
                             color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.BottomStart)
+                            modifier = Modifier.align(Alignment.CenterStart)
                         )
                     }
                 }
             }
         }
+
 
 //    IconButton(onClick = {
 //        mainNavController.navigate(Routs.addAppatmentScreen)
@@ -826,5 +982,5 @@ fun ClientDitailsScreen(
 //
 //        )
 //    }
-        }
     }
+}

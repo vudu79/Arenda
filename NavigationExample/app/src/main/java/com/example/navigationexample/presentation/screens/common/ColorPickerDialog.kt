@@ -33,22 +33,25 @@ fun ColourButton(colors: List<Color>, onColorSelected: (Color) -> Unit, currentl
             .padding( bottom = 5.dp, start = 5.dp, end = 5.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(5))
-            .border(
-                2.dp,
-                MaterialTheme.colorScheme.onBackground.copy(alpha = 0.99f),
-                RoundedCornerShape(5)
-            )
+//            .border(
+//                2.dp,
+//                MaterialTheme.colorScheme.onBackground.copy(alpha = 0.99f),
+//                RoundedCornerShape(5)
+//            )
+            .border(width = 2.dp, color = Color(223, 75, 0))
             .clickable {
                 colorPickerOpen = true
             }
-            .background(Color(142, 143, 138))
+//            .background(Color(142, 143, 138))
 
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
-                .background(Color(142, 143, 138)),
+                .background(Color(41, green = 41, blue = 41))
+
+                ,
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
