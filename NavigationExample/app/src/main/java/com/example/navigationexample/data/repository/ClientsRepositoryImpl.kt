@@ -1,11 +1,21 @@
 package com.example.navigationexample.data.repository
 
-import androidx.compose.ui.tooling.data.EmptyGroup.name
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.navigationexample.data.dao.ClientDao
 import com.example.navigationexample.data.entity.Client
+import com.example.navigationexample.data.entity.RentalDay
+import com.example.navigationexample.domain.usecase.validation.ValidationFormState
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
@@ -29,11 +39,48 @@ class ClientsRepositoryImpl @Inject constructor(private val clientDao: ClientDao
         return clientDao.getClientByName(name)
     }
 
-    fun getClientByPhone(phone: String): Client {
+    suspend fun getClientByPhone(phone: String): Client {
+        Log.d("tag", "Клиент взят из базы")
         return clientDao.getClientByPhone(phone)
+
     }
 
-    fun updateClientByPhone(client: Client): Int {
+//    fun getClientByPhone(
+//        onStart: () -> Unit,
+//        onCompletion: () -> Unit,
+//        onError: () -> Unit,
+//        phone: String
+//    ) = flow {
+//        var validateFormState = ValidationFormState()
+//        val client = clientDao.getClientByPhone(phone)
+//        if (client == null) {
+//            onError()
+//        } else {
+//            validateFormState = validateFormState.copy(status = client.status)
+//            validateFormState = validateFormState.copy(firstName = client.firstName)
+//            validateFormState = validateFormState.copy(secondName = client.secondName)
+//            validateFormState = validateFormState.copy(lastName = client.lastName)
+//            validateFormState = validateFormState.copy(phone = client.phone)
+//            validateFormState = validateFormState.copy(documentNamber = client.documentNumber)
+//            validateFormState = validateFormState.copy(documentDitails = client.documentDitails)
+//            validateFormState = validateFormState.copy(members = client.members.toString())
+//            validateFormState =
+//                validateFormState.copy(dateInString = LocalDate.ofEpochDay(client.inDate).toString())
+//            validateFormState = validateFormState.copy(dateInLong = client.inDate)
+//            validateFormState =
+//                validateFormState.copy(dateOutString = LocalDate.ofEpochDay(client.outDate).toString())
+//            validateFormState = validateFormState.copy(dateOutLong = client.outDate)
+//            validateFormState = validateFormState.copy(prePayment = client.prepayment.toString())
+//            validateFormState = validateFormState.copy(transferInfo = client.transferInfo)
+//            validateFormState = validateFormState.copy(referer = client.referer)
+//            validateFormState = validateFormState.copy(color = Color(client.clientColor))
+//
+//            emit(validateFormState)
+//        }
+//    }.onStart { onStart() }.onCompletion { onCompletion() }.flowOn(Dispatchers.IO)
+
+
+    fun updateClient(client: Client): Int {
         return clientDao.updateClient(client)
     }
 

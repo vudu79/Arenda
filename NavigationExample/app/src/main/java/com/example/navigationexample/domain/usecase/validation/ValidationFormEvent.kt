@@ -3,6 +3,7 @@ package com.example.navigationexample.domain.usecase.validation
 import androidx.compose.ui.graphics.Color
 
 sealed class ValidationFormEvent {
+    data class StatusChanged(val status: String) : ValidationFormEvent()
     data class FirstNameChanged(val firstName: String) : ValidationFormEvent()
     data class SecondNameChanged(val secondName: String) : ValidationFormEvent()
     data class LastNameChanged(val lastName: String) : ValidationFormEvent()

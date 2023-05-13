@@ -20,7 +20,7 @@ interface ClientDao {
     fun getClientByName(clientName: String): Client
 
     @Query("SELECT * FROM clients WHERE phone = :clientPhone")
-    fun getClientByPhone(clientPhone: String): Client
+    suspend fun getClientByPhone(clientPhone: String): Client
 
     @Query("SELECT * FROM clients")
     fun getAllClients(): LiveData<List<Client>>

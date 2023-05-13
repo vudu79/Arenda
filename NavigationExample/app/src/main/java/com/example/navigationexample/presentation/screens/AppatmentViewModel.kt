@@ -138,6 +138,9 @@ class AppatmentViewModel @Inject constructor(
 
     fun onFormEvent(event: ValidationFormEvent) {
         when (event) {
+            is ValidationFormEvent.StatusChanged -> {
+                validateFormState = validateFormState.copy(status = event.status)
+            }
             is ValidationFormEvent.FirstNameChanged -> {
                 validateFormState = validateFormState.copy(firstName = event.firstName)
             }

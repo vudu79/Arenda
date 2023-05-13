@@ -1,39 +1,31 @@
 package com.example.navigationexample.presentation.screens
 
-import android.util.Log
 import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.navigationexample.data.entity.Appatment
 import com.example.navigationexample.data.entity.Client
-import com.example.navigationexample.data.repository.AppatmentRepositoryImpl
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
-import com.example.navigationexample.data.repository.DaysRepositoryImpl
-import com.example.navigationexample.domain.models.ClientMonk
-import com.example.navigationexample.domain.usecase.GetDayClientMapUseCase
-import com.example.navigationexample.domain.usecase.getAppatmentPlanedDaysUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
-import java.time.LocalDate
 import javax.inject.Inject
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
-import com.example.navigationexample.domain.models.ClientStatus
 import com.example.navigationexample.domain.usecase.validation.*
 import com.example.navigationexample.domain.usecase.validation.validators.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 
 @HiltViewModel
 class ClientViewModel @Inject constructor(
     private val clientRepository: ClientsRepositoryImpl,
-    private val daysRepository: DaysRepositoryImpl,
 
     private val nameValidationField: NameValidation = NameValidation(),
     private val phoneValidationField: PhoneValidation = PhoneValidation(),
@@ -47,28 +39,44 @@ class ClientViewModel @Inject constructor(
 
     var currentApartment = MutableLiveData<Appatment>()
 
-
     var validateFormState by mutableStateOf(ValidationFormState())
+
     private val validationEventChannel = Channel<ValidatAllFieldsResultEvent>()
+
     val validationEvents = validationEventChannel.receiveAsFlow()
 
 
-    init {
-
+    fun getClientState(phone: String) = viewModelScope.launch {
+        val client = clientRepository.getClientByPhone(phone)
+        validateFormState = validateFormState.copy(status = client.status)
+        validateFormState = validateFormState.copy(firstName = client.firstName)
+        validateFormState = validateFormState.copy(secondName = client.secondName)
+        validateFormState = validateFormState.copy(lastName = client.lastName)
+        validateFormState = validateFormState.copy(phone = client.phone)
+        validateFormState = validateFormState.copy(documentNamber = client.documentNumber)
+        validateFormState = validateFormState.copy(documentDitails = client.documentDitails)
+        validateFormState = validateFormState.copy(members = client.members.toString())
+        validateFormState =
+            validateFormState.copy(dateInString = LocalDate.ofEpochDay(client.inDate).toString())
+        validateFormState = validateFormState.copy(dateInLong = client.inDate)
+        validateFormState =
+            validateFormState.copy(dateOutString = LocalDate.ofEpochDay(client.outDate).toString())
+        validateFormState = validateFormState.copy(dateOutLong = client.outDate)
+        validateFormState = validateFormState.copy(prePayment = client.prepayment.toString())
+        validateFormState = validateFormState.copy(transferInfo = client.transferInfo)
+        validateFormState = validateFormState.copy(referer = client.referer)
+        validateFormState = validateFormState.copy(color = Color(client.clientColor))
     }
 
-
-    fun addClient(client: Client) {
-        clientRepository.insertClient(client)
-        daysRepository.insertClientDays(client)
-    }
-
-    fun getClientByPhone(phone: String): Client{
-
+    fun updateClient(client: Client): Int {
+        return clientRepository.updateClient(client = client)
     }
 
     fun onFormEvent(event: ValidationFormEvent) {
         when (event) {
+            is ValidationFormEvent.StatusChanged -> {
+                validateFormState = validateFormState.copy(status = event.status)
+            }
             is ValidationFormEvent.FirstNameChanged -> {
                 validateFormState = validateFormState.copy(firstName = event.firstName)
             }
@@ -135,8 +143,10 @@ class ClientViewModel @Inject constructor(
         val dateOutStringResult = dateStringValidationField.execute(validateFormState.dateOutString)
         val dateInLongResult = dateLongValidationField.execute(validateFormState.dateInLong)
         val dateOutLongResult = dateLongValidationField.execute(validateFormState.dateOutLong)
-        val secondNameResult = validateFormState.secondName?.let { nameValidationField.execute(it, false) }
-        val lastNameResult =validateFormState.lastName?.let { nameValidationField.execute(it, false) }
+        val secondNameResult =
+            validateFormState.secondName?.let { nameValidationField.execute(it, false) }
+        val lastNameResult =
+            validateFormState.lastName?.let { nameValidationField.execute(it, false) }
         val phoneResult = phoneValidationField.execute(validateFormState.phone)
         val documentNumberResult = validateFormState.documentNamber?.let {
             documentNumberValidationField.execute(
@@ -148,7 +158,7 @@ class ClientViewModel @Inject constructor(
                 it, false
             )
         }
-        val membersResult =membersValidationField.execute(validateFormState.members)
+        val membersResult = membersValidationField.execute(validateFormState.members)
         val prePaymentResult = paymentValidationField.execute(validateFormState.prePayment)
         val paymentResult = paymentValidationField.execute(validateFormState.payment)
 
@@ -170,44 +180,44 @@ class ClientViewModel @Inject constructor(
 
         if (hasError) {
             validateFormState = validateFormState.copy(
-             firstNameError=firstNameResult.errorMessage,
-             secondNameError=secondNameResult?.errorMessage,
-             lastNameError=lastNameResult?.errorMessage,
-             phoneError=phoneResult.errorMessage,
-             documentNamberError=documentNumberResult?.errorMessage,
-             documentDitailsError=documentDitailsResult?.errorMessage,
-             membersError=membersResult.errorMessage,
-             dateOutStringError=dateOutStringResult.errorMessage,
-             dateInStringError=dateInStringResult.errorMessage,
-             dateOutLongError=dateOutLongResult.errorMessage,
-             dateInLongError=dateInLongResult.errorMessage,
-             prePaymentError=prePaymentResult.errorMessage,
-             paymentError=paymentResult.errorMessage,
+                firstNameError = firstNameResult.errorMessage,
+                secondNameError = secondNameResult?.errorMessage,
+                lastNameError = lastNameResult?.errorMessage,
+                phoneError = phoneResult.errorMessage,
+                documentNamberError = documentNumberResult?.errorMessage,
+                documentDitailsError = documentDitailsResult?.errorMessage,
+                membersError = membersResult.errorMessage,
+                dateOutStringError = dateOutStringResult.errorMessage,
+                dateInStringError = dateInStringResult.errorMessage,
+                dateOutLongError = dateOutLongResult.errorMessage,
+                dateInLongError = dateInLongResult.errorMessage,
+                prePaymentError = prePaymentResult.errorMessage,
+                paymentError = paymentResult.errorMessage,
             )
             return
         }
         viewModelScope.launch {
 
-            addClient(
-                Client(
-                    status = ClientStatus.waiting,
-                    firstName = validateFormState.firstName.trim(),
-                    secondName = validateFormState.secondName?.trim(),
-                    lastName = validateFormState.lastName?.trim(),
-                    phone = "+7${validateFormState.phone.trim()}",
-                    documentNumber = validateFormState.documentNamber!!.trim(),
-                    documentDitails = validateFormState.documentDitails!!.trim(),
-                    inDate = validateFormState.dateInLong,
-                    outDate = validateFormState.dateOutLong,
-                    members = validateFormState.members.trim().toInt(),
-                    prepayment = validateFormState.prePayment.trim().toInt(),
-                    payment = validateFormState.payment.trim().toInt(),
-                    clientColor = validateFormState.color.toArgb(),
-                    transferInfo = validateFormState.transferInfo,
-                    referer = validateFormState.referer,
-                    appatment_name = currentApartment.value?.name ?: ""
-                )
-            )
+//            updateClient(
+//                Client(
+//                    status = ClientStatus.waiting,
+//                    firstName = validateFormState.firstName.trim(),
+//                    secondName = validateFormState.secondName?.trim(),
+//                    lastName = validateFormState.lastName?.trim(),
+//                    phone = "+7${validateFormState.phone.trim()}",
+//                    documentNumber = validateFormState.documentNamber!!.trim(),
+//                    documentDitails = validateFormState.documentDitails!!.trim(),
+//                    inDate = validateFormState.dateInLong,
+//                    outDate = validateFormState.dateOutLong,
+//                    members = validateFormState.members.trim().toInt(),
+//                    prepayment = validateFormState.prePayment.trim().toInt(),
+//                    payment = validateFormState.payment.trim().toInt(),
+//                    clientColor = validateFormState.color.toArgb(),
+//                    transferInfo = validateFormState.transferInfo,
+//                    referer = validateFormState.referer,
+//                    appatment_name = currentApartment.value?.name ?: ""
+//                )
+//            )
             validationEventChannel.send(ValidatAllFieldsResultEvent.Success)
         }
     }

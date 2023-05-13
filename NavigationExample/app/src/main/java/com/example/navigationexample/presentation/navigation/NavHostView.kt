@@ -7,22 +7,23 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.navigationexample.presentation.navigation.batton_navigation.AppatmentFinanceScreen
-import com.example.navigationexample.presentation.navigation.batton_navigation.BottomNavItems
 import com.example.navigationexample.presentation.screens.*
 
 
 @Composable
-fun NavHostView(viewModel: AppatmentViewModel) {
+fun NavHostView(viewModelAppatment: AppatmentViewModel,
+                viewModelClient: ClientViewModel,
+) {
     val mainNavController = rememberNavController()
     NavHost(navController = mainNavController, startDestination = Routs.home) {
         composable(Routs.home) {
-            MainScreen(mainNavController, viewModel)
+            MainScreen(mainNavController, viewModelAppatment)
         }
 
         composable(Routs.addAppatmentScreen) {
             AddAppatmentScreen(
                 navController = mainNavController,
-                viewModel,
+                viewModelAppatment,
                 onHome = { mainNavController.navigate(Routs.home) })
 
         }
@@ -38,7 +39,7 @@ fun NavHostView(viewModel: AppatmentViewModel) {
         ) { navBackStackEntry ->
             val appatment_name = navBackStackEntry.arguments?.getString("appatment_name")
             appatment_name?.let {
-                AppatmentFinanceScreen(mainNavController, viewModel, appatment_name)
+                AppatmentFinanceScreen(mainNavController, viewModelAppatment, appatment_name)
             }
         }
 
@@ -53,7 +54,7 @@ fun NavHostView(viewModel: AppatmentViewModel) {
         ) { navBackStackEntry ->
             val appatment_name = navBackStackEntry.arguments?.getString("appatment_name")
             appatment_name?.let {
-                AddClientScreen(mainNavController, viewModel, appatment_name)
+                AddClientScreen(mainNavController, viewModelAppatment, appatment_name)
             }
         }
 
@@ -68,7 +69,7 @@ fun NavHostView(viewModel: AppatmentViewModel) {
         ) { navBackStackEntry ->
             val appatment_name = navBackStackEntry.arguments?.getString("appatment_name")
             appatment_name?.let {
-                SetDatePeriodScreen(mainNavController, viewModel, appatment_name)
+                SetDatePeriodScreen(mainNavController, viewModelAppatment, appatment_name)
             }
         }
 
@@ -81,7 +82,7 @@ fun NavHostView(viewModel: AppatmentViewModel) {
                 val clientPhone = client
                 ClientDitailsScreen(
                     mainNavController = mainNavController,
-                    viewModel = viewModel,
+                    viewModel = viewModelClient,
                     clientPhone = clientPhone
                 )
             }

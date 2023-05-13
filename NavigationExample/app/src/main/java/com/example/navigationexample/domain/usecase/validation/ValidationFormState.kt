@@ -2,8 +2,10 @@ package com.example.navigationexample.domain.usecase.validation
 
 import androidx.compose.ui.graphics.Color
 import com.example.navigationexample.constants.Constans
+import com.example.navigationexample.domain.models.ClientStatus
 
 data class ValidationFormState(
+    var status: String = ClientStatus.waiting,
     var firstName: String = "",
     var firstNameError: String? = null,
     var secondName: String? = "",

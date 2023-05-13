@@ -19,13 +19,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.navigationexample.presentation.navigation.NavHostView
 import com.example.navigationexample.presentation.screens.AppatmentViewModel
+import com.example.navigationexample.presentation.screens.ClientViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.security.AccessController.getContext
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel: AppatmentViewModel by viewModels()
+    private val viewModelAppat: AppatmentViewModel by viewModels()
+    private val viewModelClient: ClientViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +44,10 @@ class MainActivity : ComponentActivity() {
 //                    )
 //                )
 //            }
-            NavHostView(viewModel)
+            NavHostView(
+                viewModelAppat,
+                viewModelClient
+            )
         }
     }
 }

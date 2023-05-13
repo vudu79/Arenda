@@ -132,7 +132,7 @@ class DaysRepositoryImpl @Inject constructor(
             rentalDaysList.forEach {
                 val localDay = LocalDate.ofEpochDay(it.epochDay)
                 Log.d("myTag", "День  - $localDay")
-                val client = clientsRepositoryImpl.getClient(it.clientName)
+                val client = clientsRepositoryImpl.getClientByName(it.clientName)
                 val clientMonk = ClientMonk(
                     client,
                     it.appatmentName,
