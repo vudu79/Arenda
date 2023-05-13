@@ -3,13 +3,14 @@ package com.example.navigationexample.data.entity
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.navigationexample.domain.models.ClientStatus
 
 
-@Entity(tableName = "clients")
+@Entity(tableName = "clients", indices = [Index(value = ["phone"],
+    unique = true)])
 class Client {
-
     @PrimaryKey(autoGenerate = true)
     @NonNull
     @ColumnInfo(name = "clientId")

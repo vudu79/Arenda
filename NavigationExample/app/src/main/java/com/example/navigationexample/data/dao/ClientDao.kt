@@ -1,16 +1,13 @@
 package com.example.navigationexample.data.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.example.navigationexample.data.entity.Client
 
 
 @Dao
 interface ClientDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertClient(client: Client)
 
     @Query("DELETE FROM clients WHERE first_name = :name")

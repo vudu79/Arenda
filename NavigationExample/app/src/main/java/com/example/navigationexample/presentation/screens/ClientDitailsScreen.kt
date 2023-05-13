@@ -152,13 +152,13 @@ fun ClientDitailsScreen(
                     horizontalAlignment = Alignment.Start,
                     modifier = Modifier
                         .fillMaxWidth(0.70f)
-
                         .height(fieldStatusHeight.value.dp)
-                        .border(width = 2.dp, color = Color(223, 75, 0))
+                        .border(width = 1.dp, color = Color(223, 75, 0), shape = RoundedCornerShape(5.dp))
                         .background(Color(red = 41, 41, blue = 41)),
                 ) {
 
                     Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color(red = 41, green = 41, blue = 41))
@@ -166,11 +166,9 @@ fun ClientDitailsScreen(
                     ) {
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxWidth(0.85f)
                                 .height(50.dp)
                                 .background(Color(red = 41, green = 41, blue = 41))
-                                .heightIn(min = 60.dp, max = 200.dp)
-
 
                         ) {
                             Text(
@@ -178,31 +176,29 @@ fun ClientDitailsScreen(
                                 maxLines = 1,
                                 modifier = Modifier
                                     .align(Alignment.CenterStart)
-                                    .background(Color(1, 1, 1))
+                                    .background(Color(41, 41, 41))
                                     .padding(start = 5.dp),
 
                                 fontSize = 18.sp,
                                 color = Color(254, 253, 253, 255)
                             )
-
-                            IconButton(
-                                modifier = Modifier
-                                    .align(Alignment.BottomEnd)
-                                    .padding(start = 10.dp, end = 10.dp),
-                                onClick = {
-                                    isStatusEditActive.value = !isStatusEditActive.value
-                                }
-                            )
-                            {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.baseline_edit_24),
-                                    contentDescription = "Редактировать",
-
-                                    modifier = Modifier.size(30.dp),
-                                    tint = Color(223, 75, 0)
-                                )
+                        }
+                        IconButton(
+                            modifier = Modifier
+//                                    .align(Alignment.BottomEnd)
+                                .padding(start = 10.dp, end = 10.dp),
+                            onClick = {
+                                isStatusEditActive.value = !isStatusEditActive.value
                             }
+                        )
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_edit_24),
+                                contentDescription = "Редактировать",
 
+                                modifier = Modifier.size(30.dp),
+                                tint = Color(223, 75, 0)
+                            )
                         }
                     }
 
@@ -247,8 +243,6 @@ fun ClientDitailsScreen(
 
 
 //        Имя+++++++++++++++++++++++++++++++++++++++++++++++
-
-
         item {
             Card(
                 modifier = Modifier
@@ -266,50 +260,48 @@ fun ClientDitailsScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.70f)
                         .height(fieldFirstNameHeight.value.dp)
-                        .border(width = 2.dp, color = Color(223, 75, 0))
+                        .border(width = 1.dp, color = Color(223, 75, 0), shape = RoundedCornerShape(5.dp))
                         .background(Color(red = 41, 41, blue = 41)),
                 ) {
 
                     Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color(red = 41, green = 41, blue = 41))
                     ) {
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxWidth(0.85f)
                                 .height(50.dp)
                                 .background(Color(red = 41, green = 41, blue = 41))
-                                .heightIn(min = 60.dp, max = 200.dp)
                         ) {
                             Text(
                                 text = state.firstName,
                                 maxLines = 1,
                                 modifier = Modifier
                                     .align(Alignment.CenterStart)
-                                    .background(Color(1, 1, 1))
+                                    .background(Color(41, 41, 41))
                                     .padding(start = 5.dp),
 
                                 fontSize = 18.sp,
                                 color = Color(254, 253, 253, 255)
                             )
-
-                            IconButton(
-                                modifier = Modifier.align(Alignment.BottomEnd),
-                                onClick = {
-                                    isFirstNameEditActive.value = !isFirstNameEditActive.value
-                                }
-                            )
-                            {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.baseline_edit_24),
-                                    contentDescription = "Редактировать",
-
-                                    modifier = Modifier.size(30.dp),
-                                    tint = Color(223, 75, 0)
-                                )
+                        }
+                        IconButton(
+//                            modifier = Modifier.align(Alignment.BottomEnd),
+                            onClick = {
+                                isFirstNameEditActive.value = !isFirstNameEditActive.value
                             }
+                        )
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_edit_24),
+                                contentDescription = "Редактировать",
 
+                                modifier = Modifier.size(30.dp),
+                                tint = Color(223, 75, 0)
+                            )
                         }
                     }
 
@@ -376,20 +368,20 @@ fun ClientDitailsScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.70f)
                         .height(fieldSecondNameHeight.value.dp)
-                        .border(width = 2.dp, color = Color(223, 75, 0))
+                        .border(width = 1.dp, color = Color(223, 75, 0), shape = RoundedCornerShape(5.dp))
                         .background(Color(red = 41, 41, blue = 41)),
                 ) {
                     Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color(red = 41, green = 41, blue = 41))
                     ) {
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxWidth(0.85f)
                                 .height(50.dp)
                                 .background(Color(red = 41, green = 41, blue = 41))
-                                .heightIn(min = 60.dp, max = 200.dp)
                         ) {
                             Text(
                                 text = state.secondName ?: "не установлено",
@@ -401,8 +393,8 @@ fun ClientDitailsScreen(
                                 fontSize = 18.sp,
                                 color = Color(254, 253, 253, 255)
                             )
+                        }
                             IconButton(
-                                modifier = Modifier.align(Alignment.BottomEnd),
                                 onClick = {
                                     isSecondNameEditActive.value = !isSecondNameEditActive.value
                                 }
@@ -415,7 +407,7 @@ fun ClientDitailsScreen(
                                     tint = Color(223, 75, 0)
                                 )
                             }
-                        }
+
                     }
                     Spacer(modifier = Modifier.padding(2.dp))
                     if (isSecondNameEditActive.value) {
@@ -480,21 +472,21 @@ fun ClientDitailsScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.70f)
                         .height(fieldLastNameHeight.value.dp)
-                        .border(width = 2.dp, color = Color(223, 75, 0))
+                        .border(width = 1.dp, color = Color(223, 75, 0), shape = RoundedCornerShape(5.dp))
                         .background(Color(red = 41, 41, blue = 41)),
                 ) {
 
                     Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color(red = 41, green = 41, blue = 41))
                     ) {
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxWidth(0.85f)
                                 .height(50.dp)
                                 .background(Color(red = 41, green = 41, blue = 41))
-                                .heightIn(min = 60.dp, max = 200.dp)
                         ) {
                             Text(
                                 text = state.lastName ?: "не установлено",
@@ -506,9 +498,8 @@ fun ClientDitailsScreen(
                                 fontSize = 18.sp,
                                 color = Color(254, 253, 253, 255)
                             )
-
+                        }
                             IconButton(
-                                modifier = Modifier.align(Alignment.BottomEnd),
                                 onClick = {
                                     isLastNameEditActive.value = !isLastNameEditActive.value
                                 }
@@ -521,7 +512,6 @@ fun ClientDitailsScreen(
                                     tint = Color(223, 75, 0)
                                 )
                             }
-                        }
                     }
                     Spacer(modifier = Modifier.padding(2.dp))
                     if (isLastNameEditActive.value) {
@@ -586,21 +576,21 @@ fun ClientDitailsScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.70f)
                         .height(fieldPhoneHeight.value.dp)
-                        .border(width = 2.dp, color = Color(223, 75, 0))
+                        .border(width = 1.dp, color = Color(223, 75, 0), shape = RoundedCornerShape(5.dp))
                         .background(Color(red = 41, 41, blue = 41)),
                 ) {
 
                     Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color(red = 41, green = 41, blue = 41))
                     ) {
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxWidth(0.85f)
                                 .height(50.dp)
                                 .background(Color(red = 41, green = 41, blue = 41))
-                                .heightIn(min = 60.dp, max = 200.dp)
                         ) {
                             Text(
                                 text = state.phone,
@@ -612,9 +602,8 @@ fun ClientDitailsScreen(
                                 fontSize = 18.sp,
                                 color = Color(254, 253, 253, 255)
                             )
-
+                        }
                             IconButton(
-                                modifier = Modifier.align(Alignment.BottomEnd),
                                 onClick = {
                                     isPhoneEditActive.value = !isPhoneEditActive.value
                                 }
@@ -627,7 +616,6 @@ fun ClientDitailsScreen(
                                     tint = Color(223, 75, 0)
                                 )
                             }
-                        }
                     }
                     Spacer(modifier = Modifier.padding(2.dp))
                     if (isPhoneEditActive.value) {
@@ -666,21 +654,21 @@ fun ClientDitailsScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.70f)
                         .height(fieldDocumentNamberHeight.value.dp)
-                        .border(width = 2.dp, color = Color(223, 75, 0))
+                        .border(width = 1.dp, color = Color(223, 75, 0), shape = RoundedCornerShape(5.dp))
                         .background(Color(red = 41, 41, blue = 41)),
                 ) {
 
                     Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color(red = 41, green = 41, blue = 41))
                     ) {
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxWidth(0.85f)
                                 .height(50.dp)
                                 .background(Color(red = 41, green = 41, blue = 41))
-                                .heightIn(min = 60.dp, max = 200.dp)
                         ) {
                             Text(
                                 text = state.documentNamber ?: "не установлено",
@@ -692,9 +680,8 @@ fun ClientDitailsScreen(
                                 fontSize = 18.sp,
                                 color = Color(254, 253, 253, 255)
                             )
-
+                        }
                             IconButton(
-                                modifier = Modifier.align(Alignment.BottomEnd),
                                 onClick = {
                                     isDocumentNamberEditActive.value =
                                         !isDocumentNamberEditActive.value
@@ -708,7 +695,6 @@ fun ClientDitailsScreen(
                                     tint = Color(223, 75, 0)
                                 )
                             }
-                        }
                     }
                     Spacer(modifier = Modifier.padding(2.dp))
                     if (isDocumentNamberEditActive.value) {
@@ -748,7 +734,7 @@ fun ClientDitailsScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.70f)
                         .height(fieldDocumentDitailsHeight.value.dp)
-                        .border(width = 2.dp, color = Color(223, 75, 0))
+                        .border(width = 1.dp, color = Color(223, 75, 0), shape = RoundedCornerShape(5.dp))
                         .background(Color(red = 41, 41, blue = 41)),
                 ) {
 
@@ -875,21 +861,21 @@ fun ClientDitailsScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.70f)
                         .height(fieldMembersHeight.value.dp)
-                        .border(width = 2.dp, color = Color(223, 75, 0))
+                        .border(width = 1.dp, color = Color(223, 75, 0), shape = RoundedCornerShape(5.dp))
                         .background(Color(red = 41, 41, blue = 41)),
                 ) {
 
                     Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color(red = 41, green = 41, blue = 41))
                     ) {
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxWidth(0.85f)
                                 .height(50.dp)
                                 .background(Color(red = 41, green = 41, blue = 41))
-                                .heightIn(min = 60.dp, max = 200.dp)
                         ) {
                             Text(
                                 text = state.members,
@@ -901,9 +887,8 @@ fun ClientDitailsScreen(
                                 fontSize = 18.sp,
                                 color = Color(254, 253, 253, 255)
                             )
-
+                        }
                             IconButton(
-                                modifier = Modifier.align(Alignment.BottomEnd),
                                 onClick = {
                                     isMembersEditActive.value = !isMembersEditActive.value
                                 }
@@ -916,7 +901,6 @@ fun ClientDitailsScreen(
                                     tint = Color(223, 75, 0)
                                 )
                             }
-                        }
                     }
                     Spacer(modifier = Modifier.padding(2.dp))
                     if (isMembersEditActive.value) {

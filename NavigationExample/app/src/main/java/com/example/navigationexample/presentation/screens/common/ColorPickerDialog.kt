@@ -38,7 +38,7 @@ fun ColourButton(colors: List<Color>, onColorSelected: (Color) -> Unit, currentl
 //                MaterialTheme.colorScheme.onBackground.copy(alpha = 0.99f),
 //                RoundedCornerShape(5)
 //            )
-            .border(width = 2.dp, color = Color(223, 75, 0))
+            .border(width = 1.dp, color = Color(223, 75, 0))
             .clickable {
                 colorPickerOpen = true
             }
@@ -48,7 +48,7 @@ fun ColourButton(colors: List<Color>, onColorSelected: (Color) -> Unit, currentl
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(10.dp)
                 .background(Color(41, green = 41, blue = 41))
 
                 ,
@@ -57,6 +57,7 @@ fun ColourButton(colors: List<Color>, onColorSelected: (Color) -> Unit, currentl
         ) {
             Text(
                 text = "Цвет для календаря",
+                color= Color.White
             )
 
             Canvas(
