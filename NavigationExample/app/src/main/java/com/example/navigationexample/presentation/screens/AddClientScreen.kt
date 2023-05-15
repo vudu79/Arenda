@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -74,511 +75,588 @@ fun AddClientScreen(
         }
     }
 
-
-
-    Box(
-        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(41, 41, 41))
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(41, 41, 41))
+        Box(
+            modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomCenter
         ) {
-
-            Column(
+            LazyColumn(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(30.dp))
-                    .padding(10.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                    .background(Color(41, 41, 41))
             ) {
-                Text(
-                    text = "Регистрация клиента",
-                    modifier = Modifier.padding(top = 1.dp, bottom = 1.dp),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(223, 75, 0).copy(alpha = 0.9f)
-                )
-                Text(
-                    text = "объект: \"${viewModel.currentApartment.value?.name ?: ""}\" | срок: " +
-                            (viewModel.currentApartment.value?.rentalPeriod ?: ""),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 1.dp, bottom = 1.dp),
-                    color = Color(223, 75, 0).copy(alpha = 0.9f)
 
-                )
-            }
-
-
-
-//   Статус клиента
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(0.99f)
-                    .padding(top = 20.dp, bottom = 5.dp, start = 5.dp, end = 5.dp)
-                    .background(
-                        Color(142, 143, 138)
-                    ),
-//                            .wrapContentSize(Alignment.Center),
-                contentAlignment = Alignment.BottomStart
-            ) {
-                Text(
-                    text = "Статус клиента - ${items[selectedIndex.value]}",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterStart)
-                        .padding(start = 10.dp, top=15.dp, bottom = 15.dp)
-                        .clickable(onClick = { expanded.value = true }),
-                    fontSize = 16.sp,
-                    color = Black,
-                )
-                DropdownMenu(
-                    expanded = expanded.value,
-                    onDismissRequest = { expanded.value = false },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            Color.Transparent
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(30.dp))
+                            .padding(10.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "Регистрация клиента",
+                            modifier = Modifier.padding(top = 1.dp, bottom = 1.dp),
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(223, 75, 0).copy(alpha = 0.9f)
                         )
-                ) {
-                    items.forEachIndexed { index, s ->
-                        DropdownMenuItem(onClick = {
-                            selectedIndex.value = index
-                            expanded.value = false
-                            viewModel.onFormEvent(ValidationFormEvent.StatusChanged(s))
-                        }) {
-                            val disabledText = if (s == disabledValue) {
-                                " (Disabled)"
-                            } else {
-                                ""
+                        Text(
+                            text = "объект: \"${viewModel.currentApartment.value?.name ?: ""}\" | срок: " +
+                                    (viewModel.currentApartment.value?.rentalPeriod ?: ""),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(top = 1.dp, bottom = 1.dp),
+                            color = Color(223, 75, 0).copy(alpha = 0.9f)
+
+                        )
+                    }
+                }
+
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(0.99f)
+                            .padding(top = 20.dp, bottom = 5.dp, start = 5.dp, end = 5.dp)
+                            .background(
+                                Color(142, 143, 138)
+                            ),
+//                            .wrapContentSize(Alignment.Center),
+                        contentAlignment = Alignment.BottomStart
+                    ) {
+                        Text(
+                            text = "Статус клиента - ${items[selectedIndex.value]}",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.CenterStart)
+                                .padding(start = 10.dp, top = 15.dp, bottom = 15.dp)
+                                .clickable(onClick = { expanded.value = true }),
+                            fontSize = 16.sp,
+                            color = Black,
+                        )
+                        DropdownMenu(
+                            expanded = expanded.value,
+                            onDismissRequest = { expanded.value = false },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    Color.Transparent
+                                )
+                        ) {
+                            items.forEachIndexed { index, s ->
+                                DropdownMenuItem(onClick = {
+                                    selectedIndex.value = index
+                                    expanded.value = false
+                                    viewModel.onFormEvent(ValidationFormEvent.StatusChanged(s))
+                                }) {
+                                    val disabledText = if (s == disabledValue) {
+                                        " (Disabled)"
+                                    } else {
+                                        ""
+                                    }
+                                    Text(text = s + disabledText)
+                                }
                             }
-                            Text(text = s + disabledText)
+                        }
+                    }
+                }
+
+//Имя клиента
+                item {
+                    OutlinedTextField(
+                        value = state.firstName,
+                        onValueChange = {
+                            viewModel.onFormEvent(ValidationFormEvent.FirstNameChanged(it))
+                        },
+                        placeholder = { Text(text = "Имя", color = Black) },
+                        isError = state.firstNameError != null,
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black,
+                            textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Text,
+                            capitalization = KeyboardCapitalization.None,
+                            autoCorrect = true,
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
+                    )
+                    if (state.firstNameError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.firstNameError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                }
+
+
+                item {
+                    state.secondName?.let {
+                        OutlinedTextField(
+                            value = it,
+                            onValueChange = {
+                                viewModel.onFormEvent(ValidationFormEvent.SecondNameChanged(it))
+                            },
+
+                            placeholder = { Text(text = "Отчество", color = Black) },
+                            isError = state.secondNameError != null,
+                            singleLine = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                unfocusedBorderColor = Black,
+                                textColor = Black,
+                                backgroundColor = Color(142, 143, 138)
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text
+                            ),
+                            keyboardActions = KeyboardActions(onNext = {
+                                focusManager.moveFocus(FocusDirection.Down)
+                            }),
+                        )
+                    }
+                    if (state.secondNameError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.secondNameError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                    state.lastName?.let {
+                        OutlinedTextField(
+                            value = it,
+                            onValueChange = {
+                                viewModel.onFormEvent(ValidationFormEvent.LastNameChanged(it))
+                            },
+                            placeholder = { Text(text = "Фамилия", color = Black) },
+                            isError = state.lastNameError != null,
+                            singleLine = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                unfocusedBorderColor = Black,
+                                textColor = Black,
+                                backgroundColor = Color(142, 143, 138)
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text
+                            ),
+                            keyboardActions = KeyboardActions(onNext = {
+                                focusManager.moveFocus(FocusDirection.Down)
+                            }),
+                        )
+                    }
+                    if (state.lastNameError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.lastNameError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                }
+
+                item {
+                    PhoneField(
+                        state.phone,
+                        placeHolder = "Контактный телефон",
+                        mask = "+7(000)-000-00-00",
+                        maskNumber = '0',
+                        onPhoneChanged = {
+                            viewModel.onFormEvent(ValidationFormEvent.PhoneChanged(it))
+
+                        },
+                        errorMessage = state.phoneError,
+                        modifier = Modifier.align(Alignment.BottomStart)
+                    )
+                }
+
+                item {
+                    state.documentNamber?.let {
+                        PhoneField(
+                            value = it,
+                            placeHolder = "Паспорт: серия и номер",
+                            mask = "0000-000000",
+                            maskNumber = '0',
+                            onPhoneChanged = { phone ->
+                                viewModel.onFormEvent(
+                                    ValidationFormEvent.DocumentNamberChanged(
+                                        phone
+                                    )
+                                )
+                            },
+                            errorMessage = state.documentNamberError,
+                            modifier = Modifier.align(Alignment.BottomStart)
+                        )
+                    }
+                }
+
+                item {
+                    state.documentDitails?.let {
+                        OutlinedTextField(
+                            value = it,
+                            onValueChange = {
+                                viewModel.onFormEvent(ValidationFormEvent.DocumentDitailsChanged(it))
+                            },
+                            placeholder = {
+                                Text(
+                                    text = "Паспорт - когда, кем выдан",
+                                    color = Black
+                                )
+                            },
+                            isError = state.documentDitailsError != null,
+                            singleLine = false,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                unfocusedBorderColor = Black,
+                                textColor = Black,
+                                backgroundColor = Color(142, 143, 138)
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Phone
+                            ),
+                            keyboardActions = KeyboardActions(onNext = {
+                                focusManager.moveFocus(FocusDirection.Down)
+                            }),
+                            maxLines = 4
+                        )
+                    }
+                    if (state.documentDitailsError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.documentDitailsError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                }
+
+
+                item {
+                    ColourButton(
+                        Constans.ClientColorsList.clientColorsList, onColorSelected = {
+                            viewModel.onFormEvent(ValidationFormEvent.ColorChanged(it))
+                        }, state.color
+                    )
+                }
+
+
+                item {
+                    OutlinedTextField(
+                        value = state.members,
+                        onValueChange = {
+                            viewModel.onFormEvent(ValidationFormEvent.MembersChanged(it))
+                        },
+                        placeholder = { Text(text = "Количество человек", color = Black) },
+                        isError = state.membersError != null,
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black,
+                            textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
+                    )
+                    if (state.membersError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.membersError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                }
+
+
+                item {
+                    OutlinedTextField(
+                        value = "c ${state.dateInString} по ${state.dateOutString} ",
+                        onValueChange = {
+                            viewModel.onFormEvent(ValidationFormEvent.InLongDateChanged(viewModel.dateInLong))
+                            viewModel.onFormEvent(ValidationFormEvent.InStringDateChanged(viewModel.dateInString))
+                            viewModel.onFormEvent(ValidationFormEvent.OutLongDateChanged(viewModel.dateOutLong))
+                            viewModel.onFormEvent(ValidationFormEvent.OutStringDateChanged(viewModel.dateOutString))
+                        },
+                        placeholder = { Text(text = "Период проживания", color = Black) },
+                        isError = (state.dateInStringError != null || state.dateOutStringError != null || state.dateInLongError != null || state.dateOutLongError != null),
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp)
+                            .clickable {
+                                navController.navigate(
+                                    route =
+                                    "${Routs.setClientPeriod}?appatment_name=$appatmentName"
+                                )
+//                                viewModel.showDatePickerDialog(context, "in")
+
+                            },
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                        ),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            disabledTextColor = Black,
+                            unfocusedBorderColor = Black, textColor = Black,
+                            backgroundColor = Color(142, 143, 138),
+
+                            ),
+                        enabled = false,
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
+                    )
+                    if (state.dateInStringError != null || state.dateOutStringError != null || state.dateInLongError != null || state.dateOutLongError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.dateInStringError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                }
+
+
+                item {
+                    OutlinedTextField(
+                        value = state.prePayment,
+                        onValueChange = {
+                            viewModel.onFormEvent(ValidationFormEvent.PrepaymentChanged(it))
+                        },
+
+                        placeholder = { Text(text = "Внесенный залог", color = Black) },
+                        isError = state.prePaymentError != null,
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                        ),
+
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black,
+                            textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
+                    )
+
+                    if (state.prePaymentError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.prePaymentError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                }
+
+
+                item {
+                    OutlinedTextField(
+                        value = state.payment,
+                        onValueChange = {
+                            viewModel.onFormEvent(ValidationFormEvent.PaymentChanged(it))
+                        },
+
+                        placeholder = { Text(text = "Стоимость суток", color = Black) },
+                        isError = state.paymentError != null,
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black,
+                            textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
+                    )
+
+                    if (state.paymentError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.paymentError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                }
+
+
+                item {
+                    state.transferInfo?.let {
+                        OutlinedTextField(
+                            value = it,
+                            onValueChange = {
+                                viewModel.onFormEvent(ValidationFormEvent.transferInfoChanged(it))
+                            },
+
+                            placeholder = { Text(text = "Сведения для трансфера", color = Black) },
+                            singleLine = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                unfocusedBorderColor = Black,
+                                textColor = Black,
+                                backgroundColor = Color(142, 143, 138)
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text
+                            ),
+                            keyboardActions = KeyboardActions(onNext = {
+                                focusManager.moveFocus(FocusDirection.Down)
+                            }),
+                        )
+                    }
+                }
+
+
+                item {
+                    state.referer?.let {
+                        OutlinedTextField(
+                            value = it,
+                            onValueChange = {
+                                viewModel.onFormEvent(ValidationFormEvent.refererChanged(it))
+                            },
+                            placeholder = { Text(text = "Рекламный ресурс", color = Black) },
+                            singleLine = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                unfocusedBorderColor = Black,
+                                textColor = Black,
+                                backgroundColor = Color(142, 143, 138)
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text
+                            ),
+                            keyboardActions = KeyboardActions(onNext = {
+                                focusManager.moveFocus(FocusDirection.Down)
+                            }),
+                        )
+                    }
+                }
+
+
+                item{
+                    Spacer(modifier = Modifier.padding(10.dp))
+
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentSize(Alignment.Center),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            IconButton(modifier = Modifier.padding(end = 80.dp),
+                                onClick = {
+                                    viewModel.getAppatmentClients(appatmentName)
+                                    navController.navigate(Routs.addClientScreen)
+                                })
+                            {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.baseline_arrow_back_24),
+                                    contentDescription = "Назад",
+
+                                    modifier = Modifier.size(55.dp),
+                                    tint = Color(223, 75, 0)
+                                )
+                            }
+                            IconButton(
+                                onClick = {
+                                    viewModel.onFormEvent(ValidationFormEvent.onSubmit)
+                                }
+                            )
+                            {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.baseline_check_24),
+                                    contentDescription = "Добавить объект недвижимости",
+
+                                    modifier = Modifier.size(55.dp),
+                                    tint = Color(223, 75, 0)
+                                )
+                            }
                         }
                     }
                 }
             }
-
-//Имя клиента
-            OutlinedTextField(
-                value = state.firstName,
-                onValueChange = {
-                    viewModel.onFormEvent(ValidationFormEvent.FirstNameChanged(it))
-                },
-                placeholder = { Text(text = "Имя", color = Black) },
-                isError = state.firstNameError != null,
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    unfocusedBorderColor = Black,
-                    textColor = Black,
-                    backgroundColor = Color(142, 143, 138)
-                ),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next, keyboardType = KeyboardType.Text,
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = true,
-                ),
-                keyboardActions = KeyboardActions(onNext = {
-                    focusManager.moveFocus(FocusDirection.Down)
-                }),
-            )
-            if (state.firstNameError != null) {
-                Text(
-                    text = state.firstNameError!!,
-                    color = MaterialTheme.colors.error,
-                    modifier = Modifier.align(Alignment.Start)
-                )
-            }
-
-            state.secondName?.let {
-                OutlinedTextField(
-                    value = it,
-                    onValueChange = {
-                        viewModel.onFormEvent(ValidationFormEvent.SecondNameChanged(it))
-                    },
-
-                    placeholder = { Text(text = "Отчество", color = Black) },
-                    isError = state.secondNameError != null,
-                    singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        unfocusedBorderColor = Black,
-                        textColor = Black,
-                        backgroundColor = Color(142, 143, 138)
-                    ),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next, keyboardType = KeyboardType.Text
-                    ),
-                    keyboardActions = KeyboardActions(onNext = {
-                        focusManager.moveFocus(FocusDirection.Down)
-                    }),
-                )
-            }
-            if (state.secondNameError != null) {
-                Text(
-                    text = state.secondNameError!!,
-                    color = MaterialTheme.colors.error,
-                    modifier = Modifier.align(Alignment.Start)
-                )
-            }
-
-            state.lastName?.let {
-                OutlinedTextField(
-                    value = it,
-                    onValueChange = {
-                        viewModel.onFormEvent(ValidationFormEvent.LastNameChanged(it))
-                    },
-                    placeholder = { Text(text = "Фамилия", color = Black) },
-                    isError = state.lastNameError != null,
-                    singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        unfocusedBorderColor = Black,
-                        textColor = Black,
-                        backgroundColor = Color(142, 143, 138)
-                    ),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next, keyboardType = KeyboardType.Text
-                    ),
-                    keyboardActions = KeyboardActions(onNext = {
-                        focusManager.moveFocus(FocusDirection.Down)
-                    }),
-                )
-            }
-            if (state.lastNameError != null) {
-                Text(
-                    text = state.lastNameError!!,
-                    color = MaterialTheme.colors.error,
-                    modifier = Modifier.align(Alignment.Start)
-                )
-            }
-
-            PhoneField(
-                state.phone,
-                placeHolder = "Контактный телефон",
-                mask = "+7(000)-000-00-00",
-                maskNumber = '0',
-                onPhoneChanged = {
-                    viewModel.onFormEvent(ValidationFormEvent.PhoneChanged(it))
-
-                },
-                errorMessage = state.phoneError,
-                modifier = Modifier.align(Alignment.Start)
-            )
-
-            state.documentNamber?.let {
-                PhoneField(
-                    value = it,
-                    placeHolder = "Паспорт: серия и номер",
-                    mask = "0000-000000",
-                    maskNumber = '0',
-                    onPhoneChanged = { phone ->
-                        viewModel.onFormEvent(
-                            ValidationFormEvent.DocumentNamberChanged(
-                                phone
-                            )
-                        )
-                    },
-                    errorMessage = state.documentNamberError,
-                    modifier = Modifier.align(Alignment.Start)
-                )
-            }
-
-            state.documentDitails?.let {
-                OutlinedTextField(
-                    value = it,
-                    onValueChange = {
-                        viewModel.onFormEvent(ValidationFormEvent.DocumentDitailsChanged(it))
-                    },
-                    placeholder = {
-                        Text(
-                            text = "Паспорт - когда, кем выдан",
-                            color = Black
-                        )
-                    },
-                    isError = state.documentDitailsError != null,
-                    singleLine = false,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        unfocusedBorderColor = Black,
-                        textColor = Black,
-                        backgroundColor = Color(142, 143, 138)
-                    ),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next, keyboardType = KeyboardType.Phone
-                    ),
-                    keyboardActions = KeyboardActions(onNext = {
-                        focusManager.moveFocus(FocusDirection.Down)
-                    }),
-                    maxLines = 4
-                )
-            }
-
-            if (state.documentDitailsError != null) {
-                Text(
-                    text = state.documentDitailsError!!,
-                    color = MaterialTheme.colors.error,
-                    modifier = Modifier.align(Alignment.Start)
-                )
-            }
-
-            ColourButton(
-                Constans.ClientColorsList.clientColorsList, onColorSelected = {
-                    viewModel.onFormEvent(ValidationFormEvent.ColorChanged(it))
-                }, state.color
-            )
-
-            OutlinedTextField(
-                value = state.members,
-                onValueChange = {
-                    viewModel.onFormEvent(ValidationFormEvent.MembersChanged(it))
-                },
-                placeholder = { Text(text = "Количество человек", color = Black) },
-                isError = state.membersError != null,
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    unfocusedBorderColor = Black,
-                    textColor = Black,
-                    backgroundColor = Color(142, 143, 138)
-                ),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
-                ),
-                keyboardActions = KeyboardActions(onNext = {
-                    focusManager.moveFocus(FocusDirection.Down)
-                }),
-            )
-            if (state.membersError != null) {
-                Text(
-                    text = state.membersError!!,
-                    color = MaterialTheme.colors.error,
-                    modifier = Modifier.align(Alignment.Start)
-                )
-            }
-
-            OutlinedTextField(
-                value = "c ${state.dateInString} по ${state.dateOutString} ",
-                onValueChange = {
-                    viewModel.onFormEvent(ValidationFormEvent.InLongDateChanged(viewModel.dateInLong))
-                    viewModel.onFormEvent(ValidationFormEvent.InStringDateChanged(viewModel.dateInString))
-                    viewModel.onFormEvent(ValidationFormEvent.OutLongDateChanged(viewModel.dateOutLong))
-                    viewModel.onFormEvent(ValidationFormEvent.OutStringDateChanged(viewModel.dateOutString))
-                },
-                placeholder = { Text(text = "Период проживания", color = Black) },
-                isError = (state.dateInStringError != null || state.dateOutStringError != null || state.dateInLongError != null || state.dateOutLongError != null),
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 5.dp, start = 5.dp, end = 5.dp)
-                    .clickable {
-                        navController.navigate(
-                            route =
-                            "${Routs.setClientPeriod}?appatment_name=$appatmentName"
-                        )
-//                                viewModel.showDatePickerDialog(context, "in")
-
-                    },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
-                ),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    disabledTextColor = Black,
-                    unfocusedBorderColor = Black, textColor = Black,
-                    backgroundColor = Color(142, 143, 138),
-
-                    ),
-                enabled = false,
-                keyboardActions = KeyboardActions(onNext = {
-                    focusManager.moveFocus(FocusDirection.Down)
-                }),
-            )
-
-            if (state.dateInStringError != null || state.dateOutStringError != null || state.dateInLongError != null || state.dateOutLongError != null) {
-                Text(
-                    text = state.dateInStringError!!,
-                    color = MaterialTheme.colors.error,
-                    modifier = Modifier.align(Alignment.Start)
-                )
-            }
-
-            OutlinedTextField(
-                value = state.prePayment,
-                onValueChange = {
-                    viewModel.onFormEvent(ValidationFormEvent.PrepaymentChanged(it))
-                },
-
-                placeholder = { Text(text = "Внесенный залог", color = Black) },
-                isError = state.prePaymentError != null,
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
-                ),
-
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    unfocusedBorderColor = Black,
-                    textColor = Black,
-                    backgroundColor = Color(142, 143, 138)
-                ),
-                keyboardActions = KeyboardActions(onNext = {
-                    focusManager.moveFocus(FocusDirection.Down)
-                }),
-            )
-
-            if (state.prePaymentError != null) {
-                Text(
-                    text = state.prePaymentError!!,
-                    color = MaterialTheme.colors.error,
-                    modifier = Modifier.align(Alignment.Start)
-                )
-            }
-
-            OutlinedTextField(
-                value = state.payment,
-                onValueChange = {
-                    viewModel.onFormEvent(ValidationFormEvent.PaymentChanged(it))
-                },
-
-                placeholder = { Text(text = "Стоимость суток", color = Black) },
-                isError = state.paymentError != null,
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    unfocusedBorderColor = Black,
-                    textColor = Black,
-                    backgroundColor = Color(142, 143, 138)
-                ),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
-                ),
-                keyboardActions = KeyboardActions(onNext = {
-                    focusManager.moveFocus(FocusDirection.Down)
-                }),
-            )
-
-            if (state.paymentError != null) {
-                Text(
-                    text = state.paymentError!!,
-                    color = MaterialTheme.colors.error,
-                    modifier = Modifier.align(Alignment.Start)
-                )
-            }
-
-            state.transferInfo?.let {
-                OutlinedTextField(
-                    value = it,
-                    onValueChange = {
-                        viewModel.onFormEvent(ValidationFormEvent.transferInfoChanged(it))
-                    },
-
-                    placeholder = { Text(text = "Сведения для трансфера", color = Black) },
-                    singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        unfocusedBorderColor = Black,
-                        textColor = Black,
-                        backgroundColor = Color(142, 143, 138)
-                    ),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next, keyboardType = KeyboardType.Text
-                    ),
-                    keyboardActions = KeyboardActions(onNext = {
-                        focusManager.moveFocus(FocusDirection.Down)
-                    }),
-                )
-            }
-
-
-            state.referer?.let {
-                OutlinedTextField(
-                    value = it,
-                    onValueChange = {
-                        viewModel.onFormEvent(ValidationFormEvent.refererChanged(it))
-                    },
-
-                    placeholder = { Text(text = "Рекламный ресурс", color = Black) },
-                    singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        unfocusedBorderColor = Black,
-                        textColor = Black,
-                        backgroundColor = Color(142, 143, 138)
-                    ),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next, keyboardType = KeyboardType.Text
-                    ),
-                    keyboardActions = KeyboardActions(onNext = {
-                        focusManager.moveFocus(FocusDirection.Down)
-                    }),
-                )
-            }
-
-
-
-
-
-            Spacer(modifier = Modifier.padding(10.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize(Alignment.Center),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(modifier = Modifier.padding(end = 80.dp),
-                    onClick = {
-                        viewModel.getAppatmentClients(appatmentName)
-                        navController.navigate(Routs.home)
-                    })
-                {
-                    Icon(
-                        painter = painterResource(id = R.drawable.baseline_arrow_back_24),
-                        contentDescription = "Назад",
-
-                        modifier = Modifier.size(55.dp),
-                        tint = Color(223, 75, 0)
-                    )
-                }
-                IconButton(
-                    onClick = {
-                        viewModel.onFormEvent(ValidationFormEvent.onSubmit)
-                    }
-                )
-                {
-                    Icon(
-                        painter = painterResource(id = R.drawable.baseline_check_24),
-                        contentDescription = "Добавить объект недвижимости",
-
-                        modifier = Modifier.size(55.dp),
-                        tint = Color(223, 75, 0)
-                    )
-                }
-            }
         }
+
+
     }
 }
 

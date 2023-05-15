@@ -262,7 +262,7 @@ class AppatmentViewModel @Inject constructor(
 
             addClient(
                 Client(
-                    status = ClientStatus.waiting,
+                    status = validateFormState.status,
                     firstName = validateFormState.firstName.trim(),
                     secondName = validateFormState.secondName?.trim(),
                     lastName = validateFormState.lastName?.trim(),

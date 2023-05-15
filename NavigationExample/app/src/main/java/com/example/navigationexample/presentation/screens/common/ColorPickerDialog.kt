@@ -22,15 +22,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
-fun ColourButton(colors: List<Color>, onColorSelected: (Color) -> Unit, currently: Color ) {
+fun ColourButton(colors: List<Color>, onColorSelected: (Color) -> Unit, currently: Color) {
     var colorPickerOpen by rememberSaveable { mutableStateOf(false) }
     var currentlySelected by rememberSaveable(saver = colourSaver()) { mutableStateOf(currently) }
 
     Box(
         modifier = Modifier
-            .padding( bottom = 5.dp, start = 5.dp, end = 5.dp)
+            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp)
+            .background(Color(142, 143, 138))
             .fillMaxWidth()
             .clip(RoundedCornerShape(5))
 //            .border(
@@ -38,7 +40,7 @@ fun ColourButton(colors: List<Color>, onColorSelected: (Color) -> Unit, currentl
 //                MaterialTheme.colorScheme.onBackground.copy(alpha = 0.99f),
 //                RoundedCornerShape(5)
 //            )
-            .border(width = 1.dp, color = Color(223, 75, 0))
+//            .border(width = 1.dp, color = Color(223, 75, 0))
             .clickable {
                 colorPickerOpen = true
             }
@@ -48,16 +50,16 @@ fun ColourButton(colors: List<Color>, onColorSelected: (Color) -> Unit, currentl
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp)
-                .background(Color(41, green = 41, blue = 41))
-
-                ,
+                .padding(10.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
+                modifier = Modifier.padding(start=3.dp),
                 text = "Цвет для календаря",
-                color= Color.White
+                color = Color.Black,
+                fontSize = 16.sp
+
             )
 
             Canvas(
