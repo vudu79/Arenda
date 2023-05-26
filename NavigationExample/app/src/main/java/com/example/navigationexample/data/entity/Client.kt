@@ -115,4 +115,41 @@ class Client {
         this.appatment_name = appatment_name
     }
 
+    constructor(
+        id:Int,
+        status: String,
+        firstName: String,
+        secondName: String?,
+        lastName: String?,
+        phone: String,
+        documentNumber: String,
+        documentDitails: String,
+        inDate: Long,
+        outDate: Long,
+        members: Int,
+        prepayment: Int,
+        payment: Int,
+        clientColor: Int,
+        transferInfo: String?,
+        referer: String?,
+        appatment_name: String
+    ){
+        this.id = id
+        this.status = status
+        this.firstName = firstName
+        this.secondName = secondName
+        this.lastName = lastName
+        this.phone = phone
+        this.documentNumber = documentNumber
+        this.documentDitails = documentDitails
+        this.members = members
+        this.inDate = inDate
+        this.outDate = outDate
+        this.prepayment = prepayment
+        this.payment = payment
+        this.clientColor = clientColor
+        this.transferInfo = transferInfo
+        this.referer = referer
+        this.appatment_name = appatment_name
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.navigationexample.presentation.screens
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -28,9 +30,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.navigationexample.R
 import com.example.navigationexample.constants.Constans
-import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.domain.models.ClientStatus
+import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
 import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
+import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.common.ColourButton
 import com.example.navigationexample.presentation.screens.common.PhoneField
 
@@ -39,7 +42,7 @@ import com.example.navigationexample.presentation.screens.common.PhoneField
 @Composable
 fun ClientDitailsScreen(
     mainNavController: NavHostController,
-    viewModel: ClientViewModel,
+    viewModelClient: ClientViewModel,
     clientPhone: String
 ) {
 
@@ -51,9 +54,9 @@ fun ClientDitailsScreen(
     val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) {
-        viewModel.getClientState(clientPhone)
+        viewModelClient.getClientState(clientPhone)
     }
-    val state = viewModel.validateFormState
+    val state = viewModelClient.validateFormState
 
     val isStatusEditActive = remember {
         mutableStateOf(false)
@@ -132,6 +135,24 @@ fun ClientDitailsScreen(
         true -> 120
         false -> 50
     }
+
+
+    LaunchedEffect(key1 = context) {
+        viewModelClient.validationEvents.collect { event ->
+            when (event) {
+                is ValidatAllFieldsResultEvent.UpdateSuccess -> {
+                    Toast.makeText(
+                        context, "Клиент обновлен!", Toast.LENGTH_SHORT
+                    ).show()
+                    mainNavController.navigate(route = Routs.mainScreenClients)
+                }
+                is ValidatAllFieldsResultEvent.InsertSuccess -> {
+                }
+            }
+        }
+    }
+
+
 
 
 
@@ -349,7 +370,7 @@ fun ClientDitailsScreen(
                         OutlinedTextField(
                             value = state.firstName,
                             onValueChange = {
-                                viewModel.onFormEvent(ValidationFormEvent.FirstNameChanged(it))
+                                viewModelClient.onFormEvent(ValidationFormEvent.FirstNameChanged(it))
                             },
                             placeholder = { Text(text = "Имя", color = Color.Black) },
                             isError = state.firstNameError != null,
@@ -457,7 +478,7 @@ fun ClientDitailsScreen(
                         OutlinedTextField(
                             value = state.secondName ?: "не установлено",
                             onValueChange = {
-                                viewModel.onFormEvent(ValidationFormEvent.SecondNameChanged(it))
+                                viewModelClient.onFormEvent(ValidationFormEvent.SecondNameChanged(it))
                             },
                             placeholder = { Text(text = "Отчество", color = Color.Black) },
                             isError = state.secondNameError != null,
@@ -565,7 +586,7 @@ fun ClientDitailsScreen(
                         OutlinedTextField(
                             value = state.lastName ?: "не установлено",
                             onValueChange = {
-                                viewModel.onFormEvent(ValidationFormEvent.LastNameChanged(it))
+                                viewModelClient.onFormEvent(ValidationFormEvent.LastNameChanged(it))
                             },
                             placeholder = { Text(text = "Фамилия", color = Color.Black) },
                             isError = state.lastNameError != null,
@@ -676,7 +697,7 @@ fun ClientDitailsScreen(
                             mask = "+7(000)-000-00-00",
                             maskNumber = '0',
                             onPhoneChanged = {
-                                viewModel.onFormEvent(ValidationFormEvent.PhoneChanged(it))
+                                viewModelClient.onFormEvent(ValidationFormEvent.PhoneChanged(it))
                             },
                             errorMessage = state.phoneError,
                             modifier = Modifier.align(Alignment.Start)
@@ -759,7 +780,7 @@ fun ClientDitailsScreen(
                             mask = "0000-000000",
                             maskNumber = '0',
                             onPhoneChanged = {
-                                viewModel.onFormEvent(ValidationFormEvent.DocumentNamberChanged(it))
+                                viewModelClient.onFormEvent(ValidationFormEvent.DocumentNamberChanged(it))
                             },
                             errorMessage = state.documentNamberError,
                             modifier = Modifier.align(Alignment.Start)
@@ -845,7 +866,7 @@ fun ClientDitailsScreen(
                         OutlinedTextField(
                             value = state.documentDitails ?: "не установлено",
                             onValueChange = {
-                                viewModel.onFormEvent(ValidationFormEvent.DocumentDitailsChanged(it))
+                                viewModelClient.onFormEvent(ValidationFormEvent.DocumentDitailsChanged(it))
                             },
                             placeholder = {
                                 Text(
@@ -895,7 +916,7 @@ fun ClientDitailsScreen(
         item {
             ColourButton(
                 Constans.ClientColorsList.clientColorsList, onColorSelected = {
-                    viewModel.onFormEvent(ValidationFormEvent.ColorChanged(it))
+                    viewModelClient.onFormEvent(ValidationFormEvent.ColorChanged(it))
                 }, state.color
             )
         }
@@ -970,7 +991,7 @@ fun ClientDitailsScreen(
                         OutlinedTextField(
                             value = state.members,
                             onValueChange = {
-                                viewModel.onFormEvent(ValidationFormEvent.MembersChanged(it))
+                                viewModelClient.onFormEvent(ValidationFormEvent.MembersChanged(it))
                             },
                             placeholder = {
                                 Text(
@@ -1013,7 +1034,47 @@ fun ClientDitailsScreen(
                 }
             }
         }
+        item{
+            Spacer(modifier = Modifier.padding(10.dp))
 
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentSize(Alignment.Center),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(modifier = Modifier.padding(end = 80.dp),
+                        onClick = {
+//                            viewModelClient.getAppatmentClients(appatmentName)
+                            mainNavController.navigate(route = "${Routs.mainScreenClients}/${state.apartmentName}")
+                        })
+                    {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_arrow_back_24),
+                            contentDescription = "Назад",
+
+                            modifier = Modifier.size(55.dp),
+                            tint = Color(223, 75, 0)
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            viewModelClient.onFormEvent(ValidationFormEvent.onSubmitUpdate(""))
+                        }
+                    )
+                    {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_check_24),
+                            contentDescription = "Изменить данные клиента",
+                            modifier = Modifier.size(55.dp),
+                            tint = Color(223, 75, 0)
+                        )
+                    }
+                }
+            }
+        }
 
 //    IconButton(onClick = {
 //        mainNavController.navigate(Routs.addAppatmentScreen)

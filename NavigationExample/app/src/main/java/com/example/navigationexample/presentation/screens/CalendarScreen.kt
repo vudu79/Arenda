@@ -124,7 +124,7 @@ fun CalendarScreen(
                     modifier = Modifier.wrapContentWidth(),
                     state = state,
                     dayContent = { day ->
-//                        localDateClientMap?.get(day.date)?.let { Log.d("myTag", it.toString()) }
+//                        localDateClientMap?.get(day.date)?.let { // Log.d("myTag", it.toString()) }
                         CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
                             val clientMonkList = if (day.position == DayPosition.MonthDate) {
 //                            flights[day.date].orEmpty().map { colorResource(it.color) }

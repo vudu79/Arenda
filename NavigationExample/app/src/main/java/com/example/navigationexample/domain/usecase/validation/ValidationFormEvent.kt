@@ -26,5 +26,6 @@ sealed class ValidationFormEvent {
 
 
 sealed class ValidatAllFieldsResultEvent{
-    object Success: ValidatAllFieldsResultEvent()
+    object InsertSuccess: ValidatAllFieldsResultEvent()
+    object UpdateSuccess: ValidatAllFieldsResultEvent()
 }

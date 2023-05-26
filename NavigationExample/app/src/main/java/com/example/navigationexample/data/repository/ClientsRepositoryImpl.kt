@@ -1,23 +1,12 @@
 package com.example.navigationexample.data.repository
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.navigationexample.data.dao.ClientDao
 import com.example.navigationexample.data.entity.Client
-import com.example.navigationexample.data.entity.RentalDay
-import com.example.navigationexample.domain.usecase.validation.ValidationFormState
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 
@@ -40,7 +29,7 @@ class ClientsRepositoryImpl @Inject constructor(private val clientDao: ClientDao
     }
 
     suspend fun getClientByPhone(phone: String): Client {
-        Log.d("tag", "Клиент взят из базы")
+        // Log.d("tag", "Клиент взят из базы")
         return clientDao.getClientByPhone(phone)
 
     }
@@ -94,8 +83,6 @@ class ClientsRepositoryImpl @Inject constructor(private val clientDao: ClientDao
     fun getAppatmentClients(appatmentName: String) {
         coroutineScope.launch(Dispatchers.Main) {
             allAppatmentClients.value = asyncFind(appatmentName).await()
-            Log.d("myTag", "все улиенты - ${appatmentName}")
-            Log.d("myTag", "все улиенты - ${allAppatmentClients.value}")
         }
     }
 

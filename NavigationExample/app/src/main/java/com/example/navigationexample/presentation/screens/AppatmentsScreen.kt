@@ -74,7 +74,7 @@ fun MainScreen(
 
         ) {
             items(allAppatment) { item ->
-//                Log.d("myTag", allAppatment.toString())
+//                // Log.d("myTag", allAppatment.toString())
                 AppatmentItemRow(
                     appatmentItem = item,
                     navcontroller = mainNavController,

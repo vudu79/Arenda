@@ -5,6 +5,8 @@ import com.example.navigationexample.constants.Constans
 import com.example.navigationexample.domain.models.ClientStatus
 
 data class ValidationFormState(
+    var apartmentName: String? = "",
+    var id: Int? = 0,
     var status: String = ClientStatus.waiting,
     var firstName: String = "",
     var firstNameError: String? = null,

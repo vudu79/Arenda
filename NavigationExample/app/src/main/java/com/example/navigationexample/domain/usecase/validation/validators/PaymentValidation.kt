@@ -31,7 +31,7 @@ class PaymentValidation @Inject constructor() {
                 successful = true
             )
         } catch (e: Exception) {
-            Log.d("myTag","sdfsdfsdfsdf ------- $e")
+//            // Log.d("myTag","sdfsdfsdfsdf ------- $e")
             return ValidationResult(
 
                 successful = false,

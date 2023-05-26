@@ -81,11 +81,11 @@ fun NavHostView(
             arguments = listOf(navArgument("client_phone") { type = NavType.StringType })
         ) { backStackEntry ->
             val arguments = requireNotNull(backStackEntry.arguments)
-            arguments.getString("client_phone")?.let { client ->
-                val clientPhone = client
+            arguments.getString("client_phone")?.let { cp ->
+                val clientPhone = cp
                 ClientDitailsScreen(
                     mainNavController = mainNavController,
-                    viewModel = viewModelClient,
+                    viewModelClient = viewModelClient,
                     clientPhone = clientPhone
                 )
             }

@@ -13,7 +13,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,16 +59,17 @@ fun AddClientScreen(
     LaunchedEffect(key1 = context) {
         viewModelClient.validationEvents.collect { event ->
             when (event) {
-                is ValidatAllFieldsResultEvent.Success -> {
-                    Log.d("myTag", "payment --- ${state.payment}")
-                    Log.d("myTag", "prePayment --- ${state.prePayment}")
-                    Log.d("myTag", "members --- ${state.members}")
+                is ValidatAllFieldsResultEvent.InsertSuccess -> {
+//                    // Log.d("myTag", "payment --- ${state.payment}")
+//                    // Log.d("myTag", "prePayment --- ${state.prePayment}")
+//                    // Log.d("myTag", "members --- ${state.members}")
 
                     Toast.makeText(
                         context, "Новый клиент зарегестрирован!", Toast.LENGTH_SHORT
                     ).show()
                     navController.navigate(route = "${Routs.mainScreenClients}/$appatmentName")
-//
+                }
+                is ValidatAllFieldsResultEvent.UpdateSuccess -> {
                 }
             }
         }
@@ -638,7 +638,7 @@ fun AddClientScreen(
                             }
                             IconButton(
                                 onClick = {
-                                    Log.d("myTag", "аппат с представл - $appatmentName")
+//                                    // Log.d("myTag", "аппат с представл - $appatmentName")
                                     viewModelClient.onFormEvent(ValidationFormEvent.onSubmitInsert(appatmentName))
                                 }
                             )
