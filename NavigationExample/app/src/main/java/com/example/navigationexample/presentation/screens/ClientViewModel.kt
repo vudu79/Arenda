@@ -256,7 +256,7 @@ class ClientViewModel @Inject constructor(
         }
     }
 
-    private fun hasError() {
+    private fun submitDataUpdate() {
         val firstNameResult = nameValidationField.execute(validateFormState.firstName, true)
         val dateInStringResult = dateStringValidationField.execute(validateFormState.dateInString)
         val dateOutStringResult = dateStringValidationField.execute(validateFormState.dateOutString)
