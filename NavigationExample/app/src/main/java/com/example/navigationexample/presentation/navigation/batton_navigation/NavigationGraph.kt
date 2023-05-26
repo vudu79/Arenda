@@ -2,44 +2,52 @@ package com.example.navigationexample.presentation.navigation.batton_navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.*
 
 @Composable
 fun NavigationGraph(
     mainNavController: NavHostController,
     clientNavController: NavHostController,
-    viewModel: AppatmentViewModel,
+    viewModelAppatment: AppatmentViewModel,
+    viewModelClient: ClientViewModel,
+    viewModelCalendar: CalendarViewModel,
     appatmentName: String
 ) {
     NavHost(clientNavController, startDestination = BottomNavItems.Clients.screen_route) {
         composable(BottomNavItems.Clients.screen_route) {
             ClientsScreen(
                 mainNavController = mainNavController,
-                viewModel = viewModel,
+                viewModelClient = viewModelClient,
+                viewModelAppatment = viewModelAppatment,
+                viewModelCalendar = viewModelCalendar,
                 appatmentName = appatmentName
             )
         }
         composable(BottomNavItems.Calendar.screen_route) {
             CalendarScreen(
                 navController = mainNavController,
-                viewModel = viewModel,
+                viewModelCalendar = viewModelCalendar,
+                viewModelClient = viewModelClient,
                 appatmentName = appatmentName
             )
         }
         composable(BottomNavItems.Ballance.screen_route) {
             SetDatePeriodScreen(
                 navController = mainNavController,
-                viewModel = viewModel,
+                viewModelClient = viewModelClient,
+                viewModelCalendar = viewModelCalendar,
                 appatmentName = appatmentName
             )
         }
         composable(BottomNavItems.Appatments.screen_route) {
-            MainScreen(mainNavController = mainNavController, viewModel = viewModel)
+            MainScreen(
+                mainNavController = mainNavController,
+                viewModelAppatment = viewModelAppatment,
+                viewModelClient = viewModelClient,
+                viewModelCalendar = viewModelCalendar
+            )
         }
     }
 }

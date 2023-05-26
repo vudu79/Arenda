@@ -3,6 +3,8 @@ package com.example.navigationexample.presentation.screens
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,44 +24,32 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 //import com.example.composeex.ClientItemRow
 import com.example.navigationexample.R
 import com.example.navigationexample.data.entity.Client
+import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
 import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.common.CustomAlertDialog
-import com.kizitonwose.calendar.sample.compose.Example2Page
 import com.kizitonwose.calendar.sample.compose.clickable
-import java.security.AccessController.getContext
 import java.time.LocalDate
 
 
 @Composable
 fun ClientsScreen(
     mainNavController: NavHostController,
-    viewModel: AppatmentViewModel,
+    viewModelClient: ClientViewModel,
+    viewModelAppatment: AppatmentViewModel,
+    viewModelCalendar: CalendarViewModel,
     appatmentName: String
 ) {
-    val currentAppatment by viewModel.currentApartment.observeAsState()
-    val appatmentClients by viewModel.allApartmentClients.observeAsState(listOf())
-    val allClients by viewModel.allClients.observeAsState(listOf())
+    val currentAppatment by viewModelClient.currentApartment.observeAsState()
+    val appatmentClients by viewModelClient.allApartmentClients.observeAsState(listOf())
 
-//    Image(
-//        painter = painterResource(
-//            id = R.drawable.sky
-//        ),
-//        contentDescription = "im1",
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .alpha(0.5f),
-//        contentScale = ContentScale.FillBounds
-//    )
     Column(
         modifier = Modifier
             .background(Color(red = 41, green = 41, blue = 41))
@@ -84,14 +74,18 @@ fun ClientsScreen(
 
         ) {
             items(appatmentClients) { item ->
-                ClientItemRow(client = item, navcontroller = mainNavController, viewModel)
+                ClientItemRow(
+                    client = item,
+                    navcontroller = mainNavController,
+                    viewModelClient = viewModelClient,
+                    viewModelCalendar = viewModelCalendar
+                )
             }
         }
 
 
         IconButton(onClick = {
-
-            mainNavController.navigate(route = "${Routs.addClientScreen}?appatment_name=$appatmentName")
+            mainNavController.navigate(route = "${Routs.addClientScreen}/$appatmentName")
         })
         {
             Icon(
@@ -111,7 +105,8 @@ fun ClientsScreen(
 fun LazyItemScope.ClientItemRow(
     client: Client,
     navcontroller: NavController,
-    viewModel: AppatmentViewModel
+    viewModelClient: ClientViewModel,
+    viewModelCalendar: CalendarViewModel
 ) {
 
     var showCustomDialog by remember {
@@ -242,9 +237,9 @@ fun LazyItemScope.ClientItemRow(
         }, onOk = {
             showCustomDialog = !showCustomDialog
 
-            viewModel.deleteClient(client.firstName)
-            viewModel.getAppatmentClients(client.appatment_name)
-            viewModel.updateDaysMapForCalendar(client.appatment_name)
+            viewModelClient.deleteClient(client.firstName)
+            viewModelClient.getAppatmentClients(client.appatment_name)
+            viewModelCalendar.updateDaysMapForCalendar(client.appatment_name)
         },
             message = "Клиент будет безвозвратно удален. Вы уверены?"
         )

@@ -48,18 +48,18 @@ private val inActiveTextColor: Color @Composable get() = colorResource(R.color.e
 @Composable
 fun SetDatePeriodScreen(
     navController: NavHostController,
-    viewModel: AppatmentViewModel,
+    viewModelClient: ClientViewModel,
+    viewModelCalendar: CalendarViewModel,
     appatmentName: String,
     close: () -> Unit = { navController.navigate("${Routs.addClientScreen}?appatment_name=$appatmentName") },
     dateSelected: (startDate: LocalDate, endDate: LocalDate) -> Unit = { _, _ -> },
 
     ) {
 
-    val planedApartmentDays: List<LocalDate> by viewModel.allApartmentPlanedDays.collectAsState(
+    val planedApartmentDays: List<LocalDate> by viewModelCalendar.allApartmentPlanedDays.collectAsState(
         initial = listOf()
     )
-    val clientFormState = viewModel.validateFormState
-    val isLoading: Boolean by viewModel.isLoadingForSetPeriodScreen
+    val isLoading: Boolean by viewModelCalendar.isLoadingForSetPeriodScreen
 
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth }
@@ -99,12 +99,12 @@ fun SetDatePeriodScreen(
 //                            viewModel.dateInLong1.value = startDate.toEpochDay()
 //                            viewModel.dateOutLong1.value = endDate.toEpochDay()
 
-                            viewModel.validateFormState.dateInString=startDate.toString()
-                            viewModel.validateFormState.dateInLong=startDate.toEpochDay()
-                            viewModel.validateFormState.dateOutString=endDate.toString()
-                            viewModel.validateFormState.dateOutLong=endDate.toEpochDay()
+                            viewModelClient.validateFormState.dateInString=startDate.toString()
+                            viewModelClient.validateFormState.dateInLong=startDate.toEpochDay()
+                            viewModelClient.validateFormState.dateOutString=endDate.toString()
+                            viewModelClient.validateFormState.dateOutLong=endDate.toEpochDay()
 
-                            navController.navigate(Routs.addClientScreen)
+                            navController.navigate("${Routs.addClientScreen}/$appatmentName")
                         }
                     },
                 )

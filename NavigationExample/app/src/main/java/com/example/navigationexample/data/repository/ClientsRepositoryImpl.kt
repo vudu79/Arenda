@@ -94,37 +94,8 @@ class ClientsRepositoryImpl @Inject constructor(private val clientDao: ClientDao
     fun getAppatmentClients(appatmentName: String) {
         coroutineScope.launch(Dispatchers.Main) {
             allAppatmentClients.value = asyncFind(appatmentName).await()
-//            dateClientMap.clear()
-//            val clients = allAppatmentClients.value
-//            clients?.let { it ->
-//                val fff: MutableList<Client> = mutableListOf()
-//                it.forEach { client ->
-//                    val startDay = LocalDate.ofEpochDay(client.inDate!!)
-//                    val endDay = LocalDate.ofEpochDay(client.outDate!!)
-//                    val clientPeriod = listDaysBetween(startDay, endDay)
-//                    clientPeriod.forEach { day ->
-//                        run {
-//                            if (dateClientMap.containsKey(day)) {
-//                                Log.d("myTag", "условие сработало мап = $dateClientMap")
-//                                fff.addAll(dateClientMap[day]!!)
-//                                Log.d("myTag", "добавил в fff лист из мапы = $fff")
-//                                fff.add(client)
-//                                Log.d("myTag", "добавил в fff клиента = $fff")
-//                                dateClientMap[day]?.addAll(fff)
-//                                Log.d("myTag", "обновил мапу = $dateClientMap")
-//
-//                                fff.clear()
-////                                Log.d("myTag", " fff -----  $fff")
-////                                Log.d("myTag", " map -----  ${dateClientMap[day]?.size}")
-//                            } else {
-//                                dateClientMap.put(day, mutableSetOf(client))
-//                            }
-//
-//
-//                        }
-//                    }
-//                }
-//            }
+            Log.d("myTag", "все улиенты - ${appatmentName}")
+            Log.d("myTag", "все улиенты - ${allAppatmentClients.value}")
         }
     }
 
@@ -133,22 +104,5 @@ class ClientsRepositoryImpl @Inject constructor(private val clientDao: ClientDao
         coroutineScope.async(Dispatchers.IO) {
             return@async clientDao.getAppatmentClients(appatmentName)
         }
-
-
-    fun listDaysBetween(
-        startDate: LocalDate? = null,
-        endDate: LocalDate? = null
-    ): MutableList<LocalDate> {
-        val listDays: MutableList<LocalDate> = mutableListOf()
-        val numOfDaysBetween = (ChronoUnit.DAYS.between(startDate, endDate)).toInt()
-        (0..numOfDaysBetween).forEach {
-            val date: LocalDate? = startDate?.plusDays(it.toLong())
-            if (date != null) {
-                listDays.add(date)
-            }
-        }
-        return listDays
-    }
-
 
 }

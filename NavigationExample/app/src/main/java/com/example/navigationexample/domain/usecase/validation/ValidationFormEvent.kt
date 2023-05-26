@@ -20,7 +20,8 @@ sealed class ValidationFormEvent {
     data class transferInfoChanged(val transferInfo: String) : ValidationFormEvent()
     data class refererChanged(val referer: String) : ValidationFormEvent()
     data class ColorChanged(val color: Color) : ValidationFormEvent()
-    object onSubmit : ValidationFormEvent()
+    data class onSubmitInsert(val apartmentName: String) : ValidationFormEvent()
+    data class onSubmitUpdate(val apartmentName: String) : ValidationFormEvent()
 }
 
 

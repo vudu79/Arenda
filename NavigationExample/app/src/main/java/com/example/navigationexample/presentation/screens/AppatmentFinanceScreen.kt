@@ -8,13 +8,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.navigationexample.presentation.screens.AppatmentViewModel
+import com.example.navigationexample.presentation.screens.CalendarViewModel
+import com.example.navigationexample.presentation.screens.ClientViewModel
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AppatmentFinanceScreen(
     mainNavController: NavHostController,
-    viewModel: AppatmentViewModel,
+    viewModelAppatment: AppatmentViewModel,
+    viewModelClient: ClientViewModel,
+    viewModelCalendar: CalendarViewModel,
     appatmentName: String
 ) {
     val clientNavController = rememberNavController()
@@ -32,7 +36,9 @@ fun AppatmentFinanceScreen(
             NavigationGraph(
                 mainNavController = mainNavController,
                 clientNavController = clientNavController,
-                viewModel = viewModel,
+                viewModelAppatment = viewModelAppatment,
+                viewModelClient = viewModelClient,
+                viewModelCalendar =viewModelCalendar,
                 appatmentName=appatmentName
 
             )

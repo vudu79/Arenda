@@ -1,5 +1,6 @@
 package com.example.navigationexample.presentation.screens
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -30,9 +30,14 @@ import com.example.navigationexample.presentation.screens.common.CustomAlertDial
 
 
 @Composable
-fun MainScreen(mainNavController: NavHostController, viewModel: AppatmentViewModel) {
+fun MainScreen(
+    mainNavController: NavHostController,
+    viewModelAppatment: AppatmentViewModel,
+    viewModelClient: ClientViewModel,
+    viewModelCalendar: CalendarViewModel
+) {
 
-    val allAppatment by viewModel.allApartments.observeAsState(listOf())
+    val allAppatment by viewModelAppatment.allApartments.observeAsState(listOf())
 
 //    Image(
 //        painter = painterResource(
@@ -73,7 +78,9 @@ fun MainScreen(mainNavController: NavHostController, viewModel: AppatmentViewMod
                 AppatmentItemRow(
                     appatmentItem = item,
                     navcontroller = mainNavController,
-                    viewModel
+                    viewModelAppatment = viewModelAppatment,
+                    viewModelCalendar = viewModelCalendar,
+                    viewModelClient = viewModelClient
                 )
             }
         }
@@ -127,14 +134,14 @@ fun MainScreen(mainNavController: NavHostController, viewModel: AppatmentViewMod
 }
 
 
-
-
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun AppatmentItemRow(
     appatmentItem: Appatment,
     navcontroller: NavController,
-    viewModel: AppatmentViewModel
+    viewModelAppatment: AppatmentViewModel,
+    viewModelCalendar: CalendarViewModel,
+    viewModelClient: ClientViewModel
 ) {
     var isExpanded by remember {
         mutableStateOf(false)
@@ -147,9 +154,9 @@ fun AppatmentItemRow(
         mutableStateOf<Int>(0)
     }
 
-    iconHomeType =  when(appatmentItem.type){
+    iconHomeType = when (appatmentItem.type) {
         "Квартира" -> R.drawable.baseline_cottage_24
-        "Аппартаменты" ->  R.drawable.baseline_apartment_24
+        "Аппартаменты" -> R.drawable.baseline_apartment_24
         "Комерческое" -> R.drawable.baseline_home_work_24
         else -> R.drawable.baseline_cottage_24
     }
@@ -171,11 +178,12 @@ fun AppatmentItemRow(
                 .background(Color(128, 107, 90))
                 .combinedClickable(
                     onClick = {
-                        viewModel.getAppatmentClients(appatmentItem.name)
-                        viewModel.setCurrentAppatment(appatmentItem)
-                        viewModel.updateApartmentPlanedDays(appatmentItem.name)
-                        viewModel.updateDaysMapForCalendar(appatmentItem.name)
-                        navcontroller.navigate(route = "${Routs.mainScreenClients}?appatment_name=${appatmentItem.name}")
+                        Log .d("myTag","апартаменты - ${appatmentItem.name}" )
+                        viewModelClient.getAppatmentClients(appatmentItem.name)
+                        viewModelAppatment.setCurrentAppatment(appatmentItem)
+                        viewModelCalendar.updateApartmentPlanedDays(appatmentItem.name)
+                        viewModelCalendar.updateDaysMapForCalendar(appatmentItem.name)
+                        navcontroller.navigate(route = "${Routs.mainScreenClients}/${appatmentItem.name}")
                     },
                     onLongClick = {
                         showCustomDialog = !showCustomDialog
@@ -222,7 +230,12 @@ fun AppatmentItemRow(
                 )
                 Text(
                     appatmentItem.rentalPeriod,
-                    modifier = Modifier.padding(bottom = 5.dp, start = 1.dp, end = 1.dp, top = 1.dp ),
+                    modifier = Modifier.padding(
+                        bottom = 5.dp,
+                        start = 1.dp,
+                        end = 1.dp,
+                        top = 1.dp
+                    ),
                     maxLines = 1,
                     fontSize = 10.sp
                 )
@@ -245,10 +258,11 @@ fun AppatmentItemRow(
             showCustomDialog = !showCustomDialog
         }, onOk = {
             showCustomDialog = !showCustomDialog
-            viewModel.deleteAppatment(appatmentItem.name)
-            viewModel.updateApartmentPlanedDays(appatmentItem.name)
+            viewModelAppatment.deleteAppatment(appatmentItem.name)
+            viewModelCalendar.updateApartmentPlanedDays(appatmentItem.name)
         },
-            message = "Объект недвижимости будет безвозвратно удален. Вы уверены?")
+            message = "Объект недвижимости будет безвозвратно удален. Вы уверены?"
+        )
     }
 
 }

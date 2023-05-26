@@ -23,7 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.navigationexample.R
 import com.example.navigationexample.domain.models.ClientMonk
@@ -35,14 +34,10 @@ import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.*
 import com.kizitonwose.calendar.sample.shared.Flight.Airport
 import com.kizitonwose.calendar.sample.shared.displayText
-import com.kizitonwose.calendar.sample.shared.generateFlights
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
-import java.util.*
-
-private val flights = generateFlights().groupBy { it.time.toLocalDate() }
 
 
 private val pageBackgroundColor: Color @Composable get() = colorResource(R.color.example_5_page_bg_color)
@@ -52,15 +47,22 @@ private val selectedItemColor: Color @Composable get() = colorResource(R.color.e
 private val inActiveTextColor: Color @Composable get() = colorResource(R.color.example_5_text_grey_light)
 
 @Composable
-fun CalendarScreen(navController: NavHostController, viewModel: AppatmentViewModel, appatmentName: String) {
-//    viewModel.updateDaysMapForCalendar(appatmentName)
-//    val dateClientMap = remember { viewModel.dateClientMapForObserve.value }
+fun CalendarScreen(
+    navController: NavHostController,
+    viewModelCalendar: CalendarViewModel,
+    viewModelClient: ClientViewModel,
+    appatmentName: String
+) {
+//    LaunchedEffect(Unit) {
+    viewModelCalendar.updateApartmentPlanedDays(appatmentName)
+    viewModelCalendar.updateDaysMapForCalendar(appatmentName)
+//    }
 
-    val localDateClientMap: MutableMap<LocalDate, MutableSet<ClientMonk>> by viewModel.localDayClientMocKMap.collectAsState(
+    val localDateClientMap: MutableMap<LocalDate, MutableSet<ClientMonk>> by viewModelCalendar.localDayClientMocKMap.collectAsState(
         initial = mutableMapOf()
     )
 
-    val isLoading: Boolean by viewModel.isLoadingForCalendarScreen
+    val isLoading: Boolean by viewModelCalendar.isLoadingForCalendarScreen
 
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
@@ -154,7 +156,12 @@ fun CalendarScreen(navController: NavHostController, viewModel: AppatmentViewMod
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(items = clientsInSelectedDate.value) { client ->
 //                    ClientInformation(client)
-                    ClientItemRow(client.client, navController, viewModel)
+                    ClientItemRow(
+                        client = client.client,
+                        navcontroller = navController,
+                        viewModelCalendar = viewModelCalendar,
+                        viewModelClient = viewModelClient
+                    )
                 }
             }
         }
@@ -199,7 +206,7 @@ private fun Day(
 
         if (clientMonks.size == 2) {
             val left = clientMonks.first { it?.ieEndDay == true }
-            val right = clientMonks.first { it?.ieStartDay == true }
+            val right = clientMonks.first { it?.isStartDay == true }
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -288,7 +295,7 @@ private fun LazyItemScope.ClientInformation(clientMonk: ClientMonk) {
     ) {
         Box(
             modifier = Modifier
-                .border(width = 3.dp, color = Color(clientMonk.color), RoundedCornerShape(8.dp) )
+                .border(width = 3.dp, color = Color(clientMonk.color), RoundedCornerShape(8.dp))
                 .fillParentMaxWidth(1 / 5f)
                 .aspectRatio(1f),
             contentAlignment = Alignment.Center,

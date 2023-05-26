@@ -43,13 +43,13 @@ import com.example.navigationexample.presentation.screens.common.*
 @Composable
 fun AddClientScreen(
     navController: NavHostController,
-    viewModel: AppatmentViewModel,
+    viewModelClient: ClientViewModel,
     appatmentName: String,
 ) {
 
-    val currentAppatment by viewModel.currentApartment.observeAsState()
+//    val currentAppatment by viewModelClient.currentApartment.observeAsState()
     val focusManager = LocalFocusManager.current
-    val state = viewModel.validateFormState
+    val state = viewModelClient.validateFormState
     val context = LocalContext.current
 
     val expanded = remember { mutableStateOf(false) }
@@ -58,7 +58,7 @@ fun AddClientScreen(
     val selectedIndex = remember { mutableStateOf(0) }
 
     LaunchedEffect(key1 = context) {
-        viewModel.validationEvents.collect { event ->
+        viewModelClient.validationEvents.collect { event ->
             when (event) {
                 is ValidatAllFieldsResultEvent.Success -> {
                     Log.d("myTag", "payment --- ${state.payment}")
@@ -68,7 +68,7 @@ fun AddClientScreen(
                     Toast.makeText(
                         context, "Новый клиент зарегестрирован!", Toast.LENGTH_SHORT
                     ).show()
-                    navController.navigate(route = "${Routs.mainScreenClients}?appatment_name=$appatmentName")
+                    navController.navigate(route = "${Routs.mainScreenClients}/$appatmentName")
 //
                 }
             }
@@ -110,8 +110,8 @@ fun AddClientScreen(
                             color = Color(223, 75, 0).copy(alpha = 0.9f)
                         )
                         Text(
-                            text = "объект: \"${viewModel.currentApartment.value?.name ?: ""}\" | срок: " +
-                                    (viewModel.currentApartment.value?.rentalPeriod ?: ""),
+                            text = "объект: \"${viewModelClient.currentApartment.value?.name ?: ""}\" | срок: " +
+                                    (viewModelClient.currentApartment.value?.rentalPeriod ?: ""),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(top = 1.dp, bottom = 1.dp),
@@ -155,7 +155,7 @@ fun AddClientScreen(
                                 DropdownMenuItem(onClick = {
                                     selectedIndex.value = index
                                     expanded.value = false
-                                    viewModel.onFormEvent(ValidationFormEvent.StatusChanged(s))
+                                    viewModelClient.onFormEvent(ValidationFormEvent.StatusChanged(s))
                                 }) {
                                     val disabledText = if (s == disabledValue) {
                                         " (Disabled)"
@@ -174,7 +174,7 @@ fun AddClientScreen(
                     OutlinedTextField(
                         value = state.firstName,
                         onValueChange = {
-                            viewModel.onFormEvent(ValidationFormEvent.FirstNameChanged(it))
+                            viewModelClient.onFormEvent(ValidationFormEvent.FirstNameChanged(it))
                         },
                         placeholder = { Text(text = "Имя", color = Black) },
                         isError = state.firstNameError != null,
@@ -216,7 +216,7 @@ fun AddClientScreen(
                         OutlinedTextField(
                             value = it,
                             onValueChange = {
-                                viewModel.onFormEvent(ValidationFormEvent.SecondNameChanged(it))
+                                viewModelClient.onFormEvent(ValidationFormEvent.SecondNameChanged(it))
                             },
 
                             placeholder = { Text(text = "Отчество", color = Black) },
@@ -254,7 +254,7 @@ fun AddClientScreen(
                         OutlinedTextField(
                             value = it,
                             onValueChange = {
-                                viewModel.onFormEvent(ValidationFormEvent.LastNameChanged(it))
+                                viewModelClient.onFormEvent(ValidationFormEvent.LastNameChanged(it))
                             },
                             placeholder = { Text(text = "Фамилия", color = Black) },
                             isError = state.lastNameError != null,
@@ -296,7 +296,7 @@ fun AddClientScreen(
                         mask = "+7(000)-000-00-00",
                         maskNumber = '0',
                         onPhoneChanged = {
-                            viewModel.onFormEvent(ValidationFormEvent.PhoneChanged(it))
+                            viewModelClient.onFormEvent(ValidationFormEvent.PhoneChanged(it))
 
                         },
                         errorMessage = state.phoneError,
@@ -312,7 +312,7 @@ fun AddClientScreen(
                             mask = "0000-000000",
                             maskNumber = '0',
                             onPhoneChanged = { phone ->
-                                viewModel.onFormEvent(
+                                viewModelClient.onFormEvent(
                                     ValidationFormEvent.DocumentNamberChanged(
                                         phone
                                     )
@@ -329,7 +329,7 @@ fun AddClientScreen(
                         OutlinedTextField(
                             value = it,
                             onValueChange = {
-                                viewModel.onFormEvent(ValidationFormEvent.DocumentDitailsChanged(it))
+                                viewModelClient.onFormEvent(ValidationFormEvent.DocumentDitailsChanged(it))
                             },
                             placeholder = {
                                 Text(
@@ -374,7 +374,7 @@ fun AddClientScreen(
                 item {
                     ColourButton(
                         Constans.ClientColorsList.clientColorsList, onColorSelected = {
-                            viewModel.onFormEvent(ValidationFormEvent.ColorChanged(it))
+                            viewModelClient.onFormEvent(ValidationFormEvent.ColorChanged(it))
                         }, state.color
                     )
                 }
@@ -384,7 +384,7 @@ fun AddClientScreen(
                     OutlinedTextField(
                         value = state.members,
                         onValueChange = {
-                            viewModel.onFormEvent(ValidationFormEvent.MembersChanged(it))
+                            viewModelClient.onFormEvent(ValidationFormEvent.MembersChanged(it))
                         },
                         placeholder = { Text(text = "Количество человек", color = Black) },
                         isError = state.membersError != null,
@@ -423,10 +423,10 @@ fun AddClientScreen(
                     OutlinedTextField(
                         value = "c ${state.dateInString} по ${state.dateOutString} ",
                         onValueChange = {
-                            viewModel.onFormEvent(ValidationFormEvent.InLongDateChanged(viewModel.dateInLong))
-                            viewModel.onFormEvent(ValidationFormEvent.InStringDateChanged(viewModel.dateInString))
-                            viewModel.onFormEvent(ValidationFormEvent.OutLongDateChanged(viewModel.dateOutLong))
-                            viewModel.onFormEvent(ValidationFormEvent.OutStringDateChanged(viewModel.dateOutString))
+                            viewModelClient.onFormEvent(ValidationFormEvent.InLongDateChanged(viewModelClient.dateInLong))
+                            viewModelClient.onFormEvent(ValidationFormEvent.InStringDateChanged(viewModelClient.dateInString))
+                            viewModelClient.onFormEvent(ValidationFormEvent.OutLongDateChanged(viewModelClient.dateOutLong))
+                            viewModelClient.onFormEvent(ValidationFormEvent.OutStringDateChanged(viewModelClient.dateOutString))
                         },
                         placeholder = { Text(text = "Период проживания", color = Black) },
                         isError = (state.dateInStringError != null || state.dateOutStringError != null || state.dateInLongError != null || state.dateOutLongError != null),
@@ -437,7 +437,7 @@ fun AddClientScreen(
                             .clickable {
                                 navController.navigate(
                                     route =
-                                    "${Routs.setClientPeriod}?appatment_name=$appatmentName"
+                                    "${Routs.setClientPeriod}/$appatmentName"
                                 )
 //                                viewModel.showDatePickerDialog(context, "in")
 
@@ -475,7 +475,7 @@ fun AddClientScreen(
                     OutlinedTextField(
                         value = state.prePayment,
                         onValueChange = {
-                            viewModel.onFormEvent(ValidationFormEvent.PrepaymentChanged(it))
+                            viewModelClient.onFormEvent(ValidationFormEvent.PrepaymentChanged(it))
                         },
 
                         placeholder = { Text(text = "Внесенный залог", color = Black) },
@@ -517,7 +517,7 @@ fun AddClientScreen(
                     OutlinedTextField(
                         value = state.payment,
                         onValueChange = {
-                            viewModel.onFormEvent(ValidationFormEvent.PaymentChanged(it))
+                            viewModelClient.onFormEvent(ValidationFormEvent.PaymentChanged(it))
                         },
 
                         placeholder = { Text(text = "Стоимость суток", color = Black) },
@@ -559,7 +559,7 @@ fun AddClientScreen(
                         OutlinedTextField(
                             value = it,
                             onValueChange = {
-                                viewModel.onFormEvent(ValidationFormEvent.transferInfoChanged(it))
+                                viewModelClient.onFormEvent(ValidationFormEvent.transferInfoChanged(it))
                             },
 
                             placeholder = { Text(text = "Сведения для трансфера", color = Black) },
@@ -588,7 +588,7 @@ fun AddClientScreen(
                         OutlinedTextField(
                             value = it,
                             onValueChange = {
-                                viewModel.onFormEvent(ValidationFormEvent.refererChanged(it))
+                                viewModelClient.onFormEvent(ValidationFormEvent.refererChanged(it))
                             },
                             placeholder = { Text(text = "Рекламный ресурс", color = Black) },
                             singleLine = true,
@@ -624,8 +624,8 @@ fun AddClientScreen(
                         ) {
                             IconButton(modifier = Modifier.padding(end = 80.dp),
                                 onClick = {
-                                    viewModel.getAppatmentClients(appatmentName)
-                                    navController.navigate(Routs.addClientScreen)
+                                    viewModelClient.getAppatmentClients(appatmentName)
+                                    navController.navigate(Routs.mainScreenClients)
                                 })
                             {
                                 Icon(
@@ -638,13 +638,14 @@ fun AddClientScreen(
                             }
                             IconButton(
                                 onClick = {
-                                    viewModel.onFormEvent(ValidationFormEvent.onSubmit)
+                                    Log.d("myTag", "аппат с представл - $appatmentName")
+                                    viewModelClient.onFormEvent(ValidationFormEvent.onSubmitInsert(appatmentName))
                                 }
                             )
                             {
                                 Icon(
                                     painter = painterResource(id = R.drawable.baseline_check_24),
-                                    contentDescription = "Добавить объект недвижимости",
+                                    contentDescription = "Добавить клиента",
 
                                     modifier = Modifier.size(55.dp),
                                     tint = Color(223, 75, 0)

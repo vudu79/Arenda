@@ -1,5 +1,6 @@
 package com.example.navigationexample.presentation.screens
 
+import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +12,9 @@ import javax.inject.Inject
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.viewModelScope
+import com.example.navigationexample.data.repository.DaysRepositoryImpl
 import com.example.navigationexample.domain.usecase.validation.*
 import com.example.navigationexample.domain.usecase.validation.validators.*
 import kotlinx.coroutines.CoroutineScope
@@ -25,7 +28,9 @@ import java.time.LocalDate
 
 @HiltViewModel
 class ClientViewModel @Inject constructor(
+//    private val viewModelCalendar: CalendarViewModel,
     private val clientRepository: ClientsRepositoryImpl,
+    private val daysRepository: DaysRepositoryImpl,
 
     private val nameValidationField: NameValidation = NameValidation(),
     private val phoneValidationField: PhoneValidation = PhoneValidation(),
@@ -36,15 +41,22 @@ class ClientViewModel @Inject constructor(
     private val dateStringValidationField: DateStringValidation = DateStringValidation(),
     private val dateLongValidationField: DateLongValidation = DateLongValidation()
 ) : ViewModel() {
-
+    var allApartmentClients: MutableLiveData<List<Client>>
     var currentApartment = MutableLiveData<Appatment>()
-
     var validateFormState by mutableStateOf(ValidationFormState())
+
+    init{
+        allApartmentClients = clientRepository.allAppatmentClients
+    }
 
     private val validationEventChannel = Channel<ValidatAllFieldsResultEvent>()
 
     val validationEvents = validationEventChannel.receiveAsFlow()
 
+    var dateOutString by mutableStateOf("")
+    var dateOutLong by mutableStateOf(0L)
+    var dateInString by mutableStateOf("")
+    var dateInLong by mutableStateOf(0L)
 
     fun getClientState(phone: String) = viewModelScope.launch {
         val client = clientRepository.getClientByPhone(phone)
@@ -68,6 +80,20 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(color = Color(client.clientColor))
     }
 
+    fun getAppatmentClients(appatmentName: String) {
+        clientRepository.getAppatmentClients(appatmentName)
+    }
+
+
+    fun addClient(client: Client) {
+        clientRepository.insertClient(client)
+        daysRepository.insertClientDays(client)
+    }
+
+    fun deleteClient(name: String) {
+        daysRepository.deleteClientDays(name)
+        clientRepository.deleteClient(name)
+    }
     fun updateClient(client: Client): Int {
         return clientRepository.updateClient(client = client)
     }
@@ -131,13 +157,106 @@ class ClientViewModel @Inject constructor(
                 validateFormState = validateFormState.copy(color = event.color)
             }
 
-            is ValidationFormEvent.onSubmit -> {
-                submitData()
+            is ValidationFormEvent.onSubmitInsert -> {
+                Log.d("myTag", "аппат - ${event.apartmentName}")
+                submitDataInsert(event.apartmentName)
             }
+
+
+            is ValidationFormEvent.onSubmitUpdate -> {
+                submitDataUpdate(event.apartmentName)
+            }
+
         }
     }
 
-    private fun submitData() {
+    private fun submitDataInsert(apartmentName:String) {
+        val firstNameResult = nameValidationField.execute(validateFormState.firstName, true)
+        val dateInStringResult = dateStringValidationField.execute(validateFormState.dateInString)
+        val dateOutStringResult = dateStringValidationField.execute(validateFormState.dateOutString)
+        val dateInLongResult = dateLongValidationField.execute(validateFormState.dateInLong)
+        val dateOutLongResult = dateLongValidationField.execute(validateFormState.dateOutLong)
+        val secondNameResult = validateFormState.secondName?.let { nameValidationField.execute(it, false) }
+        val lastNameResult =validateFormState.lastName?.let { nameValidationField.execute(it, false) }
+        val phoneResult = phoneValidationField.execute(validateFormState.phone)
+        val documentNumberResult = validateFormState.documentNamber?.let {
+            documentNumberValidationField.execute(
+                it
+            )
+        }
+        val documentDitailsResult = validateFormState.documentDitails?.let {
+            documentDitailsValidationField.execute(
+                it, false
+            )
+        }
+        val membersResult =membersValidationField.execute(validateFormState.members)
+        val prePaymentResult = paymentValidationField.execute(validateFormState.prePayment)
+        val paymentResult = paymentValidationField.execute(validateFormState.payment)
+
+        val hasError = listOf(
+            firstNameResult,
+            secondNameResult,
+            lastNameResult,
+            phoneResult,
+            documentNumberResult,
+            documentDitailsResult,
+            dateInLongResult,
+            dateInStringResult,
+            dateOutLongResult,
+            dateOutStringResult,
+            membersResult,
+            prePaymentResult,
+            paymentResult
+        ).any { !it!!.successful }
+
+        if (hasError) {
+            validateFormState = validateFormState.copy(
+                firstNameError=firstNameResult.errorMessage,
+                secondNameError=secondNameResult?.errorMessage,
+                lastNameError=lastNameResult?.errorMessage,
+                phoneError=phoneResult.errorMessage,
+                documentNamberError=documentNumberResult?.errorMessage,
+                documentDitailsError=documentDitailsResult?.errorMessage,
+                membersError=membersResult.errorMessage,
+                dateOutStringError=dateOutStringResult.errorMessage,
+                dateInStringError=dateInStringResult.errorMessage,
+                dateOutLongError=dateOutLongResult.errorMessage,
+                dateInLongError=dateInLongResult.errorMessage,
+                prePaymentError=prePaymentResult.errorMessage,
+                paymentError=paymentResult.errorMessage,
+            )
+            return
+        }
+        viewModelScope.launch {
+
+            addClient(
+                Client(
+                    status = validateFormState.status,
+                    firstName = validateFormState.firstName.trim(),
+                    secondName = validateFormState.secondName?.trim(),
+                    lastName = validateFormState.lastName?.trim(),
+                    phone = "+7${validateFormState.phone.trim()}",
+                    documentNumber = validateFormState.documentNamber!!.trim(),
+                    documentDitails = validateFormState.documentDitails!!.trim(),
+                    inDate = validateFormState.dateInLong,
+                    outDate = validateFormState.dateOutLong,
+                    members = validateFormState.members.trim().toInt(),
+                    prepayment = validateFormState.prePayment.trim().toInt(),
+                    payment = validateFormState.payment.trim().toInt(),
+                    clientColor = validateFormState.color.toArgb(),
+                    transferInfo = validateFormState.transferInfo,
+                    referer = validateFormState.referer,
+                    appatment_name = apartmentName
+                )
+            )
+            clientRepository.getAppatmentClients(apartmentName)
+//            currentApartment.value?.name?.let { viewModelCalendar.updateDaysMapForCalendar(it) }
+//            currentApartment.value?.name?.let { viewModelCalendar.updateApartmentPlanedDays(it) }
+            validationEventChannel.send(ValidatAllFieldsResultEvent.Success)
+        }
+    }
+
+    private fun submitDataUpdate(apartmentName: String) {
         val firstNameResult = nameValidationField.execute(validateFormState.firstName, true)
         val dateInStringResult = dateStringValidationField.execute(validateFormState.dateInString)
         val dateOutStringResult = dateStringValidationField.execute(validateFormState.dateOutString)
@@ -215,12 +334,13 @@ class ClientViewModel @Inject constructor(
 //                    clientColor = validateFormState.color.toArgb(),
 //                    transferInfo = validateFormState.transferInfo,
 //                    referer = validateFormState.referer,
-//                    appatment_name = currentApartment.value?.name ?: ""
+//                    appatment_name = apartmentName
 //                )
 //            )
             validationEventChannel.send(ValidatAllFieldsResultEvent.Success)
         }
     }
+
 }
 
 

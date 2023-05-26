@@ -11,13 +11,19 @@ import com.example.navigationexample.presentation.screens.*
 
 
 @Composable
-fun NavHostView(viewModelAppatment: AppatmentViewModel,
-                viewModelClient: ClientViewModel,
+fun NavHostView(
+    viewModelAppatment: AppatmentViewModel,
+    viewModelClient: ClientViewModel,
+    viewModelCalendar: CalendarViewModel
 ) {
     val mainNavController = rememberNavController()
     NavHost(navController = mainNavController, startDestination = Routs.home) {
         composable(Routs.home) {
-            MainScreen(mainNavController, viewModelAppatment)
+            MainScreen(
+                mainNavController, viewModelAppatment = viewModelAppatment,
+                viewModelClient = viewModelClient,
+                viewModelCalendar = viewModelCalendar
+            )
         }
 
         composable(Routs.addAppatmentScreen) {
@@ -29,53 +35,50 @@ fun NavHostView(viewModelAppatment: AppatmentViewModel,
         }
 
         composable(
-            route = "${Routs.mainScreenClients}?appatment_name={appatment_name}",
-            arguments = listOf(
-                navArgument("appatment_name") {
-                    defaultValue = ""
-                    type = NavType.StringType
-                }
-            )
+            route = "${Routs.mainScreenClients}/{apartment_name}",
         ) { navBackStackEntry ->
-            val appatment_name = navBackStackEntry.arguments?.getString("appatment_name")
+            val appatment_name = navBackStackEntry.arguments?.getString("apartment_name")
             appatment_name?.let {
-                AppatmentFinanceScreen(mainNavController, viewModelAppatment, appatment_name)
+                AppatmentFinanceScreen(
+                    mainNavController = mainNavController,
+                    viewModelAppatment = viewModelAppatment,
+                    viewModelClient = viewModelClient,
+                    viewModelCalendar = viewModelCalendar,
+                    appatmentName = appatment_name
+                )
             }
         }
 
         composable(
-            route = "${Routs.addClientScreen}?appatment_name={appatment_name}",
-            arguments = listOf(
-                navArgument("appatment_name") {
-                    defaultValue = ""
-                    type = NavType.StringType
-                }
-            )
+            route = "${Routs.addClientScreen}/{apartment_name}"
         ) { navBackStackEntry ->
-            val appatment_name = navBackStackEntry.arguments?.getString("appatment_name")
+            val appatment_name = navBackStackEntry.arguments?.getString("apartment_name")
             appatment_name?.let {
-                AddClientScreen(mainNavController, viewModelAppatment, appatment_name)
+                AddClientScreen(
+                    navController = mainNavController,
+                    viewModelClient = viewModelClient,
+                    appatmentName = appatment_name
+                )
             }
         }
 
         composable(
-            route = "${Routs.setClientPeriod}?appatment_name={appatment_name}",
-            arguments = listOf(
-                navArgument("appatment_name") {
-                    defaultValue = ""
-                    type = NavType.StringType
-                }
-            )
+            route = "${Routs.setClientPeriod}/{apartment_name}",
         ) { navBackStackEntry ->
-            val appatment_name = navBackStackEntry.arguments?.getString("appatment_name")
+            val appatment_name = navBackStackEntry.arguments?.getString("apartment_name")
             appatment_name?.let {
-                SetDatePeriodScreen(mainNavController, viewModelAppatment, appatment_name)
+                SetDatePeriodScreen(
+                    navController = mainNavController,
+                    viewModelClient = viewModelClient,
+                    viewModelCalendar = viewModelCalendar,
+                    appatmentName = appatment_name
+                )
             }
         }
 
         composable(
             route = "${Routs.clientDitailsScreen}/{client_phone}",
-            arguments = listOf (navArgument("client_phone") { type = NavType.StringType })
+            arguments = listOf(navArgument("client_phone") { type = NavType.StringType })
         ) { backStackEntry ->
             val arguments = requireNotNull(backStackEntry.arguments)
             arguments.getString("client_phone")?.let { client ->
