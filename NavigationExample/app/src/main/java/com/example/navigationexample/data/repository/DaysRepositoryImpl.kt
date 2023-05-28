@@ -1,6 +1,5 @@
 package com.example.navigationexample.data.repository
 
-import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.MutableLiveData
 import com.example.navigationexample.data.dao.RentalDaysDao
@@ -40,7 +39,7 @@ class DaysRepositoryImpl @Inject constructor(
 //        val startDayEpoch = startDay.toEpochDay()
 //        val endDayEpoch = endDay.toEpochDay()
         coroutineScope.launch(Dispatchers.IO) {
-            val allApartmentRentalDate = rentalDaysDao.getAppatmentDays(client.appatment_name)
+            val allApartmentRentalDate = rentalDaysDao.getAppatmentDays(client.appatmentName)
             val allLocalDays = allApartmentRentalDate.map {
                 LocalDate.ofEpochDay(it.epochDay)
             }
@@ -59,7 +58,7 @@ class DaysRepositoryImpl @Inject constructor(
                         isStartDay = isStart,
                         isEndDay = isEnd,
                         isEnable = isEnable,
-                        appatmentName = client.appatment_name
+                        appatmentName = client.appatmentName
                     )
                 )
             }

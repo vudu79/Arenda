@@ -26,5 +26,5 @@ interface ClientDao {
     fun getAppatmentClients(appatmentName: String): List<Client>
 
     @Update
-    fun updateClient(client: Client): Int
+    suspend fun updateClient(client: Client): Int
 }

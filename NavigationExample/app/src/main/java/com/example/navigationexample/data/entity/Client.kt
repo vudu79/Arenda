@@ -62,7 +62,7 @@ class Client {
     var referer: String? = ""
 
     @ColumnInfo(name = "appatment_name")
-    var appatment_name: String = ""
+    var appatmentName: String = ""
 
     constructor()
     constructor(
@@ -70,13 +70,13 @@ class Client {
         phone: String,
         inDate: Long,
         outDate: Long,
-        appatment_name: String
+        appatmentName: String
     ) {
         this.firstName = firstName
         this.phone = phone
         this.inDate = inDate
         this.outDate = outDate
-        this.appatment_name = appatment_name
+        this.appatmentName = appatmentName
     }
 
     constructor(
@@ -95,7 +95,7 @@ class Client {
         clientColor: Int,
         transferInfo: String?,
         referer: String?,
-        appatment_name: String
+        appatmentName: String
     ){
         this.status = status
         this.firstName = firstName
@@ -112,7 +112,7 @@ class Client {
         this.clientColor = clientColor
         this.transferInfo = transferInfo
         this.referer = referer
-        this.appatment_name = appatment_name
+        this.appatmentName = appatmentName
     }
 
     constructor(
@@ -132,7 +132,7 @@ class Client {
         clientColor: Int,
         transferInfo: String?,
         referer: String?,
-        appatment_name: String
+        appatmentName: String
     ){
         this.id = id
         this.status = status
@@ -150,6 +150,6 @@ class Client {
         this.clientColor = clientColor
         this.transferInfo = transferInfo
         this.referer = referer
-        this.appatment_name = appatment_name
+        this.appatmentName = appatmentName
     }
 }

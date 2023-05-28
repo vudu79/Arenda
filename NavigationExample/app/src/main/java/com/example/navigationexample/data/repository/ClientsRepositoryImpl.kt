@@ -69,7 +69,7 @@ class ClientsRepositoryImpl @Inject constructor(private val clientDao: ClientDao
 //    }.onStart { onStart() }.onCompletion { onCompletion() }.flowOn(Dispatchers.IO)
 
 
-    fun updateClient(client: Client): Int {
+    suspend fun updateClient(client: Client): Int {
         return clientDao.updateClient(client)
     }
 

@@ -44,7 +44,7 @@ fun NavHostView(
                     viewModelAppatment = viewModelAppatment,
                     viewModelClient = viewModelClient,
                     viewModelCalendar = viewModelCalendar,
-                    appatmentName = appatment_name
+                    appatmentName = appatment_name,
                 )
             }
         }

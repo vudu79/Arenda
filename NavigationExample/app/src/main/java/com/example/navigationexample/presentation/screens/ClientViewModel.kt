@@ -26,7 +26,6 @@ import java.time.LocalDate
 
 @HiltViewModel
 class ClientViewModel @Inject constructor(
-//    private val viewModelCalendar: CalendarViewModel,
     private val clientRepository: ClientsRepositoryImpl,
     private val daysRepository: DaysRepositoryImpl,
 
@@ -58,7 +57,7 @@ class ClientViewModel @Inject constructor(
 
     fun getClientState(phone: String) = viewModelScope.launch {
         val client = clientRepository.getClientByPhone(phone)
-        validateFormState = validateFormState.copy(apartmentName = client.appatment_name)
+        validateFormState = validateFormState.copy(apartmentName = client.appatmentName)
         validateFormState = validateFormState.copy(id = client.id)
         validateFormState = validateFormState.copy(status = client.status)
         validateFormState = validateFormState.copy(firstName = client.firstName)
@@ -74,6 +73,7 @@ class ClientViewModel @Inject constructor(
         validateFormState =
             validateFormState.copy(dateOutString = LocalDate.ofEpochDay(client.outDate).toString())
         validateFormState = validateFormState.copy(dateOutLong = client.outDate)
+        validateFormState = validateFormState.copy(payment = client.payment.toString())
         validateFormState = validateFormState.copy(prePayment = client.prepayment.toString())
         validateFormState = validateFormState.copy(transferInfo = client.transferInfo)
         validateFormState = validateFormState.copy(referer = client.referer)
@@ -95,7 +95,7 @@ class ClientViewModel @Inject constructor(
         clientRepository.deleteClient(name)
     }
 
-    fun updateClient(client: Client): Int {
+    suspend fun updateClient(client: Client): Int {
         return clientRepository.updateClient(client = client)
     }
 
@@ -230,7 +230,6 @@ class ClientViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
-
             addClient(
                 Client(
                     status = validateFormState.status,
@@ -248,7 +247,7 @@ class ClientViewModel @Inject constructor(
                     clientColor = validateFormState.color.toArgb(),
                     transferInfo = validateFormState.transferInfo,
                     referer = validateFormState.referer,
-                    appatment_name = apartmentName
+                    appatmentName = apartmentName
                 )
             )
             clientRepository.getAppatmentClients(apartmentName)
@@ -288,10 +287,10 @@ class ClientViewModel @Inject constructor(
             phoneResult,
             documentNumberResult,
             documentDitailsResult,
-            dateInLongResult,
-            dateInStringResult,
-            dateOutLongResult,
-            dateOutStringResult,
+//            dateInLongResult,
+//            dateInStringResult,
+//            dateOutLongResult,
+//            dateOutStringResult,
             membersResult,
             prePaymentResult,
             paymentResult
@@ -314,6 +313,9 @@ class ClientViewModel @Inject constructor(
                 prePaymentError = prePaymentResult.errorMessage,
                 paymentError = paymentResult.errorMessage,
             )
+            viewModelScope.launch {
+                validationEventChannel.send(ValidatAllFieldsResultEvent.UpdateWrong)
+            }
             return
         }
         viewModelScope.launch {
@@ -336,7 +338,7 @@ class ClientViewModel @Inject constructor(
                         clientColor = validateFormState.color.toArgb(),
                         transferInfo = validateFormState.transferInfo,
                         referer = validateFormState.referer,
-                        appatment_name = validateFormState.apartmentName!!
+                        appatmentName = validateFormState.apartmentName!!
                     )
                 )
             }

@@ -3,8 +3,6 @@ package com.example.navigationexample.presentation.screens
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -32,7 +30,6 @@ import androidx.navigation.NavHostController
 //import com.example.composeex.ClientItemRow
 import com.example.navigationexample.R
 import com.example.navigationexample.data.entity.Client
-import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
 import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.common.CustomAlertDialog
 import com.kizitonwose.calendar.sample.compose.clickable
@@ -238,8 +235,8 @@ fun LazyItemScope.ClientItemRow(
             showCustomDialog = !showCustomDialog
 
             viewModelClient.deleteClient(client.firstName)
-            viewModelClient.getAppatmentClients(client.appatment_name)
-            viewModelCalendar.updateDaysMapForCalendar(client.appatment_name)
+            viewModelClient.getAppatmentClients(client.appatmentName)
+            viewModelCalendar.updateDaysMapForCalendar(client.appatmentName)
         },
             message = "Клиент будет безвозвратно удален. Вы уверены?"
         )

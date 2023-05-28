@@ -60,9 +60,6 @@ fun AddClientScreen(
         viewModelClient.validationEvents.collect { event ->
             when (event) {
                 is ValidatAllFieldsResultEvent.InsertSuccess -> {
-//                    // Log.d("myTag", "payment --- ${state.payment}")
-//                    // Log.d("myTag", "prePayment --- ${state.prePayment}")
-//                    // Log.d("myTag", "members --- ${state.members}")
 
                     Toast.makeText(
                         context, "Новый клиент зарегестрирован!", Toast.LENGTH_SHORT
@@ -70,6 +67,8 @@ fun AddClientScreen(
                     navController.navigate(route = "${Routs.mainScreenClients}/$appatmentName")
                 }
                 is ValidatAllFieldsResultEvent.UpdateSuccess -> {
+                }
+                is ValidatAllFieldsResultEvent.UpdateWrong -> {
                 }
             }
         }

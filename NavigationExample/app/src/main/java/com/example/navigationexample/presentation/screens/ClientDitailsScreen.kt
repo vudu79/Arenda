@@ -45,22 +45,21 @@ fun ClientDitailsScreen(
     viewModelClient: ClientViewModel,
     clientPhone: String
 ) {
-
-    val languages = listOf("Kotlin", "Java", "Javascript", "Rust")
-    val (selectedOption, onOptionSelected) = remember { mutableStateOf(languages[0]) }
-
-
-    val context = LocalContext.current
-    val focusManager = LocalFocusManager.current
-
     LaunchedEffect(Unit) {
         viewModelClient.getClientState(clientPhone)
     }
     val state = viewModelClient.validateFormState
 
+    val (selectedOption, onOptionSelected) = remember { mutableStateOf(ClientStatus.statusList[0]) }
+
+    val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+
     val isStatusEditActive = remember {
         mutableStateOf(false)
     }
+
+
     val fieldStatusHeight = remember { mutableStateOf(50) }
     fieldStatusHeight.value = when (isStatusEditActive.value) {
         true -> 180
@@ -93,7 +92,6 @@ fun ClientDitailsScreen(
         true -> 120
         false -> 50
     }
-
 
     val isPhoneEditActive = remember {
         mutableStateOf(false)
@@ -136,6 +134,24 @@ fun ClientDitailsScreen(
         false -> 50
     }
 
+    val isPrepaymentEditActive = remember {
+        mutableStateOf(false)
+    }
+    val fieldPrepaymentHeight = remember { mutableStateOf(50) }
+    fieldPrepaymentHeight.value = when (isPrepaymentEditActive.value) {
+        true -> 120
+        false -> 50
+    }
+
+    val isPaymentEditActive = remember {
+        mutableStateOf(false)
+    }
+    val fieldPaymentHeight = remember { mutableStateOf(50) }
+    fieldPaymentHeight.value = when (isPaymentEditActive.value) {
+        true -> 120
+        false -> 50
+    }
+
 
     LaunchedEffect(key1 = context) {
         viewModelClient.validationEvents.collect { event ->
@@ -144,16 +160,21 @@ fun ClientDitailsScreen(
                     Toast.makeText(
                         context, "Клиент обновлен!", Toast.LENGTH_SHORT
                     ).show()
-                    mainNavController.navigate(route = Routs.mainScreenClients)
+                    mainNavController.navigate(route = "${Routs.mainScreenClients}/${state.apartmentName}")
                 }
+
+                is ValidatAllFieldsResultEvent.UpdateWrong -> {
+                    Toast.makeText(
+                        context, "Ошибка при обновлении клиента", Toast.LENGTH_SHORT
+                    ).show()
+//                    mainNavController.navigate(route = "${Routs.mainScreenClients}/${state.apartmentName}")
+                }
+
                 is ValidatAllFieldsResultEvent.InsertSuccess -> {
                 }
             }
         }
     }
-
-
-
 
 
     LazyColumn(
@@ -1034,6 +1055,233 @@ fun ClientDitailsScreen(
                 }
             }
         }
+
+// предоплата
+
+        item {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(3.dp)
+                    .background(Color(red = 41, green = 41, blue = 41)),
+                shape = RoundedCornerShape(5.dp),
+                elevation = 8.dp,
+                onClick = {
+
+                }
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth(0.70f)
+                        .height(fieldPrepaymentHeight.value.dp)
+                        .border(
+                            width = 1.dp,
+                            color = Color(223, 75, 0),
+                            shape = RoundedCornerShape(5.dp)
+                        )
+                        .background(Color(red = 41, 41, blue = 41)),
+                ) {
+
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(red = 41, green = 41, blue = 41))
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(0.85f)
+                                .height(50.dp)
+                                .background(Color(red = 41, green = 41, blue = 41))
+                        ) {
+                            Text(
+                                text = state.prePayment,
+                                maxLines = 1,
+                                modifier = Modifier
+                                    .align(Alignment.CenterStart)
+                                    .background(Color(1, 1, 1))
+                                    .padding(start = 5.dp),
+                                fontSize = 18.sp,
+                                color = Color(254, 253, 253, 255)
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                isPrepaymentEditActive.value = !isPrepaymentEditActive.value
+                            }
+                        )
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_edit_24),
+                                contentDescription = "Редактировать",
+                                modifier = Modifier.size(30.dp),
+                                tint = Color(223, 75, 0)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.padding(2.dp))
+                    if (isPrepaymentEditActive.value) {
+                        OutlinedTextField(
+                            value = state.prePayment,
+                            onValueChange = {
+                                viewModelClient.onFormEvent(ValidationFormEvent.PrepaymentChanged(it))
+                            },
+                            placeholder = {
+                                Text(
+                                    text = "Предоплата",
+                                    color = Color.Black
+                                )
+                            },
+                            isError = state.prePaymentError != null,
+                            singleLine = false,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 1.dp, bottom = 5.dp, start = 5.dp, end = 5.dp),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                unfocusedBorderColor = Color.Black,
+                                textColor = Color.Black,
+                                backgroundColor = Color(142, 143, 138)
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text,
+                                capitalization = KeyboardCapitalization.None,
+                                autoCorrect = true,
+                            ),
+                            keyboardActions = KeyboardActions(onNext = {
+                                focusManager.moveFocus(FocusDirection.Down)
+                            }),
+                        )
+                    }
+                }
+                if (state.prePaymentError != null) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text = state.prePaymentError!!,
+                            color = MaterialTheme.colors.error,
+                            modifier = Modifier.align(Alignment.CenterStart)
+                        )
+                    }
+                }
+            }
+        }
+
+// цена за сутки
+
+        item {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(3.dp)
+                    .background(Color(red = 41, green = 41, blue = 41)),
+                shape = RoundedCornerShape(5.dp),
+                elevation = 8.dp,
+                onClick = {
+
+                }
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth(0.70f)
+                        .height(fieldPaymentHeight.value.dp)
+                        .border(
+                            width = 1.dp,
+                            color = Color(223, 75, 0),
+                            shape = RoundedCornerShape(5.dp)
+                        )
+                        .background(Color(red = 41, 41, blue = 41)),
+                ) {
+
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(red = 41, green = 41, blue = 41))
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(0.85f)
+                                .height(50.dp)
+                                .background(Color(red = 41, green = 41, blue = 41))
+                        ) {
+                            Text(
+                                text = state.payment,
+                                maxLines = 1,
+                                modifier = Modifier
+                                    .align(Alignment.CenterStart)
+                                    .background(Color(1, 1, 1))
+                                    .padding(start = 5.dp),
+                                fontSize = 18.sp,
+                                color = Color(254, 253, 253, 255)
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                isPaymentEditActive.value = !isPaymentEditActive.value
+                            }
+                        )
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_edit_24),
+                                contentDescription = "Редактировать",
+                                modifier = Modifier.size(30.dp),
+                                tint = Color(223, 75, 0)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.padding(2.dp))
+                    if (isPaymentEditActive.value) {
+                        OutlinedTextField(
+                            value = state.payment,
+                            onValueChange = {
+                                viewModelClient.onFormEvent(ValidationFormEvent.PaymentChanged(it))
+                            },
+                            placeholder = {
+                                Text(
+                                    text = "Цена за сутки",
+                                    color = Color.Black
+                                )
+                            },
+                            isError = state.paymentError != null,
+                            singleLine = false,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 1.dp, bottom = 5.dp, start = 5.dp, end = 5.dp),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                unfocusedBorderColor = Color.Black,
+                                textColor = Color.Black,
+                                backgroundColor = Color(142, 143, 138)
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text,
+                                capitalization = KeyboardCapitalization.None,
+                                autoCorrect = true,
+                            ),
+                            keyboardActions = KeyboardActions(onNext = {
+                                focusManager.moveFocus(FocusDirection.Down)
+                            }),
+                        )
+                    }
+                }
+                if (state.paymentError != null) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text = state.paymentError!!,
+                            color = MaterialTheme.colors.error,
+                            modifier = Modifier.align(Alignment.CenterStart)
+                        )
+                    }
+                }
+            }
+        }
+
         item{
             Spacer(modifier = Modifier.padding(10.dp))
 
@@ -1075,20 +1323,5 @@ fun ClientDitailsScreen(
                 }
             }
         }
-
-//    IconButton(onClick = {
-//        mainNavController.navigate(Routs.addAppatmentScreen)
-//    }) {
-//        Icon(
-//            painter = painterResource(id = R.drawable.baseline_add_home_work_24),
-//            contentDescription = "Добавить объект",
-//
-//            modifier = Modifier
-//                .size(50.dp)
-//                .padding(bottom = 3.dp),
-//            tint = Color(223, 75, 0)
-//
-//        )
-//    }
     }
 }
