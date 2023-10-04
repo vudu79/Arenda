@@ -1,6 +1,5 @@
 package com.example.navigationexample.presentation.screens
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -187,98 +186,123 @@ fun ClientDitailsScreen(
 
 //        Статус _______________________________________________________________
         item {
-            Card(
+
+            Column(
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp)
-                    .background(Color(red = 41, green = 41, blue = 41)),
-                shape = RoundedCornerShape(5.dp),
-                elevation = 8.dp,
-                onClick = {
-
-                }
             ) {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth(0.70f)
-                        .height(fieldStatusHeight.value.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color(223, 75, 0),
-                            shape = RoundedCornerShape(5.dp)
-                        )
-                        .background(Color(red = 41, 41, blue = 41)),
-                ) {
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                Row() {
+                    Text(
+                        text = "Статус клиента",
+                        maxLines = 1,
+                        modifier = Modifier
+                            .background(Color(41, 41, 41))
+                            .padding(start = 5.dp),
+                        fontSize = 12.sp,
+                        color = Color(223, 75, 0)
+                    )
+                }
+                Row() {
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color(red = 41, green = 41, blue = 41))
+                            .padding(3.dp)
+                            .background(Color(red = 41, green = 41, blue = 41)),
+                        shape = RoundedCornerShape(5.dp),
+                        elevation = 8.dp,
+                        onClick = {
 
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(0.85f)
-                                .height(50.dp)
-                                .background(Color(red = 41, green = 41, blue = 41))
-
-                        ) {
-                            Text(
-                                text = state.status,
-                                maxLines = 1,
-                                modifier = Modifier
-                                    .align(Alignment.CenterStart)
-                                    .background(Color(41, 41, 41))
-                                    .padding(start = 5.dp),
-
-                                fontSize = 18.sp,
-                                color = Color(254, 253, 253, 255)
-                            )
                         }
-                        IconButton(
-                            modifier = Modifier
-//                                    .align(Alignment.BottomEnd)
-                                .padding(start = 10.dp, end = 10.dp),
-                            onClick = {
-                                isStatusEditActive.value = !isStatusEditActive.value
-                            }
-                        )
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_edit_24),
-                                contentDescription = "Редактировать",
-
-                                modifier = Modifier.size(30.dp),
-                                tint = Color(223, 75, 0)
-                            )
-                        }
-                    }
-
-                    Column(
-                        horizontalAlignment = Alignment.Start,
-                        modifier = Modifier.selectableGroup().fillMaxWidth()
                     ) {
-                        ClientStatus.statusList.forEach { text ->
-                            Row(
-                                Modifier
-                                    .height(25.dp)
-                                    .selectable(
-                                        selected = (text == selectedOption),
-                                        onClick = { onOptionSelected(text) }
-                                    ),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                RadioButton(
-                                    selected = (text == selectedOption),
-                                    onClick = null
+
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .fillMaxWidth(0.70f)
+                                .height(fieldStatusHeight.value.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(223, 75, 0),
+                                    shape = RoundedCornerShape(5.dp)
                                 )
-                                Text(text = text, fontSize = 12.sp, color= Color(254, 253, 253, 255))
+                                .background(Color(red = 41, 41, blue = 41)),
+                        ) {
 
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(red = 41, green = 41, blue = 41))
+
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .height(50.dp)
+                                        .background(Color(red = 41, green = 41, blue = 41))
+
+                                ) {
+                                    Text(
+                                        text = state.status,
+                                        maxLines = 1,
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+                                            .background(Color(41, 41, 41))
+                                            .padding(start = 5.dp),
+
+                                        fontSize = 18.sp,
+                                        color = Color(254, 253, 253, 255)
+                                    )
+                                }
+                                IconButton(
+                                    modifier = Modifier
+//                                    .align(Alignment.BottomEnd)
+                                        .padding(start = 10.dp, end = 10.dp),
+                                    onClick = {
+                                        isStatusEditActive.value = !isStatusEditActive.value
+                                    }
+                                )
+                                {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_edit_24),
+                                        contentDescription = "Редактировать",
+
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(223, 75, 0)
+                                    )
+                                }
                             }
-                        }
-                    }
+
+                            Column(
+                                horizontalAlignment = Alignment.Start,
+                                modifier = Modifier
+                                    .selectableGroup()
+                                    .fillMaxWidth()
+                            ) {
+                                ClientStatus.statusList.forEach { text ->
+                                    Row(
+                                        Modifier
+                                            .height(25.dp)
+                                            .selectable(
+                                                selected = (text == selectedOption),
+                                                onClick = { onOptionSelected(text) }
+                                            ),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        RadioButton(
+                                            selected = (text == selectedOption),
+                                            onClick = null
+                                        )
+                                        Text(
+                                            text = text,
+                                            fontSize = 12.sp,
+                                            color = Color(254, 253, 253, 255)
+                                        )
+
+                                    }
+                                }
+                            }
 
 //                    if (isStatusEditActive.value) {
 //                        OutlinedTextField(
@@ -307,7 +331,7 @@ fun ClientDitailsScreen(
 //                            }),
 //                        )
 //                    }
-                }
+                        }
 //            if (state.firstNameError != null) {
 //                Text(
 //                    text = state.firstNameError!!,
@@ -315,116 +339,147 @@ fun ClientDitailsScreen(
 //                    modifier = Modifier.align(Alignment.Start)
 //                )
 //            }
+                    }
+                }
             }
         }
 
 
 //        Имя+++++++++++++++++++++++++++++++++++++++++++++++
         item {
-            Card(
+            Column(
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp)
-                    .background(Color(red = 41, green = 41, blue = 41)),
-                shape = RoundedCornerShape(5.dp),
-                elevation = 8.dp,
-                onClick = {
-
-                }
             ) {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth(0.70f)
-                        .height(fieldFirstNameHeight.value.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color(223, 75, 0),
-                            shape = RoundedCornerShape(5.dp)
-                        )
-                        .background(Color(red = 41, 41, blue = 41)),
-                ) {
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                Row() {
+                    Text(
+                        text = "Имя клиента",
+                        maxLines = 1,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color(red = 41, green = 41, blue = 41))
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(0.85f)
-                                .height(50.dp)
-                                .background(Color(red = 41, green = 41, blue = 41))
-                        ) {
-                            Text(
-                                text = state.firstName,
-                                maxLines = 1,
-                                modifier = Modifier
-                                    .align(Alignment.CenterStart)
-                                    .background(Color(41, 41, 41))
-                                    .padding(start = 5.dp),
-
-                                fontSize = 18.sp,
-                                color = Color(254, 253, 253, 255)
-                            )
-                        }
-                        IconButton(
-//                            modifier = Modifier.align(Alignment.BottomEnd),
-                            onClick = {
-                                isFirstNameEditActive.value = !isFirstNameEditActive.value
-                            }
-                        )
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_edit_24),
-                                contentDescription = "Редактировать",
-
-                                modifier = Modifier.size(30.dp),
-                                tint = Color(223, 75, 0)
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    if (isFirstNameEditActive.value) {
-                        OutlinedTextField(
-                            value = state.firstName,
-                            onValueChange = {
-                                viewModelClient.onFormEvent(ValidationFormEvent.FirstNameChanged(it))
-                            },
-                            placeholder = { Text(text = "Имя", color = Color.Black) },
-                            isError = state.firstNameError != null,
-                            singleLine = false,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 1.dp, bottom = 5.dp, start = 5.dp, end = 5.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                unfocusedBorderColor = Color.Black,
-                                textColor = Color.Black,
-                                backgroundColor = Color(142, 143, 138)
-                            ),
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text,
-                                capitalization = KeyboardCapitalization.None,
-                                autoCorrect = true,
-                            ),
-                            keyboardActions = KeyboardActions(onNext = {
-                                focusManager.moveFocus(FocusDirection.Down)
-                            }),
-                        )
-                    }
+                            .background(Color(41, 41, 41))
+                            .padding(start = 5.dp),
+                        fontSize = 12.sp,
+                        color = Color(223, 75, 0)
+                    )
                 }
-                if (state.firstNameError != null) {
-                    Box(
+                Row() {
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(3.dp)
+                            .background(Color(red = 41, green = 41, blue = 41)),
+                        shape = RoundedCornerShape(5.dp),
+                        elevation = 8.dp,
+                        onClick = {
+
+                        }
                     ) {
-                        Text(
-                            text = state.firstNameError!!,
-                            color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.BottomStart)
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .fillMaxWidth(0.70f)
+                                .height(fieldFirstNameHeight.value.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(223, 75, 0),
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                                .background(Color(red = 41, 41, blue = 41)),
+                        ) {
+
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(red = 41, green = 41, blue = 41))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .height(50.dp)
+                                        .background(Color(red = 41, green = 41, blue = 41))
+                                ) {
+                                    Text(
+                                        text = state.firstName,
+                                        maxLines = 1,
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+                                            .background(Color(41, 41, 41))
+                                            .padding(start = 5.dp),
+
+                                        fontSize = 18.sp,
+                                        color = Color(254, 253, 253, 255)
+                                    )
+                                }
+                                IconButton(
+//                            modifier = Modifier.align(Alignment.BottomEnd),
+                                    onClick = {
+                                        isFirstNameEditActive.value = !isFirstNameEditActive.value
+                                    }
+                                )
+                                {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_edit_24),
+                                        contentDescription = "Редактировать",
+
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(223, 75, 0)
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.padding(2.dp))
+                            if (isFirstNameEditActive.value) {
+                                OutlinedTextField(
+                                    value = state.firstName,
+                                    onValueChange = {
+                                        viewModelClient.onFormEvent(
+                                            ValidationFormEvent.FirstNameChanged(
+                                                it
+                                            )
+                                        )
+                                    },
+                                    placeholder = { Text(text = "Имя", color = Color.Black) },
+                                    isError = state.firstNameError != null,
+                                    singleLine = false,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            top = 1.dp,
+                                            bottom = 5.dp,
+                                            start = 5.dp,
+                                            end = 5.dp
+                                        ),
+                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                                        unfocusedBorderColor = Color.Black,
+                                        textColor = Color.Black,
+                                        backgroundColor = Color(142, 143, 138)
+                                    ),
+                                    keyboardOptions = KeyboardOptions(
+                                        imeAction = ImeAction.Next,
+                                        keyboardType = KeyboardType.Text,
+                                        capitalization = KeyboardCapitalization.None,
+                                        autoCorrect = true,
+                                    ),
+                                    keyboardActions = KeyboardActions(onNext = {
+                                        focusManager.moveFocus(FocusDirection.Down)
+                                    }),
+                                )
+                            }
+                        }
+                        if (state.firstNameError != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = state.firstNameError!!,
+                                    color = MaterialTheme.colors.error,
+                                    modifier = Modifier.align(Alignment.BottomStart)
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -433,106 +488,135 @@ fun ClientDitailsScreen(
 //        Отчество +++++++++++++++++++++++++++++++++++++++++++++++
 
         item {
-            Card(
+            Column(
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp)
-                    .background(Color(red = 41, green = 41, blue = 41)),
-                shape = RoundedCornerShape(5.dp),
-                elevation = 8.dp,
-                onClick = {
-
-                }
             ) {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth(0.70f)
-                        .height(fieldSecondNameHeight.value.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color(223, 75, 0),
-                            shape = RoundedCornerShape(5.dp)
-                        )
-                        .background(Color(red = 41, 41, blue = 41)),
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                Row() {
+                    Text(
+                        text = "Отчество",
+                        maxLines = 1,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color(red = 41, green = 41, blue = 41))
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(0.85f)
-                                .height(50.dp)
-                                .background(Color(red = 41, green = 41, blue = 41))
-                        ) {
-                            Text(
-                                text = state.secondName ?: "не установлено",
-                                maxLines = 1,
-                                modifier = Modifier
-                                    .align(Alignment.CenterStart)
-                                    .background(Color(1, 1, 1))
-                                    .padding(start = 5.dp),
-                                fontSize = 18.sp,
-                                color = Color(254, 253, 253, 255)
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                isSecondNameEditActive.value = !isSecondNameEditActive.value
-                            }
-                        )
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_edit_24),
-                                contentDescription = "Редактировать",
-                                modifier = Modifier.size(30.dp),
-                                tint = Color(223, 75, 0)
-                            )
-                        }
-
-                    }
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    if (isSecondNameEditActive.value) {
-                        OutlinedTextField(
-                            value = state.secondName ?: "не установлено",
-                            onValueChange = {
-                                viewModelClient.onFormEvent(ValidationFormEvent.SecondNameChanged(it))
-                            },
-                            placeholder = { Text(text = "Отчество", color = Color.Black) },
-                            isError = state.secondNameError != null,
-                            singleLine = false,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 1.dp, bottom = 5.dp, start = 5.dp, end = 5.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                unfocusedBorderColor = Color.Black,
-                                textColor = Color.Black,
-                                backgroundColor = Color(142, 143, 138)
-                            ),
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text,
-                                capitalization = KeyboardCapitalization.None,
-                                autoCorrect = true,
-                            ),
-                            keyboardActions = KeyboardActions(onNext = {
-                                focusManager.moveFocus(FocusDirection.Down)
-                            }),
-                        )
-                    }
+                            .background(Color(41, 41, 41))
+                            .padding(start = 5.dp),
+                        fontSize = 12.sp,
+                        color = Color(223, 75, 0)
+                    )
                 }
-                if (state.secondNameError != null) {
-                    Box(
+                Row() {
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(3.dp)
+                            .background(Color(red = 41, green = 41, blue = 41)),
+                        shape = RoundedCornerShape(5.dp),
+                        elevation = 8.dp,
+                        onClick = {
+
+                        }
                     ) {
-                        Text(
-                            text = state.secondNameError!!,
-                            color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.CenterStart)
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .fillMaxWidth(0.70f)
+                                .height(fieldSecondNameHeight.value.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(223, 75, 0),
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                                .background(Color(red = 41, 41, blue = 41)),
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(red = 41, green = 41, blue = 41))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .height(50.dp)
+                                        .background(Color(red = 41, green = 41, blue = 41))
+                                ) {
+                                    Text(
+                                        text = state.secondName ?: "не установлено",
+                                        maxLines = 1,
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+                                            .background(Color(1, 1, 1))
+                                            .padding(start = 5.dp),
+                                        fontSize = 18.sp,
+                                        color = Color(254, 253, 253, 255)
+                                    )
+                                }
+                                IconButton(
+                                    onClick = {
+                                        isSecondNameEditActive.value = !isSecondNameEditActive.value
+                                    }
+                                )
+                                {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_edit_24),
+                                        contentDescription = "Редактировать",
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(223, 75, 0)
+                                    )
+                                }
+
+                            }
+                            Spacer(modifier = Modifier.padding(2.dp))
+                            if (isSecondNameEditActive.value) {
+                                OutlinedTextField(
+                                    value = state.secondName ?: "не установлено",
+                                    onValueChange = {
+                                        viewModelClient.onFormEvent(
+                                            ValidationFormEvent.SecondNameChanged(
+                                                it
+                                            )
+                                        )
+                                    },
+                                    placeholder = { Text(text = "Отчество", color = Color.Black) },
+                                    isError = state.secondNameError != null,
+                                    singleLine = false,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            top = 1.dp,
+                                            bottom = 5.dp,
+                                            start = 5.dp,
+                                            end = 5.dp
+                                        ),
+                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                                        unfocusedBorderColor = Color.Black,
+                                        textColor = Color.Black,
+                                        backgroundColor = Color(142, 143, 138)
+                                    ),
+                                    keyboardOptions = KeyboardOptions(
+                                        imeAction = ImeAction.Next,
+                                        keyboardType = KeyboardType.Text,
+                                        capitalization = KeyboardCapitalization.None,
+                                        autoCorrect = true,
+                                    ),
+                                    keyboardActions = KeyboardActions(onNext = {
+                                        focusManager.moveFocus(FocusDirection.Down)
+                                    }),
+                                )
+                            }
+                        }
+                        if (state.secondNameError != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = state.secondNameError!!,
+                                    color = MaterialTheme.colors.error,
+                                    modifier = Modifier.align(Alignment.CenterStart)
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -541,106 +625,135 @@ fun ClientDitailsScreen(
 
 //        Фамилия +++++++++++++++++++++++++++++++++++++++++++++++
         item {
-            Card(
+            Column(
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp)
-                    .background(Color(red = 41, green = 41, blue = 41)),
-                shape = RoundedCornerShape(5.dp),
-                elevation = 8.dp,
-                onClick = {
-
-                }
             ) {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth(0.70f)
-                        .height(fieldLastNameHeight.value.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color(223, 75, 0),
-                            shape = RoundedCornerShape(5.dp)
-                        )
-                        .background(Color(red = 41, 41, blue = 41)),
-                ) {
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                Row() {
+                    Text(
+                        text = "Фамилия",
+                        maxLines = 1,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color(red = 41, green = 41, blue = 41))
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(0.85f)
-                                .height(50.dp)
-                                .background(Color(red = 41, green = 41, blue = 41))
-                        ) {
-                            Text(
-                                text = state.lastName ?: "не установлено",
-                                maxLines = 1,
-                                modifier = Modifier
-                                    .align(Alignment.CenterStart)
-                                    .background(Color(1, 1, 1))
-                                    .padding(start = 5.dp),
-                                fontSize = 18.sp,
-                                color = Color(254, 253, 253, 255)
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                isLastNameEditActive.value = !isLastNameEditActive.value
-                            }
-                        )
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_edit_24),
-                                contentDescription = "Редактировать",
-                                modifier = Modifier.size(30.dp),
-                                tint = Color(223, 75, 0)
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    if (isLastNameEditActive.value) {
-                        OutlinedTextField(
-                            value = state.lastName ?: "не установлено",
-                            onValueChange = {
-                                viewModelClient.onFormEvent(ValidationFormEvent.LastNameChanged(it))
-                            },
-                            placeholder = { Text(text = "Фамилия", color = Color.Black) },
-                            isError = state.lastNameError != null,
-                            singleLine = false,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 1.dp, bottom = 5.dp, start = 5.dp, end = 5.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                unfocusedBorderColor = Color.Black,
-                                textColor = Color.Black,
-                                backgroundColor = Color(142, 143, 138)
-                            ),
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text,
-                                capitalization = KeyboardCapitalization.None,
-                                autoCorrect = true,
-                            ),
-                            keyboardActions = KeyboardActions(onNext = {
-                                focusManager.moveFocus(FocusDirection.Down)
-                            }),
-                        )
-                    }
+                            .background(Color(41, 41, 41))
+                            .padding(start = 5.dp),
+                        fontSize = 12.sp,
+                        color = Color(223, 75, 0)
+                    )
                 }
-                if (state.lastNameError != null) {
-                    Box(
+                Row() {
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(3.dp)
+                            .background(Color(red = 41, green = 41, blue = 41)),
+                        shape = RoundedCornerShape(5.dp),
+                        elevation = 8.dp,
+                        onClick = {
+
+                        }
                     ) {
-                        Text(
-                            text = state.lastNameError!!,
-                            color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.CenterStart)
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .fillMaxWidth(0.70f)
+                                .height(fieldLastNameHeight.value.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(223, 75, 0),
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                                .background(Color(red = 41, 41, blue = 41)),
+                        ) {
+
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(red = 41, green = 41, blue = 41))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .height(50.dp)
+                                        .background(Color(red = 41, green = 41, blue = 41))
+                                ) {
+                                    Text(
+                                        text = state.lastName ?: "не установлено",
+                                        maxLines = 1,
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+                                            .background(Color(1, 1, 1))
+                                            .padding(start = 5.dp),
+                                        fontSize = 18.sp,
+                                        color = Color(254, 253, 253, 255)
+                                    )
+                                }
+                                IconButton(
+                                    onClick = {
+                                        isLastNameEditActive.value = !isLastNameEditActive.value
+                                    }
+                                )
+                                {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_edit_24),
+                                        contentDescription = "Редактировать",
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(223, 75, 0)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.padding(2.dp))
+                            if (isLastNameEditActive.value) {
+                                OutlinedTextField(
+                                    value = state.lastName ?: "не установлено",
+                                    onValueChange = {
+                                        viewModelClient.onFormEvent(
+                                            ValidationFormEvent.LastNameChanged(
+                                                it
+                                            )
+                                        )
+                                    },
+                                    placeholder = { Text(text = "Фамилия", color = Color.Black) },
+                                    isError = state.lastNameError != null,
+                                    singleLine = false,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            top = 1.dp,
+                                            bottom = 5.dp,
+                                            start = 5.dp,
+                                            end = 5.dp
+                                        ),
+                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                                        unfocusedBorderColor = Color.Black,
+                                        textColor = Color.Black,
+                                        backgroundColor = Color(142, 143, 138)
+                                    ),
+                                    keyboardOptions = KeyboardOptions(
+                                        imeAction = ImeAction.Next,
+                                        keyboardType = KeyboardType.Text,
+                                        capitalization = KeyboardCapitalization.None,
+                                        autoCorrect = true,
+                                    ),
+                                    keyboardActions = KeyboardActions(onNext = {
+                                        focusManager.moveFocus(FocusDirection.Down)
+                                    }),
+                                )
+                            }
+                        }
+                        if (state.lastNameError != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = state.lastNameError!!,
+                                    color = MaterialTheme.colors.error,
+                                    modifier = Modifier.align(Alignment.CenterStart)
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -649,80 +762,103 @@ fun ClientDitailsScreen(
 
 //        Телефон +++++++++++++++++++++++++++++++++++++++++++++++
         item {
-            Card(
+            Column(
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp)
-                    .background(Color(red = 41, green = 41, blue = 41)),
-                shape = RoundedCornerShape(5.dp),
-                elevation = 8.dp,
-                onClick = {
-
-                }
             ) {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth(0.70f)
-                        .height(fieldPhoneHeight.value.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color(223, 75, 0),
-                            shape = RoundedCornerShape(5.dp)
-                        )
-                        .background(Color(red = 41, 41, blue = 41)),
-                ) {
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                Row() {
+                    Text(
+                        text = "Контактный телефон",
+                        maxLines = 1,
+                        modifier = Modifier
+                            .background(Color(41, 41, 41))
+                            .padding(start = 5.dp),
+                        fontSize = 12.sp,
+                        color = Color(223, 75, 0)
+                    )
+                }
+                Row() {
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color(red = 41, green = 41, blue = 41))
+                            .padding(3.dp)
+                            .background(Color(red = 41, green = 41, blue = 41)),
+                        shape = RoundedCornerShape(5.dp),
+                        elevation = 8.dp,
+                        onClick = {
+
+                        }
                     ) {
-                        Box(
+                        Column(
+                            horizontalAlignment = Alignment.Start,
                             modifier = Modifier
-                                .fillMaxWidth(0.85f)
-                                .height(50.dp)
-                                .background(Color(red = 41, green = 41, blue = 41))
+                                .fillMaxWidth(0.70f)
+                                .height(fieldPhoneHeight.value.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(223, 75, 0),
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                                .background(Color(red = 41, 41, blue = 41)),
                         ) {
-                            Text(
-                                text = state.phone,
-                                maxLines = 1,
+
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier
-                                    .align(Alignment.CenterStart)
-                                    .background(Color(1, 1, 1))
-                                    .padding(start = 5.dp),
-                                fontSize = 18.sp,
-                                color = Color(254, 253, 253, 255)
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                isPhoneEditActive.value = !isPhoneEditActive.value
+                                    .fillMaxWidth()
+                                    .background(Color(red = 41, green = 41, blue = 41))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .height(50.dp)
+                                        .background(Color(red = 41, green = 41, blue = 41))
+                                ) {
+                                    Text(
+                                        text = state.phone,
+                                        maxLines = 1,
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+                                            .background(Color(1, 1, 1))
+                                            .padding(start = 5.dp),
+                                        fontSize = 18.sp,
+                                        color = Color(254, 253, 253, 255)
+                                    )
+                                }
+                                IconButton(
+                                    onClick = {
+                                        isPhoneEditActive.value = !isPhoneEditActive.value
+                                    }
+                                )
+                                {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_edit_24),
+                                        contentDescription = "Редактировать",
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(223, 75, 0)
+                                    )
+                                }
                             }
-                        )
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_edit_24),
-                                contentDescription = "Редактировать",
-                                modifier = Modifier.size(30.dp),
-                                tint = Color(223, 75, 0)
-                            )
+                            Spacer(modifier = Modifier.padding(2.dp))
+                            if (isPhoneEditActive.value) {
+                                PhoneField(
+                                    value = state.phone,
+                                    placeHolder = "Контактный телефон",
+                                    mask = "+7(000)-000-00-00",
+                                    maskNumber = '0',
+                                    onPhoneChanged = {
+                                        viewModelClient.onFormEvent(
+                                            ValidationFormEvent.PhoneChanged(
+                                                it
+                                            )
+                                        )
+                                    },
+                                    errorMessage = state.phoneError,
+                                    modifier = Modifier.align(Alignment.Start)
+                                )
+                            }
                         }
-                    }
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    if (isPhoneEditActive.value) {
-                        PhoneField(
-                            value = state.phone,
-                            placeHolder = "Контактный телефон",
-                            mask = "+7(000)-000-00-00",
-                            maskNumber = '0',
-                            onPhoneChanged = {
-                                viewModelClient.onFormEvent(ValidationFormEvent.PhoneChanged(it))
-                            },
-                            errorMessage = state.phoneError,
-                            modifier = Modifier.align(Alignment.Start)
-                        )
                     }
                 }
             }
@@ -731,81 +867,104 @@ fun ClientDitailsScreen(
 
 //        Номер паспорта +++++++++++++++++++++++++++++++++++++++++++++++
         item {
-            Card(
+            Column(
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp)
-                    .background(Color(red = 41, green = 41, blue = 41)),
-                shape = RoundedCornerShape(5.dp),
-                elevation = 8.dp,
-                onClick = {
-
-                }
             ) {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth(0.70f)
-                        .height(fieldDocumentNamberHeight.value.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color(223, 75, 0),
-                            shape = RoundedCornerShape(5.dp)
-                        )
-                        .background(Color(red = 41, 41, blue = 41)),
-                ) {
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                Row() {
+                    Text(
+                        text = "Номер паспорта",
+                        maxLines = 1,
+                        modifier = Modifier
+                            .background(Color(41, 41, 41))
+                            .padding(start = 5.dp),
+                        fontSize = 12.sp,
+                        color = Color(223, 75, 0)
+                    )
+                }
+                Row() {
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color(red = 41, green = 41, blue = 41))
+                            .padding(3.dp)
+                            .background(Color(red = 41, green = 41, blue = 41)),
+                        shape = RoundedCornerShape(5.dp),
+                        elevation = 8.dp,
+                        onClick = {
+
+                        }
                     ) {
-                        Box(
+                        Column(
+                            horizontalAlignment = Alignment.Start,
                             modifier = Modifier
-                                .fillMaxWidth(0.85f)
-                                .height(50.dp)
-                                .background(Color(red = 41, green = 41, blue = 41))
+                                .fillMaxWidth(0.70f)
+                                .height(fieldDocumentNamberHeight.value.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(223, 75, 0),
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                                .background(Color(red = 41, 41, blue = 41)),
                         ) {
-                            Text(
-                                text = state.documentNamber ?: "не установлено",
-                                maxLines = 1,
+
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 modifier = Modifier
-                                    .align(Alignment.CenterStart)
-                                    .background(Color(1, 1, 1))
-                                    .padding(start = 5.dp),
-                                fontSize = 18.sp,
-                                color = Color(254, 253, 253, 255)
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                isDocumentNamberEditActive.value =
-                                    !isDocumentNamberEditActive.value
+                                    .fillMaxWidth()
+                                    .background(Color(red = 41, green = 41, blue = 41))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .height(50.dp)
+                                        .background(Color(red = 41, green = 41, blue = 41))
+                                ) {
+                                    Text(
+                                        text = state.documentNamber ?: "не установлено",
+                                        maxLines = 1,
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+                                            .background(Color(1, 1, 1))
+                                            .padding(start = 5.dp),
+                                        fontSize = 18.sp,
+                                        color = Color(254, 253, 253, 255)
+                                    )
+                                }
+                                IconButton(
+                                    onClick = {
+                                        isDocumentNamberEditActive.value =
+                                            !isDocumentNamberEditActive.value
+                                    }
+                                )
+                                {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_edit_24),
+                                        contentDescription = "Редактировать",
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(223, 75, 0)
+                                    )
+                                }
                             }
-                        )
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_edit_24),
-                                contentDescription = "Редактировать",
-                                modifier = Modifier.size(30.dp),
-                                tint = Color(223, 75, 0)
-                            )
+                            Spacer(modifier = Modifier.padding(2.dp))
+                            if (isDocumentNamberEditActive.value) {
+                                PhoneField(
+                                    value = state.documentNamber ?: "не установлено",
+                                    placeHolder = "Паспорт: серия номер",
+                                    mask = "0000-000000",
+                                    maskNumber = '0',
+                                    onPhoneChanged = {
+                                        viewModelClient.onFormEvent(
+                                            ValidationFormEvent.DocumentNamberChanged(
+                                                it
+                                            )
+                                        )
+                                    },
+                                    errorMessage = state.documentNamberError,
+                                    modifier = Modifier.align(Alignment.Start)
+                                )
+                            }
                         }
-                    }
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    if (isDocumentNamberEditActive.value) {
-                        PhoneField(
-                            value = state.documentNamber ?: "не установлено",
-                            placeHolder = "Паспорт: серия номер",
-                            mask = "0000-000000",
-                            maskNumber = '0',
-                            onPhoneChanged = {
-                                viewModelClient.onFormEvent(ValidationFormEvent.DocumentNamberChanged(it))
-                            },
-                            errorMessage = state.documentNamberError,
-                            modifier = Modifier.align(Alignment.Start)
-                        )
                     }
                 }
             }
@@ -814,121 +973,150 @@ fun ClientDitailsScreen(
 
 //        паспортные данные+++++++++++++++++++++++++++++++++++++++++++++++
         item {
-            Card(
+            Column(
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp)
-                    .background(Color(red = 41, green = 41, blue = 41)),
-                shape = RoundedCornerShape(5.dp),
-                elevation = 8.dp,
-                onClick = {
-
-                }
             ) {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth(0.70f)
-                        .height(fieldDocumentDitailsHeight.value.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color(223, 75, 0),
-                            shape = RoundedCornerShape(5.dp)
-                        )
-                        .background(Color(red = 41, 41, blue = 41)),
-                ) {
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                Row() {
+                    Text(
+                        text = "Паспортные данные",
+                        maxLines = 1,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color(red = 41, green = 41, blue = 41))
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(0.85f)
-                                .background(Color(red = 41, green = 41, blue = 41))
-                        ) {
-                            Text(
-                                text = state.documentDitails ?: "не установлено",
-                                modifier = Modifier
-                                    .align(Alignment.CenterStart)
-                                    .background(Color(41, green = 41, blue = 41))
-                                    .padding(start = 5.dp),
-                                fontSize = 18.sp,
-                                color = Color(254, 253, 253, 255),
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 4,
-                                textAlign = TextAlign.Justify
-                            )
-                        }
-
-                        IconButton(
-//                            modifier = Modifier.align(Alignment.BottomEnd),
-                            onClick = {
-                                isDocumentDitailsEditActive.value =
-                                    !isDocumentDitailsEditActive.value
-                            }
-                        )
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_edit_24),
-                                contentDescription = "Редактировать",
-                                modifier = Modifier.size(30.dp),
-                                tint = Color(223, 75, 0)
-                            )
-                        }
-
-                    }
-
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    if (isDocumentDitailsEditActive.value) {
-                        OutlinedTextField(
-                            value = state.documentDitails ?: "не установлено",
-                            onValueChange = {
-                                viewModelClient.onFormEvent(ValidationFormEvent.DocumentDitailsChanged(it))
-                            },
-                            placeholder = {
-                                Text(
-                                    text = "Паспор: кем и когда выдан",
-                                    color = Color.Black
-                                )
-                            },
-                            isError = state.documentDitailsError != null,
-                            singleLine = false,
-
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(120.dp)
-                                .padding(top = 1.dp, bottom = 5.dp, start = 5.dp, end = 5.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                unfocusedBorderColor = Color.Black,
-                                textColor = Color.Black,
-                                backgroundColor = Color(142, 143, 138)
-                            ),
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text,
-                                capitalization = KeyboardCapitalization.None,
-                                autoCorrect = true,
-                            ),
-                            keyboardActions = KeyboardActions(onNext = {
-                                focusManager.moveFocus(FocusDirection.Down)
-                            }),
-                            minLines = 4
-                        )
-                    }
+                            .background(Color(41, 41, 41))
+                            .padding(start = 5.dp),
+                        fontSize = 12.sp,
+                        color = Color(223, 75, 0)
+                    )
                 }
-                if (state.documentDitailsError != null) {
-                    Box(
+                Row() {
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(3.dp)
+                            .background(Color(red = 41, green = 41, blue = 41)),
+                        shape = RoundedCornerShape(5.dp),
+                        elevation = 8.dp,
+                        onClick = {
+
+                        }
                     ) {
-                        Text(
-                            text = state.documentDitailsError!!,
-                            color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.BottomStart)
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            verticalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier
+                                .fillMaxWidth(0.70f)
+                                .height(fieldDocumentDitailsHeight.value.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(223, 75, 0),
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                                .background(Color(red = 41, 41, blue = 41)),
+                        ) {
+
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(red = 41, green = 41, blue = 41))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .background(Color(red = 41, green = 41, blue = 41))
+                                ) {
+                                    Text(
+                                        text = state.documentDitails ?: "не установлено",
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+                                            .background(Color(41, green = 41, blue = 41))
+                                            .padding(start = 5.dp),
+                                        fontSize = 18.sp,
+                                        color = Color(254, 253, 253, 255),
+                                        overflow = TextOverflow.Ellipsis,
+                                        maxLines = 4,
+                                        textAlign = TextAlign.Justify
+                                    )
+                                }
+
+                                IconButton(
+//                            modifier = Modifier.align(Alignment.BottomEnd),
+                                    onClick = {
+                                        isDocumentDitailsEditActive.value =
+                                            !isDocumentDitailsEditActive.value
+                                    }
+                                )
+                                {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_edit_24),
+                                        contentDescription = "Редактировать",
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(223, 75, 0)
+                                    )
+                                }
+
+                            }
+
+                            Spacer(modifier = Modifier.padding(2.dp))
+                            if (isDocumentDitailsEditActive.value) {
+                                OutlinedTextField(
+                                    value = state.documentDitails ?: "не установлено",
+                                    onValueChange = {
+                                        viewModelClient.onFormEvent(
+                                            ValidationFormEvent.DocumentDitailsChanged(
+                                                it
+                                            )
+                                        )
+                                    },
+                                    placeholder = {
+                                        Text(
+                                            text = "Паспор: кем и когда выдан",
+                                            color = Color.Black
+                                        )
+                                    },
+                                    isError = state.documentDitailsError != null,
+                                    singleLine = false,
+
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(120.dp)
+                                        .padding(
+                                            top = 1.dp,
+                                            bottom = 5.dp,
+                                            start = 5.dp,
+                                            end = 5.dp
+                                        ),
+                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                                        unfocusedBorderColor = Color.Black,
+                                        textColor = Color.Black,
+                                        backgroundColor = Color(142, 143, 138)
+                                    ),
+                                    keyboardOptions = KeyboardOptions(
+                                        imeAction = ImeAction.Next,
+                                        keyboardType = KeyboardType.Text,
+                                        capitalization = KeyboardCapitalization.None,
+                                        autoCorrect = true,
+                                    ),
+                                    keyboardActions = KeyboardActions(onNext = {
+                                        focusManager.moveFocus(FocusDirection.Down)
+                                    }),
+                                    minLines = 4
+                                )
+                            }
+                        }
+                        if (state.documentDitailsError != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = state.documentDitailsError!!,
+                                    color = MaterialTheme.colors.error,
+                                    modifier = Modifier.align(Alignment.BottomStart)
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -946,111 +1134,140 @@ fun ClientDitailsScreen(
 // количестов человек
 
         item {
-            Card(
+            Column(
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp)
-                    .background(Color(red = 41, green = 41, blue = 41)),
-                shape = RoundedCornerShape(5.dp),
-                elevation = 8.dp,
-                onClick = {
-
-                }
             ) {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth(0.70f)
-                        .height(fieldMembersHeight.value.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color(223, 75, 0),
-                            shape = RoundedCornerShape(5.dp)
-                        )
-                        .background(Color(red = 41, 41, blue = 41)),
-                ) {
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                Row() {
+                    Text(
+                        text = "Количество гостей",
+                        maxLines = 1,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color(red = 41, green = 41, blue = 41))
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(0.85f)
-                                .height(50.dp)
-                                .background(Color(red = 41, green = 41, blue = 41))
-                        ) {
-                            Text(
-                                text = state.members,
-                                maxLines = 1,
-                                modifier = Modifier
-                                    .align(Alignment.CenterStart)
-                                    .background(Color(1, 1, 1))
-                                    .padding(start = 5.dp),
-                                fontSize = 18.sp,
-                                color = Color(254, 253, 253, 255)
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                isMembersEditActive.value = !isMembersEditActive.value
-                            }
-                        )
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_edit_24),
-                                contentDescription = "Редактировать",
-                                modifier = Modifier.size(30.dp),
-                                tint = Color(223, 75, 0)
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    if (isMembersEditActive.value) {
-                        OutlinedTextField(
-                            value = state.members,
-                            onValueChange = {
-                                viewModelClient.onFormEvent(ValidationFormEvent.MembersChanged(it))
-                            },
-                            placeholder = {
-                                Text(
-                                    text = "Количество человек",
-                                    color = Color.Black
-                                )
-                            },
-                            isError = state.membersError != null,
-                            singleLine = false,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 1.dp, bottom = 5.dp, start = 5.dp, end = 5.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                unfocusedBorderColor = Color.Black,
-                                textColor = Color.Black,
-                                backgroundColor = Color(142, 143, 138)
-                            ),
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text,
-                                capitalization = KeyboardCapitalization.None,
-                                autoCorrect = true,
-                            ),
-                            keyboardActions = KeyboardActions(onNext = {
-                                focusManager.moveFocus(FocusDirection.Down)
-                            }),
-                        )
-                    }
+                            .background(Color(41, 41, 41))
+                            .padding(start = 5.dp),
+                        fontSize = 12.sp,
+                        color = Color(223, 75, 0)
+                    )
                 }
-                if (state.membersError != null) {
-                    Box(
+                Row() {
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(3.dp)
+                            .background(Color(red = 41, green = 41, blue = 41)),
+                        shape = RoundedCornerShape(5.dp),
+                        elevation = 8.dp,
+                        onClick = {
+
+                        }
                     ) {
-                        Text(
-                            text = state.membersError!!,
-                            color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.CenterStart)
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .fillMaxWidth(0.70f)
+                                .height(fieldMembersHeight.value.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(223, 75, 0),
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                                .background(Color(red = 41, 41, blue = 41)),
+                        ) {
+
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(red = 41, green = 41, blue = 41))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .height(50.dp)
+                                        .background(Color(red = 41, green = 41, blue = 41))
+                                ) {
+                                    Text(
+                                        text = state.members,
+                                        maxLines = 1,
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+                                            .background(Color(1, 1, 1))
+                                            .padding(start = 5.dp),
+                                        fontSize = 18.sp,
+                                        color = Color(254, 253, 253, 255)
+                                    )
+                                }
+                                IconButton(
+                                    onClick = {
+                                        isMembersEditActive.value = !isMembersEditActive.value
+                                    }
+                                )
+                                {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_edit_24),
+                                        contentDescription = "Редактировать",
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(223, 75, 0)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.padding(2.dp))
+                            if (isMembersEditActive.value) {
+                                OutlinedTextField(
+                                    value = state.members,
+                                    onValueChange = {
+                                        viewModelClient.onFormEvent(
+                                            ValidationFormEvent.MembersChanged(
+                                                it
+                                            )
+                                        )
+                                    },
+                                    placeholder = {
+                                        Text(
+                                            text = "Количество человек",
+                                            color = Color.Black
+                                        )
+                                    },
+                                    isError = state.membersError != null,
+                                    singleLine = false,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            top = 1.dp,
+                                            bottom = 5.dp,
+                                            start = 5.dp,
+                                            end = 5.dp
+                                        ),
+                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                                        unfocusedBorderColor = Color.Black,
+                                        textColor = Color.Black,
+                                        backgroundColor = Color(142, 143, 138)
+                                    ),
+                                    keyboardOptions = KeyboardOptions(
+                                        imeAction = ImeAction.Next,
+                                        keyboardType = KeyboardType.Text,
+                                        capitalization = KeyboardCapitalization.None,
+                                        autoCorrect = true,
+                                    ),
+                                    keyboardActions = KeyboardActions(onNext = {
+                                        focusManager.moveFocus(FocusDirection.Down)
+                                    }),
+                                )
+                            }
+                        }
+                        if (state.membersError != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = state.membersError!!,
+                                    color = MaterialTheme.colors.error,
+                                    modifier = Modifier.align(Alignment.CenterStart)
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -1059,111 +1276,140 @@ fun ClientDitailsScreen(
 // предоплата
 
         item {
-            Card(
+            Column(
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp)
-                    .background(Color(red = 41, green = 41, blue = 41)),
-                shape = RoundedCornerShape(5.dp),
-                elevation = 8.dp,
-                onClick = {
-
-                }
             ) {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth(0.70f)
-                        .height(fieldPrepaymentHeight.value.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color(223, 75, 0),
-                            shape = RoundedCornerShape(5.dp)
-                        )
-                        .background(Color(red = 41, 41, blue = 41)),
-                ) {
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                Row() {
+                    Text(
+                        text = "Предоплата",
+                        maxLines = 1,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color(red = 41, green = 41, blue = 41))
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(0.85f)
-                                .height(50.dp)
-                                .background(Color(red = 41, green = 41, blue = 41))
-                        ) {
-                            Text(
-                                text = state.prePayment,
-                                maxLines = 1,
-                                modifier = Modifier
-                                    .align(Alignment.CenterStart)
-                                    .background(Color(1, 1, 1))
-                                    .padding(start = 5.dp),
-                                fontSize = 18.sp,
-                                color = Color(254, 253, 253, 255)
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                isPrepaymentEditActive.value = !isPrepaymentEditActive.value
-                            }
-                        )
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_edit_24),
-                                contentDescription = "Редактировать",
-                                modifier = Modifier.size(30.dp),
-                                tint = Color(223, 75, 0)
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    if (isPrepaymentEditActive.value) {
-                        OutlinedTextField(
-                            value = state.prePayment,
-                            onValueChange = {
-                                viewModelClient.onFormEvent(ValidationFormEvent.PrepaymentChanged(it))
-                            },
-                            placeholder = {
-                                Text(
-                                    text = "Предоплата",
-                                    color = Color.Black
-                                )
-                            },
-                            isError = state.prePaymentError != null,
-                            singleLine = false,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 1.dp, bottom = 5.dp, start = 5.dp, end = 5.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                unfocusedBorderColor = Color.Black,
-                                textColor = Color.Black,
-                                backgroundColor = Color(142, 143, 138)
-                            ),
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text,
-                                capitalization = KeyboardCapitalization.None,
-                                autoCorrect = true,
-                            ),
-                            keyboardActions = KeyboardActions(onNext = {
-                                focusManager.moveFocus(FocusDirection.Down)
-                            }),
-                        )
-                    }
+                            .background(Color(41, 41, 41))
+                            .padding(start = 5.dp),
+                        fontSize = 12.sp,
+                        color = Color(223, 75, 0)
+                    )
                 }
-                if (state.prePaymentError != null) {
-                    Box(
+                Row() {
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(3.dp)
+                            .background(Color(red = 41, green = 41, blue = 41)),
+                        shape = RoundedCornerShape(5.dp),
+                        elevation = 8.dp,
+                        onClick = {
+
+                        }
                     ) {
-                        Text(
-                            text = state.prePaymentError!!,
-                            color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.CenterStart)
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .fillMaxWidth(0.70f)
+                                .height(fieldPrepaymentHeight.value.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(223, 75, 0),
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                                .background(Color(red = 41, 41, blue = 41)),
+                        ) {
+
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(red = 41, green = 41, blue = 41))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .height(50.dp)
+                                        .background(Color(red = 41, green = 41, blue = 41))
+                                ) {
+                                    Text(
+                                        text = state.prePayment,
+                                        maxLines = 1,
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+                                            .background(Color(1, 1, 1))
+                                            .padding(start = 5.dp),
+                                        fontSize = 18.sp,
+                                        color = Color(254, 253, 253, 255)
+                                    )
+                                }
+                                IconButton(
+                                    onClick = {
+                                        isPrepaymentEditActive.value = !isPrepaymentEditActive.value
+                                    }
+                                )
+                                {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_edit_24),
+                                        contentDescription = "Редактировать",
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(223, 75, 0)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.padding(2.dp))
+                            if (isPrepaymentEditActive.value) {
+                                OutlinedTextField(
+                                    value = state.prePayment,
+                                    onValueChange = {
+                                        viewModelClient.onFormEvent(
+                                            ValidationFormEvent.PrepaymentChanged(
+                                                it
+                                            )
+                                        )
+                                    },
+                                    placeholder = {
+                                        Text(
+                                            text = "Предоплата",
+                                            color = Color.Black
+                                        )
+                                    },
+                                    isError = state.prePaymentError != null,
+                                    singleLine = false,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            top = 1.dp,
+                                            bottom = 5.dp,
+                                            start = 5.dp,
+                                            end = 5.dp
+                                        ),
+                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                                        unfocusedBorderColor = Color.Black,
+                                        textColor = Color.Black,
+                                        backgroundColor = Color(142, 143, 138)
+                                    ),
+                                    keyboardOptions = KeyboardOptions(
+                                        imeAction = ImeAction.Next,
+                                        keyboardType = KeyboardType.Text,
+                                        capitalization = KeyboardCapitalization.None,
+                                        autoCorrect = true,
+                                    ),
+                                    keyboardActions = KeyboardActions(onNext = {
+                                        focusManager.moveFocus(FocusDirection.Down)
+                                    }),
+                                )
+                            }
+                        }
+                        if (state.prePaymentError != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = state.prePaymentError!!,
+                                    color = MaterialTheme.colors.error,
+                                    modifier = Modifier.align(Alignment.CenterStart)
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -1172,117 +1418,146 @@ fun ClientDitailsScreen(
 // цена за сутки
 
         item {
-            Card(
+            Column(
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp)
-                    .background(Color(red = 41, green = 41, blue = 41)),
-                shape = RoundedCornerShape(5.dp),
-                elevation = 8.dp,
-                onClick = {
-
-                }
             ) {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth(0.70f)
-                        .height(fieldPaymentHeight.value.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color(223, 75, 0),
-                            shape = RoundedCornerShape(5.dp)
-                        )
-                        .background(Color(red = 41, 41, blue = 41)),
-                ) {
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                Row() {
+                    Text(
+                        text = "Стоимость суток",
+                        maxLines = 1,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color(red = 41, green = 41, blue = 41))
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(0.85f)
-                                .height(50.dp)
-                                .background(Color(red = 41, green = 41, blue = 41))
-                        ) {
-                            Text(
-                                text = state.payment,
-                                maxLines = 1,
-                                modifier = Modifier
-                                    .align(Alignment.CenterStart)
-                                    .background(Color(1, 1, 1))
-                                    .padding(start = 5.dp),
-                                fontSize = 18.sp,
-                                color = Color(254, 253, 253, 255)
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                isPaymentEditActive.value = !isPaymentEditActive.value
-                            }
-                        )
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_edit_24),
-                                contentDescription = "Редактировать",
-                                modifier = Modifier.size(30.dp),
-                                tint = Color(223, 75, 0)
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    if (isPaymentEditActive.value) {
-                        OutlinedTextField(
-                            value = state.payment,
-                            onValueChange = {
-                                viewModelClient.onFormEvent(ValidationFormEvent.PaymentChanged(it))
-                            },
-                            placeholder = {
-                                Text(
-                                    text = "Цена за сутки",
-                                    color = Color.Black
-                                )
-                            },
-                            isError = state.paymentError != null,
-                            singleLine = false,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 1.dp, bottom = 5.dp, start = 5.dp, end = 5.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                unfocusedBorderColor = Color.Black,
-                                textColor = Color.Black,
-                                backgroundColor = Color(142, 143, 138)
-                            ),
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Next, keyboardType = KeyboardType.Text,
-                                capitalization = KeyboardCapitalization.None,
-                                autoCorrect = true,
-                            ),
-                            keyboardActions = KeyboardActions(onNext = {
-                                focusManager.moveFocus(FocusDirection.Down)
-                            }),
-                        )
-                    }
+                            .background(Color(41, 41, 41))
+                            .padding(start = 5.dp),
+                        fontSize = 12.sp,
+                        color = Color(223, 75, 0)
+                    )
                 }
-                if (state.paymentError != null) {
-                    Box(
+                Row() {
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(3.dp)
+                            .background(Color(red = 41, green = 41, blue = 41)),
+                        shape = RoundedCornerShape(5.dp),
+                        elevation = 8.dp,
+                        onClick = {
+
+                        }
                     ) {
-                        Text(
-                            text = state.paymentError!!,
-                            color = MaterialTheme.colors.error,
-                            modifier = Modifier.align(Alignment.CenterStart)
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .fillMaxWidth(0.70f)
+                                .height(fieldPaymentHeight.value.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(223, 75, 0),
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                                .background(Color(red = 41, 41, blue = 41)),
+                        ) {
+
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(red = 41, green = 41, blue = 41))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .height(50.dp)
+                                        .background(Color(red = 41, green = 41, blue = 41))
+                                ) {
+                                    Text(
+                                        text = state.payment,
+                                        maxLines = 1,
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+                                            .background(Color(1, 1, 1))
+                                            .padding(start = 5.dp),
+                                        fontSize = 18.sp,
+                                        color = Color(254, 253, 253, 255)
+                                    )
+                                }
+                                IconButton(
+                                    onClick = {
+                                        isPaymentEditActive.value = !isPaymentEditActive.value
+                                    }
+                                )
+                                {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_edit_24),
+                                        contentDescription = "Редактировать",
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(223, 75, 0)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.padding(2.dp))
+                            if (isPaymentEditActive.value) {
+                                OutlinedTextField(
+                                    value = state.payment,
+                                    onValueChange = {
+                                        viewModelClient.onFormEvent(
+                                            ValidationFormEvent.PaymentChanged(
+                                                it
+                                            )
+                                        )
+                                    },
+                                    placeholder = {
+                                        Text(
+                                            text = "Цена за сутки",
+                                            color = Color.Black
+                                        )
+                                    },
+                                    isError = state.paymentError != null,
+                                    singleLine = false,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            top = 1.dp,
+                                            bottom = 5.dp,
+                                            start = 5.dp,
+                                            end = 5.dp
+                                        ),
+                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                                        unfocusedBorderColor = Color.Black,
+                                        textColor = Color.Black,
+                                        backgroundColor = Color(142, 143, 138)
+                                    ),
+                                    keyboardOptions = KeyboardOptions(
+                                        imeAction = ImeAction.Next,
+                                        keyboardType = KeyboardType.Text,
+                                        capitalization = KeyboardCapitalization.None,
+                                        autoCorrect = true,
+                                    ),
+                                    keyboardActions = KeyboardActions(onNext = {
+                                        focusManager.moveFocus(FocusDirection.Down)
+                                    }),
+                                )
+                            }
+                        }
+                        if (state.paymentError != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = state.paymentError!!,
+                                    color = MaterialTheme.colors.error,
+                                    modifier = Modifier.align(Alignment.CenterStart)
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
 
-        item{
+        item {
             Spacer(modifier = Modifier.padding(10.dp))
 
             Box(modifier = Modifier.fillMaxWidth()) {

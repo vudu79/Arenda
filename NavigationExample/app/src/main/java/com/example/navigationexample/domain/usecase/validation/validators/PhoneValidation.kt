@@ -1,14 +1,12 @@
 package com.example.navigationexample.domain.usecase.validation.validators
 
 import com.example.navigationexample.domain.usecase.validation.ValidationResult
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 class PhoneValidation @Inject constructor(){
-
     fun execute(phonewithTrimed: String): ValidationResult {
         val phone = phonewithTrimed.trim()
-        val hasOnliDigits = phone.all { it.isDigit() }
+        val hasOnlyDigits = phone.all { it.isDigit() }
 
         if (phone.isEmpty()) {
             return ValidationResult(
@@ -17,7 +15,7 @@ class PhoneValidation @Inject constructor(){
             )
         }
 
-        if (!hasOnliDigits) {
+        if (!hasOnlyDigits) {
             return ValidationResult(
                 successful = false,
                 errorMessage = "Поле должно содержать только цифры"

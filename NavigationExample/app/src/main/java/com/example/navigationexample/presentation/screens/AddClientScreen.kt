@@ -2,7 +2,6 @@ package com.example.navigationexample.presentation.screens
 
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -624,7 +623,7 @@ fun AddClientScreen(
                             IconButton(modifier = Modifier.padding(end = 80.dp),
                                 onClick = {
                                     viewModelClient.getAppatmentClients(appatmentName)
-                                    navController.navigate(Routs.mainScreenClients)
+                                    navController.navigate("${Routs.mainScreenClients}/${appatmentName}")
                                 })
                             {
                                 Icon(

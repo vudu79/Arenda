@@ -105,8 +105,6 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(color = Constans.ClientColorsList.clientColorsList[0])
     }
 
-
-
     fun getAppatmentClients(appatmentName: String) {
         clientRepository.getAppatmentClients(appatmentName)
     }
@@ -191,7 +189,6 @@ class ClientViewModel @Inject constructor(
             }
 
             is ValidationFormEvent.onSubmitUpdate -> {
-
                 submitDataUpdate()
             }
         }
