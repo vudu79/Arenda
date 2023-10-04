@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.viewModelScope
+import com.example.navigationexample.constants.Constans
 import com.example.navigationexample.data.repository.DaysRepositoryImpl
 import com.example.navigationexample.domain.models.ClientStatus
 import com.example.navigationexample.domain.usecase.validation.*
@@ -79,6 +80,32 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(referer = client.referer)
         validateFormState = validateFormState.copy(color = Color(client.clientColor))
     }
+
+    fun resetState() = viewModelScope.launch {
+        validateFormState = validateFormState.copy(apartmentName = "")
+        validateFormState = validateFormState.copy(id = 0)
+        validateFormState = validateFormState.copy(status = ClientStatus.waiting)
+        validateFormState = validateFormState.copy(firstName = "")
+        validateFormState = validateFormState.copy(secondName = "")
+        validateFormState = validateFormState.copy(lastName = "")
+        validateFormState = validateFormState.copy(phone = "")
+        validateFormState = validateFormState.copy(documentNamber = "")
+        validateFormState = validateFormState.copy(documentDitails = "")
+        validateFormState = validateFormState.copy(members = "")
+        validateFormState =
+            validateFormState.copy(dateInString = "")
+        validateFormState = validateFormState.copy(dateInLong = 0L)
+        validateFormState =
+            validateFormState.copy(dateOutString = "")
+        validateFormState = validateFormState.copy(dateOutLong = 0L)
+        validateFormState = validateFormState.copy(payment = "")
+        validateFormState = validateFormState.copy(prePayment = "")
+        validateFormState = validateFormState.copy(transferInfo = "")
+        validateFormState = validateFormState.copy(referer = "")
+        validateFormState = validateFormState.copy(color = Constans.ClientColorsList.clientColorsList[0])
+    }
+
+
 
     fun getAppatmentClients(appatmentName: String) {
         clientRepository.getAppatmentClients(appatmentName)

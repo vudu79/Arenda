@@ -630,7 +630,6 @@ fun AddClientScreen(
                                 Icon(
                                     painter = painterResource(id = R.drawable.baseline_arrow_back_24),
                                     contentDescription = "Назад",
-
                                     modifier = Modifier.size(55.dp),
                                     tint = Color(223, 75, 0)
                                 )
@@ -645,7 +644,6 @@ fun AddClientScreen(
                                 Icon(
                                     painter = painterResource(id = R.drawable.baseline_check_24),
                                     contentDescription = "Добавить клиента",
-
                                     modifier = Modifier.size(55.dp),
                                     tint = Color(223, 75, 0)
                                 )
@@ -655,8 +653,6 @@ fun AddClientScreen(
                 }
             }
         }
-
-
     }
 }
 

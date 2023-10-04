@@ -82,6 +82,7 @@ fun ClientsScreen(
 
 
         IconButton(onClick = {
+            viewModelClient.resetState()
             mainNavController.navigate(route = "${Routs.addClientScreen}/$appatmentName")
         })
         {
