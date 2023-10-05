@@ -113,7 +113,6 @@ class DaysRepositoryImpl @Inject constructor(
         }
     }.onStart { onStart() }.onCompletion { onCompletion() }.flowOn(Dispatchers.IO)
 
-
     @WorkerThread
     fun fetchRentalDayClientMocKMap(
         onStart: () -> Unit,
