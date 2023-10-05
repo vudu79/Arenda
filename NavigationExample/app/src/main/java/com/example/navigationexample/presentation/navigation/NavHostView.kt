@@ -88,6 +88,7 @@ fun NavHostView(
                 ClientDitailsScreen(
                     mainNavController = mainNavController,
                     viewModelClient = viewModelClient,
+                    viewModelAppatment = viewModelAppatment,
                     clientPhone = clientPhone
                 )
             }

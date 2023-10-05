@@ -294,11 +294,10 @@ fun AddClientScreen(
                     PhoneField(
                         state.phone,
                         placeHolder = "Контактный телефон",
-                        mask = "+7(000)-000-00-00",
+                        mask = "000-000-00-00",
                         maskNumber = '0',
                         onPhoneChanged = {
                             viewModelClient.onFormEvent(ValidationFormEvent.PhoneChanged(it))
-
                         },
                         errorMessage = state.phoneError,
                         modifier = Modifier.align(Alignment.BottomStart)

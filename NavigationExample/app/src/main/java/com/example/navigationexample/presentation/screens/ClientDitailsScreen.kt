@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -43,8 +44,10 @@ import com.example.navigationexample.presentation.screens.common.PhoneField
 fun ClientDitailsScreen(
     mainNavController: NavHostController,
     viewModelClient: ClientViewModel,
+    viewModelAppatment: AppatmentViewModel,
     clientPhone: String
 ) {
+    val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
     LaunchedEffect(Unit) {
         viewModelClient.getClientState(clientPhone)
     }
@@ -158,7 +161,8 @@ fun ClientDitailsScreen(
                     Toast.makeText(
                         context, "Клиент обновлен!", Toast.LENGTH_SHORT
                     ).show()
-                    mainNavController.navigate(route = "${Routs.mainScreenClients}/${state.apartmentName}")
+                    viewModelClient.getAppatmentClients(currentAppatment!!.name)
+                    mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
                 }
 
                 is ValidatAllFieldsResultEvent.UpdateWrong -> {
@@ -166,7 +170,7 @@ fun ClientDitailsScreen(
                     Toast.makeText(
                         context, "Ошибка при обновлении клиента", Toast.LENGTH_SHORT
                     ).show()
-//                    mainNavController.navigate(route = "${Routs.mainScreenClients}/${state.apartmentName}")
+//
                 }
 
                 is ValidatAllFieldsResultEvent.InsertSuccess -> {
@@ -845,7 +849,7 @@ fun ClientDitailsScreen(
                                 PhoneField(
                                     value = state.phone,
                                     placeHolder = "Контактный телефон",
-                                    mask = "7(000)-000-00-00",
+                                    mask = "000-000-00-00",
                                     maskNumber = '0',
                                     onPhoneChanged = {
                                         viewModelClient.onFormEvent(
@@ -1571,7 +1575,7 @@ fun ClientDitailsScreen(
                     IconButton(modifier = Modifier.padding(end = 80.dp),
                         onClick = {
 //                            viewModelClient.getAppatmentClients(appatmentName)
-                            mainNavController.navigate(route = "${Routs.mainScreenClients}/${state.apartmentName}")
+                            mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
                         })
                     {
                         Icon(
