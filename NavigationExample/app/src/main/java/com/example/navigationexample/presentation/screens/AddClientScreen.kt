@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +43,7 @@ import com.example.navigationexample.presentation.screens.common.*
 fun AddClientScreen(
     navController: NavHostController,
     viewModelClient: ClientViewModel,
+    viewModelAppatment: AppatmentViewModel,
     appatmentName: String,
 ) {
 
@@ -49,7 +51,7 @@ fun AddClientScreen(
     val focusManager = LocalFocusManager.current
     val state = viewModelClient.validateFormState
     val context = LocalContext.current
-
+    val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
     val expanded = remember { mutableStateOf(false) }
     val items = ClientStatus.statusList
     val disabledValue = "B"
@@ -108,8 +110,7 @@ fun AddClientScreen(
                             color = Color(223, 75, 0).copy(alpha = 0.9f)
                         )
                         Text(
-                            text = "объект: \"${viewModelClient.currentApartment.value?.name ?: ""}\" | срок: " +
-                                    (viewModelClient.currentApartment.value?.rentalPeriod ?: ""),
+                            text = "объект: \"${currentAppatment?.name ?: "_"}\"",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(top = 1.dp, bottom = 1.dp),

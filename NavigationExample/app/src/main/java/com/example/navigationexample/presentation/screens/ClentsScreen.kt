@@ -44,7 +44,7 @@ fun ClientsScreen(
     viewModelCalendar: CalendarViewModel,
     appatmentName: String
 ) {
-    val currentAppatment by viewModelClient.currentApartment.observeAsState()
+    val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
     val appatmentClients by viewModelClient.allApartmentClients.observeAsState(listOf())
 
     Column(

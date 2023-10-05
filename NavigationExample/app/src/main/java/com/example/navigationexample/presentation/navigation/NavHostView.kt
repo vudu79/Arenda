@@ -57,6 +57,7 @@ fun NavHostView(
                 AddClientScreen(
                     navController = mainNavController,
                     viewModelClient = viewModelClient,
+                    viewModelAppatment = viewModelAppatment,
                     appatmentName = appatment_name
                 )
             }
