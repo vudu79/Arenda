@@ -18,7 +18,7 @@ class PhoneValidation @Inject constructor(){
         if (!hasOnlyDigits) {
             return ValidationResult(
                 successful = false,
-                errorMessage = "Поле должно содержать только цифры"
+                errorMessage = "Поле должно содержать только цифры!!!!!${phone}"
             )
         }
 

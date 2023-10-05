@@ -1,5 +1,6 @@
 package com.example.navigationexample.presentation.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -123,7 +124,6 @@ fun ClientDitailsScreen(
         }
     }
 
-
     val isMembersEditActive = remember {
         mutableStateOf(false)
     }
@@ -151,7 +151,6 @@ fun ClientDitailsScreen(
         false -> 50
     }
 
-
     LaunchedEffect(key1 = context) {
         viewModelClient.validationEvents.collect { event ->
             when (event) {
@@ -163,6 +162,7 @@ fun ClientDitailsScreen(
                 }
 
                 is ValidatAllFieldsResultEvent.UpdateWrong -> {
+                    Log.d("myTag", "Содержание листа ошибок ${event.hasErrorList}")
                     Toast.makeText(
                         context, "Ошибка при обновлении клиента", Toast.LENGTH_SHORT
                     ).show()
@@ -845,7 +845,7 @@ fun ClientDitailsScreen(
                                 PhoneField(
                                     value = state.phone,
                                     placeHolder = "Контактный телефон",
-                                    mask = "+7(000)-000-00-00",
+                                    mask = "7(000)-000-00-00",
                                     maskNumber = '0',
                                     onPhoneChanged = {
                                         viewModelClient.onFormEvent(

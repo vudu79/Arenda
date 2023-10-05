@@ -102,7 +102,8 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(prePayment = "")
         validateFormState = validateFormState.copy(transferInfo = "")
         validateFormState = validateFormState.copy(referer = "")
-        validateFormState = validateFormState.copy(color = Constans.ClientColorsList.clientColorsList[0])
+        validateFormState =
+            validateFormState.copy(color = Constans.ClientColorsList.clientColorsList[0])
     }
 
     fun getAppatmentClients(appatmentName: String) {
@@ -304,7 +305,7 @@ class ClientViewModel @Inject constructor(
         val prePaymentResult = paymentValidationField.execute(validateFormState.prePayment)
         val paymentResult = paymentValidationField.execute(validateFormState.payment)
 
-        val hasError = listOf(
+        val hasErrorList = listOf(
             firstNameResult,
             secondNameResult,
             lastNameResult,
@@ -318,7 +319,9 @@ class ClientViewModel @Inject constructor(
             membersResult,
             prePaymentResult,
             paymentResult
-        ).any { !it!!.successful }
+        )
+
+        val hasError: Boolean = hasErrorList.any { !it!!.successful }
 
         if (hasError) {
             Log.d("myTag", "hasError true")
@@ -338,7 +341,7 @@ class ClientViewModel @Inject constructor(
                 paymentError = paymentResult.errorMessage,
             )
             viewModelScope.launch {
-                validationEventChannel.send(ValidatAllFieldsResultEvent.UpdateWrong)
+                validationEventChannel.send(ValidatAllFieldsResultEvent.UpdateWrong(hasErrorList = hasErrorList))
             }
             return
         }

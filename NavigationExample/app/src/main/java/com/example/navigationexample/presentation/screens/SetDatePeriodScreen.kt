@@ -51,7 +51,7 @@ fun SetDatePeriodScreen(
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
     appatmentName: String,
-    close: () -> Unit = { navController.navigate("${Routs.addClientScreen}?appatment_name=$appatmentName") },
+    close: () -> Unit = { navController.navigate("${Routs.addClientScreen}/$appatmentName") },
     dateSelected: (startDate: LocalDate, endDate: LocalDate) -> Unit = { _, _ -> },
 
     ) {

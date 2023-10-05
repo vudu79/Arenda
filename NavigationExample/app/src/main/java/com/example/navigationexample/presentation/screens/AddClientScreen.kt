@@ -68,8 +68,10 @@ fun AddClientScreen(
                     navController.navigate(route = "${Routs.mainScreenClients}/$appatmentName")
                 }
                 is ValidatAllFieldsResultEvent.UpdateSuccess -> {
+
                 }
                 is ValidatAllFieldsResultEvent.UpdateWrong -> {
+
                 }
             }
         }

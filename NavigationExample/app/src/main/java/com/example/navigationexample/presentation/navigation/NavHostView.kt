@@ -20,7 +20,8 @@ fun NavHostView(
     NavHost(navController = mainNavController, startDestination = Routs.home) {
         composable(Routs.home) {
             MainScreen(
-                mainNavController, viewModelAppatment = viewModelAppatment,
+                mainNavController,
+                viewModelAppatment = viewModelAppatment,
                 viewModelClient = viewModelClient,
                 viewModelCalendar = viewModelCalendar
             )

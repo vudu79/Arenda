@@ -65,10 +65,7 @@ fun ClientsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.74f)
-
                 .padding(3.dp)
-
-
         ) {
             items(appatmentClients) { item ->
                 ClientItemRow(
@@ -80,7 +77,6 @@ fun ClientsScreen(
             }
         }
 
-
         IconButton(onClick = {
             viewModelClient.resetState()
             mainNavController.navigate(route = "${Routs.addClientScreen}/$appatmentName")
@@ -89,7 +85,6 @@ fun ClientsScreen(
             Icon(
                 painter = painterResource(id = R.drawable.baseline_group_add_24),
                 contentDescription = "Добавить клиента",
-
                 modifier = Modifier.size(55.dp),
                 tint = Color(223, 75, 0)
             )
@@ -167,8 +162,6 @@ fun LazyItemScope.ClientItemRow(
                     .fillMaxHeight(0.8f)  //fill the max height
                     .width(3.dp)
             )
-
-
 
             Column(
                 horizontalAlignment = Alignment.Start,
