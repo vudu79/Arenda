@@ -228,7 +228,7 @@ fun LazyItemScope.ClientItemRow(
         }, onOk = {
             showCustomDialog = !showCustomDialog
 
-            viewModelClient.deleteClient(client.firstName)
+            viewModelClient.deleteClient(client.phone)
             viewModelClient.getAppatmentClients(client.appatmentName)
             viewModelCalendar.updateDaysMapForCalendar(client.appatmentName)
         },
@@ -240,7 +240,7 @@ fun LazyItemScope.ClientItemRow(
 
 fun makeCall(context: Context, number: String) {
     val intent = Intent(Intent.ACTION_DIAL);
-    intent.data = Uri.parse("tel:$number")
+    intent.data = Uri.parse("tel:+7$number")
     startActivity(context, intent, null)
 }
 

@@ -12,8 +12,8 @@ interface RentalDaysDao {
     @Insert
     fun insertDay(day: RentalDay)
 
-    @Query("DELETE FROM rentaldays WHERE client_name = :clientName")
-    fun deleteClientDays(clientName: String)
+    @Query("DELETE FROM rentaldays WHERE client_phone = :clientPhone")
+    fun deleteClientDays(clientPhone: String)
 
 
     @Query("SELECT * FROM rentaldays WHERE appatment_name=:appatmentName")
@@ -24,6 +24,6 @@ interface RentalDaysDao {
     fun getAllRentalDays(): List<RentalDay>
 
 
-    @Query("SELECT * FROM rentaldays WHERE client_name = :clientName")
-    fun getClientDays(clientName: String): List<RentalDay>
+    @Query("SELECT * FROM rentaldays WHERE client_phone = :clientPhone")
+    fun getClientDays(clientPhone: String): List<RentalDay>
 }

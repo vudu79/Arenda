@@ -10,8 +10,8 @@ interface ClientDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertClient(client: Client)
 
-    @Query("DELETE FROM clients WHERE first_name = :name")
-    fun deleteClient(name: String)
+    @Query("DELETE FROM clients WHERE phone = :phone")
+    fun deleteClient(phone: String)
 
     @Query("SELECT * FROM clients WHERE first_name = :clientName")
     fun getClientByName(clientName: String): Client
