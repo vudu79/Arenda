@@ -1134,6 +1134,198 @@ fun ClientDitailsScreen(
             )
         }
 
+//_____________________________________________________________________________________________________
+// даты+++++++++++++++++++++++++++++++++++++
+        item {
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Row() {
+                    Text(
+                        text = "Даты проживания",
+                        maxLines = 1,
+                        modifier = Modifier
+                            .background(Color(41, 41, 41))
+                            .padding(start = 5.dp),
+                        fontSize = 12.sp,
+                        color = Color(223, 75, 0)
+                    )
+                }
+                Row() {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(3.dp)
+                            .background(Color(red = 41, green = 41, blue = 41)),
+                        shape = RoundedCornerShape(5.dp),
+                        elevation = 8.dp,
+                        onClick = {
+
+                        }
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .fillMaxWidth(0.70f)
+                                .height(fieldLastNameHeight.value.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(223, 75, 0),
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                                .background(Color(red = 41, 41, blue = 41)),
+                        ) {
+
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(red = 41, green = 41, blue = 41))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .height(50.dp)
+                                        .background(Color(red = 41, green = 41, blue = 41))
+                                ) {
+                                    Text(
+                                        text = "с ${state.dateInString} по ${state.dateOutString}",
+                                        maxLines = 1,
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+                                            .background(Color(red = 41, 41, blue = 41))
+                                            .padding(start = 5.dp),
+                                        fontSize = 18.sp,
+                                        color = Color(254, 253, 253, 255)
+                                    )
+                                }
+                                IconButton(
+                                    onClick = {
+                                        mainNavController.navigate(route =
+                                        "${Routs.setClientPeriodFromEditClient}/${clientPhone}")
+                                    }
+                                )
+                                {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_edit_24),
+                                        contentDescription = "Редактировать",
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(223, 75, 0)
+                                    )
+                                }
+                            }
+//                            Spacer(modifier = Modifier.padding(2.dp))
+//                            if (isLastNameEditActive.value) {
+//                                OutlinedTextField(
+//                                    value = state.lastName ?: "не установлено",
+//                                    onValueChange = {
+//                                        viewModelClient.onFormEvent(
+//                                            ValidationFormEvent.LastNameChanged(
+//                                                it
+//                                            )
+//                                        )
+//                                    },
+//                                    placeholder = { Text(text = "Фамилия", color = Color.Black) },
+//                                    isError = state.lastNameError != null,
+//                                    singleLine = false,
+//                                    modifier = Modifier
+//                                        .fillMaxWidth()
+//                                        .padding(
+//                                            top = 1.dp,
+//                                            bottom = 5.dp,
+//                                            start = 5.dp,
+//                                            end = 5.dp
+//                                        ),
+//                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+//                                        unfocusedBorderColor = Color.Black,
+//                                        textColor = Color.Black,
+//                                        backgroundColor = Color(142, 143, 138)
+//                                    ),
+//                                    keyboardOptions = KeyboardOptions(
+//                                        imeAction = ImeAction.Next,
+//                                        keyboardType = KeyboardType.Text,
+//                                        capitalization = KeyboardCapitalization.None,
+//                                        autoCorrect = true,
+//                                    ),
+//                                    keyboardActions = KeyboardActions(onNext = {
+//                                        focusManager.moveFocus(FocusDirection.Down)
+//                                    }),
+//                                )
+//                            }
+                        }
+//                        if (state.lastNameError != null) {
+//                            Box(
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                            ) {
+//                                Text(
+//                                    text = state.lastNameError!!,
+//                                    color = MaterialTheme.colors.error,
+//                                    modifier = Modifier.align(Alignment.CenterStart)
+//                                )
+//                            }
+//                        }
+                    }
+                }
+            }
+        }
+
+        
+
+//        item {
+//            OutlinedTextField(
+//                value = "c ${state.dateInString} по ${state.dateOutString} ",
+//                onValueChange = {
+//                    viewModelClient.onFormEvent(ValidationFormEvent.InLongDateChanged(viewModelClient.dateInLong))
+//                    viewModelClient.onFormEvent(ValidationFormEvent.InStringDateChanged(viewModelClient.dateInString))
+//                    viewModelClient.onFormEvent(ValidationFormEvent.OutLongDateChanged(viewModelClient.dateOutLong))
+//                    viewModelClient.onFormEvent(ValidationFormEvent.OutStringDateChanged(viewModelClient.dateOutString))
+//                },
+//                placeholder = { Text(text = "Период проживания", color = Color.Black) },
+//                isError = (state.dateInStringError != null || state.dateOutStringError != null || state.dateInLongError != null || state.dateOutLongError != null),
+//                singleLine = true,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(bottom = 5.dp, start = 5.dp, end = 5.dp)
+//                    .clickable {
+//                        navController.navigate(
+//                            route =
+//                            "${Routs.setClientPeriod}/$appatmentName"
+//                        )
+////                                viewModel.showDatePickerDialog(context, "in")
+//
+//                    },
+//                keyboardOptions = KeyboardOptions(
+//                    imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+//                ),
+//                colors = TextFieldDefaults.outlinedTextFieldColors(
+//                    disabledTextColor = Color.Black,
+//                    unfocusedBorderColor = Color.Black, textColor = Color.Black,
+//                    backgroundColor = Color(142, 143, 138),
+//
+//                    ),
+//                enabled = false,
+//                keyboardActions = KeyboardActions(onNext = {
+//                    focusManager.moveFocus(FocusDirection.Down)
+//                }),
+//            )
+//            if (state.dateInStringError != null || state.dateOutStringError != null || state.dateInLongError != null || state.dateOutLongError != null) {
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                ) {
+//                    Text(
+//                        text = state.dateInStringError!!,
+//                        color = MaterialTheme.colors.error,
+//                        modifier = Modifier.align(Alignment.BottomStart)
+//                    )
+//                }
+//            }
+//        }
+
+//  ______________________________________________________________________________________________________
 
 // количестов человек
 

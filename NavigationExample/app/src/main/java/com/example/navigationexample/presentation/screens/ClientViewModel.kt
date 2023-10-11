@@ -79,6 +79,7 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(transferInfo = client.transferInfo)
         validateFormState = validateFormState.copy(referer = client.referer)
         validateFormState = validateFormState.copy(color = Color(client.clientColor))
+        Log.d("myTag", "стейт клиента обнавлен")
     }
 
     fun resetState() = viewModelScope.launch {

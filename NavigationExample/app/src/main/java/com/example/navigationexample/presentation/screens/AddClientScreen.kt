@@ -437,7 +437,7 @@ fun AddClientScreen(
                             .clickable {
                                 navController.navigate(
                                     route =
-                                    "${Routs.setClientPeriod}/$appatmentName"
+                                    "${Routs.setClientPeriodFromAddClient}/$appatmentName"
                                 )
 //                                viewModel.showDatePickerDialog(context, "in")
 

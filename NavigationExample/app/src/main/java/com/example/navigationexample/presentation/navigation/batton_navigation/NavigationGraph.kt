@@ -34,15 +34,15 @@ fun NavigationGraph(
             )
         }
         composable(BottomNavItems.Ballance.screen_route) {
-            SetDatePeriodScreen(
-                navController = mainNavController,
-                viewModelClient = viewModelClient,
-                viewModelCalendar = viewModelCalendar,
-                appatmentName = appatmentName
-            )
+//            SetDatePeriodScreen(
+//                navController = mainNavController,
+//                viewModelClient = viewModelClient,
+//                viewModelCalendar = viewModelCalendar,
+//                appatmentName = appatmentName
+//            )
         }
         composable(BottomNavItems.Appatments.screen_route) {
-            MainScreen(
+            AppartmentsScreen(
                 mainNavController = mainNavController,
                 viewModelAppatment = viewModelAppatment,
                 viewModelClient = viewModelClient,
