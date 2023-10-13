@@ -68,8 +68,10 @@ fun AddClientScreen(
                     navController.navigate(route = "${Routs.mainScreenClients}/$appatmentName")
                 }
                 is ValidatAllFieldsResultEvent.UpdateSuccess -> {
+
                 }
                 is ValidatAllFieldsResultEvent.UpdateWrong -> {
+
                 }
             }
         }
@@ -292,11 +294,10 @@ fun AddClientScreen(
                     PhoneField(
                         state.phone,
                         placeHolder = "Контактный телефон",
-                        mask = "+7(000)-000-00-00",
+                        mask = "000-000-00-00",
                         maskNumber = '0',
                         onPhoneChanged = {
                             viewModelClient.onFormEvent(ValidationFormEvent.PhoneChanged(it))
-
                         },
                         errorMessage = state.phoneError,
                         modifier = Modifier.align(Alignment.BottomStart)
@@ -436,7 +437,7 @@ fun AddClientScreen(
                             .clickable {
                                 navController.navigate(
                                     route =
-                                    "${Routs.setClientPeriod}/$appatmentName"
+                                    "${Routs.setClientPeriodFromAddClient}/$appatmentName"
                                 )
 //                                viewModel.showDatePickerDialog(context, "in")
 

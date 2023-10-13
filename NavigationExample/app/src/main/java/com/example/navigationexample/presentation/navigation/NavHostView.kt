@@ -19,8 +19,9 @@ fun NavHostView(
     val mainNavController = rememberNavController()
     NavHost(navController = mainNavController, startDestination = Routs.home) {
         composable(Routs.home) {
-            MainScreen(
-                mainNavController, viewModelAppatment = viewModelAppatment,
+            AppartmentsScreen(
+                mainNavController,
+                viewModelAppatment = viewModelAppatment,
                 viewModelClient = viewModelClient,
                 viewModelCalendar = viewModelCalendar
             )
@@ -64,7 +65,7 @@ fun NavHostView(
         }
 
         composable(
-            route = "${Routs.setClientPeriod}/{apartment_name}",
+            route = "${Routs.setClientPeriodFromAddClient}/{apartment_name}",
         ) { navBackStackEntry ->
             val appatment_name = navBackStackEntry.arguments?.getString("apartment_name")
             appatment_name?.let {
@@ -72,7 +73,23 @@ fun NavHostView(
                     navController = mainNavController,
                     viewModelClient = viewModelClient,
                     viewModelCalendar = viewModelCalendar,
-                    appatmentName = appatment_name
+                    appatmentName = appatment_name,
+                    clientPhone = ""
+                )
+            }
+        }
+
+        composable(
+            route = "${Routs.setClientPeriodFromEditClient}/{client_phone}",
+        ) { navBackStackEntry ->
+            val clientPhone = navBackStackEntry.arguments?.getString("client_phone")
+            clientPhone?.let {
+                SetDatePeriodScreen(
+                    navController = mainNavController,
+                    viewModelClient = viewModelClient,
+                    viewModelCalendar = viewModelCalendar,
+                    appatmentName = "",
+                    clientPhone = clientPhone
                 )
             }
         }
@@ -87,6 +104,7 @@ fun NavHostView(
                 ClientDitailsScreen(
                     mainNavController = mainNavController,
                     viewModelClient = viewModelClient,
+                    viewModelAppatment = viewModelAppatment,
                     clientPhone = clientPhone
                 )
             }

@@ -1,6 +1,5 @@
 package com.example.navigationexample.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.navigationexample.data.dao.ClientDao
@@ -82,12 +81,12 @@ class ClientsRepositoryImpl @Inject constructor(private val clientDao: ClientDao
 
     fun getAppatmentClients(appatmentName: String) {
         coroutineScope.launch(Dispatchers.Main) {
-            allAppatmentClients.value = asyncFind(appatmentName).await()
+            allAppatmentClients.value = asyncFindAllApartmentClients(appatmentName).await()
         }
     }
 
 
-    private fun asyncFind(appatmentName: String): Deferred<List<Client>?> =
+    private fun asyncFindAllApartmentClients(appatmentName: String): Deferred<List<Client>?> =
         coroutineScope.async(Dispatchers.IO) {
             return@async clientDao.getAppatmentClients(appatmentName)
         }

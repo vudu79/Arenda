@@ -1,8 +1,10 @@
 package com.example.navigationexample.presentation.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
@@ -12,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -42,11 +45,13 @@ import com.example.navigationexample.presentation.screens.common.PhoneField
 fun ClientDitailsScreen(
     mainNavController: NavHostController,
     viewModelClient: ClientViewModel,
+    viewModelAppatment: AppatmentViewModel,
     clientPhone: String
 ) {
-    LaunchedEffect(Unit) {
-        viewModelClient.getClientState(clientPhone)
-    }
+    val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
+//    LaunchedEffect(Unit) {
+//        viewModelClient.getClientState(clientPhone)
+//    }
     val state = viewModelClient.validateFormState
 
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(ClientStatus.statusList[0]) }
@@ -123,7 +128,6 @@ fun ClientDitailsScreen(
         }
     }
 
-
     val isMembersEditActive = remember {
         mutableStateOf(false)
     }
@@ -151,7 +155,6 @@ fun ClientDitailsScreen(
         false -> 50
     }
 
-
     LaunchedEffect(key1 = context) {
         viewModelClient.validationEvents.collect { event ->
             when (event) {
@@ -159,14 +162,16 @@ fun ClientDitailsScreen(
                     Toast.makeText(
                         context, "Клиент обновлен!", Toast.LENGTH_SHORT
                     ).show()
-                    mainNavController.navigate(route = "${Routs.mainScreenClients}/${state.apartmentName}")
+                    viewModelClient.getAppatmentClients(currentAppatment!!.name)
+                    mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
                 }
 
                 is ValidatAllFieldsResultEvent.UpdateWrong -> {
+                    Log.d("myTag", "Содержание листа ошибок ${event.hasErrorList}")
                     Toast.makeText(
                         context, "Ошибка при обновлении клиента", Toast.LENGTH_SHORT
                     ).show()
-//                    mainNavController.navigate(route = "${Routs.mainScreenClients}/${state.apartmentName}")
+//
                 }
 
                 is ValidatAllFieldsResultEvent.InsertSuccess -> {
@@ -845,7 +850,7 @@ fun ClientDitailsScreen(
                                 PhoneField(
                                     value = state.phone,
                                     placeHolder = "Контактный телефон",
-                                    mask = "+7(000)-000-00-00",
+                                    mask = "000-000-00-00",
                                     maskNumber = '0',
                                     onPhoneChanged = {
                                         viewModelClient.onFormEvent(
@@ -1130,6 +1135,244 @@ fun ClientDitailsScreen(
             )
         }
 
+//_____________________________________________________________________________________________________
+// даты+++++++++++++++++++++++++++++++++++++
+        item {
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Row() {
+                    Text(
+                        text = "Даты проживания",
+                        maxLines = 1,
+                        modifier = Modifier
+                            .background(Color(41, 41, 41))
+                            .padding(start = 5.dp),
+                        fontSize = 12.sp,
+                        color = Color(223, 75, 0)
+                    )
+                }
+                Row() {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(3.dp)
+                            .background(Color(red = 41, green = 41, blue = 41)),
+                        shape = RoundedCornerShape(5.dp),
+                        elevation = 8.dp,
+                        onClick = {
+
+                        }
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .fillMaxWidth(0.70f)
+                                .height(fieldLastNameHeight.value.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(223, 75, 0),
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                                .background(Color(red = 41, 41, blue = 41)),
+                        ) {
+
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(red = 41, green = 41, blue = 41))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .height(50.dp)
+                                        .background(Color(red = 41, green = 41, blue = 41))
+                                ) {
+//                                    Text(
+//                                        text = "с ${state.dateInString} по ${state.dateOutString}",
+//
+//                                        maxLines = 1,
+//                                        modifier = Modifier
+//                                            .align(Alignment.CenterStart)
+//                                            .background(Color(red = 41, 41, blue = 41))
+//                                            .padding(start = 5.dp),
+//                                        fontSize = 18.sp,
+//                                        color = Color(254, 253, 253, 255)
+//                                    )
+
+                                    OutlinedTextField(
+                                        value = "c ${state.dateInString} по ${state.dateOutString} ",
+                                        onValueChange = {
+                                            viewModelClient.onFormEvent(ValidationFormEvent.InLongDateChanged(viewModelClient.dateInLong))
+                                            viewModelClient.onFormEvent(ValidationFormEvent.InStringDateChanged(viewModelClient.dateInString))
+                                            viewModelClient.onFormEvent(ValidationFormEvent.OutLongDateChanged(viewModelClient.dateOutLong))
+                                            viewModelClient.onFormEvent(ValidationFormEvent.OutStringDateChanged(viewModelClient.dateOutString))
+                                        },
+                                        placeholder = { Text(text = "Период проживания", color = Color.Black) },
+                                        isError = (state.dateInStringError != null || state.dateOutStringError != null || state.dateInLongError != null || state.dateOutLongError != null),
+                                        singleLine = true,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp)
+                                            .clickable {
+//                                                navController.navigate(
+//                                                    route =
+//                                                    "${Routs.setClientPeriodFromAddClient}/$appatmentName"
+//                                                )
+//                                viewModel.showDatePickerDialog(context, "in")
+
+                                            },
+                                        keyboardOptions = KeyboardOptions(
+                                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                                        ),
+                                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                                            disabledTextColor = Color.Black,
+                                            unfocusedBorderColor = Color.Black, textColor = Color.Black,
+                                            backgroundColor = Color(142, 143, 138),
+
+                                            ),
+                                        enabled = false,
+                                        keyboardActions = KeyboardActions(onNext = {
+                                            focusManager.moveFocus(FocusDirection.Down)
+                                        }),
+                                    )
+
+
+
+
+
+
+
+
+                                }
+                                IconButton(
+                                    onClick = {
+                                        mainNavController.navigate(route =
+                                        "${Routs.setClientPeriodFromEditClient}/${clientPhone}")
+                                    }
+                                )
+                                {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_edit_24),
+                                        contentDescription = "Редактировать",
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(223, 75, 0)
+                                    )
+                                }
+                            }
+//                            Spacer(modifier = Modifier.padding(2.dp))
+//                            if (isLastNameEditActive.value) {
+//                                OutlinedTextField(
+//                                    value = state.lastName ?: "не установлено",
+//                                    onValueChange = {
+//                                        viewModelClient.onFormEvent(
+//                                            ValidationFormEvent.LastNameChanged(
+//                                                it
+//                                            )
+//                                        )
+//                                    },
+//                                    placeholder = { Text(text = "Фамилия", color = Color.Black) },
+//                                    isError = state.lastNameError != null,
+//                                    singleLine = false,
+//                                    modifier = Modifier
+//                                        .fillMaxWidth()
+//                                        .padding(
+//                                            top = 1.dp,
+//                                            bottom = 5.dp,
+//                                            start = 5.dp,
+//                                            end = 5.dp
+//                                        ),
+//                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+//                                        unfocusedBorderColor = Color.Black,
+//                                        textColor = Color.Black,
+//                                        backgroundColor = Color(142, 143, 138)
+//                                    ),
+//                                    keyboardOptions = KeyboardOptions(
+//                                        imeAction = ImeAction.Next,
+//                                        keyboardType = KeyboardType.Text,
+//                                        capitalization = KeyboardCapitalization.None,
+//                                        autoCorrect = true,
+//                                    ),
+//                                    keyboardActions = KeyboardActions(onNext = {
+//                                        focusManager.moveFocus(FocusDirection.Down)
+//                                    }),
+//                                )
+//                            }
+                        }
+//                        if (state.lastNameError != null) {
+//                            Box(
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                            ) {
+//                                Text(
+//                                    text = state.lastNameError!!,
+//                                    color = MaterialTheme.colors.error,
+//                                    modifier = Modifier.align(Alignment.CenterStart)
+//                                )
+//                            }
+//                        }
+                    }
+                }
+            }
+        }
+
+        
+
+//        item {
+//            OutlinedTextField(
+//                value = "c ${state.dateInString} по ${state.dateOutString} ",
+//                onValueChange = {
+//                    viewModelClient.onFormEvent(ValidationFormEvent.InLongDateChanged(viewModelClient.dateInLong))
+//                    viewModelClient.onFormEvent(ValidationFormEvent.InStringDateChanged(viewModelClient.dateInString))
+//                    viewModelClient.onFormEvent(ValidationFormEvent.OutLongDateChanged(viewModelClient.dateOutLong))
+//                    viewModelClient.onFormEvent(ValidationFormEvent.OutStringDateChanged(viewModelClient.dateOutString))
+//                },
+//                placeholder = { Text(text = "Период проживания", color = Color.Black) },
+//                isError = (state.dateInStringError != null || state.dateOutStringError != null || state.dateInLongError != null || state.dateOutLongError != null),
+//                singleLine = true,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(bottom = 5.dp, start = 5.dp, end = 5.dp)
+//                    .clickable {
+//                        navController.navigate(
+//                            route =
+//                            "${Routs.setClientPeriod}/$appatmentName"
+//                        )
+////                                viewModel.showDatePickerDialog(context, "in")
+//
+//                    },
+//                keyboardOptions = KeyboardOptions(
+//                    imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+//                ),
+//                colors = TextFieldDefaults.outlinedTextFieldColors(
+//                    disabledTextColor = Color.Black,
+//                    unfocusedBorderColor = Color.Black, textColor = Color.Black,
+//                    backgroundColor = Color(142, 143, 138),
+//
+//                    ),
+//                enabled = false,
+//                keyboardActions = KeyboardActions(onNext = {
+//                    focusManager.moveFocus(FocusDirection.Down)
+//                }),
+//            )
+//            if (state.dateInStringError != null || state.dateOutStringError != null || state.dateInLongError != null || state.dateOutLongError != null) {
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                ) {
+//                    Text(
+//                        text = state.dateInStringError!!,
+//                        color = MaterialTheme.colors.error,
+//                        modifier = Modifier.align(Alignment.BottomStart)
+//                    )
+//                }
+//            }
+//        }
+
+//  ______________________________________________________________________________________________________
 
 // количестов человек
 
@@ -1571,7 +1814,7 @@ fun ClientDitailsScreen(
                     IconButton(modifier = Modifier.padding(end = 80.dp),
                         onClick = {
 //                            viewModelClient.getAppatmentClients(appatmentName)
-                            mainNavController.navigate(route = "${Routs.mainScreenClients}/${state.apartmentName}")
+                            mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
                         })
                     {
                         Icon(

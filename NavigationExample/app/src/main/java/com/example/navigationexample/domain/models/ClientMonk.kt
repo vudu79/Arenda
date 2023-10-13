@@ -8,6 +8,5 @@ data class ClientMonk(val client: Client,
                       val isEnable: Boolean,
                       val isStartDay: Boolean,
                       val ieEndDay: Boolean,
-
                       ) {
 }

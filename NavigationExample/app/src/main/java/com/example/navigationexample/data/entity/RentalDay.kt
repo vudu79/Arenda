@@ -19,8 +19,8 @@ class RentalDay {
     @ColumnInfo(name = "client_color")
     var clientColor: Int = 0
 
-    @ColumnInfo(name = "client_name")
-    var clientName: String = ""
+    @ColumnInfo(name = "client_phone")
+    var clientPhone: String = ""
 
     @ColumnInfo(name = "is_start_day")
     var isStartDay: Boolean = false
@@ -37,7 +37,7 @@ class RentalDay {
     constructor(
         epochDay: Long,
         clientColor: Int,
-        clientName: String,
+        clientPhone: String,
         isStartDay: Boolean,
         isEndDay: Boolean,
         isEnable: Boolean,
@@ -45,7 +45,7 @@ class RentalDay {
     ) {
         this.epochDay = epochDay
         this.clientColor = clientColor
-        this.clientName = clientName
+        this.clientPhone = clientPhone
         this.isStartDay = isStartDay
         this.isEndDay = isEndDay
         this.isEnable = isEnable

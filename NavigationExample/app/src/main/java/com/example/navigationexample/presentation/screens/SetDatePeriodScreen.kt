@@ -51,10 +51,9 @@ fun SetDatePeriodScreen(
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
     appatmentName: String,
-    close: () -> Unit = { navController.navigate("${Routs.addClientScreen}?appatment_name=$appatmentName") },
     dateSelected: (startDate: LocalDate, endDate: LocalDate) -> Unit = { _, _ -> },
-
-    ) {
+    clientPhone: String
+) {
 
     val planedApartmentDays: List<LocalDate> by viewModelCalendar.allApartmentPlanedDays.collectAsState(
         initial = listOf()
@@ -88,23 +87,37 @@ fun SetDatePeriodScreen(
                     daysOfWeek = daysOfWeek,
                     selection = selection,
                     planedApartmentDays = planedApartmentDays,
-                    close = close,
+                    close = {
+                        if (appatmentName != "" && clientPhone == "") {
+                            navController.navigate("${Routs.addClientScreen}/$appatmentName")
+                        } else if (appatmentName == "" && clientPhone != "") {
+                            navController.navigate("${Routs.clientDitailsScreen}/$clientPhone")
+                        }
+                    },
                     clearDates = { selection = DateSelection() },
                     save = {
                         val (startDate, endDate) = selection
                         if (startDate != null && endDate != null) {
                             dateSelected(startDate, endDate)
-//                            viewModel.dateInString1.value = startDate.toString()
-//                            viewModel.dateOutString1.value = endDate.toString()
-//                            viewModel.dateInLong1.value = startDate.toEpochDay()
-//                            viewModel.dateOutLong1.value = endDate.toEpochDay()
 
-                            viewModelClient.validateFormState.dateInString=startDate.toString()
-                            viewModelClient.validateFormState.dateInLong=startDate.toEpochDay()
-                            viewModelClient.validateFormState.dateOutString=endDate.toString()
-                            viewModelClient.validateFormState.dateOutLong=endDate.toEpochDay()
+                            viewModelClient.dateInString = startDate.toString()
+                            viewModelClient.dateOutString = endDate.toString()
+                            viewModelClient.dateInLong = startDate.toEpochDay()
+                            viewModelClient.dateOutLong = endDate.toEpochDay()
 
-                            navController.navigate("${Routs.addClientScreen}/$appatmentName")
+                            viewModelClient.validateFormState.dateInString = startDate.toString()
+                            viewModelClient.validateFormState.dateInLong = startDate.toEpochDay()
+                            viewModelClient.validateFormState.dateOutString = endDate.toString()
+                            viewModelClient.validateFormState.dateOutLong = endDate.toEpochDay()
+
+//                            viewModelClient.getClientState(clientPhone)
+
+
+                            if (appatmentName != "" && clientPhone == "") {
+                                navController.navigate("${Routs.addClientScreen}/$appatmentName")
+                            } else if (appatmentName == "" && clientPhone != "") {
+                                navController.navigate("${Routs.clientDitailsScreen}/$clientPhone")
+                            }
                         }
                     },
                 )
@@ -253,7 +266,7 @@ private fun CalendarTop(
 //                    enabled = selection.daysBetween != null,
                     enabled = isEnabledSave,
 
-                ) {
+                    ) {
                     Text(text = "Save")
                 }
 

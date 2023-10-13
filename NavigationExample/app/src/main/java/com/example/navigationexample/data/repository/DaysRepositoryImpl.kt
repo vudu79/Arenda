@@ -54,7 +54,7 @@ class DaysRepositoryImpl @Inject constructor(
                     RentalDay(
                         epochDay = it.toEpochDay(),
                         clientColor = client.clientColor,
-                        clientName = client.firstName,
+                        clientPhone = client.phone,
                         isStartDay = isStart,
                         isEndDay = isEnd,
                         isEnable = isEnable,
@@ -72,15 +72,15 @@ class DaysRepositoryImpl @Inject constructor(
         }
     }
 
-    fun getClientDays(appatmentName: String) {
+    fun getClientDays(clientPhone: String) {
         coroutineScope.launch(Dispatchers.Main) {
-            allClientDays.value = asyncFindClientDays(appatmentName).await()
+            allClientDays.value = asyncFindClientDays(clientPhone).await()
         }
     }
 
-    private fun asyncFindClientDays(clientName: String): Deferred<List<RentalDay>?> =
+    private fun asyncFindClientDays(clientPhone: String): Deferred<List<RentalDay>?> =
         coroutineScope.async(Dispatchers.IO) {
-            return@async rentalDaysDao.getClientDays(clientName)
+            return@async rentalDaysDao.getClientDays(clientPhone)
         }
 
 
@@ -130,7 +130,7 @@ class DaysRepositoryImpl @Inject constructor(
             rentalDaysList.forEach {
                 val localDay = LocalDate.ofEpochDay(it.epochDay)
                 // Log.d("myTag", "День  - $localDay")
-                val client = clientsRepositoryImpl.getClientByName(it.clientName)
+                val client = clientsRepositoryImpl.getClientByPhone(it.clientPhone)
                 val clientMonk = ClientMonk(
                     client,
                     it.appatmentName,

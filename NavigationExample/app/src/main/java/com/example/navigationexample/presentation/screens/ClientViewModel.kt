@@ -42,6 +42,7 @@ class ClientViewModel @Inject constructor(
     var allApartmentClients: MutableLiveData<List<Client>>
     var currentApartment = MutableLiveData<Appatment>()
     var validateFormState by mutableStateOf(ValidationFormState())
+//    var validateFormStateFlow = MutableStateFlow<ValidationFormState>(validateFormState)
 
     init {
         allApartmentClients = clientRepository.allAppatmentClients
@@ -79,6 +80,7 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(transferInfo = client.transferInfo)
         validateFormState = validateFormState.copy(referer = client.referer)
         validateFormState = validateFormState.copy(color = Color(client.clientColor))
+        Log.d("myTag", "стейт клиента обнавлен")
     }
 
     fun resetState() = viewModelScope.launch {
@@ -102,7 +104,8 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(prePayment = "")
         validateFormState = validateFormState.copy(transferInfo = "")
         validateFormState = validateFormState.copy(referer = "")
-        validateFormState = validateFormState.copy(color = Constans.ClientColorsList.clientColorsList[0])
+        validateFormState =
+            validateFormState.copy(color = Constans.ClientColorsList.clientColorsList[0])
     }
 
     fun getAppatmentClients(appatmentName: String) {
@@ -260,7 +263,7 @@ class ClientViewModel @Inject constructor(
                     firstName = validateFormState.firstName.trim(),
                     secondName = validateFormState.secondName?.trim(),
                     lastName = validateFormState.lastName?.trim(),
-                    phone = "+7${validateFormState.phone.trim()}",
+                    phone = validateFormState.phone.trim(),
                     documentNumber = validateFormState.documentNamber!!.trim(),
                     documentDitails = validateFormState.documentDitails!!.trim(),
                     inDate = validateFormState.dateInLong,
@@ -304,21 +307,23 @@ class ClientViewModel @Inject constructor(
         val prePaymentResult = paymentValidationField.execute(validateFormState.prePayment)
         val paymentResult = paymentValidationField.execute(validateFormState.payment)
 
-        val hasError = listOf(
+        val hasErrorList = listOf(
             firstNameResult,
             secondNameResult,
             lastNameResult,
             phoneResult,
             documentNumberResult,
             documentDitailsResult,
-//            dateInLongResult,
-//            dateInStringResult,
-//            dateOutLongResult,
-//            dateOutStringResult,
+            dateInLongResult,
+            dateInStringResult,
+            dateOutLongResult,
+            dateOutStringResult,
             membersResult,
             prePaymentResult,
             paymentResult
-        ).any { !it!!.successful }
+        )
+
+        val hasError: Boolean = hasErrorList.any { !it!!.successful }
 
         if (hasError) {
             Log.d("myTag", "hasError true")
@@ -338,7 +343,7 @@ class ClientViewModel @Inject constructor(
                 paymentError = paymentResult.errorMessage,
             )
             viewModelScope.launch {
-                validationEventChannel.send(ValidatAllFieldsResultEvent.UpdateWrong)
+                validationEventChannel.send(ValidatAllFieldsResultEvent.UpdateWrong(hasErrorList = hasErrorList))
             }
             return
         }
@@ -351,7 +356,7 @@ class ClientViewModel @Inject constructor(
                         firstName = validateFormState.firstName.trim(),
                         secondName = validateFormState.secondName?.trim(),
                         lastName = validateFormState.lastName?.trim(),
-                        phone = "+7${validateFormState.phone.trim()}",
+                        phone = validateFormState.phone.trim(),
                         documentNumber = validateFormState.documentNamber!!.trim(),
                         documentDitails = validateFormState.documentDitails!!.trim(),
                         inDate = validateFormState.dateInLong,

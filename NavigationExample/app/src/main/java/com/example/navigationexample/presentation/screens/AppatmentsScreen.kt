@@ -30,7 +30,7 @@ import com.example.navigationexample.presentation.screens.common.CustomAlertDial
 
 
 @Composable
-fun MainScreen(
+fun AppartmentsScreen(
     mainNavController: NavHostController,
     viewModelAppatment: AppatmentViewModel,
     viewModelClient: ClientViewModel,
