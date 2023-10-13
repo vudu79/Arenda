@@ -49,9 +49,6 @@ fun ClientDitailsScreen(
     clientPhone: String
 ) {
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
-//    LaunchedEffect(Unit) {
-//        viewModelClient.getClientState(clientPhone)
-//    }
     val state = viewModelClient.validateFormState
 
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(ClientStatus.statusList[0]) }

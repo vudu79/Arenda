@@ -33,8 +33,8 @@ class DaysRepositoryImpl @Inject constructor(
     }
 
     fun insertClientDays(client: Client) {
-        val startDay = LocalDate.ofEpochDay(client.inDate!!)
-        val endDay = LocalDate.ofEpochDay(client.outDate!!)
+        val startDay = LocalDate.ofEpochDay(client.inDate)
+        val endDay = LocalDate.ofEpochDay(client.outDate)
         val clientPeriod = listDaysBetween(startDay, endDay)
 //        val startDayEpoch = startDay.toEpochDay()
 //        val endDayEpoch = endDay.toEpochDay()
@@ -66,9 +66,9 @@ class DaysRepositoryImpl @Inject constructor(
     }
 
 
-    fun deleteClientDays(clientName: String) {
+    fun deleteClientDays(clientPhone: String) {
         coroutineScope.launch(Dispatchers.IO) {
-            rentalDaysDao.deleteClientDays(clientName)
+            rentalDaysDao.deleteClientDays(clientPhone)
         }
     }
 
@@ -85,6 +85,24 @@ class DaysRepositoryImpl @Inject constructor(
 
 
     @WorkerThread
+    fun updateClientDays(
+        onStart: () -> Unit,
+        onCompletion: () -> Unit,
+        onError: () -> Unit,
+        client: Client,
+        result: Int
+    ) = flow {
+        deleteClientDays(client.phone)
+        insertClientDays(client)
+        if (result < 0) {
+            onError()
+        } else {
+            emit(0)
+        }
+    }.onStart { onStart() }.onCompletion { onCompletion() }.flowOn(Dispatchers.IO)
+
+
+    @WorkerThread
     fun fetchAppatmentRentalDays(
         onStart: () -> Unit,
         onCompletion: () -> Unit,
@@ -94,15 +112,7 @@ class DaysRepositoryImpl @Inject constructor(
         val rentalDaysList: List<RentalDay> = rentalDaysDao.getAppatmentDays(appatmentName)
         if (rentalDaysList.isEmpty()) {
             onError()
-
         } else {
-//            val localDays: Map<String, List<LocalDate>> = rentalDaysList.let { day ->
-//                day.groupBy(
-//                    keySelector = { it.appatmentName },
-//                    valueTransform = { LocalDate.ofEpochDay(it.epochDay) }
-//                )
-//            }
-
             val localDays: MutableList<LocalDate> = mutableListOf()
             rentalDaysList.let {
                 it.forEach {
@@ -112,6 +122,7 @@ class DaysRepositoryImpl @Inject constructor(
             emit(localDays)
         }
     }.onStart { onStart() }.onCompletion { onCompletion() }.flowOn(Dispatchers.IO)
+
 
 
     @WorkerThread

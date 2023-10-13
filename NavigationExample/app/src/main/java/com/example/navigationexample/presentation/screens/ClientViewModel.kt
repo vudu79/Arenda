@@ -2,27 +2,26 @@ package com.example.navigationexample.presentation.screens
 
 import android.util.Log
 import androidx.compose.runtime.*
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.navigationexample.data.entity.Appatment
-import com.example.navigationexample.data.entity.Client
-import com.example.navigationexample.data.repository.ClientsRepositoryImpl
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.navigationexample.constants.Constans
+import com.example.navigationexample.data.entity.Client
+import com.example.navigationexample.data.repository.ClientsRepositoryImpl
 import com.example.navigationexample.data.repository.DaysRepositoryImpl
 import com.example.navigationexample.domain.models.ClientStatus
-import com.example.navigationexample.domain.usecase.validation.*
+import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
+import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
+import com.example.navigationexample.domain.usecase.validation.ValidationFormState
 import com.example.navigationexample.domain.usecase.validation.validators.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
 
 
 @HiltViewModel
@@ -40,9 +39,10 @@ class ClientViewModel @Inject constructor(
     private val dateLongValidationField: DateLongValidation = DateLongValidation()
 ) : ViewModel() {
     var allApartmentClients: MutableLiveData<List<Client>>
-    var currentApartment = MutableLiveData<Appatment>()
     var validateFormState by mutableStateOf(ValidationFormState())
-//    var validateFormStateFlow = MutableStateFlow<ValidationFormState>(validateFormState)
+
+    private val _isLoadingForUpdateClient: MutableState<Boolean> = mutableStateOf(false)
+    val isLoadingForUpdateClient: State<Boolean> get() = _isLoadingForUpdateClient
 
     init {
         allApartmentClients = clientRepository.allAppatmentClients
@@ -118,14 +118,30 @@ class ClientViewModel @Inject constructor(
         daysRepository.insertClientDays(client)
     }
 
-    fun deleteClient(name: String) {
-        daysRepository.deleteClientDays(name)
-        clientRepository.deleteClient(name)
+    fun deleteClient(clientPhone: String) {
+        daysRepository.deleteClientDays(clientPhone)
+        clientRepository.deleteClient(clientPhone)
     }
 
-    suspend fun updateClient(client: Client): Int {
-        return clientRepository.updateClient(client = client)
+    private suspend fun updateClient(client: Client): Int {
+        val result = clientRepository.updateClient(client = client)
+        updateClientDays(client, result)
+        return result
     }
+
+
+    private fun updateClientDays(client: Client, result: Int) {
+        daysRepository.updateClientDays(
+            result = result,
+            client = client,
+            onStart = { _isLoadingForUpdateClient.value = true },
+            onCompletion = { _isLoadingForUpdateClient.value = false },
+            onError = { Log.d("myTag", "Ошибка обновления дней клиента")},
+        )
+    }
+
+
+
 
     fun onFormEvent(event: ValidationFormEvent) {
         when (event) {

@@ -46,48 +46,51 @@ fun ClientsScreen(
 ) {
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
     val appatmentClients by viewModelClient.allApartmentClients.observeAsState(listOf())
+    val isLoading: Boolean by viewModelClient.isLoadingForUpdateClient
 
-    Column(
-        modifier = Modifier
-            .background(Color(red = 41, green = 41, blue = 41))
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Text(
-            text = "Клиенты для ${currentAppatment?.name ?: "_"}",
-            modifier = Modifier.padding(top = 5.dp, bottom = 10.dp),
-            fontSize = 20.sp,
-            color = Color(223, 75, 0)
-        )
-        LazyColumn(
-
+    if (isLoading) {
+        CircularProgressIndicator()
+    } else {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.74f)
-                .padding(3.dp)
+                .background(Color(red = 41, green = 41, blue = 41))
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(appatmentClients) { item ->
-                ClientItemRow(
-                    client = item,
-                    navcontroller = mainNavController,
-                    viewModelClient = viewModelClient,
-                    viewModelCalendar = viewModelCalendar
+            Text(
+                text = "Клиенты для ${currentAppatment?.name ?: "_"}",
+                modifier = Modifier.padding(top = 5.dp, bottom = 10.dp),
+                fontSize = 20.sp,
+                color = Color(223, 75, 0)
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.74f)
+                    .padding(3.dp)
+            ) {
+                items(appatmentClients) { item ->
+                    ClientItemRow(
+                        client = item,
+                        navcontroller = mainNavController,
+                        viewModelClient = viewModelClient,
+                        viewModelCalendar = viewModelCalendar
+                    )
+                }
+            }
+
+            IconButton(onClick = {
+                viewModelClient.resetState()
+                mainNavController.navigate(route = "${Routs.addClientScreen}/$appatmentName")
+            })
+            {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_group_add_24),
+                    contentDescription = "Добавить клиента",
+                    modifier = Modifier.size(55.dp),
+                    tint = Color(223, 75, 0)
                 )
             }
-        }
-
-        IconButton(onClick = {
-            viewModelClient.resetState()
-            mainNavController.navigate(route = "${Routs.addClientScreen}/$appatmentName")
-        })
-        {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_group_add_24),
-                contentDescription = "Добавить клиента",
-                modifier = Modifier.size(55.dp),
-                tint = Color(223, 75, 0)
-            )
         }
     }
 }
@@ -125,7 +128,7 @@ fun LazyItemScope.ClientItemRow(
                 .combinedClickable(
                     onClick = {
 
-                            viewModelClient.getClientState(client.phone)
+                        viewModelClient.getClientState(client.phone)
                         navcontroller.navigate("${Routs.clientDitailsScreen}/${client.phone}")
                     },
                     onLongClick = {
@@ -207,9 +210,9 @@ fun LazyItemScope.ClientItemRow(
 
 
                         Text(
-                            text = "${LocalDate.ofEpochDay(client.inDate ?: 0)} - ${
+                            text = "${LocalDate.ofEpochDay(client.inDate)} - ${
                                 LocalDate.ofEpochDay(
-                                    client.outDate ?: 0
+                                    client.outDate
                                 )
                             }",
                             modifier = Modifier.padding(2.dp),
@@ -241,7 +244,7 @@ fun LazyItemScope.ClientItemRow(
 }
 
 fun makeCall(context: Context, number: String) {
-    val intent = Intent(Intent.ACTION_DIAL);
+    val intent = Intent(Intent.ACTION_DIAL)
     intent.data = Uri.parse("tel:+7$number")
     startActivity(context, intent, null)
 }
