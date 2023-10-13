@@ -99,16 +99,20 @@ fun SetDatePeriodScreen(
                         val (startDate, endDate) = selection
                         if (startDate != null && endDate != null) {
                             dateSelected(startDate, endDate)
-//                            viewModel.dateInString1.value = startDate.toString()
-//                            viewModel.dateOutString1.value = endDate.toString()
-//                            viewModel.dateInLong1.value = startDate.toEpochDay()
-//                            viewModel.dateOutLong1.value = endDate.toEpochDay()
+
+                            viewModelClient.dateInString = startDate.toString()
+                            viewModelClient.dateOutString = endDate.toString()
+                            viewModelClient.dateInLong = startDate.toEpochDay()
+                            viewModelClient.dateOutLong = endDate.toEpochDay()
 
                             viewModelClient.validateFormState.dateInString = startDate.toString()
                             viewModelClient.validateFormState.dateInLong = startDate.toEpochDay()
                             viewModelClient.validateFormState.dateOutString = endDate.toString()
                             viewModelClient.validateFormState.dateOutLong = endDate.toEpochDay()
-                            viewModelClient.getClientState(clientPhone)
+
+//                            viewModelClient.getClientState(clientPhone)
+
+
                             if (appatmentName != "" && clientPhone == "") {
                                 navController.navigate("${Routs.addClientScreen}/$appatmentName")
                             } else if (appatmentName == "" && clientPhone != "") {

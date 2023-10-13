@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
@@ -48,9 +49,9 @@ fun ClientDitailsScreen(
     clientPhone: String
 ) {
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
-    LaunchedEffect(Unit) {
-        viewModelClient.getClientState(clientPhone)
-    }
+//    LaunchedEffect(Unit) {
+//        viewModelClient.getClientState(clientPhone)
+//    }
     val state = viewModelClient.validateFormState
 
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(ClientStatus.statusList[0]) }
@@ -1190,16 +1191,62 @@ fun ClientDitailsScreen(
                                         .height(50.dp)
                                         .background(Color(red = 41, green = 41, blue = 41))
                                 ) {
-                                    Text(
-                                        text = "с ${state.dateInString} по ${state.dateOutString}",
-                                        maxLines = 1,
+//                                    Text(
+//                                        text = "с ${state.dateInString} по ${state.dateOutString}",
+//
+//                                        maxLines = 1,
+//                                        modifier = Modifier
+//                                            .align(Alignment.CenterStart)
+//                                            .background(Color(red = 41, 41, blue = 41))
+//                                            .padding(start = 5.dp),
+//                                        fontSize = 18.sp,
+//                                        color = Color(254, 253, 253, 255)
+//                                    )
+
+                                    OutlinedTextField(
+                                        value = "c ${state.dateInString} по ${state.dateOutString} ",
+                                        onValueChange = {
+                                            viewModelClient.onFormEvent(ValidationFormEvent.InLongDateChanged(viewModelClient.dateInLong))
+                                            viewModelClient.onFormEvent(ValidationFormEvent.InStringDateChanged(viewModelClient.dateInString))
+                                            viewModelClient.onFormEvent(ValidationFormEvent.OutLongDateChanged(viewModelClient.dateOutLong))
+                                            viewModelClient.onFormEvent(ValidationFormEvent.OutStringDateChanged(viewModelClient.dateOutString))
+                                        },
+                                        placeholder = { Text(text = "Период проживания", color = Color.Black) },
+                                        isError = (state.dateInStringError != null || state.dateOutStringError != null || state.dateInLongError != null || state.dateOutLongError != null),
+                                        singleLine = true,
                                         modifier = Modifier
-                                            .align(Alignment.CenterStart)
-                                            .background(Color(red = 41, 41, blue = 41))
-                                            .padding(start = 5.dp),
-                                        fontSize = 18.sp,
-                                        color = Color(254, 253, 253, 255)
+                                            .fillMaxWidth()
+                                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp)
+                                            .clickable {
+//                                                navController.navigate(
+//                                                    route =
+//                                                    "${Routs.setClientPeriodFromAddClient}/$appatmentName"
+//                                                )
+//                                viewModel.showDatePickerDialog(context, "in")
+
+                                            },
+                                        keyboardOptions = KeyboardOptions(
+                                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                                        ),
+                                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                                            disabledTextColor = Color.Black,
+                                            unfocusedBorderColor = Color.Black, textColor = Color.Black,
+                                            backgroundColor = Color(142, 143, 138),
+
+                                            ),
+                                        enabled = false,
+                                        keyboardActions = KeyboardActions(onNext = {
+                                            focusManager.moveFocus(FocusDirection.Down)
+                                        }),
                                     )
+
+
+
+
+
+
+
+
                                 }
                                 IconButton(
                                     onClick = {

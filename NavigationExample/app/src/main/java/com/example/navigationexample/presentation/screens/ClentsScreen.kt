@@ -124,6 +124,8 @@ fun LazyItemScope.ClientItemRow(
                 .background(Color(128, 107, 90))
                 .combinedClickable(
                     onClick = {
+
+                            viewModelClient.getClientState(client.phone)
                         navcontroller.navigate("${Routs.clientDitailsScreen}/${client.phone}")
                     },
                     onLongClick = {
@@ -207,7 +209,7 @@ fun LazyItemScope.ClientItemRow(
                         Text(
                             text = "${LocalDate.ofEpochDay(client.inDate ?: 0)} - ${
                                 LocalDate.ofEpochDay(
-                                    client.inDate ?: 0
+                                    client.outDate ?: 0
                                 )
                             }",
                             modifier = Modifier.padding(2.dp),

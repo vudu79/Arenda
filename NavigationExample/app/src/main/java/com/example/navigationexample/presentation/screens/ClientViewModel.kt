@@ -42,6 +42,7 @@ class ClientViewModel @Inject constructor(
     var allApartmentClients: MutableLiveData<List<Client>>
     var currentApartment = MutableLiveData<Appatment>()
     var validateFormState by mutableStateOf(ValidationFormState())
+//    var validateFormStateFlow = MutableStateFlow<ValidationFormState>(validateFormState)
 
     init {
         allApartmentClients = clientRepository.allAppatmentClients
@@ -313,10 +314,10 @@ class ClientViewModel @Inject constructor(
             phoneResult,
             documentNumberResult,
             documentDitailsResult,
-//            dateInLongResult,
-//            dateInStringResult,
-//            dateOutLongResult,
-//            dateOutStringResult,
+            dateInLongResult,
+            dateInStringResult,
+            dateOutLongResult,
+            dateOutStringResult,
             membersResult,
             prePaymentResult,
             paymentResult
