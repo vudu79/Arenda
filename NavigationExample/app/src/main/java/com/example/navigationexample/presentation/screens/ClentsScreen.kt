@@ -233,7 +233,7 @@ fun LazyItemScope.ClientItemRow(
         }, onOk = {
             showCustomDialog = !showCustomDialog
 
-            viewModelClient.deleteClient(client.phone)
+            viewModelClient.deleteClient(client.id)
             viewModelClient.getAppatmentClients(client.appatmentName)
             viewModelCalendar.updateDaysMapForCalendar(client.appatmentName)
         },

@@ -1,6 +1,5 @@
 package com.example.navigationexample.domain.usecase
 
-import android.util.Log
 import com.example.navigationexample.data.entity.RentalDay
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
 import com.example.navigationexample.data.repository.DaysRepositoryImpl
@@ -22,7 +21,7 @@ class GetDayClientMapUseCase @Inject constructor(
         // Log.d("myTag", "from UseCase  - $allAppatmentDays")
         allAppatmentDays?.forEach {
             val localDay = LocalDate.ofEpochDay(it.epochDay)
-            val client = clientsRepositoryImpl.getClientByName(it.clientPhone)
+            val client = clientsRepositoryImpl.getClientById(it.clientId)
             // Log.d("myTag", "День  - $localDay")
             val clientMonk = ClientMonk(
                 client,

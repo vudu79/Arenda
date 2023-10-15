@@ -13,8 +13,8 @@ import com.example.navigationexample.domain.models.ClientStatus
 class Client {
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    @ColumnInfo(name = "clientId")
-    var id: Int = 0
+    @ColumnInfo(name = "client_id")
+    var id: Long = 0
 
     @ColumnInfo(name = "status")
     var status: String = ClientStatus.waiting
@@ -116,7 +116,7 @@ class Client {
     }
 
     constructor(
-        id:Int,
+        id:Long,
         status: String,
         firstName: String,
         secondName: String?,

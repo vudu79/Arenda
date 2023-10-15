@@ -113,14 +113,14 @@ class ClientViewModel @Inject constructor(
     }
 
 
-    fun addClient(client: Client) {
-        clientRepository.insertClient(client)
-        daysRepository.insertClientDays(client)
+    suspend fun addClient(client: Client) {
+        val clientId = clientRepository.insertClient(client).await()
+        daysRepository.insertClientDays(client, clientId)
     }
 
-    fun deleteClient(clientPhone: String) {
-        daysRepository.deleteClientDays(clientPhone)
-        clientRepository.deleteClient(clientPhone)
+    fun deleteClient(clientId: Long) {
+        daysRepository.deleteClientDays(clientId)
+        clientRepository.deleteClient(clientId)
     }
 
     private suspend fun updateClient(client: Client): Int {
@@ -364,7 +364,7 @@ class ClientViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
-            if (validateFormState.id != 0) {
+            if (validateFormState.id != 0L) {
                 updateClient(
                     Client(
                         id = validateFormState.id!!,
