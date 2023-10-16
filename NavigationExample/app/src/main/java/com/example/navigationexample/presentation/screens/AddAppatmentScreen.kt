@@ -40,8 +40,8 @@ fun AddAppatmentScreen(
     val context = LocalContext.current
 //    val scaffoldState = rememberScaffoldState()
     val nameAppat = remember { mutableStateOf("") }
-    val typeAppat = remember { mutableStateOf("") }
-    val rentatypeAppat = remember { mutableStateOf("") }
+    val typeAppat = remember { mutableStateOf("Квартира") }
+    val rentatypeAppat = remember { mutableStateOf("Посуточно") }
     val addressAppat = remember { mutableStateOf("") }
     val squearAppat = remember { mutableStateOf("") }
 
@@ -113,7 +113,7 @@ fun AddAppatmentScreen(
                         label = { Text(text = "Название", color = Black) },
                         placeholder = { Text(text = "Название", color = Black) },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.79f),
+                        modifier = Modifier.fillMaxWidth(0.8f),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black,
                             textColor = Black,
@@ -122,19 +122,15 @@ fun AddAppatmentScreen(
                     )
 
                     Box(
-
                         modifier = Modifier
                             .fillMaxWidth(0.79f)
                             .padding(bottom = 10.dp, top = 10.dp),
 //                            .wrapContentSize(Alignment.Center),
                         contentAlignment = Alignment.TopCenter
-
                     ) {
                         Text(
                             text = "Тип объекта- ${items[selectedIndex.value]}",
-
                             modifier = Modifier
-
                                 .fillMaxWidth()
 //                                .padding(top = 5.dp, start = 5.dp)
                                 .height(56.dp)
@@ -144,7 +140,6 @@ fun AddAppatmentScreen(
                                 ),
                             fontSize = 16.sp,
                             color = Black,
-
                             )
                         DropdownMenu(
                             expanded = expanded.value,
@@ -172,7 +167,6 @@ fun AddAppatmentScreen(
                         }
                     }
 
-
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(0.79f),
@@ -181,9 +175,7 @@ fun AddAppatmentScreen(
                     ) {
                         Text(
                             text = "Срок аренды- ${itemsRenta[selectedIndexRenta.value]}",
-
                             modifier = Modifier
-
                                 .fillMaxWidth()
 //                                .padding(top = 5.dp, start = 5.dp)
                                 .height(56.dp)
@@ -221,7 +213,6 @@ fun AddAppatmentScreen(
                         }
                     }
 
-
                     OutlinedTextField(
                         value = addressAppat.value,
                         onValueChange = { addressAppat.value = it },
@@ -252,7 +243,6 @@ fun AddAppatmentScreen(
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
 
-
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -269,7 +259,6 @@ fun AddAppatmentScreen(
                             Icon(
                                 painter = painterResource(id = R.drawable.baseline_arrow_back_24),
                                 contentDescription = "Назад",
-
                                 modifier = Modifier.size(55.dp),
                                 tint = Color(223, 75, 0)
                             )

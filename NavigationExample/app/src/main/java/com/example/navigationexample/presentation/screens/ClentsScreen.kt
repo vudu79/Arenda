@@ -34,6 +34,12 @@ import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.common.CustomAlertDialog
 import com.kizitonwose.calendar.sample.compose.clickable
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+fun parseDate(date: Long): String {
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    return LocalDate.ofEpochDay(date).format(formatter)
+}
 
 
 @Composable
@@ -114,7 +120,6 @@ fun LazyItemScope.ClientItemRow(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(75.dp)
             .padding(3.dp),
         shape = RoundedCornerShape(7.dp),
         elevation = 8.dp,
@@ -127,12 +132,11 @@ fun LazyItemScope.ClientItemRow(
                 .background(Color(128, 107, 90))
                 .combinedClickable(
                     onClick = {
-
-                        viewModelClient.getClientState(client.phone)
-                        navcontroller.navigate("${Routs.clientDitailsScreen}/${client.phone}")
+//                        viewModelClient.getClientState(client.phone)
+//                        navcontroller.navigate("${Routs.clientDitailsScreen}/${client.phone}")
                     },
                     onLongClick = {
-                        showCustomDialog = !showCustomDialog
+//                        showCustomDialog = !showCustomDialog
                     }),
             verticalAlignment = Alignment.CenterVertically
 //                .border(3.dp, Color(223,75,0))
@@ -142,14 +146,12 @@ fun LazyItemScope.ClientItemRow(
 
             Box(
                 modifier = Modifier
-
                     .fillMaxHeight()
                     .padding(10.dp)
                     .clickable {
                         makeCall(context, client.phone)
                     },
-
-                ) {
+            ) {
                 Image(
                     painter = painterResource(R.drawable.baseline_phone_24),
                     contentDescription = "asd",
@@ -165,7 +167,7 @@ fun LazyItemScope.ClientItemRow(
                 color = Color(client.clientColor).copy(alpha = 0.8f),
                 modifier = Modifier
                     .fillMaxHeight(0.8f)  //fill the max height
-                    .width(3.dp)
+                    .width(5.dp)
             )
 
             Column(
@@ -173,9 +175,7 @@ fun LazyItemScope.ClientItemRow(
                 modifier = Modifier
                     .fillMaxWidth(0.70f)
                     .padding(start = 10.dp),
-
-
-                ) {
+            ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -199,22 +199,22 @@ fun LazyItemScope.ClientItemRow(
                             fontWeight = FontWeight.Bold
                         )
 
-                        Text(
-                            text = client.phone,
-                            modifier = Modifier.padding(2.dp),
-                            maxLines = 1,
-                            color = Color(red = 41, green = 41, blue = 41),
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold
-                        )
+//                        Text(
+//                            text = client.phone,
+//                            modifier = Modifier.padding(2.dp),
+//                            maxLines = 1,
+//                            color = Color(red = 41, green = 41, blue = 41),
+//                            fontSize = 10.sp,
+//                            fontWeight = FontWeight.Bold
+//                        )
 
-
                         Text(
-                            text = "${LocalDate.ofEpochDay(client.inDate)} - ${
-                                LocalDate.ofEpochDay(
-                                    client.outDate
-                                )
-                            }",
+                            text = parseDate(client.inDate) + "-" + parseDate(client.outDate),
+//                            text = "${LocalDate.ofEpochDay(client.inDate)} - ${
+//                                LocalDate.ofEpochDay(
+//                                    client.outDate
+//                                )
+//                            }",
                             modifier = Modifier.padding(2.dp),
                             maxLines = 1,
                             color = Color(red = 41, green = 41, blue = 41),
@@ -224,6 +224,62 @@ fun LazyItemScope.ClientItemRow(
                     }
                 }
             }
+
+            Divider(
+                color = Color.Black,
+                modifier = Modifier
+                    .fillMaxHeight(0.8f)  //fill the max height
+                    .width(5.dp)
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(10.dp)
+                    .clickable {
+                        viewModelClient.getClientState(client.phone)
+                        navcontroller.navigate("${Routs.clientDitailsScreen}/${client.phone}")
+                    },
+
+                ) {
+                Image(
+                    painter = painterResource(R.drawable.baseline_edit_24),
+                    contentDescription = "asd",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .padding(top = 2.dp)
+                        .size(30.dp)
+                        .clip(CircleShape)
+                )
+            }
+
+            Divider(
+                color = Color.Black,
+                modifier = Modifier
+                    .fillMaxHeight(0.8f)  //fill the max height
+                    .width(5.dp)
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(10.dp)
+                    .clickable {
+                        showCustomDialog = !showCustomDialog
+                    },
+
+                ) {
+                Image(
+                    painter = painterResource(R.drawable.baseline_delete_forever_24),
+                    contentDescription = "asd",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .padding(top = 2.dp)
+                        .size(30.dp)
+                        .clip(CircleShape)
+                )
+            }
+
         }
     }
 

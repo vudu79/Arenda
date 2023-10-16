@@ -21,8 +21,13 @@ class DaysRepositoryImpl @Inject constructor(
     private val rentalDaysDao: RentalDaysDao,
     private val clientsRepositoryImpl: ClientsRepositoryImpl
 ) {
+
+
     var allAppatmentDays = MutableLiveData<List<RentalDay>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
+
+
 
     fun insertClientDays(client: Client, clientId: Long) {
         val startDay = LocalDate.ofEpochDay(client.inDate)

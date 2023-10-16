@@ -1,7 +1,12 @@
 package com.example.navigationexample.presentation.screens
 
+
 import android.util.Log
-import androidx.compose.runtime.*
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.MutableLiveData
@@ -15,7 +20,14 @@ import com.example.navigationexample.domain.models.ClientStatus
 import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
 import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
 import com.example.navigationexample.domain.usecase.validation.ValidationFormState
-import com.example.navigationexample.domain.usecase.validation.validators.*
+import com.example.navigationexample.domain.usecase.validation.validators.DateLongValidation
+import com.example.navigationexample.domain.usecase.validation.validators.DateStringValidation
+import com.example.navigationexample.domain.usecase.validation.validators.DocumentDitails
+import com.example.navigationexample.domain.usecase.validation.validators.DocumentNumber
+import com.example.navigationexample.domain.usecase.validation.validators.MembersValidation
+import com.example.navigationexample.domain.usecase.validation.validators.NameValidation
+import com.example.navigationexample.domain.usecase.validation.validators.PaymentValidation
+import com.example.navigationexample.domain.usecase.validation.validators.PhoneValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
