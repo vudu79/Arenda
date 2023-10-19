@@ -1238,12 +1238,6 @@ fun ClientUpdateScreen(
                                     )
 
 
-
-
-
-
-
-
                                 }
                                 IconButton(
                                     onClick = {

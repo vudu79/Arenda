@@ -3,7 +3,6 @@ package com.example.navigationexample.presentation.screens//package com.example.
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -19,6 +18,9 @@ import androidx.navigation.NavHostController
 import com.example.navigationexample.R
 import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.presentation.navigation.Routs
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -32,6 +34,10 @@ fun ClientDitailsScreen(
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
     viewModelClient.getClient(clientPhone)
     val state = viewModelClient.uiClientState
+    val inDate = state.value?.inDate ?: 0L
+    val outDate = state.value?.outDate ?: 0L
+    val ldInDate = LocalDate.ofEpochDay(inDate)
+    val ldOutDate = LocalDate.ofEpochDay(outDate)
 
 
     Column(
@@ -48,9 +54,18 @@ fun ClientDitailsScreen(
                 .background(Color(41, 41, 41))
                 .align(Alignment.CenterHorizontally)
                 .padding(15.dp),
-            fontSize = 18.sp,
+            fontSize = 26.sp,
             color = Color.White
         )
+
+        state.value?.let { Color(it.clientColor).copy(alpha = 0.8f) }?.let {
+            Divider(
+                color = it,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .width(3.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.padding(10.dp))
 
@@ -59,7 +74,7 @@ fun ClientDitailsScreen(
                 .background(Color(red = 41, green = 41, blue = 41))
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
+        ) {
 
 //        Статус _______________________________________________________________
             item {
@@ -68,71 +83,141 @@ fun ClientDitailsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    Row() {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
                         Text(
-                            text = "Статус клиента",
+                            text = "Статус клиента ",
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
-                            fontSize = 12.sp,
+                            fontSize = 19.sp,
                             color = Color(223, 75, 0)
                         )
-                    }
-                    Row() {
-                        Card(
+
+                        Text(
+                            text = state.value?.status ?: "нет данныъх",
+                            maxLines = 1,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(3.dp)
-                                .background(Color(red = 41, green = 41, blue = 41)),
-                            shape = RoundedCornerShape(5.dp),
-                            elevation = 8.dp,
-                            onClick = {
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
 
-                            }
-                        ) {
-                            Column(
-                                horizontalAlignment = Alignment.Start,
-                                modifier = Modifier
-                                    .fillMaxWidth(0.70f)
-
-                                    .background(Color(red = 41, 41, blue = 41)),
-                            ) {
-
-                                Row(
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .background(Color(red = 41, green = 41, blue = 41))
-
-                                ) {
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxWidth(0.85f)
-                                            .height(50.dp)
-                                            .background(Color(red = 41, green = 41, blue = 41))
-
-                                    ) {
-                                        Text(
-                                            text = state.value?.status ?: "нет данныъх",
-                                            maxLines = 1,
-                                            modifier = Modifier
-                                                .align(Alignment.CenterStart)
-                                                .background(Color(41, 41, 41))
-                                                .padding(start = 5.dp),
-
-                                            fontSize = 18.sp,
-                                            color = Color(254, 253, 253, 255)
-                                        )
-                                    }
-                                }
-
-                            }
-                        }
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
                     }
+                    Spacer(modifier = Modifier.padding(5.dp))
+
+                }
+            }
+//        Дата заезда _______________________________________________________________
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Заезд  ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = dateToString(state.value?.inDate),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+
+                }
+            }
+//        Дата выезда _______________________________________________________________
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Выезд  ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = dateToString(state.value?.outDate),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+
                 }
             }
 
+//        количество дней _______________________________________________________________
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Количество ночей ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = ChronoUnit.DAYS.between(ldInDate, ldOutDate).toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+
+                }
+            }
 
 
 
@@ -168,14 +253,20 @@ fun ClientDitailsScreen(
     }
 }
 
+
 fun makeFullName(state: LiveData<Client>): String {
     val fName = state.value?.firstName ?: ""
     val sName = state.value?.secondName ?: ""
     val lName = state.value?.lastName ?: ""
     return "$fName $sName $lName"
-
-
 }
+
+
+fun dateToString(longDate: Long?): String {
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    return longDate?.let { LocalDate.ofEpochDay(it).format(formatter) }.toString()
+}
+
 
 @Preview
 @Composable
