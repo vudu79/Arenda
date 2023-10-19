@@ -132,8 +132,8 @@ fun LazyItemScope.ClientItemRow(
                 .background(Color(128, 107, 90))
                 .combinedClickable(
                     onClick = {
-//                        viewModelClient.getClientState(client.phone)
-//                        navcontroller.navigate("${Routs.clientDitailsScreen}/${client.phone}")
+                        viewModelClient.getClientState(client.phone)
+                        navcontroller.navigate("${Routs.clientDitailsScreen}/${client.phone}")
                     },
                     onLongClick = {
 //                        showCustomDialog = !showCustomDialog
@@ -238,7 +238,7 @@ fun LazyItemScope.ClientItemRow(
                     .padding(10.dp)
                     .clickable {
                         viewModelClient.getClientState(client.phone)
-                        navcontroller.navigate("${Routs.clientDitailsScreen}/${client.phone}")
+                        navcontroller.navigate("${Routs.clientUpdateScreen}/${client.phone}")
                     },
 
                 ) {

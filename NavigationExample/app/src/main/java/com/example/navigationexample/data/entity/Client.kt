@@ -16,11 +16,6 @@ class Client {
         @ColumnInfo(name = "client_id")
         var id: Long = 0
 
-
-
-
-
-
         @ColumnInfo(name = "status")
         var status: String = ClientStatus.waiting
 

@@ -91,7 +91,7 @@ fun SetDatePeriodScreen(
                         if (appatmentName != "" && clientPhone == "") {
                             navController.navigate("${Routs.addClientScreen}/$appatmentName")
                         } else if (appatmentName == "" && clientPhone != "") {
-                            navController.navigate("${Routs.clientDitailsScreen}/$clientPhone")
+                            navController.navigate("${Routs.clientUpdateScreen}/$clientPhone")
                         }
                     },
                     clearDates = { selection = DateSelection() },
@@ -116,7 +116,7 @@ fun SetDatePeriodScreen(
                             if (appatmentName != "" && clientPhone == "") {
                                 navController.navigate("${Routs.addClientScreen}/$appatmentName")
                             } else if (appatmentName == "" && clientPhone != "") {
-                                navController.navigate("${Routs.clientDitailsScreen}/$clientPhone")
+                                navController.navigate("${Routs.clientUpdateScreen}/$clientPhone")
                             }
                         }
                     },

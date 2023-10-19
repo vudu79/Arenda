@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,6 +31,8 @@ import com.example.navigationexample.domain.usecase.validation.validators.Paymen
 import com.example.navigationexample.domain.usecase.validation.validators.PhoneValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -52,6 +55,9 @@ class ClientViewModel @Inject constructor(
 ) : ViewModel() {
     var allApartmentClients: MutableLiveData<List<Client>>
     var validateFormState by mutableStateOf(ValidationFormState())
+
+    private val _uiClientState = MutableLiveData<Client>()
+    val uiClientState: LiveData<Client> = _uiClientState
 
     private val _isLoadingForUpdateClient: MutableState<Boolean> = mutableStateOf(false)
     val isLoadingForUpdateClient: State<Boolean> get() = _isLoadingForUpdateClient
@@ -120,6 +126,13 @@ class ClientViewModel @Inject constructor(
             validateFormState.copy(color = Constans.ClientColorsList.clientColorsList[0])
     }
 
+     fun getClient(clientPhone: String){
+         viewModelScope.launch {
+             _uiClientState.value = clientRepository.getClientByPhone(clientPhone)
+         }
+    }
+
+
     fun getAppatmentClients(appatmentName: String) {
         clientRepository.getAppatmentClients(appatmentName)
     }
@@ -151,8 +164,6 @@ class ClientViewModel @Inject constructor(
             onError = { Log.d("myTag", "Ошибка обновления дней клиента")},
         )
     }
-
-
 
 
     fun onFormEvent(event: ValidationFormEvent) {
