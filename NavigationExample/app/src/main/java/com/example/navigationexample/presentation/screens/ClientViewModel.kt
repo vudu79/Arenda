@@ -31,8 +31,6 @@ import com.example.navigationexample.domain.usecase.validation.validators.Paymen
 import com.example.navigationexample.domain.usecase.validation.validators.PhoneValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -126,10 +124,10 @@ class ClientViewModel @Inject constructor(
             validateFormState.copy(color = Constans.ClientColorsList.clientColorsList[0])
     }
 
-     fun getClient(clientPhone: String){
-         viewModelScope.launch {
-             _uiClientState.value = clientRepository.getClientByPhone(clientPhone)
-         }
+    fun getClient(clientPhone: String) {
+        viewModelScope.launch {
+            _uiClientState.value = clientRepository.getClientByPhone(clientPhone)
+        }
     }
 
 
@@ -161,7 +159,7 @@ class ClientViewModel @Inject constructor(
             client = client,
             onStart = { _isLoadingForUpdateClient.value = true },
             onCompletion = { _isLoadingForUpdateClient.value = false },
-            onError = { Log.d("myTag", "Ошибка обновления дней клиента")},
+            onError = { Log.d("myTag", "Ошибка обновления дней клиента") },
         )
     }
 
@@ -171,48 +169,62 @@ class ClientViewModel @Inject constructor(
             is ValidationFormEvent.StatusChanged -> {
                 validateFormState = validateFormState.copy(status = event.status)
             }
+
             is ValidationFormEvent.FirstNameChanged -> {
                 validateFormState = validateFormState.copy(firstName = event.firstName)
             }
+
             is ValidationFormEvent.SecondNameChanged -> {
                 validateFormState = validateFormState.copy(secondName = event.secondName)
             }
+
             is ValidationFormEvent.LastNameChanged -> {
                 validateFormState = validateFormState.copy(lastName = event.lastName)
             }
+
             is ValidationFormEvent.PhoneChanged -> {
                 validateFormState = validateFormState.copy(phone = event.phone)
             }
+
             is ValidationFormEvent.DocumentNamberChanged -> {
                 validateFormState = validateFormState.copy(documentNamber = event.documentNamber)
             }
+
             is ValidationFormEvent.DocumentDitailsChanged -> {
                 validateFormState = validateFormState.copy(documentDitails = event.documentDitails)
             }
+
             is ValidationFormEvent.MembersChanged -> {
 //                // Log.d("myTag", "asasd --- ${event.members}")
                 validateFormState = validateFormState.copy(members = event.members)
             }
+
             is ValidationFormEvent.InStringDateChanged -> {
                 validateFormState = validateFormState.copy(dateInString = event.inDateString)
             }
+
             is ValidationFormEvent.InLongDateChanged -> {
                 validateFormState = validateFormState.copy(dateInLong = event.inDateLong)
             }
+
             is ValidationFormEvent.OutStringDateChanged -> {
                 validateFormState = validateFormState.copy(dateOutString = event.outDateString)
             }
+
             is ValidationFormEvent.OutLongDateChanged -> {
                 validateFormState = validateFormState.copy(dateOutLong = event.outDateLong)
             }
+
             is ValidationFormEvent.PrepaymentChanged -> {
 //                // Log.d("myTag", "asasd --- ${event.prepayment}")
                 validateFormState = validateFormState.copy(prePayment = event.prepayment)
             }
+
             is ValidationFormEvent.PaymentChanged -> {
 //                // Log.d("myTag", "asasd --- ${event.payment}")
                 validateFormState = validateFormState.copy(payment = event.payment)
             }
+
             is ValidationFormEvent.transferInfoChanged -> {
                 validateFormState = validateFormState.copy(transferInfo = event.transferInfo)
             }
@@ -258,9 +270,13 @@ class ClientViewModel @Inject constructor(
             )
         }
         val membersResult = membersValidationField.execute(validateFormState.members)
-        val prePaymentResult = paymentValidationField.execute(validateFormState.prePayment)
-        val paymentResult = paymentValidationField.execute(validateFormState.payment)
 
+        val prePaymentResult = paymentValidationField.execute(
+            validateFormState
+        )
+        val paymentResult = paymentValidationField.execute(
+            validateFormState
+        )
         val hasError = listOf(
             firstNameResult,
             secondNameResult,
@@ -343,8 +359,13 @@ class ClientViewModel @Inject constructor(
             )
         }
         val membersResult = membersValidationField.execute(validateFormState.members)
-        val prePaymentResult = paymentValidationField.execute(validateFormState.prePayment)
-        val paymentResult = paymentValidationField.execute(validateFormState.payment)
+
+        val prePaymentResult = paymentValidationField.execute(
+            validateFormState
+        )
+        val paymentResult = paymentValidationField.execute(
+            validateFormState
+        )
 
         val hasErrorList = listOf(
             firstNameResult,

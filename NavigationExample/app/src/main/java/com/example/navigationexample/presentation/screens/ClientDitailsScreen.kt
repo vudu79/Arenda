@@ -38,7 +38,10 @@ fun ClientDitailsScreen(
     val outDate = state.value?.outDate ?: 0L
     val ldInDate = LocalDate.ofEpochDay(inDate)
     val ldOutDate = LocalDate.ofEpochDay(outDate)
-
+    val totalDays = ChronoUnit.DAYS.between(ldInDate, ldOutDate).toInt()
+    val payment = state.value?.payment ?: 0
+    val totalCoast = payment * totalDays
+    val prepayment = state.value?.prepayment ?: 0
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -179,7 +182,7 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
-
+                    Spacer(modifier = Modifier.padding(5.dp))
                 }
             }
 
@@ -204,8 +207,9 @@ fun ClientDitailsScreen(
                             color = Color(223, 75, 0)
                         )
 
+
                         Text(
-                            text = ChronoUnit.DAYS.between(ldInDate, ldOutDate).toString(),
+                            text = totalDays.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -215,9 +219,153 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
-
+                    Spacer(modifier = Modifier.padding(5.dp))
                 }
             }
+//        залог
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Оплата бронирования / залог  ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = state.value?.prepayment.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(5.dp))
+                }
+            }
+
+//        стоимость тарифа
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Цена за сутки ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = state.value?.payment.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(5.dp))
+                }
+            }
+
+//       полная стоимость брони
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Полная стоимость проживания ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = totalCoast.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(5.dp))
+                }
+            }
+
+//       полная стоимость брони с учетом залога
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Стоимость с учетом залога ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = (totalCoast - prepayment).toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(5.dp))
+                }
+            }
+
 
 
 
