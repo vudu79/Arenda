@@ -14,7 +14,6 @@ class PaymentValidation @Inject constructor() {
         val paymentInt = payment.trim().toInt()
         val prePaymentInt = prePayment.trim().toInt()
 
-
         val inDate = state.dateInLong ?: 0L
         val outDate = state.dateOutLong ?: 0L
         val ldInDate = LocalDate.ofEpochDay(inDate)

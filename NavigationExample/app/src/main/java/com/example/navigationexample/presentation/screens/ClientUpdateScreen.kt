@@ -49,6 +49,7 @@ fun ClientUpdateScreen(
     clientPhone: String
 ) {
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
+
     val state = viewModelClient.validateFormState
 
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(ClientStatus.statusList[0]) }
@@ -120,6 +121,7 @@ fun ClientUpdateScreen(
         true -> {
             if (state.documentDitails != "") 240 else 170
         }
+
         false -> {
             if (state.documentDitails != "") 120 else 50
         }
@@ -1126,9 +1128,13 @@ fun ClientUpdateScreen(
 // цвет+++++++++++++++++++++++++++++++++++++
         item {
             ColourButton(
-                Constans.ClientColorsList.clientColorsList, onColorSelected = {
+                colors = Constans.ClientColorsList.clientColorsList,
+                onColorSelected = {
                     viewModelClient.onFormEvent(ValidationFormEvent.ColorChanged(it))
-                }, state.color
+                },
+                currently = state.color,
+                isUpdateScreen = true,
+                name = state.firstName,
             )
         }
 
@@ -1203,32 +1209,50 @@ fun ClientUpdateScreen(
                                     OutlinedTextField(
                                         value = "c ${state.dateInString} по ${state.dateOutString} ",
                                         onValueChange = {
-                                            viewModelClient.onFormEvent(ValidationFormEvent.InLongDateChanged(viewModelClient.dateInLong))
-                                            viewModelClient.onFormEvent(ValidationFormEvent.InStringDateChanged(viewModelClient.dateInString))
-                                            viewModelClient.onFormEvent(ValidationFormEvent.OutLongDateChanged(viewModelClient.dateOutLong))
-                                            viewModelClient.onFormEvent(ValidationFormEvent.OutStringDateChanged(viewModelClient.dateOutString))
+                                            viewModelClient.onFormEvent(
+                                                ValidationFormEvent.InLongDateChanged(
+                                                    viewModelClient.dateInLong
+                                                )
+                                            )
+                                            viewModelClient.onFormEvent(
+                                                ValidationFormEvent.InStringDateChanged(
+                                                    viewModelClient.dateInString
+                                                )
+                                            )
+                                            viewModelClient.onFormEvent(
+                                                ValidationFormEvent.OutLongDateChanged(
+                                                    viewModelClient.dateOutLong
+                                                )
+                                            )
+                                            viewModelClient.onFormEvent(
+                                                ValidationFormEvent.OutStringDateChanged(
+                                                    viewModelClient.dateOutString
+                                                )
+                                            )
                                         },
-                                        placeholder = { Text(text = "Период проживания", color = Color.Black) },
+                                        placeholder = {
+                                            Text(
+                                                text = "Период проживания",
+                                                color = Color.Black
+                                            )
+                                        },
                                         isError = (state.dateInStringError != null || state.dateOutStringError != null || state.dateInLongError != null || state.dateOutLongError != null),
                                         singleLine = true,
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp)
+//                                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp)
                                             .clickable {
-//                                                navController.navigate(
-//                                                    route =
-//                                                    "${Routs.setClientPeriodFromAddClient}/$appatmentName"
-//                                                )
-//                                viewModel.showDatePickerDialog(context, "in")
-
+//
                                             },
                                         keyboardOptions = KeyboardOptions(
-                                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                                            imeAction = ImeAction.Next,
+                                            keyboardType = KeyboardType.Number
                                         ),
                                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                                            disabledTextColor = Color.Black,
-                                            unfocusedBorderColor = Color.Black, textColor = Color.Black,
-                                            backgroundColor = Color(142, 143, 138),
+                                            disabledTextColor = Color.White,
+                                            unfocusedBorderColor = Color.Black,
+                                            textColor = Color.Black,
+                                            backgroundColor = Color(red = 41, 41, blue = 41),
 
                                             ),
                                         enabled = false,
@@ -1241,8 +1265,10 @@ fun ClientUpdateScreen(
                                 }
                                 IconButton(
                                     onClick = {
-                                        mainNavController.navigate(route =
-                                        "${Routs.setClientPeriodFromEditClient}/${clientPhone}")
+                                        mainNavController.navigate(
+                                            route =
+                                            "${Routs.setClientPeriodFromEditClient}/${clientPhone}"
+                                        )
                                     }
                                 )
                                 {
@@ -1310,7 +1336,6 @@ fun ClientUpdateScreen(
             }
         }
 
-        
 
 //        item {
 //            OutlinedTextField(

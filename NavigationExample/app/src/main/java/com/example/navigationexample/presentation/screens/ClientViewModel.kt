@@ -122,6 +122,22 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(referer = "")
         validateFormState =
             validateFormState.copy(color = Constans.ClientColorsList.clientColorsList[0])
+        validateFormState = validateFormState.copy(firstNameError = null)
+        validateFormState = validateFormState.copy(secondNameError = null)
+        validateFormState = validateFormState.copy(lastNameError = null)
+        validateFormState = validateFormState.copy(phoneError = null)
+        validateFormState = validateFormState.copy(documentNamberError = null)
+        validateFormState = validateFormState.copy(documentDitailsError = null)
+        validateFormState = validateFormState.copy(membersError = null)
+        validateFormState = validateFormState.copy(dateOutStringError = null)
+        validateFormState = validateFormState.copy(dateInStringError = null)
+        validateFormState = validateFormState.copy(dateOutLongError = null)
+        validateFormState = validateFormState.copy(dateInLongError = null)
+        validateFormState = validateFormState.copy(prePaymentError = null)
+        validateFormState = validateFormState.copy(paymentError = null)
+        validateFormState = validateFormState.copy(transferInfoError = null)
+        validateFormState = validateFormState.copy(refererError = null)
+        validateFormState = validateFormState.copy(colorError = null)
     }
 
     fun getClient(clientPhone: String) {

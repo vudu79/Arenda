@@ -120,7 +120,7 @@ fun LazyItemScope.ClientItemRow(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(3.dp),
+            .padding(5.dp),
         shape = RoundedCornerShape(7.dp),
         elevation = 8.dp,
     ) {
@@ -143,11 +143,10 @@ fun LazyItemScope.ClientItemRow(
 
         )
         {
-
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .padding(10.dp)
+                    .padding(5.dp)
                     .clickable {
                         makeCall(context, client.phone)
                     },
@@ -163,30 +162,34 @@ fun LazyItemScope.ClientItemRow(
                 )
             }
 
-            Divider(
-                color = Color(client.clientColor).copy(alpha = 0.8f),
-                modifier = Modifier
-                    .fillMaxHeight(0.8f)  //fill the max height
-                    .width(5.dp)
-            )
-
             Column(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth(0.70f)
-                    .padding(start = 10.dp),
+                    .padding(),
             ) {
                 Row(
                     modifier = Modifier
+                        .height(IntrinsicSize.Min)
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
 
                 ) {
+
+                    Divider(
+                        color = Color(client.clientColor).copy(alpha = 0.8f),
+                        modifier = Modifier
+                            .fillMaxHeight()  //fill the max height
+                            .width(3.dp)
+                    )
+
+
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(),
+                            .fillMaxHeight()
+                            .padding(start = 10.dp),
                         verticalArrangement = Arrangement.Bottom,
                         horizontalAlignment = Alignment.Start
                     ) {
@@ -218,25 +221,26 @@ fun LazyItemScope.ClientItemRow(
                             modifier = Modifier.padding(2.dp),
                             maxLines = 1,
                             color = Color(red = 41, green = 41, blue = 41),
-                            fontSize = 10.sp,
+                            fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }
                 }
             }
 
-            Divider(
-                color = Color.Black,
-                modifier = Modifier
-                    .fillMaxHeight(0.8f)  //fill the max height
-                    .width(5.dp)
-            )
+//            Divider(
+//                color = Color.Black,
+//                modifier = Modifier
+//                    .fillMaxHeight(0.8f)  //fill the max height
+//                    .width(5.dp)
+//            )
 
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
                     .padding(10.dp)
                     .clickable {
+                        viewModelClient.resetState()
                         viewModelClient.getClientState(client.phone)
                         navcontroller.navigate("${Routs.clientUpdateScreen}/${client.phone}")
                     },
@@ -253,12 +257,12 @@ fun LazyItemScope.ClientItemRow(
                 )
             }
 
-            Divider(
-                color = Color.Black,
-                modifier = Modifier
-                    .fillMaxHeight(0.8f)  //fill the max height
-                    .width(5.dp)
-            )
+//            Divider(
+//                color = Color(client.clientColor).copy(alpha = 0.8f),
+//                modifier = Modifier
+//                    .fillMaxHeight(0.8f)  //fill the max height
+//                    .width(5.dp)
+//            )
 
             Box(
                 modifier = Modifier
