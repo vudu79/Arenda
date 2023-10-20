@@ -1,5 +1,6 @@
 package com.example.navigationexample.data.repository
 
+import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.MutableLiveData
 import com.example.navigationexample.data.dao.RentalDaysDao
@@ -22,19 +23,15 @@ class DaysRepositoryImpl @Inject constructor(
 ) {
 
 
-    val allClientDays = MutableLiveData<List<RentalDay>>()
     var allAppatmentDays = MutableLiveData<List<RentalDay>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    fun insertOneDay(newDay: RentalDay) {
-        coroutineScope.launch(Dispatchers.IO) {
-            rentalDaysDao.insertDay(newDay)
-        }
-    }
 
-    fun insertClientDays(client: Client) {
-        val startDay = LocalDate.ofEpochDay(client.inDate!!)
-        val endDay = LocalDate.ofEpochDay(client.outDate!!)
+
+
+    fun insertClientDays(client: Client, clientId: Long) {
+        val startDay = LocalDate.ofEpochDay(client.inDate)
+        val endDay = LocalDate.ofEpochDay(client.outDate)
         val clientPeriod = listDaysBetween(startDay, endDay)
 //        val startDayEpoch = startDay.toEpochDay()
 //        val endDayEpoch = endDay.toEpochDay()
@@ -54,7 +51,7 @@ class DaysRepositoryImpl @Inject constructor(
                     RentalDay(
                         epochDay = it.toEpochDay(),
                         clientColor = client.clientColor,
-                        clientPhone = client.phone,
+                        clientId = clientId,
                         isStartDay = isStart,
                         isEndDay = isEnd,
                         isEnable = isEnable,
@@ -66,22 +63,40 @@ class DaysRepositoryImpl @Inject constructor(
     }
 
 
-    fun deleteClientDays(clientName: String) {
+    fun deleteClientDays(clientId: Long) {
         coroutineScope.launch(Dispatchers.IO) {
-            rentalDaysDao.deleteClientDays(clientName)
+            rentalDaysDao.deleteClientDays(clientId)
         }
     }
 
-    fun getClientDays(clientPhone: String) {
-        coroutineScope.launch(Dispatchers.Main) {
-            allClientDays.value = asyncFindClientDays(clientPhone).await()
-        }
-    }
+//    fun getClientDays(clientPhone: String) {
+//        coroutineScope.launch(Dispatchers.Main) {
+//            allClientDays.value = asyncFindClientDays(clientPhone).await()
+//        }
+//    }
+//
+//    private fun asyncFindClientDays(clientPhone: String): Deferred<List<RentalDay>?> =
+//        coroutineScope.async(Dispatchers.IO) {
+//            return@async rentalDaysDao.getClientDays(clientPhone)
+//        }
 
-    private fun asyncFindClientDays(clientPhone: String): Deferred<List<RentalDay>?> =
-        coroutineScope.async(Dispatchers.IO) {
-            return@async rentalDaysDao.getClientDays(clientPhone)
+
+    @WorkerThread
+    fun updateClientDays(
+        onStart: () -> Unit,
+        onCompletion: () -> Unit,
+        onError: () -> Unit,
+        client: Client,
+        result: Int
+    ) = flow {
+        deleteClientDays(client.id)
+        insertClientDays(client, client.id)
+        if (result < 0) {
+            onError()
+        } else {
+            emit(0)
         }
+    }.onStart { onStart() }.onCompletion { onCompletion() }.flowOn(Dispatchers.IO)
 
 
     @WorkerThread
@@ -94,15 +109,7 @@ class DaysRepositoryImpl @Inject constructor(
         val rentalDaysList: List<RentalDay> = rentalDaysDao.getAppatmentDays(appatmentName)
         if (rentalDaysList.isEmpty()) {
             onError()
-
         } else {
-//            val localDays: Map<String, List<LocalDate>> = rentalDaysList.let { day ->
-//                day.groupBy(
-//                    keySelector = { it.appatmentName },
-//                    valueTransform = { LocalDate.ofEpochDay(it.epochDay) }
-//                )
-//            }
-
             val localDays: MutableList<LocalDate> = mutableListOf()
             rentalDaysList.let {
                 it.forEach {
@@ -126,11 +133,11 @@ class DaysRepositoryImpl @Inject constructor(
 
         } else {
             val dateClientMap: MutableMap<LocalDate, MutableSet<ClientMonk>> = mutableMapOf()
-
+            Log.d("myTag", "$rentalDaysList")
             rentalDaysList.forEach {
                 val localDay = LocalDate.ofEpochDay(it.epochDay)
                 // Log.d("myTag", "День  - $localDay")
-                val client = clientsRepositoryImpl.getClientByPhone(it.clientPhone)
+                val client = clientsRepositoryImpl.getClientById(it.clientId)
                 val clientMonk = ClientMonk(
                     client,
                     it.appatmentName,

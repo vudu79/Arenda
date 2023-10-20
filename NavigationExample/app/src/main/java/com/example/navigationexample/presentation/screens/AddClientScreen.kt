@@ -375,7 +375,7 @@ fun AddClientScreen(
                     ColourButton(
                         Constans.ClientColorsList.clientColorsList, onColorSelected = {
                             viewModelClient.onFormEvent(ValidationFormEvent.ColorChanged(it))
-                        }, state.color
+                        }, state.color, false, ""
                     )
                 }
 

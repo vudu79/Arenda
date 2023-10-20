@@ -95,6 +95,22 @@ fun NavHostView(
         }
 
         composable(
+            route = "${Routs.clientUpdateScreen}/{client_phone}",
+            arguments = listOf(navArgument("client_phone") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val arguments = requireNotNull(backStackEntry.arguments)
+            arguments.getString("client_phone")?.let { cp ->
+                val clientPhone = cp
+                ClientUpdateScreen(
+                    mainNavController = mainNavController,
+                    viewModelClient = viewModelClient,
+                    viewModelAppatment = viewModelAppatment,
+                    clientPhone = clientPhone
+                )
+            }
+        }
+
+        composable(
             route = "${Routs.clientDitailsScreen}/{client_phone}",
             arguments = listOf(navArgument("client_phone") { type = NavType.StringType })
         ) { backStackEntry ->

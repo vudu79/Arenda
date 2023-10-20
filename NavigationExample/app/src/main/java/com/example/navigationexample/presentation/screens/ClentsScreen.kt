@@ -34,6 +34,12 @@ import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.common.CustomAlertDialog
 import com.kizitonwose.calendar.sample.compose.clickable
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+fun parseDate(date: Long): String {
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    return LocalDate.ofEpochDay(date).format(formatter)
+}
 
 
 @Composable
@@ -46,48 +52,51 @@ fun ClientsScreen(
 ) {
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
     val appatmentClients by viewModelClient.allApartmentClients.observeAsState(listOf())
+    val isLoading: Boolean by viewModelClient.isLoadingForUpdateClient
 
-    Column(
-        modifier = Modifier
-            .background(Color(red = 41, green = 41, blue = 41))
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Text(
-            text = "Клиенты для ${currentAppatment?.name ?: "_"}",
-            modifier = Modifier.padding(top = 5.dp, bottom = 10.dp),
-            fontSize = 20.sp,
-            color = Color(223, 75, 0)
-        )
-        LazyColumn(
-
+    if (isLoading) {
+        CircularProgressIndicator()
+    } else {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.74f)
-                .padding(3.dp)
+                .background(Color(red = 41, green = 41, blue = 41))
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(appatmentClients) { item ->
-                ClientItemRow(
-                    client = item,
-                    navcontroller = mainNavController,
-                    viewModelClient = viewModelClient,
-                    viewModelCalendar = viewModelCalendar
+            Text(
+                text = "Клиенты для ${currentAppatment?.name ?: "_"}",
+                modifier = Modifier.padding(top = 5.dp, bottom = 10.dp),
+                fontSize = 20.sp,
+                color = Color(223, 75, 0)
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.74f)
+                    .padding(3.dp)
+            ) {
+                items(appatmentClients) { item ->
+                    ClientItemRow(
+                        client = item,
+                        navcontroller = mainNavController,
+                        viewModelClient = viewModelClient,
+                        viewModelCalendar = viewModelCalendar
+                    )
+                }
+            }
+
+            IconButton(onClick = {
+                viewModelClient.resetState()
+                mainNavController.navigate(route = "${Routs.addClientScreen}/$appatmentName")
+            })
+            {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_group_add_24),
+                    contentDescription = "Добавить клиента",
+                    modifier = Modifier.size(55.dp),
+                    tint = Color(223, 75, 0)
                 )
             }
-        }
-
-        IconButton(onClick = {
-            viewModelClient.resetState()
-            mainNavController.navigate(route = "${Routs.addClientScreen}/$appatmentName")
-        })
-        {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_group_add_24),
-                contentDescription = "Добавить клиента",
-                modifier = Modifier.size(55.dp),
-                tint = Color(223, 75, 0)
-            )
         }
     }
 }
@@ -111,8 +120,7 @@ fun LazyItemScope.ClientItemRow(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(75.dp)
-            .padding(3.dp),
+            .padding(5.dp),
         shape = RoundedCornerShape(7.dp),
         elevation = 8.dp,
     ) {
@@ -124,29 +132,25 @@ fun LazyItemScope.ClientItemRow(
                 .background(Color(128, 107, 90))
                 .combinedClickable(
                     onClick = {
-
-                            viewModelClient.getClientState(client.phone)
+                        viewModelClient.getClientState(client.phone)
                         navcontroller.navigate("${Routs.clientDitailsScreen}/${client.phone}")
                     },
                     onLongClick = {
-                        showCustomDialog = !showCustomDialog
+//                        showCustomDialog = !showCustomDialog
                     }),
             verticalAlignment = Alignment.CenterVertically
 //                .border(3.dp, Color(223,75,0))
 
         )
         {
-
             Box(
                 modifier = Modifier
-
                     .fillMaxHeight()
-                    .padding(10.dp)
+                    .padding(5.dp)
                     .clickable {
                         makeCall(context, client.phone)
                     },
-
-                ) {
+            ) {
                 Image(
                     painter = painterResource(R.drawable.baseline_phone_24),
                     contentDescription = "asd",
@@ -158,32 +162,34 @@ fun LazyItemScope.ClientItemRow(
                 )
             }
 
-            Divider(
-                color = Color(client.clientColor).copy(alpha = 0.8f),
-                modifier = Modifier
-                    .fillMaxHeight(0.8f)  //fill the max height
-                    .width(3.dp)
-            )
-
             Column(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth(0.70f)
-                    .padding(start = 10.dp),
-
-
-                ) {
+                    .padding(),
+            ) {
                 Row(
                     modifier = Modifier
+                        .height(IntrinsicSize.Min)
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
 
                 ) {
+
+                    Divider(
+                        color = Color(client.clientColor).copy(alpha = 0.8f),
+                        modifier = Modifier
+                            .fillMaxHeight()  //fill the max height
+                            .width(3.dp)
+                    )
+
+
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(),
+                            .fillMaxHeight()
+                            .padding(start = 10.dp),
                         verticalArrangement = Arrangement.Bottom,
                         horizontalAlignment = Alignment.Start
                     ) {
@@ -196,31 +202,88 @@ fun LazyItemScope.ClientItemRow(
                             fontWeight = FontWeight.Bold
                         )
 
+//                        Text(
+//                            text = client.phone,
+//                            modifier = Modifier.padding(2.dp),
+//                            maxLines = 1,
+//                            color = Color(red = 41, green = 41, blue = 41),
+//                            fontSize = 10.sp,
+//                            fontWeight = FontWeight.Bold
+//                        )
+
                         Text(
-                            text = client.phone,
+                            text = parseDate(client.inDate) + "-" + parseDate(client.outDate),
+//                            text = "${LocalDate.ofEpochDay(client.inDate)} - ${
+//                                LocalDate.ofEpochDay(
+//                                    client.outDate
+//                                )
+//                            }",
                             modifier = Modifier.padding(2.dp),
                             maxLines = 1,
                             color = Color(red = 41, green = 41, blue = 41),
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-
-
-                        Text(
-                            text = "${LocalDate.ofEpochDay(client.inDate ?: 0)} - ${
-                                LocalDate.ofEpochDay(
-                                    client.outDate ?: 0
-                                )
-                            }",
-                            modifier = Modifier.padding(2.dp),
-                            maxLines = 1,
-                            color = Color(red = 41, green = 41, blue = 41),
-                            fontSize = 10.sp,
+                            fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }
                 }
             }
+
+//            Divider(
+//                color = Color.Black,
+//                modifier = Modifier
+//                    .fillMaxHeight(0.8f)  //fill the max height
+//                    .width(5.dp)
+//            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(10.dp)
+                    .clickable {
+                        viewModelClient.resetState()
+                        viewModelClient.getClientState(client.phone)
+                        navcontroller.navigate("${Routs.clientUpdateScreen}/${client.phone}")
+                    },
+
+                ) {
+                Image(
+                    painter = painterResource(R.drawable.baseline_edit_24),
+                    contentDescription = "asd",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .padding(top = 2.dp)
+                        .size(30.dp)
+                        .clip(CircleShape)
+                )
+            }
+
+//            Divider(
+//                color = Color(client.clientColor).copy(alpha = 0.8f),
+//                modifier = Modifier
+//                    .fillMaxHeight(0.8f)  //fill the max height
+//                    .width(5.dp)
+//            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(10.dp)
+                    .clickable {
+                        showCustomDialog = !showCustomDialog
+                    },
+
+                ) {
+                Image(
+                    painter = painterResource(R.drawable.baseline_delete_forever_24),
+                    contentDescription = "asd",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .padding(top = 2.dp)
+                        .size(30.dp)
+                        .clip(CircleShape)
+                )
+            }
+
         }
     }
 
@@ -230,7 +293,7 @@ fun LazyItemScope.ClientItemRow(
         }, onOk = {
             showCustomDialog = !showCustomDialog
 
-            viewModelClient.deleteClient(client.phone)
+            viewModelClient.deleteClient(client.id)
             viewModelClient.getAppatmentClients(client.appatmentName)
             viewModelCalendar.updateDaysMapForCalendar(client.appatmentName)
         },
@@ -241,7 +304,7 @@ fun LazyItemScope.ClientItemRow(
 }
 
 fun makeCall(context: Context, number: String) {
-    val intent = Intent(Intent.ACTION_DIAL);
+    val intent = Intent(Intent.ACTION_DIAL)
     intent.data = Uri.parse("tel:+7$number")
     startActivity(context, intent, null)
 }

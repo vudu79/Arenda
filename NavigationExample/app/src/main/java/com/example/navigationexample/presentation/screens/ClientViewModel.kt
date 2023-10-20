@@ -1,28 +1,40 @@
 package com.example.navigationexample.presentation.screens
 
+
 import android.util.Log
-import androidx.compose.runtime.*
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.navigationexample.data.entity.Appatment
-import com.example.navigationexample.data.entity.Client
-import com.example.navigationexample.data.repository.ClientsRepositoryImpl
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.navigationexample.constants.Constans
+import com.example.navigationexample.data.entity.Client
+import com.example.navigationexample.data.repository.ClientsRepositoryImpl
 import com.example.navigationexample.data.repository.DaysRepositoryImpl
 import com.example.navigationexample.domain.models.ClientStatus
-import com.example.navigationexample.domain.usecase.validation.*
-import com.example.navigationexample.domain.usecase.validation.validators.*
+import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
+import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
+import com.example.navigationexample.domain.usecase.validation.ValidationFormState
+import com.example.navigationexample.domain.usecase.validation.validators.DateLongValidation
+import com.example.navigationexample.domain.usecase.validation.validators.DateStringValidation
+import com.example.navigationexample.domain.usecase.validation.validators.DocumentDitails
+import com.example.navigationexample.domain.usecase.validation.validators.DocumentNumber
+import com.example.navigationexample.domain.usecase.validation.validators.MembersValidation
+import com.example.navigationexample.domain.usecase.validation.validators.NameValidation
+import com.example.navigationexample.domain.usecase.validation.validators.PaymentValidation
+import com.example.navigationexample.domain.usecase.validation.validators.PhoneValidation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
 
 
 @HiltViewModel
@@ -40,9 +52,13 @@ class ClientViewModel @Inject constructor(
     private val dateLongValidationField: DateLongValidation = DateLongValidation()
 ) : ViewModel() {
     var allApartmentClients: MutableLiveData<List<Client>>
-    var currentApartment = MutableLiveData<Appatment>()
     var validateFormState by mutableStateOf(ValidationFormState())
-//    var validateFormStateFlow = MutableStateFlow<ValidationFormState>(validateFormState)
+
+    private val _uiClientState = MutableLiveData<Client>()
+    val uiClientState: LiveData<Client> = _uiClientState
+
+    private val _isLoadingForUpdateClient: MutableState<Boolean> = mutableStateOf(false)
+    val isLoadingForUpdateClient: State<Boolean> get() = _isLoadingForUpdateClient
 
     init {
         allApartmentClients = clientRepository.allAppatmentClients
@@ -106,74 +122,125 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(referer = "")
         validateFormState =
             validateFormState.copy(color = Constans.ClientColorsList.clientColorsList[0])
+        validateFormState = validateFormState.copy(firstNameError = null)
+        validateFormState = validateFormState.copy(secondNameError = null)
+        validateFormState = validateFormState.copy(lastNameError = null)
+        validateFormState = validateFormState.copy(phoneError = null)
+        validateFormState = validateFormState.copy(documentNamberError = null)
+        validateFormState = validateFormState.copy(documentDitailsError = null)
+        validateFormState = validateFormState.copy(membersError = null)
+        validateFormState = validateFormState.copy(dateOutStringError = null)
+        validateFormState = validateFormState.copy(dateInStringError = null)
+        validateFormState = validateFormState.copy(dateOutLongError = null)
+        validateFormState = validateFormState.copy(dateInLongError = null)
+        validateFormState = validateFormState.copy(prePaymentError = null)
+        validateFormState = validateFormState.copy(paymentError = null)
+        validateFormState = validateFormState.copy(transferInfoError = null)
+        validateFormState = validateFormState.copy(refererError = null)
+        validateFormState = validateFormState.copy(colorError = null)
     }
+
+    fun getClient(clientPhone: String) {
+        viewModelScope.launch {
+            _uiClientState.value = clientRepository.getClientByPhone(clientPhone)
+        }
+    }
+
 
     fun getAppatmentClients(appatmentName: String) {
         clientRepository.getAppatmentClients(appatmentName)
     }
 
 
-    fun addClient(client: Client) {
-        clientRepository.insertClient(client)
-        daysRepository.insertClientDays(client)
+    suspend fun addClient(client: Client) {
+        val clientId = clientRepository.insertClient(client).await()
+        daysRepository.insertClientDays(client, clientId)
     }
 
-    fun deleteClient(name: String) {
-        daysRepository.deleteClientDays(name)
-        clientRepository.deleteClient(name)
+    fun deleteClient(clientId: Long) {
+        daysRepository.deleteClientDays(clientId)
+        clientRepository.deleteClient(clientId)
     }
 
-    suspend fun updateClient(client: Client): Int {
-        return clientRepository.updateClient(client = client)
+    private suspend fun updateClient(client: Client): Int {
+        val result = clientRepository.updateClient(client = client)
+        updateClientDays(client, result)
+        return result
     }
+
+
+    private fun updateClientDays(client: Client, result: Int) {
+        daysRepository.updateClientDays(
+            result = result,
+            client = client,
+            onStart = { _isLoadingForUpdateClient.value = true },
+            onCompletion = { _isLoadingForUpdateClient.value = false },
+            onError = { Log.d("myTag", "Ошибка обновления дней клиента") },
+        )
+    }
+
 
     fun onFormEvent(event: ValidationFormEvent) {
         when (event) {
             is ValidationFormEvent.StatusChanged -> {
                 validateFormState = validateFormState.copy(status = event.status)
             }
+
             is ValidationFormEvent.FirstNameChanged -> {
                 validateFormState = validateFormState.copy(firstName = event.firstName)
             }
+
             is ValidationFormEvent.SecondNameChanged -> {
                 validateFormState = validateFormState.copy(secondName = event.secondName)
             }
+
             is ValidationFormEvent.LastNameChanged -> {
                 validateFormState = validateFormState.copy(lastName = event.lastName)
             }
+
             is ValidationFormEvent.PhoneChanged -> {
                 validateFormState = validateFormState.copy(phone = event.phone)
             }
+
             is ValidationFormEvent.DocumentNamberChanged -> {
                 validateFormState = validateFormState.copy(documentNamber = event.documentNamber)
             }
+
             is ValidationFormEvent.DocumentDitailsChanged -> {
                 validateFormState = validateFormState.copy(documentDitails = event.documentDitails)
             }
+
             is ValidationFormEvent.MembersChanged -> {
 //                // Log.d("myTag", "asasd --- ${event.members}")
                 validateFormState = validateFormState.copy(members = event.members)
             }
+
             is ValidationFormEvent.InStringDateChanged -> {
                 validateFormState = validateFormState.copy(dateInString = event.inDateString)
             }
+
             is ValidationFormEvent.InLongDateChanged -> {
                 validateFormState = validateFormState.copy(dateInLong = event.inDateLong)
             }
+
             is ValidationFormEvent.OutStringDateChanged -> {
                 validateFormState = validateFormState.copy(dateOutString = event.outDateString)
             }
+
             is ValidationFormEvent.OutLongDateChanged -> {
                 validateFormState = validateFormState.copy(dateOutLong = event.outDateLong)
             }
+
             is ValidationFormEvent.PrepaymentChanged -> {
 //                // Log.d("myTag", "asasd --- ${event.prepayment}")
                 validateFormState = validateFormState.copy(prePayment = event.prepayment)
             }
+
             is ValidationFormEvent.PaymentChanged -> {
 //                // Log.d("myTag", "asasd --- ${event.payment}")
                 validateFormState = validateFormState.copy(payment = event.payment)
             }
+
             is ValidationFormEvent.transferInfoChanged -> {
                 validateFormState = validateFormState.copy(transferInfo = event.transferInfo)
             }
@@ -219,9 +286,13 @@ class ClientViewModel @Inject constructor(
             )
         }
         val membersResult = membersValidationField.execute(validateFormState.members)
-        val prePaymentResult = paymentValidationField.execute(validateFormState.prePayment)
-        val paymentResult = paymentValidationField.execute(validateFormState.payment)
 
+        val prePaymentResult = paymentValidationField.execute(
+            validateFormState
+        )
+        val paymentResult = paymentValidationField.execute(
+            validateFormState
+        )
         val hasError = listOf(
             firstNameResult,
             secondNameResult,
@@ -304,8 +375,13 @@ class ClientViewModel @Inject constructor(
             )
         }
         val membersResult = membersValidationField.execute(validateFormState.members)
-        val prePaymentResult = paymentValidationField.execute(validateFormState.prePayment)
-        val paymentResult = paymentValidationField.execute(validateFormState.payment)
+
+        val prePaymentResult = paymentValidationField.execute(
+            validateFormState
+        )
+        val paymentResult = paymentValidationField.execute(
+            validateFormState
+        )
 
         val hasErrorList = listOf(
             firstNameResult,
@@ -348,7 +424,7 @@ class ClientViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
-            if (validateFormState.id != 0) {
+            if (validateFormState.id != 0L) {
                 updateClient(
                     Client(
                         id = validateFormState.id!!,

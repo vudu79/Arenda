@@ -11,26 +11,22 @@ import javax.inject.Inject
 
 class ClientsRepositoryImpl @Inject constructor(private val clientDao: ClientDao) {
 
-    var dateClientMap: MutableMap<LocalDate, MutableSet<Client>> = mutableMapOf()
-    val allClients: LiveData<List<Client>> = clientDao.getAllClients()
     val allAppatmentClients = MutableLiveData<List<Client>>()
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    fun insertClient(newClient: Client) {
-        coroutineScope.launch(Dispatchers.IO) {
-            clientDao.insertClient(newClient)
+    fun insertClient(newClient: Client):  Deferred<Long> =
+        coroutineScope.async (Dispatchers.IO) {
+            return@async clientDao.insertClient(newClient)
         }
-    }
 
-    fun getClientByName(name: String): Client {
-        return clientDao.getClientByName(name)
-    }
 
     suspend fun getClientByPhone(phone: String): Client {
-        // Log.d("tag", "Клиент взят из базы")
         return clientDao.getClientByPhone(phone)
+    }
 
+    fun getClientById(clientId: Long): Client {
+        return clientDao.getClientById(clientId)
     }
 
 //    fun getClientByPhone(
@@ -72,9 +68,9 @@ class ClientsRepositoryImpl @Inject constructor(private val clientDao: ClientDao
         return clientDao.updateClient(client)
     }
 
-    fun deleteClient(name: String) {
+    fun deleteClient(id: Long) {
         coroutineScope.launch(Dispatchers.IO) {
-            clientDao.deleteClient(name)
+            clientDao.deleteClient(id)
         }
     }
 
