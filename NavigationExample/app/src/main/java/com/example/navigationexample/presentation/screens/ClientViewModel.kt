@@ -31,6 +31,7 @@ import com.example.navigationexample.domain.usecase.validation.validators.Paymen
 import com.example.navigationexample.domain.usecase.validation.validators.PhoneValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -169,14 +170,16 @@ class ClientViewModel @Inject constructor(
     }
 
 
-    private fun updateClientDays(client: Client, result: Int) {
-        daysRepository.updateClientDays(
+    private suspend fun updateClientDays(client: Client, result: Int) {
+        val ee = daysRepository.updateClientDays(
             result = result,
             client = client,
-            onStart = { _isLoadingForUpdateClient.value = true },
-            onCompletion = { _isLoadingForUpdateClient.value = false },
+            onStart = { _isLoadingForUpdateClient.value = true
+                Log.d("myTag", "старт")},
+            onCompletion = { _isLoadingForUpdateClient.value = false
+                Log.d("myTag", "финиш")},
             onError = { Log.d("myTag", "Ошибка обновления дней клиента") },
-        )
+        ).collect()
     }
 
 
