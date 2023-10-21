@@ -3,6 +3,7 @@ package com.example.navigationexample.presentation.screens
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -70,13 +72,14 @@ fun AddAppatmentScreen(
         modifier = Modifier
             .fillMaxSize(),
 
-        contentAlignment = Alignment.BottomCenter
+//        contentAlignment = Alignment.BottomCenter
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
+                .fillMaxHeight()
                 .background(Color(41, 41, 41))
         ) {
             Box(
@@ -110,68 +113,99 @@ fun AddAppatmentScreen(
                     OutlinedTextField(
                         value = nameAppat.value,
                         onValueChange = { nameAppat.value = it },
-                        label = { Text(text = "Название", color = Black) },
-                        placeholder = { Text(text = "Название", color = Black) },
+                        label = { Text(text = "Название", color = Black, fontSize = 18.sp) },
+                        placeholder = { Text(text = "Название", color = Black, fontSize = 18.sp) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(0.8f),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black,
                             textColor = Black,
                             backgroundColor = Color(142, 143, 138)
-                        )
+                        ),
+                        shape = RoundedCornerShape(12.dp)
                     )
 
-                    Box(
+//                    Box(
+//                        modifier = Modifier
+//                            .fillMaxWidth(0.79f)
+//                            .padding(bottom = 10.dp, top = 10.dp)
+//                            .border(shape = RoundedCornerShape(20.dp)),
+////                            .wrapContentSize(Alignment.Center),
+//                        contentAlignment = Alignment.TopCenter
+//                    )
+
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth(0.79f)
                             .padding(bottom = 10.dp, top = 10.dp),
-//                            .wrapContentSize(Alignment.Center),
-                        contentAlignment = Alignment.TopCenter
-                    ) {
-                        Text(
-                            text = "Тип объекта- ${items[selectedIndex.value]}",
+                        shape = RoundedCornerShape(12.dp),
+                        elevation = 30.dp,
+                    )
+                    {
+                        Box(
                             modifier = Modifier
-                                .fillMaxWidth()
-//                                .padding(top = 5.dp, start = 5.dp)
-                                .height(56.dp)
-                                .clickable(onClick = { expanded.value = true })
-                                .background(
-                                    Color(142, 143, 138)
-                                ),
-                            fontSize = 16.sp,
-                            color = Black,
-                            )
-                        DropdownMenu(
-                            expanded = expanded.value,
-                            onDismissRequest = { expanded.value = false },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    Color.Transparent
-                                )
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.CenterStart,
+
                         ) {
-                            items.forEachIndexed { index, s ->
-                                DropdownMenuItem(onClick = {
-                                    selectedIndex.value = index
-                                    expanded.value = false
-                                    typeAppat.value = s
-                                }) {
-                                    val disabledText = if (s == disabledValue) {
-                                        " (Disabled)"
-                                    } else {
-                                        ""
+                            Text(
+                                text = "Тип объекта- ${items[selectedIndex.value]}",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+//                                .padding(top = 5.dp, start = 5.dp)
+                                    .height(56.dp)
+                                    .clickable(onClick = { expanded.value = true })
+                                    .background(
+                                        Color(142, 143, 138)
+                                    ),
+                                fontSize = 18.sp,
+                                color = Black,
+                                textAlign = TextAlign.Start
+                            )
+
+                        }
+
+
+
+                        MaterialTheme(
+                            shapes = MaterialTheme.shapes.copy(
+                                medium = RoundedCornerShape(
+                                    16.dp
+                                )
+                            )
+                        ) {
+                            DropdownMenu(
+                                expanded = expanded.value,
+                                onDismissRequest = { expanded.value = false },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        Color.Transparent
+                                    )
+                            ) {
+                                items.forEachIndexed { index, s ->
+                                    DropdownMenuItem(onClick = {
+                                        selectedIndex.value = index
+                                        expanded.value = false
+                                        typeAppat.value = s
+                                    }) {
+                                        val disabledText = if (s == disabledValue) {
+                                            " (Disabled)"
+                                        } else {
+                                            ""
+                                        }
+                                        Text(text = s + disabledText)
                                     }
-                                    Text(text = s + disabledText)
                                 }
                             }
                         }
                     }
 
-                    Box(
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth(0.79f),
-//                            .wrapContentSize(Alignment.Center),
-                        contentAlignment = Alignment.TopCenter
+                        shape = RoundedCornerShape(12.dp),
+                        elevation = 30.dp,
                     ) {
                         Text(
                             text = "Срок аренды- ${itemsRenta[selectedIndexRenta.value]}",
@@ -183,31 +217,39 @@ fun AddAppatmentScreen(
                                 .background(
                                     Color(142, 143, 138)
                                 ),
-                            fontSize = 16.sp,
+                            fontSize = 18.sp,
                             color = Black,
 
                             )
-                        DropdownMenu(
-                            expanded = expandedRenta.value,
-                            onDismissRequest = { expandedRenta.value = false },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    Color.Transparent
+                        MaterialTheme(
+                            shapes = MaterialTheme.shapes.copy(
+                                medium = RoundedCornerShape(
+                                    16.dp
                                 )
+                            )
                         ) {
-                            itemsRenta.forEachIndexed { index, s ->
-                                DropdownMenuItem(onClick = {
-                                    selectedIndexRenta.value = index
-                                    expandedRenta.value = false
-                                    rentatypeAppat.value = s
-                                }) {
-                                    val disabledText = if (s == disabledValueRenta) {
-                                        " (Disabled)"
-                                    } else {
-                                        ""
+                            DropdownMenu(
+                                expanded = expandedRenta.value,
+                                onDismissRequest = { expandedRenta.value = false },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        Color.Transparent
+                                    )
+                            ) {
+                                itemsRenta.forEachIndexed { index, s ->
+                                    DropdownMenuItem(onClick = {
+                                        selectedIndexRenta.value = index
+                                        expandedRenta.value = false
+                                        rentatypeAppat.value = s
+                                    }) {
+                                        val disabledText = if (s == disabledValueRenta) {
+                                            " (Disabled)"
+                                        } else {
+                                            ""
+                                        }
+                                        Text(text = s + disabledText)
                                     }
-                                    Text(text = s + disabledText)
                                 }
                             }
                         }
@@ -216,8 +258,14 @@ fun AddAppatmentScreen(
                     OutlinedTextField(
                         value = addressAppat.value,
                         onValueChange = { addressAppat.value = it },
-                        label = { Text(text = "Адрес помещения", color = Black) },
-                        placeholder = { Text(text = "Адрес помещения", color = Black) },
+                        label = { Text(text = "Адрес помещения", color = Black, fontSize = 18.sp) },
+                        placeholder = {
+                            Text(
+                                text = "Адрес помещения",
+                                color = Black,
+                                fontSize = 18.sp
+                            )
+                        },
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth(0.8f)
@@ -226,20 +274,22 @@ fun AddAppatmentScreen(
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black, textColor = Black,
                             backgroundColor = Color(142, 143, 138)
-                        )
+                        ),
+                        shape = RoundedCornerShape(12.dp)
                     )
                     OutlinedTextField(
                         value = squearAppat.value,
                         onValueChange = { squearAppat.value = it },
-                        label = { Text(text = "Площадь", color = Black) },
-                        placeholder = { Text(text = "Площадь", color = Black) },
+                        label = { Text(text = "Площадь", color = Black, fontSize = 18.sp) },
+                        placeholder = { Text(text = "Площадь", color = Black, fontSize = 18.sp) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(0.8f),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black, textColor = Black,
                             backgroundColor = Color(142, 143, 138)
-                        )
+                        ),
+                        shape = RoundedCornerShape(20.dp)
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
 
@@ -253,8 +303,8 @@ fun AddAppatmentScreen(
 
                         IconButton(modifier = Modifier.padding(end = 80.dp),
                             onClick = {
-                            navController.navigate(Routs.home)
-                        })
+                                navController.navigate(Routs.home)
+                            })
                         {
                             Icon(
                                 painter = painterResource(id = R.drawable.baseline_arrow_back_24),
