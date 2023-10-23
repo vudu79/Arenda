@@ -3,7 +3,6 @@ package com.example.navigationexample.presentation.screens
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,12 +39,13 @@ fun AddAppatmentScreen(
     onHome: () -> Unit
 ) {
     val context = LocalContext.current
-//    val scaffoldState = rememberScaffoldState()
     val nameAppat = remember { mutableStateOf("") }
     val typeAppat = remember { mutableStateOf("Квартира") }
     val rentatypeAppat = remember { mutableStateOf("Посуточно") }
     val addressAppat = remember { mutableStateOf("") }
     val squearAppat = remember { mutableStateOf("") }
+    val numberRooms = remember { mutableStateOf("") }
+    val numberBeds = remember { mutableStateOf("") }
 
     val expanded = remember { mutableStateOf(false) }
     val items = listOf("Аппартаменты", "Квартира", "Комерческое")
@@ -113,7 +113,7 @@ fun AddAppatmentScreen(
                     OutlinedTextField(
                         value = nameAppat.value,
                         onValueChange = { nameAppat.value = it },
-                        label = { Text(text = "Название", color = Black, fontSize = 18.sp) },
+//                        label = { Text(text = "Название", color = Black, fontSize = 18.sp) },
                         placeholder = { Text(text = "Название", color = Black, fontSize = 18.sp) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(0.8f),
@@ -122,55 +122,49 @@ fun AddAppatmentScreen(
                             textColor = Black,
                             backgroundColor = Color(142, 143, 138)
                         ),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(10.dp)
                     )
-
-//                    Box(
-//                        modifier = Modifier
-//                            .fillMaxWidth(0.79f)
-//                            .padding(bottom = 10.dp, top = 10.dp)
-//                            .border(shape = RoundedCornerShape(20.dp)),
-////                            .wrapContentSize(Alignment.Center),
-//                        contentAlignment = Alignment.TopCenter
-//                    )
 
                     Card(
                         modifier = Modifier
                             .fillMaxWidth(0.79f)
                             .padding(bottom = 10.dp, top = 10.dp),
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(10.dp),
                         elevation = 30.dp,
                     )
                     {
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .background(
+                                    Color(142, 143, 138)
+                                ),
                             contentAlignment = Alignment.CenterStart,
 
-                        ) {
+
+                            ) {
                             Text(
                                 text = "Тип объекта- ${items[selectedIndex.value]}",
                                 modifier = Modifier
                                     .fillMaxWidth()
+                                    .padding(start = 10.dp, top = 15.dp)
 //                                .padding(top = 5.dp, start = 5.dp)
-                                    .height(56.dp)
+                                    .height(45.dp)
                                     .clickable(onClick = { expanded.value = true })
                                     .background(
                                         Color(142, 143, 138)
                                     ),
                                 fontSize = 18.sp,
                                 color = Black,
-                                textAlign = TextAlign.Start
+                                textAlign = TextAlign.Justify
                             )
 
                         }
 
-
-
                         MaterialTheme(
                             shapes = MaterialTheme.shapes.copy(
                                 medium = RoundedCornerShape(
-                                    16.dp
+                                    10.dp
                                 )
                             )
                         ) {
@@ -207,24 +201,33 @@ fun AddAppatmentScreen(
                         shape = RoundedCornerShape(12.dp),
                         elevation = 30.dp,
                     ) {
-                        Text(
-                            text = "Срок аренды- ${itemsRenta[selectedIndexRenta.value]}",
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-//                                .padding(top = 5.dp, start = 5.dp)
-                                .height(56.dp)
-                                .clickable(onClick = { expandedRenta.value = true })
                                 .background(
                                     Color(142, 143, 138)
                                 ),
-                            fontSize = 18.sp,
-                            color = Black,
+                            contentAlignment = Alignment.CenterStart,
+                        ) {
+                            Text(
+                                text = "Срок аренды- ${itemsRenta[selectedIndexRenta.value]}",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 15.dp, start = 10.dp)
+                                    .height(45.dp)
+                                    .clickable(onClick = { expandedRenta.value = true })
+                                    .background(
+                                        Color(142, 143, 138)
+                                    ),
+                                fontSize = 18.sp,
+                                color = Black,
 
-                            )
+                                )
+                        }
                         MaterialTheme(
                             shapes = MaterialTheme.shapes.copy(
                                 medium = RoundedCornerShape(
-                                    16.dp
+                                    10.dp
                                 )
                             )
                         ) {
@@ -258,7 +261,7 @@ fun AddAppatmentScreen(
                     OutlinedTextField(
                         value = addressAppat.value,
                         onValueChange = { addressAppat.value = it },
-                        label = { Text(text = "Адрес помещения", color = Black, fontSize = 18.sp) },
+//                        label = { Text(text = "Адрес помещения", color = Black, fontSize = 18.sp) },
                         placeholder = {
                             Text(
                                 text = "Адрес помещения",
@@ -269,27 +272,77 @@ fun AddAppatmentScreen(
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth(0.8f)
-                            .fillMaxHeight(0.5f),
+                            .fillMaxHeight(0.3f)
+                            .padding(top = 10.dp),
 //                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black, textColor = Black,
                             backgroundColor = Color(142, 143, 138)
                         ),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(10.dp)
                     )
+
                     OutlinedTextField(
-                        value = squearAppat.value,
-                        onValueChange = { squearAppat.value = it },
-                        label = { Text(text = "Площадь", color = Black, fontSize = 18.sp) },
-                        placeholder = { Text(text = "Площадь", color = Black, fontSize = 18.sp) },
+                        value = numberRooms.value,
+                        onValueChange = { numberRooms.value = it },
+//                        label = { Text(text = "Площадь", color = Black, fontSize = 18.sp) },
+                        placeholder = {
+                            Text(
+                                text = "Количество комнат",
+                                color = Black,
+                                fontSize = 18.sp
+                            )
+                        },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .padding(top = 10.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black, textColor = Black,
                             backgroundColor = Color(142, 143, 138)
                         ),
-                        shape = RoundedCornerShape(20.dp)
+                        shape = RoundedCornerShape(10.dp)
+                    )
+
+                    OutlinedTextField(
+                        value = numberBeds.value,
+                        onValueChange = { numberBeds.value = it },
+//                        label = { Text(text = "Площадь", color = Black, fontSize = 18.sp) },
+                        placeholder = {
+                            Text(
+                                text = "Количество спальных мест",
+                                color = Black,
+                                fontSize = 18.sp
+                            )
+                        },
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .padding(top = 10.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black, textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        shape = RoundedCornerShape(10.dp)
+                    )
+
+                    OutlinedTextField(
+                        value = squearAppat.value,
+                        onValueChange = { squearAppat.value = it },
+//                        label = { Text(text = "Площадь", color = Black, fontSize = 18.sp) },
+                        placeholder = { Text(text = "Площадь", color = Black, fontSize = 18.sp) },
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .padding(top = 10.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black, textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        shape = RoundedCornerShape(10.dp)
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
 
@@ -346,6 +399,18 @@ fun AddAppatmentScreen(
                                     "Введите срок аренды!",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                            } else if (numberBeds.value.isEmpty()) {
+                                Toast.makeText(
+                                    context,
+                                    "Введите количество спальных мест",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else if (numberRooms.value.isEmpty()) {
+                                Toast.makeText(
+                                    context,
+                                    "Введите количество комнат",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             } else {
                                 viewModel.insertAppatment(
                                     Appatment(
@@ -353,6 +418,8 @@ fun AddAppatmentScreen(
                                         addressAppat.value,
                                         typeAppat.value,
                                         rentatypeAppat.value,
+                                        numberRooms.value.toInt(),
+                                        numberBeds.value.toInt(),
                                         squearAppat.value.toFloat()
                                     )
                                 )
@@ -373,79 +440,9 @@ fun AddAppatmentScreen(
                                 tint = Color(223, 75, 0)
                             )
                         }
-
-//                        Button(modifier = Modifier
-//                            .fillMaxWidth(0.8f),
-//                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(223, 75, 0)),
-//                            onClick = {
-//                                if (nameAppat.value.isEmpty()) {
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Введите название объекта недвижимости!",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                } else if (addressAppat.value.isEmpty()) {
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Введите адрес объекта!",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                } else if (squearAppat.value.isEmpty()) {
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Введите площадь объекта!",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                } else if (typeAppat.value.isEmpty()) {
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Введите тип объекта!",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                } else if (rentatypeAppat.value.isEmpty()) {
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Введите срок аренды!",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                } else {
-//                                    viewModel.insertAppatment(
-//                                        Appatment(
-//                                            nameAppat.value,
-//                                            addressAppat.value,
-//                                            typeAppat.value,
-//                                            rentatypeAppat.value,
-//                                            squearAppat.value.toFloat()
-//                                        )
-//                                    )
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Объект недвижимости добавлен!",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                }
-//                                navController.navigate(Routs.home)
-//                            }
-//
-//                        ) {
-//                            Text(text = "Добавить", fontSize = 20.sp, color = Black)
-//                        }
-
-//                        Spacer(modifier = Modifier.padding(5.dp))
-
-
-//                        Text(text = "Назад", color = Color.White,
-//                            modifier = Modifier.clickable {
-//                                navController.navigate(Routs.home)
-//
-//                            }
-//                        )
                     }
-
-
                 }
             }
-
         }
     }
 }
