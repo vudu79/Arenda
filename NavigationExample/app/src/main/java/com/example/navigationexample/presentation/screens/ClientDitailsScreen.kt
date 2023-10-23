@@ -66,7 +66,7 @@ fun ClientDitailsScreen(
                 color = it,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .width(3.dp)
+                    .width(5.dp)
             )
         }
 
@@ -101,7 +101,7 @@ fun ClientDitailsScreen(
                         )
 
                         Text(
-                            text = state.value?.status ?: "нет данныъх",
+                            text = state.value?.status ?: "нет данных",
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))

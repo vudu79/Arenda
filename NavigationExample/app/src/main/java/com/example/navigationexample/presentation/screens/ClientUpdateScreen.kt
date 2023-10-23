@@ -60,14 +60,11 @@ fun ClientUpdateScreen(
     val isStatusEditActive = remember {
         mutableStateOf(false)
     }
-
-
     val fieldStatusHeight = remember { mutableStateOf(50) }
     fieldStatusHeight.value = when (isStatusEditActive.value) {
         true -> 180
         false -> 50
     }
-
     val isFirstNameEditActive = remember {
         mutableStateOf(false)
     }
@@ -76,7 +73,6 @@ fun ClientUpdateScreen(
         true -> 120
         false -> 50
     }
-
     val isSecondNameEditActive = remember {
         mutableStateOf(false)
     }
@@ -85,7 +81,6 @@ fun ClientUpdateScreen(
         true -> 120
         false -> 50
     }
-
     val isLastNameEditActive = remember {
         mutableStateOf(false)
     }
@@ -94,7 +89,6 @@ fun ClientUpdateScreen(
         true -> 120
         false -> 50
     }
-
     val isPhoneEditActive = remember {
         mutableStateOf(false)
     }
@@ -103,7 +97,6 @@ fun ClientUpdateScreen(
         true -> 120
         false -> 50
     }
-
     val isDocumentNamberEditActive = remember {
         mutableStateOf(false)
     }
@@ -112,7 +105,6 @@ fun ClientUpdateScreen(
         true -> 120
         false -> 50
     }
-
     val isDocumentDitailsEditActive = remember {
         mutableStateOf(false)
     }
@@ -121,12 +113,10 @@ fun ClientUpdateScreen(
         true -> {
             if (state.documentDitails != "") 240 else 170
         }
-
         false -> {
             if (state.documentDitails != "") 120 else 50
         }
     }
-
     val isMembersEditActive = remember {
         mutableStateOf(false)
     }
@@ -135,7 +125,6 @@ fun ClientUpdateScreen(
         true -> 120
         false -> 50
     }
-
     val isPrepaymentEditActive = remember {
         mutableStateOf(false)
     }
@@ -144,7 +133,6 @@ fun ClientUpdateScreen(
         true -> 120
         false -> 50
     }
-
     val isPaymentEditActive = remember {
         mutableStateOf(false)
     }
@@ -271,7 +259,6 @@ fun ClientUpdateScreen(
                                     Icon(
                                         painter = painterResource(id = R.drawable.baseline_edit_24),
                                         contentDescription = "Редактировать",
-
                                         modifier = Modifier.size(30.dp),
                                         tint = Color(223, 75, 0)
                                     )
@@ -290,7 +277,13 @@ fun ClientUpdateScreen(
                                             .height(25.dp)
                                             .selectable(
                                                 selected = (text == selectedOption),
-                                                onClick = { onOptionSelected(text) }
+                                                onClick = { onOptionSelected(text)
+                                                    viewModelClient.onFormEvent(
+                                                        ValidationFormEvent.StatusChanged(
+                                                            text
+                                                        )
+                                                    )
+                                                }
                                             ),
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
@@ -303,7 +296,6 @@ fun ClientUpdateScreen(
                                             fontSize = 12.sp,
                                             color = Color(254, 253, 253, 255)
                                         )
-
                                     }
                                 }
                             }
