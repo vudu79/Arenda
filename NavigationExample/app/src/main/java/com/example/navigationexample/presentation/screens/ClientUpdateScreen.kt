@@ -1611,7 +1611,7 @@ fun ClientUpdateScreen(
                                     value = state.prePayment,
                                     onValueChange = {
                                         viewModelClient.onFormEvent(
-                                            ValidationFormEvent.PrepaymentChanged(
+                                            ValidationFormEvent.PrePaymentChanged(
                                                 it
                                             )
                                         )

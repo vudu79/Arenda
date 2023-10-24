@@ -6,7 +6,7 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
-class PaymentValidation @Inject constructor() {
+class PrePaymentValidation @Inject constructor() {
     fun execute(state: ValidationFormState): ValidationResult {
 
         val payment = state.payment.trim()
@@ -21,7 +21,7 @@ class PaymentValidation @Inject constructor() {
         val totalDays = ChronoUnit.DAYS.between(ldInDate, ldOutDate).toInt()
         val totalCoast = paymentInt * totalDays
 
-        val hasOnliDigits = payment.all { it.isDigit() }
+        val hasOnliDigits = prePayment.all { it.isDigit() }
 
         if (payment.isEmpty()) {
             return ValidationResult(
