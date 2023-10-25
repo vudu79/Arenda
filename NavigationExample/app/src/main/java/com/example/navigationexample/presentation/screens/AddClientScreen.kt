@@ -386,7 +386,7 @@ fun AddClientScreen(
                         onValueChange = {
                             viewModelClient.onFormEvent(ValidationFormEvent.MembersChanged(it))
                         },
-                        placeholder = { Text(text = "Количество человек", color = Black) },
+                        placeholder = { Text(text = "Количество человек в тарифе", color = Black) },
                         isError = state.membersError != null,
                         singleLine = true,
                         modifier = Modifier
@@ -411,6 +411,45 @@ fun AddClientScreen(
                         ) {
                             Text(
                                 text = state.membersError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                }
+
+
+                item {
+                    OutlinedTextField(
+                        value = state.overMembers,
+                        onValueChange = {
+                            viewModelClient.onFormEvent(ValidationFormEvent.OverMembersChanged(it))
+                        },
+                        placeholder = { Text(text = "Количество человек на доп. места", color = Black) },
+                        isError = state.overMembersError != null,
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black,
+                            textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
+                    )
+                    if (state.overMembersError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.overMembersError!!,
                                 color = MaterialTheme.colors.error,
                                 modifier = Modifier.align(Alignment.BottomStart)
                             )
@@ -475,7 +514,7 @@ fun AddClientScreen(
                     OutlinedTextField(
                         value = state.prePayment,
                         onValueChange = {
-                            viewModelClient.onFormEvent(ValidationFormEvent.PrepaymentChanged(it))
+                            viewModelClient.onFormEvent(ValidationFormEvent.PrePaymentChanged(it))
                         },
 
                         placeholder = { Text(text = "Внесенный залог", color = Black) },
@@ -520,7 +559,7 @@ fun AddClientScreen(
                             viewModelClient.onFormEvent(ValidationFormEvent.PaymentChanged(it))
                         },
 
-                        placeholder = { Text(text = "Стоимость суток", color = Black) },
+                        placeholder = { Text(text = "Стоимость тарифа", color = Black) },
                         isError = state.paymentError != null,
                         singleLine = true,
                         modifier = Modifier
@@ -546,6 +585,47 @@ fun AddClientScreen(
                         ) {
                             Text(
                                 text = state.paymentError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                }
+
+
+                item {
+                    OutlinedTextField(
+                        value = state.overPayment,
+                        onValueChange = {
+                            viewModelClient.onFormEvent(ValidationFormEvent.OverPaymentChanged(it))
+                        },
+
+                        placeholder = { Text(text = "Стоимость доп. места", color = Black) },
+                        isError = state.overPaymentError != null,
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black,
+                            textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
+                    )
+
+                    if (state.overPaymentError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.overPaymentError!!,
                                 color = MaterialTheme.colors.error,
                                 modifier = Modifier.align(Alignment.BottomStart)
                             )

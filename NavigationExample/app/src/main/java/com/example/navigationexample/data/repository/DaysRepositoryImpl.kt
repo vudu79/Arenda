@@ -94,7 +94,7 @@ class DaysRepositoryImpl @Inject constructor(
         if (result < 0) {
             onError()
         } else {
-            emit(0)
+            emit(1)
         }
     }.onStart { onStart() }.onCompletion { onCompletion() }.flowOn(Dispatchers.IO)
 

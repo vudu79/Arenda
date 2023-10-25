@@ -66,7 +66,7 @@ fun ClientDitailsScreen(
                 color = it,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .width(3.dp)
+                    .width(5.dp)
             )
         }
 
@@ -101,7 +101,7 @@ fun ClientDitailsScreen(
                         )
 
                         Text(
-                            text = state.value?.status ?: "нет данныъх",
+                            text = state.value?.status ?: "нет данных",
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -367,6 +367,177 @@ fun ClientDitailsScreen(
             }
 
 
+//   телефон клиента
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Телефон клиента: ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = "+7${state.value?.phone}",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(5.dp))
+                }
+            }
+
+
+ //   паспортные данные клиента
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Серия и номер паспорта: ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = state.value?.documentNumber.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Кем и когда выдан паспорт: ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = state.value?.documentDitails.toString(),
+                            maxLines = 5,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(5.dp))
+                }
+            }
+
+
+            //   данные для трансфера
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Информация по трансферу: ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = state.value?.transferInfo.toString(),
+                            maxLines = 5,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(5.dp))
+                }
+            }
+
+
+            //   рекламные ресурс
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Откуда клиент узнал о вас: ",
+                            maxLines = 2,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = state.value?.referer.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(5.dp))
+                }
+            }
 
 
             item {

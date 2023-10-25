@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -38,12 +39,13 @@ fun AddAppatmentScreen(
     onHome: () -> Unit
 ) {
     val context = LocalContext.current
-//    val scaffoldState = rememberScaffoldState()
     val nameAppat = remember { mutableStateOf("") }
     val typeAppat = remember { mutableStateOf("Квартира") }
     val rentatypeAppat = remember { mutableStateOf("Посуточно") }
     val addressAppat = remember { mutableStateOf("") }
     val squearAppat = remember { mutableStateOf("") }
+    val numberRooms = remember { mutableStateOf("") }
+    val numberBeds = remember { mutableStateOf("") }
 
     val expanded = remember { mutableStateOf(false) }
     val items = listOf("Аппартаменты", "Квартира", "Комерческое")
@@ -70,13 +72,14 @@ fun AddAppatmentScreen(
         modifier = Modifier
             .fillMaxSize(),
 
-        contentAlignment = Alignment.BottomCenter
+//        contentAlignment = Alignment.BottomCenter
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
+                .fillMaxHeight()
                 .background(Color(41, 41, 41))
         ) {
             Box(
@@ -110,104 +113,146 @@ fun AddAppatmentScreen(
                     OutlinedTextField(
                         value = nameAppat.value,
                         onValueChange = { nameAppat.value = it },
-                        label = { Text(text = "Название", color = Black) },
-                        placeholder = { Text(text = "Название", color = Black) },
+//                        label = { Text(text = "Название", color = Black, fontSize = 18.sp) },
+                        placeholder = { Text(text = "Название", color = Black, fontSize = 18.sp) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(0.8f),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black,
                             textColor = Black,
                             backgroundColor = Color(142, 143, 138)
-                        )
+                        ),
+                        shape = RoundedCornerShape(10.dp)
                     )
 
-                    Box(
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth(0.79f)
                             .padding(bottom = 10.dp, top = 10.dp),
-//                            .wrapContentSize(Alignment.Center),
-                        contentAlignment = Alignment.TopCenter
-                    ) {
-                        Text(
-                            text = "Тип объекта- ${items[selectedIndex.value]}",
+                        shape = RoundedCornerShape(10.dp),
+                        elevation = 30.dp,
+                    )
+                    {
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-//                                .padding(top = 5.dp, start = 5.dp)
-                                .height(56.dp)
-                                .clickable(onClick = { expanded.value = true })
                                 .background(
                                     Color(142, 143, 138)
                                 ),
-                            fontSize = 16.sp,
-                            color = Black,
+                            contentAlignment = Alignment.CenterStart,
+
+
+                            ) {
+                            Text(
+                                text = "Тип объекта- ${items[selectedIndex.value]}",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 10.dp, top = 15.dp)
+//                                .padding(top = 5.dp, start = 5.dp)
+                                    .height(45.dp)
+                                    .clickable(onClick = { expanded.value = true })
+                                    .background(
+                                        Color(142, 143, 138)
+                                    ),
+                                fontSize = 18.sp,
+                                color = Black,
+                                textAlign = TextAlign.Justify
                             )
-                        DropdownMenu(
-                            expanded = expanded.value,
-                            onDismissRequest = { expanded.value = false },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    Color.Transparent
+
+                        }
+
+                        MaterialTheme(
+                            shapes = MaterialTheme.shapes.copy(
+                                medium = RoundedCornerShape(
+                                    10.dp
                                 )
+                            )
                         ) {
-                            items.forEachIndexed { index, s ->
-                                DropdownMenuItem(onClick = {
-                                    selectedIndex.value = index
-                                    expanded.value = false
-                                    typeAppat.value = s
-                                }) {
-                                    val disabledText = if (s == disabledValue) {
-                                        " (Disabled)"
-                                    } else {
-                                        ""
+                            DropdownMenu(
+                                expanded = expanded.value,
+                                onDismissRequest = { expanded.value = false },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        Color.Transparent
+                                    )
+                            ) {
+                                items.forEachIndexed { index, s ->
+                                    DropdownMenuItem(onClick = {
+                                        selectedIndex.value = index
+                                        expanded.value = false
+                                        typeAppat.value = s
+                                    }) {
+                                        val disabledText = if (s == disabledValue) {
+                                            " (Disabled)"
+                                        } else {
+                                            ""
+                                        }
+                                        Text(text = s + disabledText)
                                     }
-                                    Text(text = s + disabledText)
                                 }
                             }
                         }
                     }
 
-                    Box(
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth(0.79f),
-//                            .wrapContentSize(Alignment.Center),
-                        contentAlignment = Alignment.TopCenter
+                        shape = RoundedCornerShape(12.dp),
+                        elevation = 30.dp,
                     ) {
-                        Text(
-                            text = "Срок аренды- ${itemsRenta[selectedIndexRenta.value]}",
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-//                                .padding(top = 5.dp, start = 5.dp)
-                                .height(56.dp)
-                                .clickable(onClick = { expandedRenta.value = true })
                                 .background(
                                     Color(142, 143, 138)
                                 ),
-                            fontSize = 16.sp,
-                            color = Black,
-
-                            )
-                        DropdownMenu(
-                            expanded = expandedRenta.value,
-                            onDismissRequest = { expandedRenta.value = false },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    Color.Transparent
-                                )
+                            contentAlignment = Alignment.CenterStart,
                         ) {
-                            itemsRenta.forEachIndexed { index, s ->
-                                DropdownMenuItem(onClick = {
-                                    selectedIndexRenta.value = index
-                                    expandedRenta.value = false
-                                    rentatypeAppat.value = s
-                                }) {
-                                    val disabledText = if (s == disabledValueRenta) {
-                                        " (Disabled)"
-                                    } else {
-                                        ""
+                            Text(
+                                text = "Срок аренды- ${itemsRenta[selectedIndexRenta.value]}",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 15.dp, start = 10.dp)
+                                    .height(45.dp)
+                                    .clickable(onClick = { expandedRenta.value = true })
+                                    .background(
+                                        Color(142, 143, 138)
+                                    ),
+                                fontSize = 18.sp,
+                                color = Black,
+
+                                )
+                        }
+                        MaterialTheme(
+                            shapes = MaterialTheme.shapes.copy(
+                                medium = RoundedCornerShape(
+                                    10.dp
+                                )
+                            )
+                        ) {
+                            DropdownMenu(
+                                expanded = expandedRenta.value,
+                                onDismissRequest = { expandedRenta.value = false },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        Color.Transparent
+                                    )
+                            ) {
+                                itemsRenta.forEachIndexed { index, s ->
+                                    DropdownMenuItem(onClick = {
+                                        selectedIndexRenta.value = index
+                                        expandedRenta.value = false
+                                        rentatypeAppat.value = s
+                                    }) {
+                                        val disabledText = if (s == disabledValueRenta) {
+                                            " (Disabled)"
+                                        } else {
+                                            ""
+                                        }
+                                        Text(text = s + disabledText)
                                     }
-                                    Text(text = s + disabledText)
                                 }
                             }
                         }
@@ -216,30 +261,88 @@ fun AddAppatmentScreen(
                     OutlinedTextField(
                         value = addressAppat.value,
                         onValueChange = { addressAppat.value = it },
-                        label = { Text(text = "Адрес помещения", color = Black) },
-                        placeholder = { Text(text = "Адрес помещения", color = Black) },
+//                        label = { Text(text = "Адрес помещения", color = Black, fontSize = 18.sp) },
+                        placeholder = {
+                            Text(
+                                text = "Адрес помещения",
+                                color = Black,
+                                fontSize = 18.sp
+                            )
+                        },
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth(0.8f)
-                            .fillMaxHeight(0.5f),
+                            .fillMaxHeight(0.3f)
+                            .padding(top = 10.dp),
 //                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black, textColor = Black,
                             backgroundColor = Color(142, 143, 138)
-                        )
+                        ),
+                        shape = RoundedCornerShape(10.dp)
                     )
+
                     OutlinedTextField(
-                        value = squearAppat.value,
-                        onValueChange = { squearAppat.value = it },
-                        label = { Text(text = "Площадь", color = Black) },
-                        placeholder = { Text(text = "Площадь", color = Black) },
+                        value = numberRooms.value,
+                        onValueChange = { numberRooms.value = it },
+//                        label = { Text(text = "Площадь", color = Black, fontSize = 18.sp) },
+                        placeholder = {
+                            Text(
+                                text = "Количество комнат",
+                                color = Black,
+                                fontSize = 18.sp
+                            )
+                        },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .padding(top = 10.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Black, textColor = Black,
                             backgroundColor = Color(142, 143, 138)
-                        )
+                        ),
+                        shape = RoundedCornerShape(10.dp)
+                    )
+
+                    OutlinedTextField(
+                        value = numberBeds.value,
+                        onValueChange = { numberBeds.value = it },
+//                        label = { Text(text = "Площадь", color = Black, fontSize = 18.sp) },
+                        placeholder = {
+                            Text(
+                                text = "Количество спальных мест",
+                                color = Black,
+                                fontSize = 18.sp
+                            )
+                        },
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .padding(top = 10.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black, textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        shape = RoundedCornerShape(10.dp)
+                    )
+
+                    OutlinedTextField(
+                        value = squearAppat.value,
+                        onValueChange = { squearAppat.value = it },
+//                        label = { Text(text = "Площадь", color = Black, fontSize = 18.sp) },
+                        placeholder = { Text(text = "Площадь", color = Black, fontSize = 18.sp) },
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .padding(top = 10.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black, textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        shape = RoundedCornerShape(10.dp)
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
 
@@ -253,8 +356,8 @@ fun AddAppatmentScreen(
 
                         IconButton(modifier = Modifier.padding(end = 80.dp),
                             onClick = {
-                            navController.navigate(Routs.home)
-                        })
+                                navController.navigate(Routs.home)
+                            })
                         {
                             Icon(
                                 painter = painterResource(id = R.drawable.baseline_arrow_back_24),
@@ -296,6 +399,18 @@ fun AddAppatmentScreen(
                                     "Введите срок аренды!",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                            } else if (numberBeds.value.isEmpty()) {
+                                Toast.makeText(
+                                    context,
+                                    "Введите количество спальных мест",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else if (numberRooms.value.isEmpty()) {
+                                Toast.makeText(
+                                    context,
+                                    "Введите количество комнат",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             } else {
                                 viewModel.insertAppatment(
                                     Appatment(
@@ -303,6 +418,8 @@ fun AddAppatmentScreen(
                                         addressAppat.value,
                                         typeAppat.value,
                                         rentatypeAppat.value,
+                                        numberRooms.value.toInt(),
+                                        numberBeds.value.toInt(),
                                         squearAppat.value.toFloat()
                                     )
                                 )
@@ -323,79 +440,9 @@ fun AddAppatmentScreen(
                                 tint = Color(223, 75, 0)
                             )
                         }
-
-//                        Button(modifier = Modifier
-//                            .fillMaxWidth(0.8f),
-//                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(223, 75, 0)),
-//                            onClick = {
-//                                if (nameAppat.value.isEmpty()) {
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Введите название объекта недвижимости!",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                } else if (addressAppat.value.isEmpty()) {
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Введите адрес объекта!",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                } else if (squearAppat.value.isEmpty()) {
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Введите площадь объекта!",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                } else if (typeAppat.value.isEmpty()) {
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Введите тип объекта!",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                } else if (rentatypeAppat.value.isEmpty()) {
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Введите срок аренды!",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                } else {
-//                                    viewModel.insertAppatment(
-//                                        Appatment(
-//                                            nameAppat.value,
-//                                            addressAppat.value,
-//                                            typeAppat.value,
-//                                            rentatypeAppat.value,
-//                                            squearAppat.value.toFloat()
-//                                        )
-//                                    )
-//                                    Toast.makeText(
-//                                        context,
-//                                        "Объект недвижимости добавлен!",
-//                                        Toast.LENGTH_SHORT
-//                                    ).show()
-//                                }
-//                                navController.navigate(Routs.home)
-//                            }
-//
-//                        ) {
-//                            Text(text = "Добавить", fontSize = 20.sp, color = Black)
-//                        }
-
-//                        Spacer(modifier = Modifier.padding(5.dp))
-
-
-//                        Text(text = "Назад", color = Color.White,
-//                            modifier = Modifier.clickable {
-//                                navController.navigate(Routs.home)
-//
-//                            }
-//                        )
                     }
-
-
                 }
             }
-
         }
     }
 }
