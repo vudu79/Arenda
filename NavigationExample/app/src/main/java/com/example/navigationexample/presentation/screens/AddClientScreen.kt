@@ -370,7 +370,7 @@ fun AddClientScreen(
                     }
                 }
 
-
+//цвет
                 item {
                     ColourButton(
                         Constans.ClientColorsList.clientColorsList, onColorSelected = {
@@ -379,85 +379,7 @@ fun AddClientScreen(
                     )
                 }
 
-
-                item {
-                    OutlinedTextField(
-                        value = state.members,
-                        onValueChange = {
-                            viewModelClient.onFormEvent(ValidationFormEvent.MembersChanged(it))
-                        },
-                        placeholder = { Text(text = "Количество человек в тарифе", color = Black) },
-                        isError = state.membersError != null,
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = Black,
-                            textColor = Black,
-                            backgroundColor = Color(142, 143, 138)
-                        ),
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
-                        ),
-                        keyboardActions = KeyboardActions(onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }),
-                    )
-                    if (state.membersError != null) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            Text(
-                                text = state.membersError!!,
-                                color = MaterialTheme.colors.error,
-                                modifier = Modifier.align(Alignment.BottomStart)
-                            )
-                        }
-                    }
-                }
-
-
-                item {
-                    OutlinedTextField(
-                        value = state.overMembers,
-                        onValueChange = {
-                            viewModelClient.onFormEvent(ValidationFormEvent.OverMembersChanged(it))
-                        },
-                        placeholder = { Text(text = "Количество человек на доп. места", color = Black) },
-                        isError = state.overMembersError != null,
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = Black,
-                            textColor = Black,
-                            backgroundColor = Color(142, 143, 138)
-                        ),
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
-                        ),
-                        keyboardActions = KeyboardActions(onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }),
-                    )
-                    if (state.overMembersError != null) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            Text(
-                                text = state.overMembersError!!,
-                                color = MaterialTheme.colors.error,
-                                modifier = Modifier.align(Alignment.BottomStart)
-                            )
-                        }
-                    }
-                }
-
-
+//даты
                 item {
                     OutlinedTextField(
                         value = "c ${state.dateInString} по ${state.dateOutString} ",
@@ -510,6 +432,84 @@ fun AddClientScreen(
                 }
 
 
+//  количество человек в тарифе
+                item {
+                    OutlinedTextField(
+                        value = state.members,
+                        onValueChange = {
+                            viewModelClient.onFormEvent(ValidationFormEvent.MembersChanged(it))
+                        },
+                        placeholder = { Text(text = "Количество человек в тарифе", color = Black) },
+                        isError = state.membersError != null,
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black,
+                            textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
+                    )
+                    if (state.membersError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.membersError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                }
+// стоимость тарифа
+                item {
+                    OutlinedTextField(
+                        value = state.payment,
+                        onValueChange = {
+                            viewModelClient.onFormEvent(ValidationFormEvent.PaymentChanged(it))
+                        },
+                        placeholder = { Text(text = "Стоимость тарифа", color = Black) },
+                        isError = state.paymentError != null,
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black,
+                            textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
+                    )
+
+                    if (state.paymentError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.paymentError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                }
+//предопалта
                 item {
                     OutlinedTextField(
                         value = state.prePayment,
@@ -550,17 +550,15 @@ fun AddClientScreen(
                         }
                     }
                 }
-
-
+//колич человек на доп место
                 item {
                     OutlinedTextField(
-                        value = state.payment,
+                        value = state.overMembers,
                         onValueChange = {
-                            viewModelClient.onFormEvent(ValidationFormEvent.PaymentChanged(it))
+                            viewModelClient.onFormEvent(ValidationFormEvent.OverMembersChanged(it))
                         },
-
-                        placeholder = { Text(text = "Стоимость тарифа", color = Black) },
-                        isError = state.paymentError != null,
+                        placeholder = { Text(text = "Количество человек на доп. места", color = Black) },
+                        isError = state.overMembersError != null,
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -577,22 +575,20 @@ fun AddClientScreen(
                             focusManager.moveFocus(FocusDirection.Down)
                         }),
                     )
-
-                    if (state.paymentError != null) {
+                    if (state.overMembersError != null) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
                             Text(
-                                text = state.paymentError!!,
+                                text = state.overMembersError!!,
                                 color = MaterialTheme.colors.error,
                                 modifier = Modifier.align(Alignment.BottomStart)
                             )
                         }
                     }
                 }
-
-
+//стоимость доп меств
                 item {
                     OutlinedTextField(
                         value = state.overPayment,
@@ -634,6 +630,7 @@ fun AddClientScreen(
                 }
 
 
+//трансфер
                 item {
                     state.transferInfo?.let {
                         OutlinedTextField(
@@ -661,8 +658,7 @@ fun AddClientScreen(
                         )
                     }
                 }
-
-
+// рекламный ресурс
                 item {
                     state.referer?.let {
                         OutlinedTextField(
@@ -689,6 +685,10 @@ fun AddClientScreen(
                         )
                     }
                 }
+
+
+
+
 
 
                 item{

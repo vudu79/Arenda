@@ -23,7 +23,7 @@ data class ValidationFormState(
     var members: String = "",
     var membersError: String? = null,
     var overMembers: String = "",
-    var overMembersError: String? = "",
+    var overMembersError: String? = null,
     var dateOutString: String = "",
     var dateOutStringError: String? = null,
     var dateInString: String = "",

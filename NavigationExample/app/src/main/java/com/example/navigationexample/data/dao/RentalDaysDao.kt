@@ -15,7 +15,6 @@ interface RentalDaysDao {
     @Query("DELETE FROM rentaldays WHERE client_id = :clientId")
     fun deleteClientDays(clientId: Long)
 
-
     @Query("SELECT * FROM rentaldays WHERE appatment_name=:appatmentName")
     fun getAppatmentDays(appatmentName: String): List<RentalDay>
 

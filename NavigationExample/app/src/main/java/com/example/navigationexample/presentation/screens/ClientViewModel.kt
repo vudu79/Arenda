@@ -222,7 +222,7 @@ class ClientViewModel @Inject constructor(
             }
 
             is ValidationFormEvent.OverMembersChanged -> {
-                validateFormState = validateFormState.copy(members = event.overMembers)
+                validateFormState = validateFormState.copy(overMembers = event.overMembers)
             }
 
             is ValidationFormEvent.InStringDateChanged -> {
@@ -250,7 +250,7 @@ class ClientViewModel @Inject constructor(
             }
 
             is ValidationFormEvent.OverPaymentChanged -> {
-                validateFormState = validateFormState.copy(payment = event.overPayment)
+                validateFormState = validateFormState.copy(overPayment = event.overPayment)
             }
 
             is ValidationFormEvent.transferInfoChanged -> {
