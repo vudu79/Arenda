@@ -36,6 +36,8 @@ import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsR
 import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
 import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.common.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -381,8 +383,13 @@ fun AddClientScreen(
 
 //даты
                 item {
+
+                    var dateString = ""
+                    if (state.dateInString.isNotBlank() && state.dateOutString.isNotBlank()) {
+                        dateString = "c ${parseDateString(state.dateInString)} по ${parseDateString(state.dateOutString)} "
+                    }
                     OutlinedTextField(
-                        value = "c ${state.dateInString} по ${state.dateOutString} ",
+                        value = dateString,
                         onValueChange = {
                             viewModelClient.onFormEvent(ValidationFormEvent.InLongDateChanged(viewModelClient.dateInLong))
                             viewModelClient.onFormEvent(ValidationFormEvent.InStringDateChanged(viewModelClient.dateInString))
@@ -777,6 +784,12 @@ fun AddClientScreen(
             }
         }
     }
+}
+
+fun parseDateString(dateS: String): String {
+    val date = LocalDate.parse(dateS)
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    return date.format(formatter)
 }
 
 

@@ -213,11 +213,7 @@ fun LazyItemScope.ClientItemRow(
 
                         Text(
                             text = parseDate(client.inDate) + "-" + parseDate(client.outDate),
-//                            text = "${LocalDate.ofEpochDay(client.inDate)} - ${
-//                                LocalDate.ofEpochDay(
-//                                    client.outDate
-//                                )
-//                            }",
+//
                             modifier = Modifier.padding(2.dp),
                             maxLines = 1,
                             color = Color(red = 41, green = 41, blue = 41),
