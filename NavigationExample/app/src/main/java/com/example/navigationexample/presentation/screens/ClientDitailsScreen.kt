@@ -40,7 +40,11 @@ fun ClientDitailsScreen(
     val ldOutDate = LocalDate.ofEpochDay(outDate)
     val totalDays = ChronoUnit.DAYS.between(ldInDate, ldOutDate).toInt()
     val payment = state.value?.payment ?: 0
-    val totalCoast = payment * totalDays
+    val overPayment = state.value?.overPayment ?: 0
+    val overMembers = state.value?.overMembers ?: 0
+    val members = state.value?.members ?: 0
+
+    val totalCoast = (payment * totalDays) + (members - overMembers) * totalDays * overPayment
     val prepayment = state.value?.prepayment ?: 0
 
     Column(
@@ -111,7 +115,7 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
-                    Spacer(modifier = Modifier.padding(5.dp))
+                    Spacer(modifier = Modifier.padding(10.dp))
 
                 }
             }
@@ -147,7 +151,7 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
-
+                    Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
 //        Дата выезда _______________________________________________________________
@@ -182,7 +186,7 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
-                    Spacer(modifier = Modifier.padding(5.dp))
+                    Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
 
@@ -219,10 +223,12 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
-                    Spacer(modifier = Modifier.padding(5.dp))
+                    Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
-//        залог
+
+
+//    человек в тарифе
             item {
                 Column(
                     horizontalAlignment = Alignment.Start,
@@ -234,7 +240,7 @@ fun ClientDitailsScreen(
                         horizontalArrangement = Arrangement.Start,
                     ) {
                         Text(
-                            text = "Оплата бронирования / залог  ",
+                            text = "Количество гостей: ",
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -244,7 +250,7 @@ fun ClientDitailsScreen(
                         )
 
                         Text(
-                            text = state.value?.prepayment.toString(),
+                            text = state.value?.members.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -254,11 +260,11 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
-                    Spacer(modifier = Modifier.padding(5.dp))
+                    Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
 
-//        стоимость тарифа
+//    человек в тарифе
             item {
                 Column(
                     horizontalAlignment = Alignment.Start,
@@ -270,7 +276,43 @@ fun ClientDitailsScreen(
                         horizontalArrangement = Arrangement.Start,
                     ) {
                         Text(
-                            text = "Цена за сутки ",
+                            text = "Человек в тарифе за сутки: ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = state.value?.overMembers.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
+                }
+            }
+
+//    стоимость тарифа
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Стоимость тарифа ",
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -290,11 +332,83 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
-                    Spacer(modifier = Modifier.padding(5.dp))
+                    Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
 
-//       полная стоимость брони
+//    стоимость доп места
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Стоимость одного доп. места ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = state.value?.overPayment.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
+                }
+            }
+
+//    залог
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Внесенный залог/предоплата  ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = state.value?.prepayment.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 18.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
+                }
+            }
+
+//    полная стоимость брони
             item {
                 Column(
                     horizontalAlignment = Alignment.Start,
@@ -326,11 +440,11 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
-                    Spacer(modifier = Modifier.padding(5.dp))
+                    Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
 
-//       полная стоимость брони с учетом залога
+//    полная стоимость брони с учетом залога
             item {
                 Column(
                     horizontalAlignment = Alignment.Start,
@@ -362,10 +476,9 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
-                    Spacer(modifier = Modifier.padding(5.dp))
+                    Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
-
 
 //   телефон клиента
             item {
@@ -399,13 +512,13 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
-                    Spacer(modifier = Modifier.padding(5.dp))
+                    Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
 
-
- //   паспортные данные клиента
+            //   паспортные данные клиента
             item {
+
                 Column(
                     horizontalAlignment = Alignment.Start,
                     modifier = Modifier
@@ -436,6 +549,7 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
+                    Spacer(modifier = Modifier.padding(10.dp))
                     Row(
                         verticalAlignment = Alignment.Top,
                         horizontalArrangement = Arrangement.Start,
@@ -461,12 +575,11 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
-                    Spacer(modifier = Modifier.padding(5.dp))
+                    Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
 
-
-            //   данные для трансфера
+//   данные для трансфера
             item {
                 Column(
                     horizontalAlignment = Alignment.Start,
@@ -498,12 +611,11 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
-                    Spacer(modifier = Modifier.padding(5.dp))
+                    Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
 
-
-            //   рекламные ресурс
+//   рекламные ресурс
             item {
                 Column(
                     horizontalAlignment = Alignment.Start,
@@ -535,9 +647,14 @@ fun ClientDitailsScreen(
                             color = Color(254, 253, 253, 255)
                         )
                     }
-                    Spacer(modifier = Modifier.padding(5.dp))
+                    Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
+
+
+
+
+
 
 
             item {

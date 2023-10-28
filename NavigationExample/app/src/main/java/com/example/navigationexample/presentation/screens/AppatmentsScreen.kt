@@ -156,7 +156,7 @@ fun AppatmentItemRow(
 
     iconHomeType = when (appatmentItem.type) {
         "Квартира" -> R.drawable.baseline_cottage_24
-        "Аппартаменты" -> R.drawable.baseline_apartment_24
+        "Аппартаменты" -> R.drawable.baseline_cottage_24
         "Комерческое" -> R.drawable.baseline_home_work_24
         else -> R.drawable.baseline_cottage_24
     }
