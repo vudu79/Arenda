@@ -432,14 +432,14 @@ fun AddClientScreen(
                 }
 
 
-//  количество человек в тарифе
+//  количество человек всего
                 item {
                     OutlinedTextField(
                         value = state.members,
                         onValueChange = {
                             viewModelClient.onFormEvent(ValidationFormEvent.MembersChanged(it))
                         },
-                        placeholder = { Text(text = "Количество человек в тарифе", color = Black) },
+                        placeholder = { Text(text = "Количество гостей", color = Black) },
                         isError = state.membersError != null,
                         singleLine = true,
                         modifier = Modifier
@@ -464,6 +464,46 @@ fun AddClientScreen(
                         ) {
                             Text(
                                 text = state.membersError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                }
+
+
+//  количество человек в тарифе
+                item {
+                    OutlinedTextField(
+                        value = state.overMembers,
+                        onValueChange = {
+                            viewModelClient.onFormEvent(ValidationFormEvent.OverMembersChanged(it))
+                        },
+                        placeholder = { Text(text = "Количество человек в тарифе", color = Black) },
+                        isError = state.overMembersError != null,
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black,
+                            textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
+                    )
+                    if (state.overMembersError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.overMembersError!!,
                                 color = MaterialTheme.colors.error,
                                 modifier = Modifier.align(Alignment.BottomStart)
                             )
@@ -551,43 +591,45 @@ fun AddClientScreen(
                     }
                 }
 //колич человек на доп место
-                item {
-                    OutlinedTextField(
-                        value = state.overMembers,
-                        onValueChange = {
-                            viewModelClient.onFormEvent(ValidationFormEvent.OverMembersChanged(it))
-                        },
-                        placeholder = { Text(text = "Количество человек на доп. места", color = Black) },
-                        isError = state.overMembersError != null,
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = Black,
-                            textColor = Black,
-                            backgroundColor = Color(142, 143, 138)
-                        ),
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
-                        ),
-                        keyboardActions = KeyboardActions(onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }),
-                    )
-                    if (state.overMembersError != null) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            Text(
-                                text = state.overMembersError!!,
-                                color = MaterialTheme.colors.error,
-                                modifier = Modifier.align(Alignment.BottomStart)
-                            )
-                        }
-                    }
-                }
+//                item {
+//                    OutlinedTextField(
+//                        value = state.overMembers,
+//                        onValueChange = {
+//                            viewModelClient.onFormEvent(ValidationFormEvent.OverMembersChanged(it))
+//                        },
+//                        placeholder = { Text(text = "Количество человек на доп. места", color = Black) },
+//                        isError = state.overMembersError != null,
+//                        singleLine = true,
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+//                        colors = TextFieldDefaults.outlinedTextFieldColors(
+//                            unfocusedBorderColor = Black,
+//                            textColor = Black,
+//                            backgroundColor = Color(142, 143, 138)
+//                        ),
+//                        keyboardOptions = KeyboardOptions(
+//                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+//                        ),
+//                        keyboardActions = KeyboardActions(onNext = {
+//                            focusManager.moveFocus(FocusDirection.Down)
+//                        }),
+//                    )
+//                    if (state.overMembersError != null) {
+//                        Box(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                        ) {
+//                            Text(
+//                                text = state.overMembersError!!,
+//                                color = MaterialTheme.colors.error,
+//                                modifier = Modifier.align(Alignment.BottomStart)
+//                            )
+//                        }
+//                    }
+//                }
+
+
 //стоимость доп меств
                 item {
                     OutlinedTextField(
