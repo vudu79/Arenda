@@ -43,9 +43,14 @@ fun ClientDitailsScreen(
     val overPayment = state.value?.overPayment ?: 0
     val overMembers = state.value?.overMembers ?: 0
     val members = state.value?.members ?: 0
-
-    val totalCoast = (payment * totalDays) + (members - overMembers) * totalDays * overPayment
     val prepayment = state.value?.prepayment ?: 0
+
+    val totalCoast = if (members <= overMembers) {
+        (payment * totalDays)
+    } else {
+        (payment * totalDays) + (members - overMembers) * totalDays * overPayment
+    }
+
 
     Column(
         horizontalAlignment = Alignment.Start,

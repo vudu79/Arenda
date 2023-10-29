@@ -90,13 +90,13 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(documentNamber = client.documentNumber)
         validateFormState = validateFormState.copy(documentDitails = client.documentDitails)
         validateFormState = validateFormState.copy(members = client.members.toString())
-        validateFormState =
-            validateFormState.copy(dateInString = LocalDate.ofEpochDay(client.inDate).toString())
+        validateFormState = validateFormState.copy(overMembers =  client.overMembers.toString())
+        validateFormState = validateFormState.copy(dateInString = LocalDate.ofEpochDay(client.inDate).toString())
         validateFormState = validateFormState.copy(dateInLong = client.inDate)
-        validateFormState =
-            validateFormState.copy(dateOutString = LocalDate.ofEpochDay(client.outDate).toString())
+        validateFormState = validateFormState.copy(dateOutString = LocalDate.ofEpochDay(client.outDate).toString())
         validateFormState = validateFormState.copy(dateOutLong = client.outDate)
         validateFormState = validateFormState.copy(payment = client.payment.toString())
+        validateFormState = validateFormState.copy(overPayment = client.overPayment.toString())
         validateFormState = validateFormState.copy(prePayment = client.prepayment.toString())
         validateFormState = validateFormState.copy(transferInfo = client.transferInfo)
         validateFormState = validateFormState.copy(referer = client.referer)
@@ -115,6 +115,7 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(documentNamber = "")
         validateFormState = validateFormState.copy(documentDitails = "")
         validateFormState = validateFormState.copy(members = "")
+        validateFormState = validateFormState.copy(overMembers = "")
         validateFormState =
             validateFormState.copy(dateInString = "")
         validateFormState = validateFormState.copy(dateInLong = 0L)
@@ -122,6 +123,7 @@ class ClientViewModel @Inject constructor(
             validateFormState.copy(dateOutString = "")
         validateFormState = validateFormState.copy(dateOutLong = 0L)
         validateFormState = validateFormState.copy(payment = "")
+        validateFormState = validateFormState.copy(overPayment = "")
         validateFormState = validateFormState.copy(prePayment = "")
         validateFormState = validateFormState.copy(transferInfo = "")
         validateFormState = validateFormState.copy(referer = "")

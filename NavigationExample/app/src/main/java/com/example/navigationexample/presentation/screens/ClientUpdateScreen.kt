@@ -120,11 +120,24 @@ fun ClientUpdateScreen(
     val isMembersEditActive = remember {
         mutableStateOf(false)
     }
+
     val fieldMembersHeight = remember { mutableStateOf(50) }
     fieldMembersHeight.value = when (isMembersEditActive.value) {
         true -> 120
         false -> 50
     }
+
+
+    val isOverMembersEditActive = remember {
+        mutableStateOf(false)
+    }
+
+    val fieldOverMembersHeight = remember { mutableStateOf(50) }
+    fieldOverMembersHeight.value = when (isOverMembersEditActive.value) {
+        true -> 120
+        false -> 50
+    }
+
     val isPrepaymentEditActive = remember {
         mutableStateOf(false)
     }
@@ -133,11 +146,21 @@ fun ClientUpdateScreen(
         true -> 120
         false -> 50
     }
+
     val isPaymentEditActive = remember {
         mutableStateOf(false)
     }
     val fieldPaymentHeight = remember { mutableStateOf(50) }
     fieldPaymentHeight.value = when (isPaymentEditActive.value) {
+        true -> 120
+        false -> 50
+    }
+
+    val isOverPaymentEditActive = remember {
+        mutableStateOf(false)
+    }
+    val fieldOverPaymentHeight = remember { mutableStateOf(50) }
+    fieldOverPaymentHeight.value = when (isOverPaymentEditActive.value) {
         true -> 120
         false -> 50
     }
@@ -1383,7 +1406,6 @@ fun ClientUpdateScreen(
 //  ______________________________________________________________________________________________________
 
 // количестов человек
-
         item {
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -1524,8 +1546,7 @@ fun ClientUpdateScreen(
             }
         }
 
-// предоплата
-
+// количество человек в тарифе
         item {
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -1534,7 +1555,148 @@ fun ClientUpdateScreen(
             ) {
                 Row() {
                     Text(
-                        text = "Предоплата",
+                        text = "Человек в тарифе за сутки",
+                        maxLines = 1,
+                        modifier = Modifier
+                            .background(Color(41, 41, 41))
+                            .padding(start = 5.dp),
+                        fontSize = 12.sp,
+                        color = Color(223, 75, 0)
+                    )
+                }
+                Row() {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(3.dp)
+                            .background(Color(red = 41, green = 41, blue = 41)),
+                        shape = RoundedCornerShape(5.dp),
+                        elevation = 8.dp,
+                        onClick = {
+
+                        }
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .fillMaxWidth(0.70f)
+                                .height(fieldOverMembersHeight.value.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(223, 75, 0),
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                                .background(Color(red = 41, 41, blue = 41)),
+                        ) {
+
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(red = 41, green = 41, blue = 41))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .height(50.dp)
+                                        .background(Color(red = 41, green = 41, blue = 41))
+                                ) {
+                                    Text(
+                                        text = state.overMembers,
+                                        maxLines = 1,
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+                                            .background(Color(1, 1, 1))
+                                            .padding(start = 5.dp),
+                                        fontSize = 18.sp,
+                                        color = Color(254, 253, 253, 255)
+                                    )
+                                }
+                                IconButton(
+                                    onClick = {
+                                        isOverMembersEditActive.value = !isOverMembersEditActive.value
+                                    }
+                                )
+                                {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_edit_24),
+                                        contentDescription = "Редактировать",
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(223, 75, 0)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.padding(2.dp))
+                            if (isOverMembersEditActive.value) {
+                                OutlinedTextField(
+                                    value = state.overMembers,
+                                    onValueChange = {
+                                        viewModelClient.onFormEvent(
+                                            ValidationFormEvent.OverMembersChanged(
+                                                it
+                                            )
+                                        )
+                                    },
+                                    placeholder = {
+                                        Text(
+                                            text = "Человек в тарифе за сутки",
+                                            color = Color.Black
+                                        )
+                                    },
+                                    isError = state.overMembersError != null,
+                                    singleLine = false,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            top = 1.dp,
+                                            bottom = 5.dp,
+                                            start = 5.dp,
+                                            end = 5.dp
+                                        ),
+                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                                        unfocusedBorderColor = Color.Black,
+                                        textColor = Color.Black,
+                                        backgroundColor = Color(142, 143, 138)
+                                    ),
+                                    keyboardOptions = KeyboardOptions(
+                                        imeAction = ImeAction.Next,
+                                        keyboardType = KeyboardType.Text,
+                                        capitalization = KeyboardCapitalization.None,
+                                        autoCorrect = true,
+                                    ),
+                                    keyboardActions = KeyboardActions(onNext = {
+                                        focusManager.moveFocus(FocusDirection.Down)
+                                    }),
+                                )
+                            }
+                        }
+                        if (state.overMembersError != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = state.overMembersError!!,
+                                    color = MaterialTheme.colors.error,
+                                    modifier = Modifier.align(Alignment.CenterStart)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+// предоплата
+        item {
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Row() {
+                    Text(
+                        text = "Залог/Предоплата",
                         maxLines = 1,
                         modifier = Modifier
                             .background(Color(41, 41, 41))
@@ -1667,7 +1829,6 @@ fun ClientUpdateScreen(
         }
 
 // цена за сутки
-
         item {
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -1676,7 +1837,7 @@ fun ClientUpdateScreen(
             ) {
                 Row() {
                     Text(
-                        text = "Стоимость суток",
+                        text = "Стоимость тарифа",
                         maxLines = 1,
                         modifier = Modifier
                             .background(Color(41, 41, 41))
@@ -1807,6 +1968,149 @@ fun ClientUpdateScreen(
                 }
             }
         }
+
+// стоимотсь доп места
+        item {
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Row() {
+                    Text(
+                        text = "Стоимость доп места",
+                        maxLines = 1,
+                        modifier = Modifier
+                            .background(Color(41, 41, 41))
+                            .padding(start = 5.dp),
+                        fontSize = 12.sp,
+                        color = Color(223, 75, 0)
+                    )
+                }
+                Row() {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(3.dp)
+                            .background(Color(red = 41, green = 41, blue = 41)),
+                        shape = RoundedCornerShape(5.dp),
+                        elevation = 8.dp,
+                        onClick = {
+
+                        }
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.Start,
+                            modifier = Modifier
+                                .fillMaxWidth(0.70f)
+                                .height(fieldOverPaymentHeight.value.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(223, 75, 0),
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                                .background(Color(red = 41, 41, blue = 41)),
+                        ) {
+
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(red = 41, green = 41, blue = 41))
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.85f)
+                                        .height(50.dp)
+                                        .background(Color(red = 41, green = 41, blue = 41))
+                                ) {
+                                    Text(
+                                        text = state.overPayment,
+                                        maxLines = 1,
+                                        modifier = Modifier
+                                            .align(Alignment.CenterStart)
+                                            .background(Color(1, 1, 1))
+                                            .padding(start = 5.dp),
+                                        fontSize = 18.sp,
+                                        color = Color(254, 253, 253, 255)
+                                    )
+                                }
+                                IconButton(
+                                    onClick = {
+                                        isOverPaymentEditActive.value = !isOverPaymentEditActive.value
+                                    }
+                                )
+                                {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_edit_24),
+                                        contentDescription = "Редактировать",
+                                        modifier = Modifier.size(30.dp),
+                                        tint = Color(223, 75, 0)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.padding(2.dp))
+                            if (isOverPaymentEditActive.value) {
+                                OutlinedTextField(
+                                    value = state.overPayment,
+                                    onValueChange = {
+                                        viewModelClient.onFormEvent(
+                                            ValidationFormEvent.OverPaymentChanged(
+                                                it
+                                            )
+                                        )
+                                    },
+                                    placeholder = {
+                                        Text(
+                                            text = "Стоимость доп места",
+                                            color = Color.Black
+                                        )
+                                    },
+                                    isError = state.overPaymentError != null,
+                                    singleLine = false,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            top = 1.dp,
+                                            bottom = 5.dp,
+                                            start = 5.dp,
+                                            end = 5.dp
+                                        ),
+                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                                        unfocusedBorderColor = Color.Black,
+                                        textColor = Color.Black,
+                                        backgroundColor = Color(142, 143, 138)
+                                    ),
+                                    keyboardOptions = KeyboardOptions(
+                                        imeAction = ImeAction.Next,
+                                        keyboardType = KeyboardType.Text,
+                                        capitalization = KeyboardCapitalization.None,
+                                        autoCorrect = true,
+                                    ),
+                                    keyboardActions = KeyboardActions(onNext = {
+                                        focusManager.moveFocus(FocusDirection.Down)
+                                    }),
+                                )
+                            }
+                        }
+                        if (state.overPaymentError != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = state.overPaymentError!!,
+                                    color = MaterialTheme.colors.error,
+                                    modifier = Modifier.align(Alignment.CenterStart)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
 
         item {
             Spacer(modifier = Modifier.padding(10.dp))
