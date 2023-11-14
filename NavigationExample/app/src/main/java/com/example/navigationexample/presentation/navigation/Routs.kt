@@ -11,5 +11,6 @@ sealed class Routs() {
         val setClientPeriodFromEditClient: String = "set_clients_period_from_edit_client"
         val clientUpdateScreen: String = "client_update_screen"
         val clientDitailsScreen: String = "client_diteils_screen"
+        val clientPaymentScreen: String = "client_payment_screen"
     }
 }

@@ -11,6 +11,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -117,6 +120,8 @@ fun LazyItemScope.ClientItemRow(
 
     val context = LocalContext.current
 
+    var expanded by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -138,7 +143,8 @@ fun LazyItemScope.ClientItemRow(
                     onLongClick = {
 //                        showCustomDialog = !showCustomDialog
                     }),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
 //                .border(3.dp, Color(223,75,0))
 
         )
@@ -224,61 +230,106 @@ fun LazyItemScope.ClientItemRow(
                 }
             }
 
-//            Divider(
-//                color = Color.Black,
-//                modifier = Modifier
-//                    .fillMaxHeight(0.8f)  //fill the max height
-//                    .width(5.dp)
-//            )
 
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(10.dp)
-                    .clickable {
-                        viewModelClient.resetState()
-                        viewModelClient.getClientState(client.phone)
-                        navcontroller.navigate("${Routs.clientUpdateScreen}/${client.phone}")
-                    },
 
+
+            Box {
+                IconButton(onClick = { expanded = true }) {
+                    Icon(Icons.Default.Menu, contentDescription = "Показать меню")
+                }
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
                 ) {
-                Image(
-                    painter = painterResource(R.drawable.baseline_edit_24),
-                    contentDescription = "asd",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .padding(top = 2.dp)
-                        .size(30.dp)
-                        .clip(CircleShape)
-                )
+                    Text(
+                        "Информация",
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .clickable(onClick = {
+                                viewModelClient.getClientState(client.phone)
+                                navcontroller.navigate("${Routs.clientDitailsScreen}/${client.phone}")
+                            })
+                    )
+                    Text(
+                        "Редактировать",
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .clickable(onClick = {
+                                viewModelClient.resetState()
+                                viewModelClient.getClientState(client.phone)
+                                navcontroller.navigate("${Routs.clientUpdateScreen}/${client.phone}")
+                            })
+                    )
+                    Divider()
+                    Text(
+                        "Оплата",
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .clickable(onClick = {
+                                viewModelClient.resetState()
+                                viewModelClient.getClientState(client.phone)
+                                navcontroller.navigate("${Routs.clientPaymentScreen}/${client.phone}")
+                            })
+                    )
+                    Divider()
+                    Text(
+                        "Удалить клиента",
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .clickable(onClick = { showCustomDialog = !showCustomDialog })
+                    )
+                }
+
             }
 
-//            Divider(
-//                color = Color(client.clientColor).copy(alpha = 0.8f),
+
+//            Box(
 //                modifier = Modifier
-//                    .fillMaxHeight(0.8f)  //fill the max height
-//                    .width(5.dp)
-//            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(10.dp)
-                    .clickable {
-                        showCustomDialog = !showCustomDialog
-                    },
-
-                ) {
-                Image(
-                    painter = painterResource(R.drawable.baseline_delete_forever_24),
-                    contentDescription = "asd",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .padding(top = 2.dp)
-                        .size(30.dp)
-                        .clip(CircleShape)
-                )
-            }
+//                    .fillMaxHeight()
+//                    .padding(10.dp)
+//                    .clickable {
+//                        viewModelClient.resetState()
+//                        viewModelClient.getClientState(client.phone)
+//                        navcontroller.navigate("${Routs.clientUpdateScreen}/${client.phone}")
+//                    },
+//
+//                ) {
+//                Image(
+//                    painter = painterResource(R.drawable.baseline_edit_24),
+//                    contentDescription = "asd",
+//                    contentScale = ContentScale.Crop,
+//                    modifier = Modifier
+//                        .padding(top = 2.dp)
+//                        .size(30.dp)
+//                        .clip(CircleShape)
+//                )
+//            }
+//
+//
+//
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxHeight()
+//                    .padding(10.dp)
+//                    .clickable {
+//                        showCustomDialog = !showCustomDialog
+//                    },
+//
+//                ) {
+//                Image(
+//                    painter = painterResource(R.drawable.baseline_delete_forever_24),
+//                    contentDescription = "asd",
+//                    contentScale = ContentScale.Crop,
+//                    modifier = Modifier
+//                        .padding(top = 2.dp)
+//                        .size(30.dp)
+//                        .clip(CircleShape)
+//                )
+//            }
 
         }
     }

@@ -127,6 +127,27 @@ fun NavHostView(
         }
 
 
+        composable(
+            route = "${Routs.clientPaymentScreen}/{client_phone}",
+            arguments = listOf(navArgument("client_phone") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val arguments = requireNotNull(backStackEntry.arguments)
+            arguments.getString("client_phone")?.let { cp ->
+                val clientPhone = cp
+                ClientPaymentScreen(
+                    mainNavController = mainNavController,
+                    viewModelClient = viewModelClient,
+                    viewModelAppatment = viewModelAppatment,
+                    clientPhone = clientPhone
+                )
+            }
+        }
+
+
+
+
+
+
 //        composable("settings") {
 //            SettingsScreen(
 //                onHome = { navController.popBackStack() },

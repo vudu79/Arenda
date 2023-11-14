@@ -22,6 +22,7 @@ import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import com.example.navigationexample.R
 import com.example.navigationexample.data.entity.Client
+import com.example.navigationexample.domain.usecase.validation.ValidationFormState
 import com.example.navigationexample.presentation.navigation.Routs
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -396,7 +397,6 @@ fun ClientDitailsScreen(
                         )
 
                     }
-
                     Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
@@ -633,11 +633,6 @@ fun ClientDitailsScreen(
             }
 
 
-
-
-
-
-
             item {
                 Spacer(modifier = Modifier.padding(10.dp))
 
@@ -659,20 +654,17 @@ fun ClientDitailsScreen(
                                 tint = Color(223, 75, 0)
                             )
                         }
-
                     }
                 }
             }
-
         }
     }
 }
 
-
-fun makeFullName(state: LiveData<Client>): String {
-    val fName = state.value?.firstName ?: ""
-    val sName = state.value?.secondName ?: ""
-    val lName = state.value?.lastName ?: ""
+fun makeFullName(state: ValidationFormState): String {
+    val fName = state.firstName ?: ""
+    val sName = state.secondName ?: ""
+    val lName = state.lastName ?: ""
     return "$fName $sName $lName"
 }
 
@@ -681,40 +673,3 @@ fun dateToString(longDate: Long?): String {
     val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     return longDate?.let { LocalDate.ofEpochDay(it).format(formatter) }.toString()
 }
-
-//
-//@Preview
-//@Composable
-//private fun ClientDitailsScreen() {
-//    ClientDitailsScreen()
-//}
-
-
-@Composable
-fun GradientButton(buttonText: String, onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color.Transparent,
-            contentColor = Color.White,
-            disabledBackgroundColor = Color.LightGray,
-            disabledContentColor = Color.Gray,
-        ),
-        modifier = Modifier
-            .padding(top = 5.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        Color(0xFF292929),
-                        Color(0xFFDF4B00),
-                    )
-                )
-            ),
-    ) {
-        Text(
-            text = buttonText, color = Color.White, modifier = Modifier.padding(10.dp)
-        )
-    }
-}
-
