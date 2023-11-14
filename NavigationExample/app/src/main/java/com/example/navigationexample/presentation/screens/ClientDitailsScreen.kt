@@ -40,6 +40,7 @@ fun ClientDitailsScreen(
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
     viewModelClient.getClient(clientPhone)
     val state = viewModelClient.uiClientState
+
     val inDate = state.value?.inDate ?: 0L
     val outDate = state.value?.outDate ?: 0L
     val ldInDate = LocalDate.ofEpochDay(inDate)
@@ -661,10 +662,10 @@ fun ClientDitailsScreen(
     }
 }
 
-fun makeFullName(state: ValidationFormState): String {
-    val fName = state.firstName ?: ""
-    val sName = state.secondName ?: ""
-    val lName = state.lastName ?: ""
+fun makeFullName(state: LiveData<Client>): String {
+    val fName = state.value?.firstName ?: ""
+    val sName = state.value?.secondName ?: ""
+    val lName = state.value?.lastName ?: ""
     return "$fName $sName $lName"
 }
 

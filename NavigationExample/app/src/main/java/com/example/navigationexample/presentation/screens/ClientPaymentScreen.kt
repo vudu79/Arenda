@@ -46,6 +46,7 @@ import com.example.navigationexample.presentation.screens.common.ColourButton
 import com.example.navigationexample.presentation.screens.common.PhoneField
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -57,13 +58,31 @@ fun ClientPaymentScreen(
     clientPhone: String
 ) {
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
-
     val state = viewModelClient.validateFormState
-
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(ClientStatus.statusList[0]) }
-
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
+
+
+    val inDate = state.dateInLong
+    val outDate = state.dateOutLong
+    val ldInDate = LocalDate.ofEpochDay(inDate)
+    val ldOutDate = LocalDate.ofEpochDay(outDate)
+    val totalDays = ChronoUnit.DAYS.between(ldInDate, ldOutDate).toInt()
+    val payment = if (state.payment == "") 0 else state.payment.toInt()
+    val overPayment = if (state.overPayment == "") 0 else state.overPayment.toInt()
+    val overMembers = if (state.overMembers == "") 0 else state.overMembers.toInt()
+    val members = if (state.members == "") 0 else state.members.toInt()
+
+    val prepayment = if (state.prePayment == "") 0 else state.prePayment.toInt()
+
+    val totalCoast = if (members <= overMembers) {
+        (payment * totalDays)
+    } else {
+        (payment * totalDays) + (members - overMembers) * totalDays * overPayment
+    }
+
+
 
     LaunchedEffect(key1 = context) {
         viewModelClient.validationEvents.collect { event ->
@@ -114,7 +133,7 @@ fun ClientPaymentScreen(
         Divider(
             color = state.color, modifier = Modifier
                 .fillMaxWidth()
-                .width(5.dp)
+                .width(10.dp)
         )
 
 
@@ -137,13 +156,29 @@ fun ClientPaymentScreen(
                         horizontalArrangement = Arrangement.Start,
                     ) {
                         Text(
-                            text = "Внесенный залог/предоплата  ",
+                            text = "Оплата бронирования/предоплата  ",
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
                             fontSize = 19.sp,
                             color = Color(223, 75, 0)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
+
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                    ) {
+                        Text(
+                            text = "Должен - ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(229, 20, 5, 255)
                         )
 
                         Text(
@@ -153,11 +188,32 @@ fun ClientPaymentScreen(
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
 
-                            fontSize = 18.sp,
-                            color = Color(254, 253, 253, 255)
+                            fontSize = 19.sp,
+                            color = Color(255, 255, 255, 255)
                         )
 
+
+                        Text(
+                            text = "Заплатил - ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(52, 241, 10, 255)
+                        )
+
+                        Text(
+                            text = state.prePayment,
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
                     }
+
                     Spacer(modifier = Modifier.padding(10.dp))
 
                     OutlinedTextField(
@@ -208,6 +264,9 @@ fun ClientPaymentScreen(
                             )
                         }
                     }
+                    GradientButton(
+                        "Сохранить"
+                    ) {  }
                 }
             }
 
@@ -333,10 +392,10 @@ fun makeFullName(state: ValidationFormState): String {
 }
 
 
-fun dateToString(longDate: Long?): String {
-    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-    return longDate?.let { LocalDate.ofEpochDay(it).format(formatter) }.toString()
-}
+//fun dateToString(longDate: Long?): String {
+//    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+//    return longDate?.let { LocalDate.ofEpochDay(it).format(formatter) }.toString()
+//}
 
 //
 //@Preview
@@ -357,6 +416,7 @@ fun GradientButton(buttonText: String, onClick: () -> Unit) {
             disabledContentColor = Color.Gray,
         ),
         modifier = Modifier
+            .fillMaxWidth()
             .padding(top = 5.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(
@@ -364,6 +424,7 @@ fun GradientButton(buttonText: String, onClick: () -> Unit) {
                     colors = listOf(
                         Color(0xFF292929),
                         Color(0xFFDF4B00),
+                        Color(0xFF292929),
                     )
                 )
             ),
