@@ -1,6 +1,5 @@
 package com.example.navigationexample.presentation.screens
 
-
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -557,46 +556,46 @@ fun AddClientScreen(
                     }
                 }
 //предопалта
-                item {
-                    OutlinedTextField(
-                        value = state.prePayment,
-                        onValueChange = {
-                            viewModelClient.onFormEvent(ValidationFormEvent.PrePaymentChanged(it))
-                        },
-
-                        placeholder = { Text(text = "Внесенный залог", color = Black) },
-                        isError = state.prePaymentError != null,
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
-                        ),
-
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = Black,
-                            textColor = Black,
-                            backgroundColor = Color(142, 143, 138)
-                        ),
-                        keyboardActions = KeyboardActions(onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }),
-                    )
-
-                    if (state.prePaymentError != null) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            Text(
-                                text = state.prePaymentError!!,
-                                color = MaterialTheme.colors.error,
-                                modifier = Modifier.align(Alignment.BottomStart)
-                            )
-                        }
-                    }
-                }
+//                item {
+//                    OutlinedTextField(
+//                        value = state.prePayment,
+//                        onValueChange = {
+//                            viewModelClient.onFormEvent(ValidationFormEvent.PrePaymentChanged(it))
+//                        },
+//
+//                        placeholder = { Text(text = "Внесенный залог", color = Black) },
+//                        isError = state.prePaymentError != null,
+//                        singleLine = true,
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+//                        keyboardOptions = KeyboardOptions(
+//                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+//                        ),
+//
+//                        colors = TextFieldDefaults.outlinedTextFieldColors(
+//                            unfocusedBorderColor = Black,
+//                            textColor = Black,
+//                            backgroundColor = Color(142, 143, 138)
+//                        ),
+//                        keyboardActions = KeyboardActions(onNext = {
+//                            focusManager.moveFocus(FocusDirection.Down)
+//                        }),
+//                    )
+//
+//                    if (state.prePaymentError != null) {
+//                        Box(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                        ) {
+//                            Text(
+//                                text = state.prePaymentError!!,
+//                                color = MaterialTheme.colors.error,
+//                                modifier = Modifier.align(Alignment.BottomStart)
+//                            )
+//                        }
+//                    }
+//                }
 //колич человек на доп место
 //                item {
 //                    OutlinedTextField(
@@ -737,9 +736,6 @@ fun AddClientScreen(
 
 
 
-
-
-
                 item{
                     Spacer(modifier = Modifier.padding(10.dp))
 
@@ -792,30 +788,3 @@ fun parseDateString(dateS: String): String {
     return date.format(formatter)
 }
 
-
-//                                viewModel.addClient(
-//                                    Client(
-//                                        firstName = viewModel.clientFirstName.value!!,
-//                                        secondName = viewModel.clientSecondName.value,
-//                                        lastName = viewModel.clientLastName.value,
-//                                        phone = "+7${phoneNumber}",
-//                                        documentNunber = "${documentNunber}",
-//                                        documentDitails = "${documentDitails}",
-//                                        inDate = viewModel.dateInLong1.value!!,
-//                                        outDate = viewModel.dateOutLong1.value!!,
-//                                        members = viewModel.members.value?.trim()?.toInt(),
-//                                        prepayment = viewModel.prepayment.value!!.trim().toInt(),
-//                                        payment = viewModel.payment.value!!.trim().toInt(),
-//                                        clientColor = viewModel.colorClient.value!!,
-//                                        sity = viewModel.sity.value,
-//                                        appatment_name = currentAppatment?.name ?: "222"
-//                                    )
-//                                )
-//                                Toast.makeText(
-//                                    context, "Новый клиент зарегестрирован!", Toast.LENGTH_SHORT
-//                                ).show()
-//                                viewModel.getAppatmentClients(currentAppatment?.name ?: "")
-//                                currentAppatment?.name?.let { viewModel.updateDaysMapForCalendar(it) }
-//                                currentAppatment?.name?.let { viewModel.updateApartmentPlanedDays(it) }
-//                                navController.navigate(route = "${Routs.mainScreenClients}?appatment_name=$appatmentName")
-//                            }

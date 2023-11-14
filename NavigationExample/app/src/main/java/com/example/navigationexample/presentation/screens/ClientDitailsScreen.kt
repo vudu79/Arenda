@@ -3,14 +3,19 @@ package com.example.navigationexample.presentation.screens//package com.example.
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
@@ -72,8 +77,7 @@ fun ClientDitailsScreen(
 
         state.value?.let { Color(it.clientColor).copy(alpha = 0.8f) }?.let {
             Divider(
-                color = it,
-                modifier = Modifier
+                color = it, modifier = Modifier
                     .fillMaxWidth()
                     .width(5.dp)
             )
@@ -91,9 +95,7 @@ fun ClientDitailsScreen(
 //        Статус _______________________________________________________________
             item {
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -127,9 +129,7 @@ fun ClientDitailsScreen(
 //        Дата заезда _______________________________________________________________
             item {
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -162,9 +162,7 @@ fun ClientDitailsScreen(
 //        Дата выезда _______________________________________________________________
             item {
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -198,9 +196,7 @@ fun ClientDitailsScreen(
 //        количество дней _______________________________________________________________
             item {
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -236,9 +232,7 @@ fun ClientDitailsScreen(
 //    человек в тарифе
             item {
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -272,9 +266,7 @@ fun ClientDitailsScreen(
 //    человек в тарифе
             item {
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -308,9 +300,7 @@ fun ClientDitailsScreen(
 //    стоимость тарифа
             item {
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -344,9 +334,7 @@ fun ClientDitailsScreen(
 //    стоимость доп места
             item {
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -380,9 +368,7 @@ fun ClientDitailsScreen(
 //    залог
             item {
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -408,7 +394,9 @@ fun ClientDitailsScreen(
                             fontSize = 18.sp,
                             color = Color(254, 253, 253, 255)
                         )
+
                     }
+
                     Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
@@ -416,9 +404,7 @@ fun ClientDitailsScreen(
 //    полная стоимость брони
             item {
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -452,9 +438,7 @@ fun ClientDitailsScreen(
 //    полная стоимость брони с учетом залога
             item {
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -488,9 +472,7 @@ fun ClientDitailsScreen(
 //   телефон клиента
             item {
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -525,9 +507,7 @@ fun ClientDitailsScreen(
             item {
 
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -587,9 +567,7 @@ fun ClientDitailsScreen(
 //   данные для трансфера
             item {
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -623,9 +601,7 @@ fun ClientDitailsScreen(
 //   рекламные ресурс
             item {
                 Column(
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.Top,
@@ -672,12 +648,10 @@ fun ClientDitailsScreen(
                             .wrapContentSize(Alignment.Center),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        IconButton(
-                            onClick = {
+                        IconButton(onClick = {
 //                            viewModelClient.getAppatmentClients(appatmentName)
-                                mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
-                            })
-                        {
+                            mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
+                        }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.baseline_arrow_back_24),
                                 contentDescription = "Назад",
@@ -708,9 +682,39 @@ fun dateToString(longDate: Long?): String {
     return longDate?.let { LocalDate.ofEpochDay(it).format(formatter) }.toString()
 }
 
+//
+//@Preview
+//@Composable
+//private fun ClientDitailsScreen() {
+//    ClientDitailsScreen()
+//}
 
-@Preview
+
 @Composable
-private fun ClientDitailsScreen() {
-    ClientDitailsScreen()
+fun GradientButton(buttonText: String, onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color.Transparent,
+            contentColor = Color.White,
+            disabledBackgroundColor = Color.LightGray,
+            disabledContentColor = Color.Gray,
+        ),
+        modifier = Modifier
+            .padding(top = 5.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        Color(0xFF292929),
+                        Color(0xFFDF4B00),
+                    )
+                )
+            ),
+    ) {
+        Text(
+            text = buttonText, color = Color.White, modifier = Modifier.padding(10.dp)
+        )
+    }
 }
+
