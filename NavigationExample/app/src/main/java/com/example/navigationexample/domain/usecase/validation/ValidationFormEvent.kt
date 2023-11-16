@@ -1,6 +1,7 @@
 package com.example.navigationexample.domain.usecase.validation
 
 import androidx.compose.ui.graphics.Color
+import com.example.navigationexample.constants.SourceEvent
 
 sealed class ValidationFormEvent {
     data class StatusChanged(val status: String) : ValidationFormEvent()
@@ -30,12 +31,12 @@ sealed class ValidationFormEvent {
     data class refererChanged(val referer: String) : ValidationFormEvent()
     data class ColorChanged(val color: Color) : ValidationFormEvent()
     data class onSubmitInsert(val apartmentName: String) : ValidationFormEvent()
-    data class onSubmitUpdate(val apartmentName: String) : ValidationFormEvent()
+    data class onSubmitUpdate(val source: SourceEvent) : ValidationFormEvent()
 }
 
 
 sealed class ValidatAllFieldsResultEvent{
     object InsertSuccess: ValidatAllFieldsResultEvent()
-    object UpdateSuccess: ValidatAllFieldsResultEvent()
+    class UpdateSuccess(var source: SourceEvent): ValidatAllFieldsResultEvent()
     class UpdateWrong(var hasErrorList: List<ValidationResult?>) : ValidatAllFieldsResultEvent()
 }

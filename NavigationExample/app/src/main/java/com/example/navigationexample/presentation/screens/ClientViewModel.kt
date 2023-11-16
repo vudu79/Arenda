@@ -14,6 +14,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.navigationexample.constants.Constans
+import com.example.navigationexample.constants.SourceEvent
 import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
 import com.example.navigationexample.data.repository.DaysRepositoryImpl
@@ -300,7 +301,7 @@ class ClientViewModel @Inject constructor(
             }
 
             is ValidationFormEvent.onSubmitUpdate -> {
-                submitDataUpdate()
+                submitDataUpdate(event.source)
             }
         }
     }
@@ -411,7 +412,7 @@ class ClientViewModel @Inject constructor(
         }
     }
 
-    private fun submitDataUpdate() {
+    private fun submitDataUpdate(source : SourceEvent) {
         val firstNameResult = nameValidationField.execute(validateFormState.firstName, true)
         val dateInStringResult = dateStringValidationField.execute(validateFormState.dateInString)
         val dateOutStringResult = dateStringValidationField.execute(validateFormState.dateOutString)
@@ -520,7 +521,7 @@ class ClientViewModel @Inject constructor(
                     )
                 )
             }
-            validationEventChannel.send(ValidatAllFieldsResultEvent.UpdateSuccess)
+            validationEventChannel.send(ValidatAllFieldsResultEvent.UpdateSuccess(source))
         }
     }
 }

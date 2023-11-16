@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.navigationexample.R
 import com.example.navigationexample.constants.Constans
+import com.example.navigationexample.constants.SourceEvent
 import com.example.navigationexample.domain.models.ClientStatus
 import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
 import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
@@ -2139,7 +2140,7 @@ fun ClientUpdateScreen(
                     }
                     IconButton(
                         onClick = {
-                            viewModelClient.onFormEvent(ValidationFormEvent.onSubmitUpdate(""))
+                            viewModelClient.onFormEvent(ValidationFormEvent.onSubmitUpdate(SourceEvent.CLIENTUPDATE))
                         }
                     )
                     {

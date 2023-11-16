@@ -17,3 +17,8 @@ sealed class Constans {
         )
     }
 }
+
+
+enum class SourceEvent {
+    CLIENTUPDATE, PAYMENTUPDATE
+}
