@@ -3,12 +3,8 @@ package com.example.navigationexample.presentation.screens
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -28,24 +24,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import com.example.navigationexample.R
-import com.example.navigationexample.constants.Constans
-import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.domain.models.ClientStatus
 import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
 import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
 import com.example.navigationexample.domain.usecase.validation.ValidationFormState
 import com.example.navigationexample.presentation.navigation.Routs
-import com.example.navigationexample.presentation.screens.common.ColourButton
-import com.example.navigationexample.presentation.screens.common.PhoneField
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 
@@ -146,7 +134,7 @@ fun ClientPaymentScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-//    залог
+//    оплата бронирования
             item {
                 Column(
                     horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()

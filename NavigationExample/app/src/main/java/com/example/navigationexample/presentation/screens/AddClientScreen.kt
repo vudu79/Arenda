@@ -555,47 +555,47 @@ fun AddClientScreen(
                         }
                     }
                 }
-//предопалта
-//                item {
-//                    OutlinedTextField(
-//                        value = state.prePayment,
-//                        onValueChange = {
-//                            viewModelClient.onFormEvent(ValidationFormEvent.PrePaymentChanged(it))
-//                        },
-//
-//                        placeholder = { Text(text = "Внесенный залог", color = Black) },
-//                        isError = state.prePaymentError != null,
-//                        singleLine = true,
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-//                        keyboardOptions = KeyboardOptions(
-//                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
-//                        ),
-//
-//                        colors = TextFieldDefaults.outlinedTextFieldColors(
-//                            unfocusedBorderColor = Black,
-//                            textColor = Black,
-//                            backgroundColor = Color(142, 143, 138)
-//                        ),
-//                        keyboardActions = KeyboardActions(onNext = {
-//                            focusManager.moveFocus(FocusDirection.Down)
-//                        }),
-//                    )
-//
-//                    if (state.prePaymentError != null) {
-//                        Box(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                        ) {
-//                            Text(
-//                                text = state.prePaymentError!!,
-//                                color = MaterialTheme.colors.error,
-//                                modifier = Modifier.align(Alignment.BottomStart)
-//                            )
-//                        }
-//                    }
-//                }
+//Оплата бронирования
+                item {
+                    OutlinedTextField(
+                        value = state.prePayment,
+                        onValueChange = {
+                            viewModelClient.onFormEvent(ValidationFormEvent.PrePaymentChanged(it))
+                        },
+
+                        placeholder = { Text(text = "Оплата бронирования/предоплата (%)", color = Black) },
+                        isError = state.prePaymentError != null,
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                        ),
+
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black,
+                            textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
+                    )
+
+                    if (state.prePaymentError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.prePaymentError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                }
 //колич человек на доп место
 //                item {
 //                    OutlinedTextField(

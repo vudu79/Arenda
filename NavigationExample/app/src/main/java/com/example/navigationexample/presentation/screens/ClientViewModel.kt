@@ -90,14 +90,23 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(documentNamber = client.documentNumber)
         validateFormState = validateFormState.copy(documentDitails = client.documentDitails)
         validateFormState = validateFormState.copy(members = client.members.toString())
-        validateFormState = validateFormState.copy(overMembers =  client.overMembers.toString())
-        validateFormState = validateFormState.copy(dateInString = LocalDate.ofEpochDay(client.inDate).toString())
+        validateFormState = validateFormState.copy(overMembers = client.overMembers.toString())
+        validateFormState =
+            validateFormState.copy(dateInString = LocalDate.ofEpochDay(client.inDate).toString())
         validateFormState = validateFormState.copy(dateInLong = client.inDate)
-        validateFormState = validateFormState.copy(dateOutString = LocalDate.ofEpochDay(client.outDate).toString())
+        validateFormState =
+            validateFormState.copy(dateOutString = LocalDate.ofEpochDay(client.outDate).toString())
         validateFormState = validateFormState.copy(dateOutLong = client.outDate)
         validateFormState = validateFormState.copy(payment = client.payment.toString())
         validateFormState = validateFormState.copy(overPayment = client.overPayment.toString())
         validateFormState = validateFormState.copy(prePayment = client.prepayment.toString())
+
+        validateFormState = validateFormState.copy(completedPayment = client.completedPayment)
+        validateFormState =
+            validateFormState.copy(completedOverPayment = client.completedOverPayment)
+        validateFormState = validateFormState.copy(completedPrePayment = client.completedPrePayment)
+        validateFormState = validateFormState.copy(pledge = client.pledge)
+
         validateFormState = validateFormState.copy(transferInfo = client.transferInfo)
         validateFormState = validateFormState.copy(referer = client.referer)
         validateFormState = validateFormState.copy(color = Color(client.clientColor))
@@ -180,10 +189,14 @@ class ClientViewModel @Inject constructor(
         val ee = daysRepository.updateClientDays(
             result = result,
             client = client,
-            onStart = { _isLoadingForUpdateClient.value = true
-                Log.d("myTag", "старт")},
-            onCompletion = { _isLoadingForUpdateClient.value = false
-                Log.d("myTag", "финиш")},
+            onStart = {
+                _isLoadingForUpdateClient.value = true
+                Log.d("myTag", "старт")
+            },
+            onCompletion = {
+                _isLoadingForUpdateClient.value = false
+                Log.d("myTag", "финиш")
+            },
             onError = { Log.d("myTag", "Ошибка обновления дней клиента") },
         ).collect()
     }
@@ -365,7 +378,13 @@ class ClientViewModel @Inject constructor(
                     overMembers = validateFormState.overMembers.trim().toInt(),
                     prepayment = validateFormState.prePayment.trim().toInt(),
                     payment = validateFormState.payment.trim().toInt(),
-                    overPayment=validateFormState.overPayment.trim().toInt(),
+                    overPayment = validateFormState.overPayment.trim().toInt(),
+
+                    completedPayment = validateFormState.completedPayment,
+                    completedPrePayment = validateFormState.completedPrePayment,
+                    completedOverPayment = validateFormState.completedOverPayment,
+                    pledge = validateFormState.pledge,
+
                     clientColor = validateFormState.color.toArgb(),
                     transferInfo = validateFormState.transferInfo,
                     referer = validateFormState.referer,
@@ -473,6 +492,12 @@ class ClientViewModel @Inject constructor(
                         prepayment = validateFormState.prePayment.trim().toInt(),
                         payment = validateFormState.payment.trim().toInt(),
                         overPayment = validateFormState.overPayment.trim().toInt(),
+
+                        completedPayment = validateFormState.completedPayment,
+                        completedPrePayment = validateFormState.completedPrePayment,
+                        completedOverPayment = validateFormState.completedOverPayment,
+                        pledge = validateFormState.pledge,
+
                         clientColor = validateFormState.color.toArgb(),
                         transferInfo = validateFormState.transferInfo,
                         referer = validateFormState.referer,

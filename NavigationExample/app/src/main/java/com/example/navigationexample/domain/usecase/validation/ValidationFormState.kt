@@ -38,6 +38,12 @@ data class ValidationFormState(
     var paymentError: String? = null,
     var overPayment: String = "",
     var overPaymentError: String? = null,
+
+    var completedPrePayment: Int = 0,
+    var completedPayment: Int= 0,
+    var completedOverPayment: Int=0,
+    var pledge: Int=0,
+
     var transferInfo: String? = "",
     var transferInfoError: String? = null,
     var referer: String? = "",

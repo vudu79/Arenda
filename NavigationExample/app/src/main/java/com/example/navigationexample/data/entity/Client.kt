@@ -62,6 +62,18 @@ class Client {
     @ColumnInfo(name = "over_payment")
     var overPayment: Int = 0
 
+    @ColumnInfo(name = "completed_pre_payment")
+    var completedPrePayment: Int = 0
+
+    @ColumnInfo(name = "completed_payment")
+    var completedPayment: Int = 0
+
+    @ColumnInfo(name = "completed_over_payment")
+    var completedOverPayment: Int = 0
+
+    @ColumnInfo(name = "pledge")
+    var pledge: Int = 0
+
     @ColumnInfo(name = "client_color")
     var clientColor: Int = 0
 
@@ -104,6 +116,12 @@ class Client {
         prepayment: Int,
         payment: Int,
         overPayment: Int,
+
+        completedPrePayment: Int,
+        completedPayment: Int,
+        completedOverPayment: Int,
+        pledge:Int,
+
         clientColor: Int,
         transferInfo: String?,
         referer: String?,
@@ -123,6 +141,12 @@ class Client {
         this.prepayment = prepayment
         this.payment = payment
         this.overPayment = overPayment
+
+        this.completedPrePayment = completedPrePayment
+        this.completedPayment = completedPayment
+        this.completedOverPayment = completedOverPayment
+        this.pledge = pledge
+
         this.clientColor = clientColor
         this.transferInfo = transferInfo
         this.referer = referer
@@ -145,6 +169,12 @@ class Client {
         prepayment: Int,
         payment: Int,
         overPayment: Int,
+
+        completedPrePayment: Int,
+        completedPayment: Int,
+        completedOverPayment: Int,
+        pledge: Int,
+
         clientColor: Int,
         transferInfo: String?,
         referer: String?,
@@ -165,6 +195,12 @@ class Client {
         this.prepayment = prepayment
         this.payment = payment
         this.overPayment = overPayment
+
+        this.completedPrePayment = completedPrePayment
+        this.completedPayment = completedPayment
+        this.completedOverPayment = completedOverPayment
+        this.pledge = pledge
+
         this.clientColor = clientColor
         this.transferInfo = transferInfo
         this.referer = referer
