@@ -19,6 +19,13 @@ sealed class ValidationFormEvent {
     data class PrePaymentChanged(val prepayment: String) : ValidationFormEvent()
     data class PaymentChanged(val payment: String) : ValidationFormEvent()
     data class OverPaymentChanged(val overPayment: String) : ValidationFormEvent()
+
+
+    data class CompletedPrePaymentChanged(val completedPrepayment: String) : ValidationFormEvent()
+    data class CompletedPaymentChanged(val completedPayment: String) : ValidationFormEvent()
+    data class CompletedOverPaymentChanged(val completedOverPayment: String) : ValidationFormEvent()
+
+
     data class transferInfoChanged(val transferInfo: String) : ValidationFormEvent()
     data class refererChanged(val referer: String) : ValidationFormEvent()
     data class ColorChanged(val color: Color) : ValidationFormEvent()

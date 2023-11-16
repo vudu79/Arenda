@@ -101,11 +101,11 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(overPayment = client.overPayment.toString())
         validateFormState = validateFormState.copy(prePayment = client.prepayment.toString())
 
-        validateFormState = validateFormState.copy(completedPayment = client.completedPayment)
+        validateFormState = validateFormState.copy(completedPayment = client.completedPayment.toString())
         validateFormState =
-            validateFormState.copy(completedOverPayment = client.completedOverPayment)
-        validateFormState = validateFormState.copy(completedPrePayment = client.completedPrePayment)
-        validateFormState = validateFormState.copy(pledge = client.pledge)
+            validateFormState.copy(completedOverPayment = client.completedOverPayment.toString())
+        validateFormState = validateFormState.copy(completedPrePayment = client.completedPrePayment.toString())
+        validateFormState = validateFormState.copy(pledge = client.pledge.toString())
 
         validateFormState = validateFormState.copy(transferInfo = client.transferInfo)
         validateFormState = validateFormState.copy(referer = client.referer)
@@ -268,6 +268,21 @@ class ClientViewModel @Inject constructor(
                 validateFormState = validateFormState.copy(overPayment = event.overPayment)
             }
 
+
+            is ValidationFormEvent.CompletedPrePaymentChanged -> {
+                validateFormState = validateFormState.copy(completedPrePayment = event.completedPrepayment)
+            }
+
+            is ValidationFormEvent.CompletedPaymentChanged -> {
+                validateFormState = validateFormState.copy(completedPayment = event.completedPayment)
+            }
+
+            is ValidationFormEvent.CompletedOverPaymentChanged -> {
+                validateFormState = validateFormState.copy(completedOverPayment = event.completedOverPayment)
+            }
+
+
+
             is ValidationFormEvent.transferInfoChanged -> {
                 validateFormState = validateFormState.copy(transferInfo = event.transferInfo)
             }
@@ -380,10 +395,10 @@ class ClientViewModel @Inject constructor(
                     payment = validateFormState.payment.trim().toInt(),
                     overPayment = validateFormState.overPayment.trim().toInt(),
 
-                    completedPayment = validateFormState.completedPayment,
-                    completedPrePayment = validateFormState.completedPrePayment,
-                    completedOverPayment = validateFormState.completedOverPayment,
-                    pledge = validateFormState.pledge,
+                    completedPayment = validateFormState.completedPayment.trim().toInt(),
+                    completedPrePayment = validateFormState.completedPrePayment.trim().toInt(),
+                    completedOverPayment = validateFormState.completedOverPayment.trim().toInt(),
+                    pledge = validateFormState.pledge.trim().toInt(),
 
                     clientColor = validateFormState.color.toArgb(),
                     transferInfo = validateFormState.transferInfo,
@@ -493,10 +508,10 @@ class ClientViewModel @Inject constructor(
                         payment = validateFormState.payment.trim().toInt(),
                         overPayment = validateFormState.overPayment.trim().toInt(),
 
-                        completedPayment = validateFormState.completedPayment,
-                        completedPrePayment = validateFormState.completedPrePayment,
-                        completedOverPayment = validateFormState.completedOverPayment,
-                        pledge = validateFormState.pledge,
+                        completedPayment = validateFormState.completedPayment.trim().toInt(),
+                        completedPrePayment = validateFormState.completedPrePayment.trim().toInt(),
+                        completedOverPayment = validateFormState.completedOverPayment.trim().toInt(),
+                        pledge = validateFormState.pledge.trim().toInt(),
 
                         clientColor = validateFormState.color.toArgb(),
                         transferInfo = validateFormState.transferInfo,

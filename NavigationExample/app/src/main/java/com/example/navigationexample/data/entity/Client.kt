@@ -62,6 +62,7 @@ class Client {
     @ColumnInfo(name = "over_payment")
     var overPayment: Int = 0
 
+
     @ColumnInfo(name = "completed_pre_payment")
     var completedPrePayment: Int = 0
 
@@ -73,6 +74,8 @@ class Client {
 
     @ColumnInfo(name = "pledge")
     var pledge: Int = 0
+
+
 
     @ColumnInfo(name = "client_color")
     var clientColor: Int = 0

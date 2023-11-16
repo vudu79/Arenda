@@ -50,14 +50,14 @@ fun ClientDitailsScreen(
     val overPayment = state.value?.overPayment ?: 0
     val overMembers = state.value?.overMembers ?: 0
     val members = state.value?.members ?: 0
-    val prepayment = state.value?.prepayment ?: 0
+    val prePaymentPercent = state.value?.prepayment ?: 0
 
     val totalCoast = if (members <= overMembers) {
         (payment * totalDays)
     } else {
         (payment * totalDays) + (members - overMembers) * totalDays * overPayment
     }
-
+    val prepayment = (totalCoast / 100) * prePaymentPercent
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -377,7 +377,7 @@ fun ClientDitailsScreen(
                         horizontalArrangement = Arrangement.Start,
                     ) {
                         Text(
-                            text = "Внесенный залог/предоплата  ",
+                            text = "Размер залог/предоплата  ",
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))

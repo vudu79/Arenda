@@ -61,15 +61,16 @@ fun ClientPaymentScreen(
     val overPayment = if (state.overPayment == "") 0 else state.overPayment.toInt()
     val overMembers = if (state.overMembers == "") 0 else state.overMembers.toInt()
     val members = if (state.members == "") 0 else state.members.toInt()
+    val prePaymentPercent = if (state.prePayment == "") 0 else state.prePayment.toInt()
+    val completedPrePayment =if (state.completedPrePayment == "") 0 else state.completedPrePayment.toInt()
 
-    val prepayment = if (state.prePayment == "") 0 else state.prePayment.toInt()
 
     val totalCoast = if (members <= overMembers) {
         (payment * totalDays)
     } else {
         (payment * totalDays) + (members - overMembers) * totalDays * overPayment
     }
-
+    val prePayment = (totalCoast / 100) * prePaymentPercent - completedPrePayment
 
 
     LaunchedEffect(key1 = context) {
@@ -170,7 +171,7 @@ fun ClientPaymentScreen(
                         )
 
                         Text(
-                            text = state.prePayment.toString(),
+                            text = prePayment.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -192,7 +193,7 @@ fun ClientPaymentScreen(
                         )
 
                         Text(
-                            text = state.prePayment,
+                            text = if (state.completedPrePayment == "") "0" else state.completedPrePayment,
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -205,16 +206,16 @@ fun ClientPaymentScreen(
                     Spacer(modifier = Modifier.padding(10.dp))
 
                     OutlinedTextField(
-                        value = state.prePayment,
+                        value = state.completedPrePayment.toString(),
                         onValueChange = {
                             viewModelClient.onFormEvent(
-                                ValidationFormEvent.PrePaymentChanged(
+                                ValidationFormEvent.CompletedPrePaymentChanged(
                                     it
                                 )
                             )
                         },
                         placeholder = { Text(text = "Залог", color = Color.Black) },
-                        isError = state.prePaymentError != null,
+                        isError = state.completedPrePaymentError != null,
                         singleLine = false,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -231,7 +232,7 @@ fun ClientPaymentScreen(
                         ),
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Next,
-                            keyboardType = KeyboardType.Text,
+                            keyboardType = KeyboardType.Number,
                             capitalization = KeyboardCapitalization.None,
                             autoCorrect = true,
                         ),
@@ -240,13 +241,13 @@ fun ClientPaymentScreen(
                         }),
                     )
 
-                    if (state.prePaymentError != null) {
+                    if (state.completedPrePaymentError != null) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
                             Text(
-                                text = state.prePaymentError!!,
+                                text = state.completedPrePaymentError!!,
                                 color = MaterialTheme.colors.error,
                                 modifier = Modifier.align(Alignment.BottomStart)
                             )
