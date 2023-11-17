@@ -6,11 +6,11 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
-class PaymentValidation @Inject constructor() {
+class PricePerDayValidation @Inject constructor() {
     fun execute(state: ValidationFormState): ValidationResult {
 
-        val payment = state.payment.trim()
-        val prePayment = state.prePayment.trim()
+        val payment = state.pricePerDay.trim()
+        val prePayment = state.pricePerDay.trim()
         val paymentInt = payment.trim().toInt()
         val prePaymentInt = prePayment.trim().toInt()
 

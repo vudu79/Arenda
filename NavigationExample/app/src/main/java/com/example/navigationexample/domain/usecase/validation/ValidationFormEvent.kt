@@ -18,7 +18,7 @@ sealed class ValidationFormEvent {
     data class InLongDateChanged(val inDateLong: Long) : ValidationFormEvent()
     data class OutLongDateChanged(val outDateLong: Long) : ValidationFormEvent()
     data class PrePaymentChanged(val prepayment: String) : ValidationFormEvent()
-    data class PaymentChanged(val payment: String) : ValidationFormEvent()
+    data class PricePerDayChanged(val pricePerDay: String) : ValidationFormEvent()
     data class OverPaymentChanged(val overPayment: String) : ValidationFormEvent()
 
 

@@ -3,26 +3,19 @@ package com.example.navigationexample.presentation.screens//package com.example.
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import com.example.navigationexample.R
 import com.example.navigationexample.data.entity.Client
-import com.example.navigationexample.domain.usecase.validation.ValidationFormState
 import com.example.navigationexample.presentation.navigation.Routs
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -46,11 +39,11 @@ fun ClientDitailsScreen(
     val ldInDate = LocalDate.ofEpochDay(inDate)
     val ldOutDate = LocalDate.ofEpochDay(outDate)
     val totalDays = ChronoUnit.DAYS.between(ldInDate, ldOutDate).toInt()
-    val payment = state.value?.payment ?: 0
+    val payment = state.value?.pricePerDay ?: 0
     val overPayment = state.value?.overPayment ?: 0
     val overMembers = state.value?.overMembers ?: 0
     val members = state.value?.members ?: 0
-    val prePaymentPercent = state.value?.prepayment ?: 0
+    val prePaymentPercent = state.value?.prePaymentPercent ?: 0
 
     val totalCoast = if (members <= overMembers) {
         (payment * totalDays)
@@ -319,7 +312,7 @@ fun ClientDitailsScreen(
                         )
 
                         Text(
-                            text = state.value?.payment.toString(),
+                            text = state.value?.pricePerDay.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -387,7 +380,7 @@ fun ClientDitailsScreen(
                         )
 
                         Text(
-                            text = state.value?.prepayment.toString(),
+                            text = state.value?.prePaymentPercent.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))

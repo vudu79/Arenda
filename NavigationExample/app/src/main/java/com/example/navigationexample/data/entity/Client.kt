@@ -53,11 +53,20 @@ class Client {
     @ColumnInfo(name = "out_date")
     var outDate: Long = 0
 
-    @ColumnInfo(name = "prepayment")
-    var prepayment: Int = 0
+    @ColumnInfo(name = "days_of_stay")
+    var daysOfStay: Int = 0
 
-    @ColumnInfo(name = "payment")
-    var payment: Int = 0
+    @ColumnInfo(name = "price_of_stay")
+    var priceOfStay: Int = 0
+
+    @ColumnInfo(name = "prepayment")
+    var prePayment: Int = 0
+
+    @ColumnInfo(name = "prepayment_percent")
+    var prePaymentPercent: Int = 0
+
+    @ColumnInfo(name = "price_per_day")
+    var pricePerDay: Int = 0
 
     @ColumnInfo(name = "over_payment")
     var overPayment: Int = 0
@@ -114,10 +123,13 @@ class Client {
         documentDitails: String,
         inDate: Long,
         outDate: Long,
+        daysOfStay:Int,
+        priceOfStay:Int,
         members: Int,
         overMembers:Int,
-        prepayment: Int,
-        payment: Int,
+        prePaymentPercent: Int,
+        prePayment: Int,
+        pricePerDay: Int,
         overPayment: Int,
 
         completedPrePayment: Int,
@@ -141,8 +153,11 @@ class Client {
         this.overMembers = overMembers
         this.inDate = inDate
         this.outDate = outDate
-        this.prepayment = prepayment
-        this.payment = payment
+        this.daysOfStay = daysOfStay
+        this.priceOfStay = priceOfStay
+        this.prePaymentPercent = prePaymentPercent
+        this.prePayment = prePayment
+        this.pricePerDay = pricePerDay
         this.overPayment = overPayment
 
         this.completedPrePayment = completedPrePayment
@@ -167,10 +182,13 @@ class Client {
         documentDitails: String,
         inDate: Long,
         outDate: Long,
+        daysOfStay:Int,
+        priceOfStay:Int,
         members: Int,
         overMembers: Int,
-        prepayment: Int,
-        payment: Int,
+        prePaymentPercent: Int,
+        prePayment: Int,
+        pricePerDay: Int,
         overPayment: Int,
 
         completedPrePayment: Int,
@@ -195,8 +213,11 @@ class Client {
         this.overMembers = overMembers
         this.inDate = inDate
         this.outDate = outDate
-        this.prepayment = prepayment
-        this.payment = payment
+        this.daysOfStay = daysOfStay
+        this.priceOfStay = priceOfStay
+        this.prePaymentPercent = prePaymentPercent
+        this.prePayment = prePayment
+        this.pricePerDay = pricePerDay
         this.overPayment = overPayment
 
         this.completedPrePayment = completedPrePayment

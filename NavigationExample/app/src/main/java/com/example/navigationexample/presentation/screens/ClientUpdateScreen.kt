@@ -1885,7 +1885,7 @@ fun ClientUpdateScreen(
                                         .background(Color(red = 41, green = 41, blue = 41))
                                 ) {
                                     Text(
-                                        text = state.payment,
+                                        text = state.pricePerDay,
                                         maxLines = 1,
                                         modifier = Modifier
                                             .align(Alignment.CenterStart)
@@ -1912,10 +1912,10 @@ fun ClientUpdateScreen(
                             Spacer(modifier = Modifier.padding(2.dp))
                             if (isPaymentEditActive.value) {
                                 OutlinedTextField(
-                                    value = state.payment,
+                                    value = state.pricePerDay,
                                     onValueChange = {
                                         viewModelClient.onFormEvent(
-                                            ValidationFormEvent.PaymentChanged(
+                                            ValidationFormEvent.PricePerDayChanged(
                                                 it
                                             )
                                         )
@@ -1926,7 +1926,7 @@ fun ClientUpdateScreen(
                                             color = Color.Black
                                         )
                                     },
-                                    isError = state.paymentError != null,
+                                    isError = state.pricePerDayError != null,
                                     singleLine = false,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -1953,13 +1953,13 @@ fun ClientUpdateScreen(
                                 )
                             }
                         }
-                        if (state.paymentError != null) {
+                        if (state.pricePerDayError != null) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
                             ) {
                                 Text(
-                                    text = state.paymentError!!,
+                                    text = state.pricePerDayError!!,
                                     color = MaterialTheme.colors.error,
                                     modifier = Modifier.align(Alignment.CenterStart)
                                 )

@@ -519,12 +519,12 @@ fun AddClientScreen(
 // стоимость тарифа
                 item {
                     OutlinedTextField(
-                        value = state.payment,
+                        value = state.pricePerDay,
                         onValueChange = {
-                            viewModelClient.onFormEvent(ValidationFormEvent.PaymentChanged(it))
+                            viewModelClient.onFormEvent(ValidationFormEvent.PricePerDayChanged(it))
                         },
                         placeholder = { Text(text = "Стоимость тарифа", color = Black) },
-                        isError = state.paymentError != null,
+                        isError = state.pricePerDayError != null,
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -542,13 +542,13 @@ fun AddClientScreen(
                         }),
                     )
 
-                    if (state.paymentError != null) {
+                    if (state.pricePerDayError != null) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
                             Text(
-                                text = state.paymentError!!,
+                                text = state.pricePerDayError!!,
                                 color = MaterialTheme.colors.error,
                                 modifier = Modifier.align(Alignment.BottomStart)
                             )
@@ -558,13 +558,13 @@ fun AddClientScreen(
 //Оплата бронирования
                 item {
                     OutlinedTextField(
-                        value = state.prePayment,
+                        value = state.prePaymentPercent,
                         onValueChange = {
                             viewModelClient.onFormEvent(ValidationFormEvent.PrePaymentChanged(it))
                         },
 
                         placeholder = { Text(text = "Оплата бронирования/предоплата (%)", color = Black) },
-                        isError = state.prePaymentError != null,
+                        isError = state.prePaymentPercentError != null,
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -583,13 +583,13 @@ fun AddClientScreen(
                         }),
                     )
 
-                    if (state.prePaymentError != null) {
+                    if (state.prePaymentPercentError != null) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
                             Text(
-                                text = state.prePaymentError!!,
+                                text = state.prePaymentPercentError!!,
                                 color = MaterialTheme.colors.error,
                                 modifier = Modifier.align(Alignment.BottomStart)
                             )

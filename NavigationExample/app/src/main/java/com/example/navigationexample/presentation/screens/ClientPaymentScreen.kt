@@ -48,36 +48,11 @@ fun ClientPaymentScreen(
 ) {
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
     val state = viewModelClient.validateFormState
+    val clientState = viewModelClient.uiClientState
     val (selectedOption, onOptionSelected) = remember { mutableStateOf(ClientStatus.statusList[0]) }
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
-
-    val inDate = state.dateInLong
-    val outDate = state.dateOutLong
-    val ldInDate = LocalDate.ofEpochDay(inDate)
-    val ldOutDate = LocalDate.ofEpochDay(outDate)
-    val totalDays = ChronoUnit.DAYS.between(ldInDate, ldOutDate).toInt()
-    val payment = if (state.payment == "") 0 else state.payment.toInt()
-    val overPayment = if (state.overPayment == "") 0 else state.overPayment.toInt()
-    val overMembers = if (state.overMembers == "") 0 else state.overMembers.toInt()
-    val members = if (state.members == "") 0 else state.members.toInt()
-    val prePaymentPercent = if (state.prePayment == "") 0 else state.prePayment.toInt()
-    val completedPrePayment =
-        if (state.completedPrePayment == "") 0 else state.completedPrePayment.toInt()
-    val completedPayment = if (state.completedPayment == "") 0 else state.completedPayment.toInt()
-
-
-    val totalCoast = if (members <= overMembers) {
-        (payment * totalDays)
-    } else {
-        (payment * totalDays) + (members - overMembers) * totalDays * overPayment
-    }
-
-    val prePayment = (totalCoast / 100) * prePaymentPercent - completedPrePayment
-
-    val totalCoastFromPrePayment = totalCoast - completedPrePayment
-    val totalCoastFromPrePaymentAndCompleted = totalCoastFromPrePayment - completedPayment
 
     LaunchedEffect(key1 = context) {
         viewModelClient.validationEvents.collect { event ->
@@ -103,8 +78,6 @@ fun ClientPaymentScreen(
             }
         }
     }
-
-
 
 
     Column(
@@ -177,7 +150,7 @@ fun ClientPaymentScreen(
                         )
 
                         Text(
-                            text = prePayment.toString(),
+                            text = state.prePayment.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -199,7 +172,7 @@ fun ClientPaymentScreen(
                         )
 
                         Text(
-                            text = if (state.completedPrePayment == "") "0" else state.completedPrePayment,
+                            text = clientState.value?.completedPrePayment.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -304,7 +277,7 @@ fun ClientPaymentScreen(
                         )
 
                         Text(
-                            text = totalCoastFromPrePaymentAndCompleted.toString(),
+                            text = clientState.value?.priceOfStay.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))

@@ -9,9 +9,9 @@ import javax.inject.Inject
 class PrePaymentValidation @Inject constructor() {
     fun execute(state: ValidationFormState): ValidationResult {
 
-        val payment = state.payment.trim()
+        val pricePerDay = state.pricePerDay.trim()
         val prePayment = state.prePayment.trim()
-        val paymentInt = payment.trim().toInt()
+        val paymentInt = pricePerDay.trim().toInt()
         val prePaymentInt = prePayment.trim().toInt()
 
         val inDate = state.dateInLong ?: 0L
@@ -23,7 +23,7 @@ class PrePaymentValidation @Inject constructor() {
 
         val hasOnliDigits = prePayment.all { it.isDigit() }
 
-        if (payment.isEmpty()) {
+        if (pricePerDay.isEmpty()) {
             return ValidationResult(
                 successful = false,
                 errorMessage = "Это обязательное поле"

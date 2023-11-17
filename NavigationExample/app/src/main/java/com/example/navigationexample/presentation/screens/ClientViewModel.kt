@@ -29,15 +29,16 @@ import com.example.navigationexample.domain.usecase.validation.validators.Docume
 import com.example.navigationexample.domain.usecase.validation.validators.MembersValidation
 import com.example.navigationexample.domain.usecase.validation.validators.NameValidation
 import com.example.navigationexample.domain.usecase.validation.validators.OverPaymentValidation
-import com.example.navigationexample.domain.usecase.validation.validators.PaymentValidation
 import com.example.navigationexample.domain.usecase.validation.validators.PhoneValidation
 import com.example.navigationexample.domain.usecase.validation.validators.PrePaymentValidation
+import com.example.navigationexample.domain.usecase.validation.validators.PricePerDayValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 
@@ -51,7 +52,7 @@ class ClientViewModel @Inject constructor(
     private val documentNumberValidationField: DocumentNumber = DocumentNumber(),
     private val documentDitailsValidationField: DocumentDitails = DocumentDitails(),
     private val membersValidationField: MembersValidation = MembersValidation(),
-    private val paymentValidationField: PaymentValidation = PaymentValidation(),
+    private val pricePerDayValidationField: PricePerDayValidation = PricePerDayValidation(),
     private val prePaymentValidationField: PrePaymentValidation = PrePaymentValidation(),
     private val overPaymentValidation: OverPaymentValidation = OverPaymentValidation(),
     private val dateStringValidationField: DateStringValidation = DateStringValidation(),
@@ -98,14 +99,17 @@ class ClientViewModel @Inject constructor(
         validateFormState =
             validateFormState.copy(dateOutString = LocalDate.ofEpochDay(client.outDate).toString())
         validateFormState = validateFormState.copy(dateOutLong = client.outDate)
-        validateFormState = validateFormState.copy(payment = client.payment.toString())
+        validateFormState = validateFormState.copy(pricePerDay = client.pricePerDay.toString())
         validateFormState = validateFormState.copy(overPayment = client.overPayment.toString())
-        validateFormState = validateFormState.copy(prePayment = client.prepayment.toString())
+        validateFormState =
+            validateFormState.copy(prePaymentPercent = client.prePaymentPercent.toString())
 
-        validateFormState = validateFormState.copy(completedPayment = client.completedPayment.toString())
+        validateFormState =
+            validateFormState.copy(completedPayment = client.completedPayment.toString())
         validateFormState =
             validateFormState.copy(completedOverPayment = client.completedOverPayment.toString())
-        validateFormState = validateFormState.copy(completedPrePayment = client.completedPrePayment.toString())
+        validateFormState =
+            validateFormState.copy(completedPrePayment = client.completedPrePayment.toString())
         validateFormState = validateFormState.copy(pledge = client.pledge.toString())
 
         validateFormState = validateFormState.copy(transferInfo = client.transferInfo)
@@ -132,9 +136,9 @@ class ClientViewModel @Inject constructor(
         validateFormState =
             validateFormState.copy(dateOutString = "")
         validateFormState = validateFormState.copy(dateOutLong = 0L)
-        validateFormState = validateFormState.copy(payment = "")
+        validateFormState = validateFormState.copy(pricePerDay = "")
         validateFormState = validateFormState.copy(overPayment = "")
-        validateFormState = validateFormState.copy(prePayment = "")
+        validateFormState = validateFormState.copy(prePaymentPercent = "")
         validateFormState = validateFormState.copy(transferInfo = "")
         validateFormState = validateFormState.copy(referer = "")
         validateFormState =
@@ -150,8 +154,8 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(dateInStringError = null)
         validateFormState = validateFormState.copy(dateOutLongError = null)
         validateFormState = validateFormState.copy(dateInLongError = null)
-        validateFormState = validateFormState.copy(prePaymentError = null)
-        validateFormState = validateFormState.copy(paymentError = null)
+        validateFormState = validateFormState.copy(prePaymentPercentError = null)
+        validateFormState = validateFormState.copy(pricePerDayError = null)
         validateFormState = validateFormState.copy(transferInfoError = null)
         validateFormState = validateFormState.copy(refererError = null)
         validateFormState = validateFormState.copy(colorError = null)
@@ -258,11 +262,11 @@ class ClientViewModel @Inject constructor(
             }
 
             is ValidationFormEvent.PrePaymentChanged -> {
-                validateFormState = validateFormState.copy(prePayment = event.prepayment)
+                validateFormState = validateFormState.copy(prePaymentPercent = event.prepayment)
             }
 
-            is ValidationFormEvent.PaymentChanged -> {
-                validateFormState = validateFormState.copy(payment = event.payment)
+            is ValidationFormEvent.PricePerDayChanged -> {
+                validateFormState = validateFormState.copy(pricePerDay = event.pricePerDay)
             }
 
             is ValidationFormEvent.OverPaymentChanged -> {
@@ -271,17 +275,19 @@ class ClientViewModel @Inject constructor(
 
 
             is ValidationFormEvent.CompletedPrePaymentChanged -> {
-                validateFormState = validateFormState.copy(completedPrePayment = event.completedPrepayment)
+                validateFormState =
+                    validateFormState.copy(completedPrePayment = event.completedPrepayment)
             }
 
             is ValidationFormEvent.CompletedPaymentChanged -> {
-                validateFormState = validateFormState.copy(completedPayment = event.completedPayment)
+                validateFormState =
+                    validateFormState.copy(completedPayment = event.completedPayment)
             }
 
             is ValidationFormEvent.CompletedOverPaymentChanged -> {
-                validateFormState = validateFormState.copy(completedOverPayment = event.completedOverPayment)
+                validateFormState =
+                    validateFormState.copy(completedOverPayment = event.completedOverPayment)
             }
-
 
 
             is ValidationFormEvent.transferInfoChanged -> {
@@ -331,7 +337,7 @@ class ClientViewModel @Inject constructor(
 
         val overMembersResult = membersValidationField.execute(validateFormState.overMembers)
 
-        val prePaymentResult = paymentValidationField.execute(
+        val prePaymentResult = pricePerDayValidationField.execute(
             validateFormState
         )
         val paymentResult = prePaymentValidationField.execute(
@@ -372,13 +378,15 @@ class ClientViewModel @Inject constructor(
                 dateInStringError = dateInStringResult.errorMessage,
                 dateOutLongError = dateOutLongResult.errorMessage,
                 dateInLongError = dateInLongResult.errorMessage,
-                prePaymentError = prePaymentResult.errorMessage,
-                paymentError = paymentResult.errorMessage,
+                prePaymentPercentError = prePaymentResult.errorMessage,
+                pricePerDayError = paymentResult.errorMessage,
                 overPaymentError = overPaymentResult.errorMessage,
             )
             return
         }
         viewModelScope.launch {
+
+
             addClient(
                 Client(
                     status = validateFormState.status,
@@ -392,9 +400,13 @@ class ClientViewModel @Inject constructor(
                     outDate = validateFormState.dateOutLong,
                     members = validateFormState.members.trim().toInt(),
                     overMembers = validateFormState.overMembers.trim().toInt(),
-                    prepayment = validateFormState.prePayment.trim().toInt(),
-                    payment = validateFormState.payment.trim().toInt(),
                     overPayment = validateFormState.overPayment.trim().toInt(),
+
+                    priceOfStay = priceOfStayCalculation(validateFormState),
+                    daysOfStay = daysCalculation(validateFormState),
+                    prePaymentPercent = validateFormState.prePaymentPercent.trim().toInt(),
+                    prePayment = prePaymentCalculation(validateFormState),
+                    pricePerDay = validateFormState.pricePerDay.trim().toInt(),
 
                     completedPayment = validateFormState.completedPayment.trim().toInt(),
                     completedPrePayment = validateFormState.completedPrePayment.trim().toInt(),
@@ -412,7 +424,7 @@ class ClientViewModel @Inject constructor(
         }
     }
 
-    private fun submitDataUpdate(source : SourceEvent) {
+    private fun submitDataUpdate(source: SourceEvent) {
         val firstNameResult = nameValidationField.execute(validateFormState.firstName, true)
         val dateInStringResult = dateStringValidationField.execute(validateFormState.dateInString)
         val dateOutStringResult = dateStringValidationField.execute(validateFormState.dateOutString)
@@ -436,10 +448,10 @@ class ClientViewModel @Inject constructor(
         val membersResult = membersValidationField.execute(validateFormState.members)
         val overMembersResult = membersValidationField.execute(validateFormState.overMembers)
 
-        val prePaymentResult = paymentValidationField.execute(
+        val prePaymentResult = pricePerDayValidationField.execute(
             validateFormState
         )
-        val paymentResult = paymentValidationField.execute(
+        val pricePerDayResult = pricePerDayValidationField.execute(
             validateFormState
         )
         val overPaymentResult = overPaymentValidation.execute(
@@ -460,7 +472,7 @@ class ClientViewModel @Inject constructor(
             overMembersResult,
             prePaymentResult,
             overPaymentResult,
-            paymentResult
+            pricePerDayResult
         )
 
         val hasError: Boolean = hasErrorList.any { !it!!.successful }
@@ -480,8 +492,8 @@ class ClientViewModel @Inject constructor(
                 dateInStringError = dateInStringResult.errorMessage,
                 dateOutLongError = dateOutLongResult.errorMessage,
                 dateInLongError = dateInLongResult.errorMessage,
-                prePaymentError = prePaymentResult.errorMessage,
-                paymentError = paymentResult.errorMessage,
+                prePaymentPercentError = prePaymentResult.errorMessage,
+                pricePerDayError = pricePerDayResult.errorMessage,
                 overPaymentError = overPaymentResult.errorMessage,
             )
             viewModelScope.launch {
@@ -505,15 +517,20 @@ class ClientViewModel @Inject constructor(
                         outDate = validateFormState.dateOutLong,
                         members = validateFormState.members.trim().toInt(),
                         overMembers = validateFormState.overMembers.trim().toInt(),
-                        prepayment = validateFormState.prePayment.trim().toInt(),
-                        payment = validateFormState.payment.trim().toInt(),
                         overPayment = validateFormState.overPayment.trim().toInt(),
+
+                        priceOfStay = priceOfStayCalculation(validateFormState),
+                        daysOfStay = daysCalculation(validateFormState),
+                        prePaymentPercent = validateFormState.prePaymentPercent.trim().toInt(),
+                        prePayment = prePaymentCalculation(validateFormState),
+                        pricePerDay = validateFormState.pricePerDay.trim().toInt(),
+
 
                         completedPayment = validateFormState.completedPayment.trim().toInt(),
                         completedPrePayment = validateFormState.completedPrePayment.trim().toInt(),
-                        completedOverPayment = validateFormState.completedOverPayment.trim().toInt(),
+                        completedOverPayment = validateFormState.completedOverPayment.trim()
+                            .toInt(),
                         pledge = validateFormState.pledge.trim().toInt(),
-
                         clientColor = validateFormState.color.toArgb(),
                         transferInfo = validateFormState.transferInfo,
                         referer = validateFormState.referer,
@@ -526,5 +543,32 @@ class ClientViewModel @Inject constructor(
     }
 }
 
+fun daysCalculation(state: ValidationFormState): Int {
+    val inDate = state.dateInLong
+    val outDate = state.dateOutLong
+    val ldInDate = LocalDate.ofEpochDay(inDate)
+    val ldOutDate = LocalDate.ofEpochDay(outDate)
+    return ChronoUnit.DAYS.between(ldInDate, ldOutDate).toInt()
 
+}
+
+fun priceOfStayCalculation(state: ValidationFormState): Int {
+    val totalDays = daysCalculation(state)
+    val pricePerDay = if (state.pricePerDay == "") 0 else state.pricePerDay.toInt()
+    val overPayment = if (state.overPayment == "") 0 else state.overPayment.toInt()
+    val overMembers = if (state.overMembers == "") 0 else state.overMembers.toInt()
+    val members = if (state.members == "") 0 else state.members.toInt()
+
+    return if (members <= overMembers) {
+        (pricePerDay * totalDays)
+    } else {
+        (pricePerDay * totalDays) + (members - overMembers) * totalDays * overPayment
+    }
+}
+
+fun prePaymentCalculation(state: ValidationFormState):Int{
+    val prePaymentPercent = if (state.prePaymentPercent == "") 0 else state.prePaymentPercent.toInt()
+    val totalCoast = priceOfStayCalculation(state)
+    return (totalCoast / 100) * prePaymentPercent
+}
 
