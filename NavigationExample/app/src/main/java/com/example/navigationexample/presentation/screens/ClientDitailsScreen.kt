@@ -370,7 +370,7 @@ fun ClientDitailsScreen(
                         horizontalArrangement = Arrangement.Start,
                     ) {
                         Text(
-                            text = "Размер залог/предоплата  ",
+                            text = "Размер предоплаты (${state.value?.prePaymentPercent.toString()}%)  ",
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -380,7 +380,7 @@ fun ClientDitailsScreen(
                         )
 
                         Text(
-                            text = state.value?.prePaymentPercent.toString(),
+                            text = state.value?.prePayment.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -439,7 +439,7 @@ fun ClientDitailsScreen(
                         horizontalArrangement = Arrangement.Start,
                     ) {
                         Text(
-                            text = "Стоимость с учетом залога ",
+                            text = "Стоимость с учетом предоплаты ",
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))

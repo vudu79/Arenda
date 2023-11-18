@@ -41,16 +41,16 @@ data class ValidationFormState(
     var overPayment: String = "",
     var overPaymentError: String? = null,
 
-    var completedPrePayment: String = "",
+    var completedPrePayment: String = "0",
     var completedPrePaymentError: String? = null,
 
-    var completedPayment: String = "",
+    var completedPayment: String = "0",
     var completedPaymentError: String? = null,
 
-    var completedOverPayment: String = "",
+    var completedOverPayment: String = "0",
     var completedOverPaymentError: String? = null,
 
-    var pledge: String = "",
+    var pledge: String = "0",
     var pledgeError: String? = null,
 
     var transferInfo: String? = "",

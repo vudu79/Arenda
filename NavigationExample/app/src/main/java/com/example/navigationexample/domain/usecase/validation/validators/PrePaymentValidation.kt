@@ -10,9 +10,9 @@ class PrePaymentValidation @Inject constructor() {
     fun execute(state: ValidationFormState): ValidationResult {
 
         val pricePerDay = state.pricePerDay.trim()
-        val prePayment = state.prePayment.trim()
+        val prePaymentPercent = state.prePaymentPercent.trim()
         val paymentInt = pricePerDay.trim().toInt()
-        val prePaymentInt = prePayment.trim().toInt()
+        val prePaymentPercentInt = prePaymentPercent.trim().toInt()
 
         val inDate = state.dateInLong ?: 0L
         val outDate = state.dateOutLong ?: 0L
@@ -20,8 +20,8 @@ class PrePaymentValidation @Inject constructor() {
         val ldOutDate = LocalDate.ofEpochDay(outDate)
         val totalDays = ChronoUnit.DAYS.between(ldInDate, ldOutDate).toInt()
         val totalCoast = paymentInt * totalDays
-
-        val hasOnliDigits = prePayment.all { it.isDigit() }
+        val prePayment = totalCoast / 100 * prePaymentPercentInt
+        val hasOnliDigits = prePaymentPercent.all { it.isDigit() }
 
         if (pricePerDay.isEmpty()) {
             return ValidationResult(
@@ -30,7 +30,7 @@ class PrePaymentValidation @Inject constructor() {
             )
         }
 
-        if (prePaymentInt > totalCoast) {
+        if (prePayment > totalCoast) {
             return ValidationResult(
                 successful = false,
                 errorMessage = "Залог больше стоимости проживания"
@@ -44,13 +44,13 @@ class PrePaymentValidation @Inject constructor() {
             )
         }
 
-        try {
-            return ValidationResult(
+        return try {
+            ValidationResult(
                 successful = true
             )
         } catch (e: Exception) {
 
-            return ValidationResult(
+            ValidationResult(
                 successful = false,
                 errorMessage = "Не корректные данные"
             )
