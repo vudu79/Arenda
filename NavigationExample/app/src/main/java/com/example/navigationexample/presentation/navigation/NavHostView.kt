@@ -134,6 +134,7 @@ fun NavHostView(
             val arguments = requireNotNull(backStackEntry.arguments)
             arguments.getString("client_phone")?.let { cp ->
                 val clientPhone = cp
+
                 ClientPaymentScreen(
                     mainNavController = mainNavController,
                     viewModelClient = viewModelClient,

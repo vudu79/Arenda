@@ -271,6 +271,7 @@ fun LazyItemScope.ClientItemRow(
                             .clickable(onClick = {
                                 viewModelClient.resetState()
                                 viewModelClient.getClientState(client.phone)
+                                viewModelClient.getClient(client.phone)
                                 navcontroller.navigate("${Routs.clientPaymentScreen}/${client.phone}")
                             })
                     )

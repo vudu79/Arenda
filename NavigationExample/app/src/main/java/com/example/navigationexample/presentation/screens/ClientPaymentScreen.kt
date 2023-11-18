@@ -34,8 +34,6 @@ import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsR
 import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
 import com.example.navigationexample.domain.usecase.validation.ValidationFormState
 import com.example.navigationexample.presentation.navigation.Routs
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -47,9 +45,9 @@ fun ClientPaymentScreen(
     clientPhone: String
 ) {
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
-    val state = viewModelClient.validateFormState
-    val clientState = viewModelClient.uiClientState
-    val (selectedOption, onOptionSelected) = remember { mutableStateOf(ClientStatus.statusList[0]) }
+    val inputValidateState = viewModelClient.validateFormState
+    val clientDBState = viewModelClient.uiClientState
+//    val (selectedOption, onOptionSelected) = remember { mutableStateOf(ClientStatus.statusList[0]) }
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
@@ -61,6 +59,8 @@ fun ClientPaymentScreen(
                     Toast.makeText(
                         context, "Данные по оплате обновлены!", Toast.LENGTH_SHORT
                     ).show()
+//                    viewModelClient.getClient(clientPhone)
+//                    viewModelClient.getClientState(clientPhone)
                     viewModelClient.getAppatmentClients(currentAppatment!!.name)
 //                    mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
                 }
@@ -88,7 +88,7 @@ fun ClientPaymentScreen(
     ) {
 
         Text(
-            text = makeFullName(state),
+            text = makeFullName(inputValidateState),
             maxLines = 2,
             modifier = Modifier
                 .background(Color(41, 41, 41))
@@ -99,7 +99,7 @@ fun ClientPaymentScreen(
         )
 
         Divider(
-            color = state.color, modifier = Modifier
+            color = inputValidateState.color, modifier = Modifier
                 .fillMaxWidth()
                 .width(10.dp)
         )
@@ -150,7 +150,7 @@ fun ClientPaymentScreen(
                         )
 
                         Text(
-                            text = state.prePayment.toString(),
+                            text = clientDBState.value?.prePayment.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -172,7 +172,7 @@ fun ClientPaymentScreen(
                         )
 
                         Text(
-                            text = clientState.value?.completedPrePayment.toString(),
+                            text = inputValidateState.completedPrePayment,
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -185,7 +185,7 @@ fun ClientPaymentScreen(
                     Spacer(modifier = Modifier.padding(10.dp))
 
                     OutlinedTextField(
-                        value = state.completedPrePayment.toString(),
+                        value = if (inputValidateState.completedPrePayment == "") "0" else inputValidateState.completedPrePayment,
                         onValueChange = {
                             viewModelClient.onFormEvent(
                                 ValidationFormEvent.CompletedPrePaymentChanged(
@@ -194,7 +194,7 @@ fun ClientPaymentScreen(
                             )
                         },
                         placeholder = { Text(text = "Залог", color = Color.Black) },
-                        isError = state.completedPrePaymentError != null,
+                        isError = inputValidateState.completedPrePaymentError != null,
                         singleLine = false,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -220,13 +220,13 @@ fun ClientPaymentScreen(
                         }),
                     )
 
-                    if (state.completedPrePaymentError != null) {
+                    if (inputValidateState.completedPrePaymentError != null) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
                             Text(
-                                text = state.completedPrePaymentError!!,
+                                text = inputValidateState.completedPrePaymentError!!,
                                 color = MaterialTheme.colors.error,
                                 modifier = Modifier.align(Alignment.BottomStart)
                             )
@@ -235,6 +235,7 @@ fun ClientPaymentScreen(
                     GradientButton(
                         "Сохранить"
                     ) {
+
                         viewModelClient.onFormEvent(ValidationFormEvent.onSubmitUpdate(SourceEvent.PAYMENTUPDATE))
 
                     }
@@ -277,7 +278,7 @@ fun ClientPaymentScreen(
                         )
 
                         Text(
-                            text = clientState.value?.priceOfStay.toString(),
+                            text = clientDBState.value?.priceOfStay.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -299,7 +300,7 @@ fun ClientPaymentScreen(
                         )
 
                         Text(
-                            text = if (state.completedPayment == "") "0" else state.completedPayment,
+                            text = inputValidateState.completedPayment,
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -312,7 +313,7 @@ fun ClientPaymentScreen(
                     Spacer(modifier = Modifier.padding(10.dp))
 
                     OutlinedTextField(
-                        value = state.completedPayment,
+                        value = if (inputValidateState.completedPayment == "") "0" else inputValidateState.completedPayment,
                         onValueChange = {
                             viewModelClient.onFormEvent(
                                 ValidationFormEvent.CompletedPaymentChanged(
@@ -321,7 +322,7 @@ fun ClientPaymentScreen(
                             )
                         },
                         placeholder = { Text(text = "Залог", color = Color.Black) },
-                        isError = state.completedPaymentError != null,
+                        isError = inputValidateState.completedPaymentError != null,
                         singleLine = false,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -347,13 +348,13 @@ fun ClientPaymentScreen(
                         }),
                     )
 
-                    if (state.completedPaymentError != null) {
+                    if (inputValidateState.completedPaymentError != null) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
                             Text(
-                                text = state.completedPaymentError!!,
+                                text = inputValidateState.completedPaymentError!!,
                                 color = MaterialTheme.colors.error,
                                 modifier = Modifier.align(Alignment.BottomStart)
                             )
