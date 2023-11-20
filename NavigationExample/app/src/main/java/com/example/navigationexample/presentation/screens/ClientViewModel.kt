@@ -22,6 +22,7 @@ import com.example.navigationexample.domain.models.ClientStatus
 import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
 import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
 import com.example.navigationexample.domain.usecase.validation.ValidationFormState
+import com.example.navigationexample.domain.usecase.validation.validators.CompletedPrePaymentValidation
 import com.example.navigationexample.domain.usecase.validation.validators.DateLongValidation
 import com.example.navigationexample.domain.usecase.validation.validators.DateStringValidation
 import com.example.navigationexample.domain.usecase.validation.validators.DocumentDitails
@@ -54,6 +55,7 @@ class ClientViewModel @Inject constructor(
     private val membersValidationField: MembersValidation = MembersValidation(),
     private val pricePerDayValidationField: PricePerDayValidation = PricePerDayValidation(),
     private val prePaymentValidationField: PrePaymentValidation = PrePaymentValidation(),
+    private val completedPrePaymentValidationField: CompletedPrePaymentValidation = CompletedPrePaymentValidation(),
     private val overPaymentValidation: OverPaymentValidation = OverPaymentValidation(),
     private val dateStringValidationField: DateStringValidation = DateStringValidation(),
     private val dateLongValidationField: DateLongValidation = DateLongValidation()
@@ -99,6 +101,7 @@ class ClientViewModel @Inject constructor(
         validateFormState =
             validateFormState.copy(dateOutString = LocalDate.ofEpochDay(client.outDate).toString())
         validateFormState = validateFormState.copy(dateOutLong = client.outDate)
+        validateFormState = validateFormState.copy(priceOfStay = client.priceOfStay.toString())
         validateFormState = validateFormState.copy(pricePerDay = client.pricePerDay.toString())
         validateFormState = validateFormState.copy(overPayment = client.overPayment.toString())
         validateFormState =
@@ -463,6 +466,11 @@ class ClientViewModel @Inject constructor(
         val overPaymentResult = overPaymentValidation.execute(
             validateFormState.overPayment
         )
+
+        val completedPrePaymentResult = completedPrePaymentValidationField.execute(
+            validateFormState
+        )
+
         val hasErrorList = listOf(
             firstNameResult,
             secondNameResult,
@@ -478,7 +486,8 @@ class ClientViewModel @Inject constructor(
             overMembersResult,
             prePaymentResult,
             overPaymentResult,
-            pricePerDayResult
+            pricePerDayResult,
+            completedPrePaymentResult
         )
 
         val hasError: Boolean = hasErrorList.any { !it!!.successful }
@@ -501,6 +510,7 @@ class ClientViewModel @Inject constructor(
                 prePaymentPercentError = prePaymentResult.errorMessage,
                 pricePerDayError = pricePerDayResult.errorMessage,
                 overPaymentError = overPaymentResult.errorMessage,
+                completedPrePaymentError = completedPrePaymentResult.errorMessage
             )
             viewModelScope.launch {
                 validationEventChannel.send(ValidatAllFieldsResultEvent.UpdateWrong(hasErrorList = hasErrorList))

@@ -41,6 +41,8 @@ data class ValidationFormState(
     var overPayment: String = "0",
     var overPaymentError: String? = null,
 
+    var priceOfStay: String = "0",
+
     var completedPrePayment: String = "0",
     var completedPrePaymentError: String? = null,
 

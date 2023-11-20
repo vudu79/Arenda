@@ -75,6 +75,7 @@ fun ClientPaymentScreen(
 //                    viewModelClient.getClientState(clientPhone)
                     viewModelClient.getAppatmentClients(currentAppatment!!.name)
                     viewModelClient.getClient(clientPhone = clientPhone)
+                    viewModelClient.resetState()
                     mainNavController.navigate("${Routs.clientPaymentScreen}/${clientPhone}")
 
 //                    mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
