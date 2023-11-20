@@ -560,7 +560,7 @@ fun AddClientScreen(
                     OutlinedTextField(
                         value = state.prePaymentPercent,
                         onValueChange = {
-                            viewModelClient.onFormEvent(ValidationFormEvent.PrePaymentChanged(it))
+                            viewModelClient.onFormEvent(ValidationFormEvent.PrePaymentPercentChanged(it))
                         },
 
                         placeholder = { Text(text = "Оплата бронирования/предоплата (%)", color = Black) },

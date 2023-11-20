@@ -103,6 +103,8 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(overPayment = client.overPayment.toString())
         validateFormState =
             validateFormState.copy(prePaymentPercent = client.prePaymentPercent.toString())
+        validateFormState =
+            validateFormState.copy(prePayment = client.prePayment.toString())
 
         validateFormState =
             validateFormState.copy(completedPayment = client.completedPayment.toString())
@@ -262,7 +264,11 @@ class ClientViewModel @Inject constructor(
             }
 
             is ValidationFormEvent.PrePaymentChanged -> {
-                validateFormState = validateFormState.copy(prePaymentPercent = event.prepayment)
+                validateFormState = validateFormState.copy(prePayment = event.prepayment)
+            }
+
+            is ValidationFormEvent.PrePaymentPercentChanged -> {
+                validateFormState = validateFormState.copy(prePaymentPercent = event.prepaymentPercent)
             }
 
             is ValidationFormEvent.PricePerDayChanged -> {
@@ -520,14 +526,16 @@ class ClientViewModel @Inject constructor(
                         overPayment = validateFormState.overPayment.trim().toInt(),
 
                         priceOfStay = priceOfStayCalculation(validateFormState),
+//                        priceOfStay = priceOfStayCalculation(validateFormState),
                         daysOfStay = daysCalculation(validateFormState),
                         prePaymentPercent = validateFormState.prePaymentPercent.trim().toInt(),
                         prePayment = prePaymentCalculation(validateFormState),
                         pricePerDay = validateFormState.pricePerDay.trim().toInt(),
 
 
-                        completedPayment = validateFormState.completedPayment.trim().toInt(),
-                        completedPrePayment = validateFormState.completedPrePayment.trim().toInt(),
+                        completedPayment = if (validateFormState.completedPayment == "") 0 else validateFormState.completedPayment.trim().toInt(),
+                        completedPrePayment = if (validateFormState.completedPrePayment == "") 0 else validateFormState.completedPrePayment.trim().toInt()
+                            .toInt(),
                         completedOverPayment = validateFormState.completedOverPayment.trim()
                             .toInt(),
                         pledge = validateFormState.pledge.trim().toInt(),
@@ -566,8 +574,9 @@ fun priceOfStayCalculation(state: ValidationFormState): Int {
     }
 }
 
-fun prePaymentCalculation(state: ValidationFormState):Int{
-    val prePaymentPercent = if (state.prePaymentPercent == "") 0 else state.prePaymentPercent.toInt()
+fun prePaymentCalculation(state: ValidationFormState): Int {
+    val prePaymentPercent =
+        if (state.prePaymentPercent == "") 0 else state.prePaymentPercent.toInt()
     val totalCoast = priceOfStayCalculation(state)
     return (totalCoast / 100) * prePaymentPercent
 }

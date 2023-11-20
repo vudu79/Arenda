@@ -50,18 +50,33 @@ fun ClientPaymentScreen(
 //    val (selectedOption, onOptionSelected) = remember { mutableStateOf(ClientStatus.statusList[0]) }
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
+    var isPrePaymentActive = true
+    var isPaymentActive = false
+    var isPledgeActive = false
 
+    val prePaymentDebt = clientDBState.value?.prePayment?.minus(clientDBState.value?.completedPrePayment!!)
+    val paymentDebt =
+        clientDBState.value?.priceOfStay?.minus(clientDBState.value?.completedPayment!!)
+            ?.minus(clientDBState.value?.completedPrePayment!!)
+
+    var prePaymentMoment = remember {
+        "0"
+    }
 
     LaunchedEffect(key1 = context) {
         viewModelClient.validationEvents.collect { event ->
             when (event) {
                 is ValidatAllFieldsResultEvent.UpdateSuccess -> {
+                    isPaymentActive = true
                     Toast.makeText(
                         context, "Данные по оплате обновлены!", Toast.LENGTH_SHORT
                     ).show()
 //                    viewModelClient.getClient(clientPhone)
 //                    viewModelClient.getClientState(clientPhone)
                     viewModelClient.getAppatmentClients(currentAppatment!!.name)
+                    viewModelClient.getClient(clientPhone = clientPhone)
+                    mainNavController.navigate("${Routs.clientPaymentScreen}/${clientPhone}")
+
 //                    mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
                 }
 
@@ -129,7 +144,7 @@ fun ClientPaymentScreen(
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
-                            fontSize = 26.sp,
+                            fontSize = 20.sp,
                             color = Color(223, 75, 0)
                         )
                     }
@@ -172,7 +187,7 @@ fun ClientPaymentScreen(
                         )
 
                         Text(
-                            text = inputValidateState.completedPrePayment,
+                            text = clientDBState.value?.completedPrePayment.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
@@ -185,15 +200,16 @@ fun ClientPaymentScreen(
                     Spacer(modifier = Modifier.padding(10.dp))
 
                     OutlinedTextField(
-                        value = if (inputValidateState.completedPrePayment == "") "0" else inputValidateState.completedPrePayment,
+                        value = inputValidateState.completedPrePayment,
                         onValueChange = {
+//                            prePaymentMoment = if (it == "") "0" else it
                             viewModelClient.onFormEvent(
                                 ValidationFormEvent.CompletedPrePaymentChanged(
                                     it
                                 )
                             )
                         },
-                        placeholder = { Text(text = "Залог", color = Color.Black) },
+                        placeholder = { Text(text = "Предоплата", color = Color.Black) },
                         isError = inputValidateState.completedPrePaymentError != null,
                         singleLine = false,
                         modifier = Modifier
@@ -235,139 +251,149 @@ fun ClientPaymentScreen(
                     GradientButton(
                         "Сохранить"
                     ) {
-
+//                      viewModelClient.onFormEvent(
+//                                ValidationFormEvent.PrePaymentChanged(
+//                                    (inputValidateState.prePayment.toInt() - prePaymentMoment.toInt()).toString()
+//                                )
+//                            )
                         viewModelClient.onFormEvent(ValidationFormEvent.onSubmitUpdate(SourceEvent.PAYMENTUPDATE))
-
+                        isPaymentActive = true
                     }
                     Spacer(modifier = Modifier.padding(20.dp))
                 }
             }
 //    полная стоимость проживания
-            item {
-                Column(
-                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.Top,
-                        horizontalArrangement = Arrangement.Start,
+//            if (isPaymentActive) {
+                item {
+                    Column(
+                        horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(
-                            text = "Оплата стоимости проживания  ",
-                            maxLines = 1,
-                            modifier = Modifier
-                                .background(Color(41, 41, 41))
-                                .padding(start = 5.dp),
-                            fontSize = 26.sp,
-                            color = Color(223, 75, 0)
-                        )
-                    }
-                    Spacer(modifier = Modifier.padding(10.dp))
-
-                    Row(
-                        verticalAlignment = Alignment.Top,
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                    ) {
-                        Text(
-                            text = "Должен - ",
-                            maxLines = 1,
-                            modifier = Modifier
-                                .background(Color(41, 41, 41))
-                                .padding(start = 5.dp),
-                            fontSize = 19.sp,
-                            color = Color(229, 20, 5, 255)
-                        )
-
-                        Text(
-                            text = clientDBState.value?.priceOfStay.toString(),
-                            maxLines = 1,
-                            modifier = Modifier
-                                .background(Color(41, 41, 41))
-                                .padding(start = 5.dp),
-
-                            fontSize = 19.sp,
-                            color = Color(255, 255, 255, 255)
-                        )
-
-
-                        Text(
-                            text = "Заплатил - ",
-                            maxLines = 1,
-                            modifier = Modifier
-                                .background(Color(41, 41, 41))
-                                .padding(start = 5.dp),
-                            fontSize = 19.sp,
-                            color = Color(52, 241, 10, 255)
-                        )
-
-                        Text(
-                            text = inputValidateState.completedPayment,
-                            maxLines = 1,
-                            modifier = Modifier
-                                .background(Color(41, 41, 41))
-                                .padding(start = 5.dp),
-                            fontSize = 19.sp,
-                            color = Color(254, 253, 253, 255)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.padding(10.dp))
-
-                    OutlinedTextField(
-                        value = if (inputValidateState.completedPayment == "") "0" else inputValidateState.completedPayment,
-                        onValueChange = {
-                            viewModelClient.onFormEvent(
-                                ValidationFormEvent.CompletedPaymentChanged(
-                                    it
-                                )
-                            )
-                        },
-                        placeholder = { Text(text = "Залог", color = Color.Black) },
-                        isError = inputValidateState.completedPaymentError != null,
-                        singleLine = false,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                top = 1.dp,
-                                bottom = 5.dp,
-                                start = 5.dp,
-                                end = 5.dp
-                            ),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            unfocusedBorderColor = Color.Black,
-                            textColor = Color.Black,
-                            backgroundColor = Color(142, 143, 138)
-                        ),
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next,
-                            keyboardType = KeyboardType.Number,
-                            capitalization = KeyboardCapitalization.None,
-                            autoCorrect = true,
-                        ),
-                        keyboardActions = KeyboardActions(onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }),
-                    )
-
-                    if (inputValidateState.completedPaymentError != null) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
+                        Row(
+                            verticalAlignment = Alignment.Top,
+                            horizontalArrangement = Arrangement.Start,
                         ) {
                             Text(
-                                text = inputValidateState.completedPaymentError!!,
-                                color = MaterialTheme.colors.error,
-                                modifier = Modifier.align(Alignment.BottomStart)
+                                text = "Оплата стоимости проживания  ",
+                                maxLines = 1,
+                                modifier = Modifier
+                                    .background(Color(41, 41, 41))
+                                    .padding(start = 5.dp),
+                                fontSize = 20.sp,
+                                color = Color(223, 75, 0)
                             )
                         }
-                    }
-                    GradientButton(
-                        "Сохранить"
-                    ) {
-                        viewModelClient.onFormEvent(ValidationFormEvent.onSubmitUpdate(SourceEvent.PAYMENTUPDATE))
+                        Spacer(modifier = Modifier.padding(10.dp))
 
+                        Row(
+                            verticalAlignment = Alignment.Top,
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                        ) {
+                            Text(
+                                text = "Должен - ",
+                                maxLines = 1,
+                                modifier = Modifier
+                                    .background(Color(41, 41, 41))
+                                    .padding(start = 5.dp),
+                                fontSize = 19.sp,
+                                color = Color(229, 20, 5, 255)
+                            )
+
+                            Text(
+                                text = paymentDebt.toString(),
+                                maxLines = 1,
+                                modifier = Modifier
+                                    .background(Color(41, 41, 41))
+                                    .padding(start = 5.dp),
+
+                                fontSize = 19.sp,
+                                color = Color(255, 255, 255, 255)
+                            )
+
+
+                            Text(
+                                text = "Заплатил - ",
+                                maxLines = 1,
+                                modifier = Modifier
+                                    .background(Color(41, 41, 41))
+                                    .padding(start = 5.dp),
+                                fontSize = 19.sp,
+                                color = Color(52, 241, 10, 255)
+                            )
+
+                            Text(
+                                text = clientDBState.value?.completedPayment.toString(),
+                                maxLines = 1,
+                                modifier = Modifier
+                                    .background(Color(41, 41, 41))
+                                    .padding(start = 5.dp),
+                                fontSize = 19.sp,
+                                color = Color(254, 253, 253, 255)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.padding(10.dp))
+
+                        OutlinedTextField(
+                            value = inputValidateState.completedPayment,
+                            onValueChange = {
+                                viewModelClient.onFormEvent(
+                                    ValidationFormEvent.CompletedPaymentChanged(
+                                        it
+                                    )
+                                )
+                            },
+                            placeholder = { Text(text = "Залог", color = Color.Black) },
+                            isError = inputValidateState.completedPaymentError != null,
+                            singleLine = false,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    top = 1.dp,
+                                    bottom = 5.dp,
+                                    start = 5.dp,
+                                    end = 5.dp
+                                ),
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+                                unfocusedBorderColor = Color.Black,
+                                textColor = Color.Black,
+                                backgroundColor = Color(142, 143, 138)
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Next,
+                                keyboardType = KeyboardType.Number,
+                                capitalization = KeyboardCapitalization.None,
+                                autoCorrect = true,
+                            ),
+                            keyboardActions = KeyboardActions(onNext = {
+                                focusManager.moveFocus(FocusDirection.Down)
+                            }),
+                        )
+
+                        if (inputValidateState.completedPaymentError != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = inputValidateState.completedPaymentError!!,
+                                    color = MaterialTheme.colors.error,
+                                    modifier = Modifier.align(Alignment.BottomStart)
+                                )
+                            }
+                        }
+                        GradientButton(
+                            "Сохранить"
+                        ) {
+                            viewModelClient.onFormEvent(
+                                ValidationFormEvent.onSubmitUpdate(
+                                    SourceEvent.PAYMENTUPDATE
+                                )
+                            )
+
+                        }
                     }
                 }
-            }
+//            }
 
 
 //    полная стоимость брони
