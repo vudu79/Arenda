@@ -31,7 +31,7 @@ fun ClientDitailsScreen(
     clientPhone: String
 ) {
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
-    viewModelClient.getClient(clientPhone)
+    viewModelClient.getClientState(clientPhone)
     val state = viewModelClient.uiClientState
 
     val inDate = state.value?.inDate ?: 0L

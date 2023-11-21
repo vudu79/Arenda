@@ -7,13 +7,13 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 class CompletedPaymentValidation @Inject constructor() {
-    fun execute(state: ValidationFormState): ValidationResult {
+    fun execute(state: ValidationFormState, paymentDept: Int): ValidationResult {
 
-        val completedPrePayment = state.completedPrePayment.trim()
         val prePaymentInt =
             if (state.prePayment.trim() == "") 0 else state.prePayment.trim().toInt()
 
         val completedPayment = state.completedPayment.trim()
+
         val paymentInt =
             if (state.priceOfStay.trim() == "") 0 else state.priceOfStay.trim().toInt()
 
@@ -44,7 +44,7 @@ class CompletedPaymentValidation @Inject constructor() {
         if (completedPaymentInt > (paymentInt-completedPrePaymentInt)) {
             return ValidationResult(
                 successful = false,
-                errorMessage = "Введите число от 0 до $prePaymentInt"
+                errorMessage = "Введите число от 0 до $paymentDept"
             )
         }
 

@@ -70,6 +70,13 @@ class ClientViewModel @Inject constructor(
     private var _paymentDebt = MutableLiveData<Int>()
     val paymentDebt: LiveData<Int> = _paymentDebt
 
+    private var _isPaymentComplete = MutableLiveData<Boolean>(false)
+    val isPaymentComplete: LiveData<Boolean> = _isPaymentComplete
+
+    private var _isPrePaymentComplete = MutableLiveData<Boolean>(false)
+    val isPrePaymentComplete: LiveData<Boolean> = _isPrePaymentComplete
+
+
     private val _isLoadingForUpdateClient: MutableState<Boolean> = mutableStateOf(false)
     val isLoadingForUpdateClient: State<Boolean> get() = _isLoadingForUpdateClient
 
@@ -86,7 +93,7 @@ class ClientViewModel @Inject constructor(
     var dateInString by mutableStateOf("")
     var dateInLong by mutableStateOf(0L)
 
-    fun getClientState(phone: String) = viewModelScope.launch {
+    fun getClientStateForValidation(phone: String) = viewModelScope.launch {
         val client = clientRepository.getClientByPhone(phone)
         validateFormState = validateFormState.copy(apartmentName = client.appatmentName)
         validateFormState = validateFormState.copy(id = client.id)
@@ -127,7 +134,7 @@ class ClientViewModel @Inject constructor(
         Log.d("myTag", "стейт клиента обнавлен")
     }
 
-    fun resetState() = viewModelScope.launch {
+    fun resetClientStateForValidation() = viewModelScope.launch {
         validateFormState = validateFormState.copy(apartmentName = "")
         validateFormState = validateFormState.copy(id = 0)
         validateFormState = validateFormState.copy(status = ClientStatus.intrasting)
@@ -148,6 +155,10 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(pricePerDay = "")
         validateFormState = validateFormState.copy(overPayment = "")
         validateFormState = validateFormState.copy(prePaymentPercent = "")
+        validateFormState = validateFormState.copy(prePayment = "")
+        validateFormState = validateFormState.copy(priceOfStay = "")
+        validateFormState = validateFormState.copy(completedPrePayment = "")
+        validateFormState = validateFormState.copy(completedPayment = "")
         validateFormState = validateFormState.copy(transferInfo = "")
         validateFormState = validateFormState.copy(referer = "")
         validateFormState =
@@ -164,26 +175,32 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(dateOutLongError = null)
         validateFormState = validateFormState.copy(dateInLongError = null)
         validateFormState = validateFormState.copy(prePaymentPercentError = null)
+        validateFormState = validateFormState.copy(prePaymentError = null)
         validateFormState = validateFormState.copy(pricePerDayError = null)
         validateFormState = validateFormState.copy(transferInfoError = null)
         validateFormState = validateFormState.copy(refererError = null)
         validateFormState = validateFormState.copy(colorError = null)
+        validateFormState = validateFormState.copy(completedPrePaymentError = null)
+        validateFormState = validateFormState.copy(completedPaymentError = null)
     }
 
 
-    fun getClient(clientPhone: String) {
+    fun getClientState(clientPhone: String) {
         viewModelScope.launch {
             _uiClientState.value = clientRepository.getClientByPhone(clientPhone)
             getPaymentDebt()
+            _isPrePaymentComplete.value = _uiClientState.value!!.prePayment == _uiClientState.value!!.completedPrePayment
+            _isPaymentComplete.value = _paymentDebt.value == _uiClientState.value!!.completedPayment
 
         }
     }
 
-    fun getPaymentDebt() {
+    private fun getPaymentDebt() {
         _paymentDebt.value =
             (uiClientState.value?.priceOfStay?.minus(uiClientState.value?.completedPrePayment!!)
-                ?: 0) - uiClientState.value?.completedPayment!!
+                ?: 0)
     }
+
 
     fun getAppatmentClients(appatmentName: String) {
         clientRepository.getAppatmentClients(appatmentName)
@@ -484,7 +501,7 @@ class ClientViewModel @Inject constructor(
             validateFormState
         )
         val completedPaymentResult = completedPaymentValidationField.execute(
-            validateFormState
+            validateFormState, paymentDebt.value!!
         )
 
         val hasErrorList = listOf(

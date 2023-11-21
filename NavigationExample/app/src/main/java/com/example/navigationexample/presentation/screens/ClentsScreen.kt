@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -89,7 +88,7 @@ fun ClientsScreen(
             }
 
             IconButton(onClick = {
-                viewModelClient.resetState()
+                viewModelClient.resetClientStateForValidation()
                 mainNavController.navigate(route = "${Routs.addClientScreen}/$appatmentName")
             })
             {
@@ -137,7 +136,7 @@ fun LazyItemScope.ClientItemRow(
                 .background(Color(128, 107, 90))
                 .combinedClickable(
                     onClick = {
-                        viewModelClient.getClientState(client.phone)
+                        viewModelClient.getClientStateForValidation(client.phone)
                         navcontroller.navigate("${Routs.clientDitailsScreen}/${client.phone}")
                     },
                     onLongClick = {
@@ -247,7 +246,7 @@ fun LazyItemScope.ClientItemRow(
                         modifier = Modifier
                             .padding(10.dp)
                             .clickable(onClick = {
-                                viewModelClient.getClientState(client.phone)
+                                viewModelClient.getClientStateForValidation(client.phone)
                                 navcontroller.navigate("${Routs.clientDitailsScreen}/${client.phone}")
                             })
                     )
@@ -257,8 +256,8 @@ fun LazyItemScope.ClientItemRow(
                         modifier = Modifier
                             .padding(10.dp)
                             .clickable(onClick = {
-                                viewModelClient.resetState()
-                                viewModelClient.getClientState(client.phone)
+                                viewModelClient.resetClientStateForValidation()
+                                viewModelClient.getClientStateForValidation(client.phone)
                                 navcontroller.navigate("${Routs.clientUpdateScreen}/${client.phone}")
                             })
                     )
@@ -269,9 +268,9 @@ fun LazyItemScope.ClientItemRow(
                         modifier = Modifier
                             .padding(10.dp)
                             .clickable(onClick = {
-                                viewModelClient.resetState()
+                                viewModelClient.resetClientStateForValidation()
+                                viewModelClient.getClientStateForValidation(client.phone)
                                 viewModelClient.getClientState(client.phone)
-                                viewModelClient.getClient(client.phone)
                                 navcontroller.navigate("${Routs.clientPaymentScreen}/${client.phone}")
                             })
                     )
