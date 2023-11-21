@@ -22,6 +22,7 @@ import com.example.navigationexample.domain.models.ClientStatus
 import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
 import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
 import com.example.navigationexample.domain.usecase.validation.ValidationFormState
+import com.example.navigationexample.domain.usecase.validation.validators.CompletedPaymentValidation
 import com.example.navigationexample.domain.usecase.validation.validators.CompletedPrePaymentValidation
 import com.example.navigationexample.domain.usecase.validation.validators.DateLongValidation
 import com.example.navigationexample.domain.usecase.validation.validators.DateStringValidation
@@ -56,6 +57,7 @@ class ClientViewModel @Inject constructor(
     private val pricePerDayValidationField: PricePerDayValidation = PricePerDayValidation(),
     private val prePaymentValidationField: PrePaymentValidation = PrePaymentValidation(),
     private val completedPrePaymentValidationField: CompletedPrePaymentValidation = CompletedPrePaymentValidation(),
+    private val completedPaymentValidationField: CompletedPaymentValidation = CompletedPaymentValidation(),
     private val overPaymentValidation: OverPaymentValidation = OverPaymentValidation(),
     private val dateStringValidationField: DateStringValidation = DateStringValidation(),
     private val dateLongValidationField: DateLongValidation = DateLongValidation()
@@ -63,8 +65,10 @@ class ClientViewModel @Inject constructor(
     var allApartmentClients: MutableLiveData<List<Client>>
     var validateFormState by mutableStateOf(ValidationFormState())
 
-    private val _uiClientState = MutableLiveData<Client>()
+    private var _uiClientState = MutableLiveData<Client>()
     val uiClientState: LiveData<Client> = _uiClientState
+    private var _paymentDebt = MutableLiveData<Int>()
+    val paymentDebt: LiveData<Int> = _paymentDebt
 
     private val _isLoadingForUpdateClient: MutableState<Boolean> = mutableStateOf(false)
     val isLoadingForUpdateClient: State<Boolean> get() = _isLoadingForUpdateClient
@@ -166,12 +170,20 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(colorError = null)
     }
 
+
     fun getClient(clientPhone: String) {
         viewModelScope.launch {
             _uiClientState.value = clientRepository.getClientByPhone(clientPhone)
+            getPaymentDebt()
+
         }
     }
 
+    fun getPaymentDebt() {
+        _paymentDebt.value =
+            (uiClientState.value?.priceOfStay?.minus(uiClientState.value?.completedPrePayment!!)
+                ?: 0) - uiClientState.value?.completedPayment!!
+    }
 
     fun getAppatmentClients(appatmentName: String) {
         clientRepository.getAppatmentClients(appatmentName)
@@ -271,7 +283,8 @@ class ClientViewModel @Inject constructor(
             }
 
             is ValidationFormEvent.PrePaymentPercentChanged -> {
-                validateFormState = validateFormState.copy(prePaymentPercent = event.prepaymentPercent)
+                validateFormState =
+                    validateFormState.copy(prePaymentPercent = event.prepaymentPercent)
             }
 
             is ValidationFormEvent.PricePerDayChanged -> {
@@ -346,10 +359,10 @@ class ClientViewModel @Inject constructor(
 
         val overMembersResult = membersValidationField.execute(validateFormState.overMembers)
 
-        val prePaymentResult = pricePerDayValidationField.execute(
+        val pricePerDay = pricePerDayValidationField.execute(
             validateFormState
         )
-        val paymentResult = prePaymentValidationField.execute(
+        val prePaymentResult = prePaymentValidationField.execute(
             validateFormState
         )
         val overPaymentResult = overPaymentValidation.execute(
@@ -369,7 +382,7 @@ class ClientViewModel @Inject constructor(
             membersResult,
             overMembersResult,
             prePaymentResult,
-            paymentResult,
+            pricePerDay,
             overPaymentResult
         ).any { !it!!.successful }
 
@@ -388,7 +401,7 @@ class ClientViewModel @Inject constructor(
                 dateOutLongError = dateOutLongResult.errorMessage,
                 dateInLongError = dateInLongResult.errorMessage,
                 prePaymentPercentError = prePaymentResult.errorMessage,
-                pricePerDayError = paymentResult.errorMessage,
+                pricePerDayError = pricePerDay.errorMessage,
                 overPaymentError = overPaymentResult.errorMessage,
             )
             return
@@ -457,7 +470,7 @@ class ClientViewModel @Inject constructor(
         val membersResult = membersValidationField.execute(validateFormState.members)
         val overMembersResult = membersValidationField.execute(validateFormState.overMembers)
 
-        val prePaymentResult = pricePerDayValidationField.execute(
+        val prePaymentResult = prePaymentValidationField.execute(
             validateFormState
         )
         val pricePerDayResult = pricePerDayValidationField.execute(
@@ -468,6 +481,9 @@ class ClientViewModel @Inject constructor(
         )
 
         val completedPrePaymentResult = completedPrePaymentValidationField.execute(
+            validateFormState
+        )
+        val completedPaymentResult = completedPaymentValidationField.execute(
             validateFormState
         )
 
@@ -487,7 +503,8 @@ class ClientViewModel @Inject constructor(
             prePaymentResult,
             overPaymentResult,
             pricePerDayResult,
-            completedPrePaymentResult
+            completedPrePaymentResult,
+            completedPaymentResult
         )
 
         val hasError: Boolean = hasErrorList.any { !it!!.successful }
@@ -502,7 +519,7 @@ class ClientViewModel @Inject constructor(
                 documentNamberError = documentNumberResult?.errorMessage,
                 documentDitailsError = documentDitailsResult?.errorMessage,
                 membersError = membersResult.errorMessage,
-                overMembersError = overMembersResult?.errorMessage,
+                overMembersError = overMembersResult.errorMessage,
                 dateOutStringError = dateOutStringResult.errorMessage,
                 dateInStringError = dateInStringResult.errorMessage,
                 dateOutLongError = dateOutLongResult.errorMessage,
@@ -510,7 +527,8 @@ class ClientViewModel @Inject constructor(
                 prePaymentPercentError = prePaymentResult.errorMessage,
                 pricePerDayError = pricePerDayResult.errorMessage,
                 overPaymentError = overPaymentResult.errorMessage,
-                completedPrePaymentError = completedPrePaymentResult.errorMessage
+                completedPrePaymentError = completedPrePaymentResult.errorMessage,
+                completedPaymentError = completedPaymentResult.errorMessage
             )
             viewModelScope.launch {
                 validationEventChannel.send(ValidatAllFieldsResultEvent.UpdateWrong(hasErrorList = hasErrorList))
@@ -543,8 +561,10 @@ class ClientViewModel @Inject constructor(
                         pricePerDay = validateFormState.pricePerDay.trim().toInt(),
 
 
-                        completedPayment = if (validateFormState.completedPayment == "") 0 else validateFormState.completedPayment.trim().toInt(),
-                        completedPrePayment = if (validateFormState.completedPrePayment == "") 0 else validateFormState.completedPrePayment.trim().toInt()
+                        completedPayment = if (validateFormState.completedPayment == "") 0 else validateFormState.completedPayment.trim()
+                            .toInt(),
+                        completedPrePayment = if (validateFormState.completedPrePayment == "") 0 else validateFormState.completedPrePayment.trim()
+                            .toInt()
                             .toInt(),
                         completedOverPayment = validateFormState.completedOverPayment.trim()
                             .toInt(),

@@ -44,8 +44,10 @@ fun ClientPaymentScreen(
     viewModelAppatment: AppatmentViewModel,
     clientPhone: String
 ) {
+
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
     val inputValidateState = viewModelClient.validateFormState
+    val paymentDebt = viewModelClient.paymentDebt
     val clientDBState = viewModelClient.uiClientState
 //    val (selectedOption, onOptionSelected) = remember { mutableStateOf(ClientStatus.statusList[0]) }
     val context = LocalContext.current
@@ -54,14 +56,6 @@ fun ClientPaymentScreen(
     var isPaymentActive = false
     var isPledgeActive = false
 
-    val prePaymentDebt = clientDBState.value?.prePayment?.minus(clientDBState.value?.completedPrePayment!!)
-    val paymentDebt =
-        clientDBState.value?.priceOfStay?.minus(clientDBState.value?.completedPayment!!)
-            ?.minus(clientDBState.value?.completedPrePayment!!)
-
-    var prePaymentMoment = remember {
-        "0"
-    }
 
     LaunchedEffect(key1 = context) {
         viewModelClient.validationEvents.collect { event ->
@@ -73,9 +67,11 @@ fun ClientPaymentScreen(
                     ).show()
 //                    viewModelClient.getClient(clientPhone)
 //                    viewModelClient.getClientState(clientPhone)
+                    viewModelClient.resetState()
                     viewModelClient.getAppatmentClients(currentAppatment!!.name)
                     viewModelClient.getClient(clientPhone = clientPhone)
-                    viewModelClient.resetState()
+                    viewModelClient.getClientState(clientPhone)
+
                     mainNavController.navigate("${Routs.clientPaymentScreen}/${clientPhone}")
 
 //                    mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
