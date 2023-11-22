@@ -71,6 +71,8 @@ class Client {
     @ColumnInfo(name = "over_payment")
     var overPayment: Int = 0
 
+    @ColumnInfo(name = "pledge")
+    var pledge: Int = 0
 
     @ColumnInfo(name = "completed_pre_payment")
     var completedPrePayment: Int = 0
@@ -81,9 +83,8 @@ class Client {
     @ColumnInfo(name = "completed_over_payment")
     var completedOverPayment: Int = 0
 
-    @ColumnInfo(name = "pledge")
-    var pledge: Int = 0
-
+    @ColumnInfo(name = "completed_pledge")
+    var completedPledge: Int = 0
 
 
     @ColumnInfo(name = "client_color")
@@ -131,11 +132,12 @@ class Client {
         prePayment: Int,
         pricePerDay: Int,
         overPayment: Int,
+        pledge:Int,
 
         completedPrePayment: Int,
         completedPayment: Int,
         completedOverPayment: Int,
-        pledge:Int,
+        completedPledge: Int,
 
         clientColor: Int,
         transferInfo: String?,
@@ -159,11 +161,12 @@ class Client {
         this.prePayment = prePayment
         this.pricePerDay = pricePerDay
         this.overPayment = overPayment
+        this.pledge = pledge
 
         this.completedPrePayment = completedPrePayment
         this.completedPayment = completedPayment
         this.completedOverPayment = completedOverPayment
-        this.pledge = pledge
+        this.completedPledge = completedPledge
 
         this.clientColor = clientColor
         this.transferInfo = transferInfo
@@ -190,11 +193,12 @@ class Client {
         prePayment: Int,
         pricePerDay: Int,
         overPayment: Int,
+        pledge: Int,
 
         completedPrePayment: Int,
         completedPayment: Int,
         completedOverPayment: Int,
-        pledge: Int,
+        completedPledge: Int,
 
         clientColor: Int,
         transferInfo: String?,
@@ -219,11 +223,12 @@ class Client {
         this.prePayment = prePayment
         this.pricePerDay = pricePerDay
         this.overPayment = overPayment
+        this.pledge = pledge
 
         this.completedPrePayment = completedPrePayment
         this.completedPayment = completedPayment
         this.completedOverPayment = completedOverPayment
-        this.pledge = pledge
+        this.completedPledge = completedPledge
 
         this.clientColor = clientColor
         this.transferInfo = transferInfo

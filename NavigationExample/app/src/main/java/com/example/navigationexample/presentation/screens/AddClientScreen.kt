@@ -596,44 +596,6 @@ fun AddClientScreen(
                         }
                     }
                 }
-//колич человек на доп место
-//                item {
-//                    OutlinedTextField(
-//                        value = state.overMembers,
-//                        onValueChange = {
-//                            viewModelClient.onFormEvent(ValidationFormEvent.OverMembersChanged(it))
-//                        },
-//                        placeholder = { Text(text = "Количество человек на доп. места", color = Black) },
-//                        isError = state.overMembersError != null,
-//                        singleLine = true,
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
-//                        colors = TextFieldDefaults.outlinedTextFieldColors(
-//                            unfocusedBorderColor = Black,
-//                            textColor = Black,
-//                            backgroundColor = Color(142, 143, 138)
-//                        ),
-//                        keyboardOptions = KeyboardOptions(
-//                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
-//                        ),
-//                        keyboardActions = KeyboardActions(onNext = {
-//                            focusManager.moveFocus(FocusDirection.Down)
-//                        }),
-//                    )
-//                    if (state.overMembersError != null) {
-//                        Box(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                        ) {
-//                            Text(
-//                                text = state.overMembersError!!,
-//                                color = MaterialTheme.colors.error,
-//                                modifier = Modifier.align(Alignment.BottomStart)
-//                            )
-//                        }
-//                    }
-//                }
 
 
 //стоимость доп меств
@@ -678,6 +640,47 @@ fun AddClientScreen(
                 }
 
 
+
+//размер залого
+                item {
+                    OutlinedTextField(
+                        value = state.pledge,
+                        onValueChange = {
+                            viewModelClient.onFormEvent(ValidationFormEvent.PledgeChanged(it))
+                        },
+
+                        placeholder = { Text(text = "Размер залога", color = Black) },
+                        isError = state.pledgeError != null,
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 5.dp, start = 5.dp, end = 5.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Black,
+                            textColor = Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
+                    )
+
+                    if (state.pledgeError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = state.pledgeError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                }
 //трансфер
                 item {
                     state.transferInfo?.let {

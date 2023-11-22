@@ -40,6 +40,8 @@ data class ValidationFormState(
     var pricePerDayError: String? = null,
     var overPayment: String = "0",
     var overPaymentError: String? = null,
+    var pledge: String = "0",
+    var pledgeError: String? = null,
 
     var priceOfStay: String = "0",
 
@@ -49,11 +51,12 @@ data class ValidationFormState(
     var completedPayment: String = "0",
     var completedPaymentError: String? = null,
 
+    var completedPledge: String = "0",
+    var completedPledgeError: String? = null,
+
+
     var completedOverPayment: String = "0",
     var completedOverPaymentError: String? = null,
-
-    var pledge: String = "0",
-    var pledgeError: String? = null,
 
     var transferInfo: String? = "",
     var transferInfoError: String? = null,

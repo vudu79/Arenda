@@ -102,7 +102,7 @@ fun ClientDitailsScreen(
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
-                            fontSize = 19.sp,
+                            fontSize = 16.sp,
                             color = Color(223, 75, 0)
                         )
 
@@ -113,7 +113,7 @@ fun ClientDitailsScreen(
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
 
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             color = Color(254, 253, 253, 255)
                         )
                     }
@@ -121,7 +121,8 @@ fun ClientDitailsScreen(
 
                 }
             }
-//        Дата заезда _______________________________________________________________
+
+//        Доход от клиениа
             item {
                 Column(
                     horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
@@ -130,237 +131,96 @@ fun ClientDitailsScreen(
                         verticalAlignment = Alignment.Top,
                         horizontalArrangement = Arrangement.Start,
                     ) {
+
                         Text(
-                            text = "Заезд  ",
+                            text = "Оплачено (предоплата/бронь): ",
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
-                            fontSize = 19.sp,
+                            fontSize = 16.sp,
                             color = Color(223, 75, 0)
                         )
 
                         Text(
-                            text = dateToString(state.value?.inDate),
+                            text = state.value?.completedPrePayment.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
 
-                            fontSize = 18.sp,
-                            color = Color(254, 253, 253, 255)
+                            fontSize = 16.sp,
+                            color = if (viewModelClient.isPrePaymentComplete.value == true) {
+                                Color(5, 224, 14, 255)
+                            } else {
+                                Color(247, 21, 4, 255)
+                            }
                         )
                     }
                     Spacer(modifier = Modifier.padding(10.dp))
-                }
-            }
-//        Дата выезда _______________________________________________________________
-            item {
-                Column(
-                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
-                ) {
                     Row(
                         verticalAlignment = Alignment.Top,
                         horizontalArrangement = Arrangement.Start,
                     ) {
+
                         Text(
-                            text = "Выезд  ",
+                            text = "Оплачено (стоимость проживания): ",
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
-                            fontSize = 19.sp,
+                            fontSize = 16.sp,
                             color = Color(223, 75, 0)
                         )
 
                         Text(
-                            text = dateToString(state.value?.outDate),
+                            text = state.value?.completedPayment.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
 
-                            fontSize = 18.sp,
-                            color = Color(254, 253, 253, 255)
+                            fontSize = 16.sp,
+                            color = if (viewModelClient.isPaymentComplete.value == true) {
+                                Color(5, 224, 14, 255)
+                            } else {
+                                Color(247, 21, 4, 255)
+                            }
                         )
                     }
                     Spacer(modifier = Modifier.padding(10.dp))
-                }
-            }
 
-//        количество дней _______________________________________________________________
-            item {
-                Column(
-                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
-                ) {
                     Row(
                         verticalAlignment = Alignment.Top,
                         horizontalArrangement = Arrangement.Start,
                     ) {
+
                         Text(
-                            text = "Количество ночей ",
+                            text = "Оплачено (залог): ",
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
-                            fontSize = 19.sp,
+                            fontSize = 16.sp,
                             color = Color(223, 75, 0)
                         )
 
-
                         Text(
-                            text = totalDays.toString(),
+                            text = state.value?.completedPledge.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
 
-                            fontSize = 18.sp,
-                            color = Color(254, 253, 253, 255)
+                            fontSize = 16.sp,
+                            color = Color(5, 224, 14, 255)
                         )
                     }
                     Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
 
-
-//    человек в тарифе
-            item {
-                Column(
-                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.Top,
-                        horizontalArrangement = Arrangement.Start,
-                    ) {
-                        Text(
-                            text = "Количество гостей: ",
-                            maxLines = 1,
-                            modifier = Modifier
-                                .background(Color(41, 41, 41))
-                                .padding(start = 5.dp),
-                            fontSize = 19.sp,
-                            color = Color(223, 75, 0)
-                        )
-
-                        Text(
-                            text = state.value?.members.toString(),
-                            maxLines = 1,
-                            modifier = Modifier
-                                .background(Color(41, 41, 41))
-                                .padding(start = 5.dp),
-
-                            fontSize = 18.sp,
-                            color = Color(254, 253, 253, 255)
-                        )
-                    }
-                    Spacer(modifier = Modifier.padding(10.dp))
-                }
-            }
-
-//    человек в тарифе
-            item {
-                Column(
-                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.Top,
-                        horizontalArrangement = Arrangement.Start,
-                    ) {
-                        Text(
-                            text = "Человек в тарифе за сутки: ",
-                            maxLines = 1,
-                            modifier = Modifier
-                                .background(Color(41, 41, 41))
-                                .padding(start = 5.dp),
-                            fontSize = 19.sp,
-                            color = Color(223, 75, 0)
-                        )
-
-                        Text(
-                            text = state.value?.overMembers.toString(),
-                            maxLines = 1,
-                            modifier = Modifier
-                                .background(Color(41, 41, 41))
-                                .padding(start = 5.dp),
-
-                            fontSize = 18.sp,
-                            color = Color(254, 253, 253, 255)
-                        )
-                    }
-                    Spacer(modifier = Modifier.padding(10.dp))
-                }
-            }
-
-//    стоимость тарифа
-            item {
-                Column(
-                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.Top,
-                        horizontalArrangement = Arrangement.Start,
-                    ) {
-                        Text(
-                            text = "Стоимость тарифа ",
-                            maxLines = 1,
-                            modifier = Modifier
-                                .background(Color(41, 41, 41))
-                                .padding(start = 5.dp),
-                            fontSize = 19.sp,
-                            color = Color(223, 75, 0)
-                        )
-
-                        Text(
-                            text = state.value?.pricePerDay.toString(),
-                            maxLines = 1,
-                            modifier = Modifier
-                                .background(Color(41, 41, 41))
-                                .padding(start = 5.dp),
-
-                            fontSize = 18.sp,
-                            color = Color(254, 253, 253, 255)
-                        )
-                    }
-                    Spacer(modifier = Modifier.padding(10.dp))
-                }
-            }
-
-//    стоимость доп места
-            item {
-                Column(
-                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.Top,
-                        horizontalArrangement = Arrangement.Start,
-                    ) {
-                        Text(
-                            text = "Стоимость одного доп. места ",
-                            maxLines = 1,
-                            modifier = Modifier
-                                .background(Color(41, 41, 41))
-                                .padding(start = 5.dp),
-                            fontSize = 19.sp,
-                            color = Color(223, 75, 0)
-                        )
-
-                        Text(
-                            text = state.value?.overPayment.toString(),
-                            maxLines = 1,
-                            modifier = Modifier
-                                .background(Color(41, 41, 41))
-                                .padding(start = 5.dp),
-
-                            fontSize = 18.sp,
-                            color = Color(254, 253, 253, 255)
-                        )
-                    }
-                    Spacer(modifier = Modifier.padding(10.dp))
-                }
-            }
-
-//    залог
+            //    стоимость бронирования
             item {
                 Column(
                     horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
@@ -375,7 +235,7 @@ fun ClientDitailsScreen(
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
-                            fontSize = 19.sp,
+                            fontSize = 16.sp,
                             color = Color(223, 75, 0)
                         )
 
@@ -386,7 +246,7 @@ fun ClientDitailsScreen(
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
 
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             color = Color(254, 253, 253, 255)
                         )
 
@@ -410,7 +270,7 @@ fun ClientDitailsScreen(
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
-                            fontSize = 19.sp,
+                            fontSize = 16.sp,
                             color = Color(223, 75, 0)
                         )
 
@@ -421,7 +281,7 @@ fun ClientDitailsScreen(
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
 
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             color = Color(254, 253, 253, 255)
                         )
                     }
@@ -444,7 +304,7 @@ fun ClientDitailsScreen(
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
-                            fontSize = 19.sp,
+                            fontSize = 16.sp,
                             color = Color(223, 75, 0)
                         )
 
@@ -455,13 +315,253 @@ fun ClientDitailsScreen(
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
 
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             color = Color(254, 253, 253, 255)
                         )
                     }
                     Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
+
+//        Дата заезда _______________________________________________________________
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Заезд  ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 16.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = dateToString(state.value?.inDate),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 16.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
+                }
+            }
+//        Дата выезда _______________________________________________________________
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Выезд  ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 16.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = dateToString(state.value?.outDate),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 16.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
+                }
+            }
+
+//        количество дней _______________________________________________________________
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Количество ночей ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 16.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+
+                        Text(
+                            text = totalDays.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 16.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
+                }
+            }
+
+
+//    количество гостей
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Количество гостей: ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 16.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = state.value?.members.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 16.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
+                }
+            }
+
+//    человек в тарифе
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Человек в тарифе за сутки: ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 16.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = state.value?.overMembers.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 16.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
+                }
+            }
+
+//    стоимость тарифа
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Стоимость тарифа ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 16.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = state.value?.pricePerDay.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 16.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
+                }
+            }
+
+//    стоимость доп места
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Стоимость одного доп. места ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 16.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = state.value?.overPayment.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 16.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
+                }
+            }
+
 
 //   телефон клиента
             item {
@@ -478,7 +578,7 @@ fun ClientDitailsScreen(
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
-                            fontSize = 19.sp,
+                            fontSize = 16.sp,
                             color = Color(223, 75, 0)
                         )
 
@@ -489,7 +589,7 @@ fun ClientDitailsScreen(
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
 
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             color = Color(254, 253, 253, 255)
                         )
                     }
@@ -513,7 +613,7 @@ fun ClientDitailsScreen(
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
-                            fontSize = 19.sp,
+                            fontSize = 16.sp,
                             color = Color(223, 75, 0)
                         )
 
@@ -524,7 +624,7 @@ fun ClientDitailsScreen(
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
 
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             color = Color(254, 253, 253, 255)
                         )
                     }
@@ -539,7 +639,7 @@ fun ClientDitailsScreen(
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
-                            fontSize = 19.sp,
+                            fontSize = 16.sp,
                             color = Color(223, 75, 0)
                         )
 
@@ -550,7 +650,7 @@ fun ClientDitailsScreen(
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
 
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             color = Color(254, 253, 253, 255)
                         )
                     }
@@ -573,7 +673,7 @@ fun ClientDitailsScreen(
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
-                            fontSize = 19.sp,
+                            fontSize = 16.sp,
                             color = Color(223, 75, 0)
                         )
 
@@ -584,7 +684,7 @@ fun ClientDitailsScreen(
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
 
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             color = Color(254, 253, 253, 255)
                         )
                     }
@@ -607,7 +707,7 @@ fun ClientDitailsScreen(
                             modifier = Modifier
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
-                            fontSize = 19.sp,
+                            fontSize = 16.sp,
                             color = Color(223, 75, 0)
                         )
 
@@ -618,7 +718,7 @@ fun ClientDitailsScreen(
                                 .background(Color(41, 41, 41))
                                 .padding(start = 5.dp),
 
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             color = Color(254, 253, 253, 255)
                         )
                     }

@@ -32,6 +32,7 @@ import com.example.navigationexample.domain.usecase.validation.validators.Member
 import com.example.navigationexample.domain.usecase.validation.validators.NameValidation
 import com.example.navigationexample.domain.usecase.validation.validators.OverPaymentValidation
 import com.example.navigationexample.domain.usecase.validation.validators.PhoneValidation
+import com.example.navigationexample.domain.usecase.validation.validators.PledgeValidation
 import com.example.navigationexample.domain.usecase.validation.validators.PrePaymentValidation
 import com.example.navigationexample.domain.usecase.validation.validators.PricePerDayValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -56,6 +57,7 @@ class ClientViewModel @Inject constructor(
     private val membersValidationField: MembersValidation = MembersValidation(),
     private val pricePerDayValidationField: PricePerDayValidation = PricePerDayValidation(),
     private val prePaymentValidationField: PrePaymentValidation = PrePaymentValidation(),
+    private val pledgeValidationField: PledgeValidation = PledgeValidation(),
     private val completedPrePaymentValidationField: CompletedPrePaymentValidation = CompletedPrePaymentValidation(),
     private val completedPaymentValidationField: CompletedPaymentValidation = CompletedPaymentValidation(),
     private val overPaymentValidation: OverPaymentValidation = OverPaymentValidation(),
@@ -75,6 +77,9 @@ class ClientViewModel @Inject constructor(
 
     private var _isPrePaymentComplete = MutableLiveData<Boolean>(false)
     val isPrePaymentComplete: LiveData<Boolean> = _isPrePaymentComplete
+
+    private var _isPledgeComplete = MutableLiveData<Boolean>(false)
+    val isPledgeComplete: LiveData<Boolean> = _isPledgeComplete
 
 
     private val _isLoadingForUpdateClient: MutableState<Boolean> = mutableStateOf(false)
@@ -119,6 +124,8 @@ class ClientViewModel @Inject constructor(
             validateFormState.copy(prePaymentPercent = client.prePaymentPercent.toString())
         validateFormState =
             validateFormState.copy(prePayment = client.prePayment.toString())
+        validateFormState = validateFormState.copy(pledge = client.pledge.toString())
+
 
         validateFormState =
             validateFormState.copy(completedPayment = client.completedPayment.toString())
@@ -126,7 +133,8 @@ class ClientViewModel @Inject constructor(
             validateFormState.copy(completedOverPayment = client.completedOverPayment.toString())
         validateFormState =
             validateFormState.copy(completedPrePayment = client.completedPrePayment.toString())
-        validateFormState = validateFormState.copy(pledge = client.pledge.toString())
+        validateFormState =
+            validateFormState.copy(completedPledge = client.completedPledge.toString())
 
         validateFormState = validateFormState.copy(transferInfo = client.transferInfo)
         validateFormState = validateFormState.copy(referer = client.referer)
@@ -159,6 +167,7 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(priceOfStay = "")
         validateFormState = validateFormState.copy(completedPrePayment = "0")
         validateFormState = validateFormState.copy(completedPayment = "0")
+        validateFormState = validateFormState.copy(completedPledge = "0")
         validateFormState = validateFormState.copy(transferInfo = "")
         validateFormState = validateFormState.copy(referer = "")
         validateFormState =
@@ -182,6 +191,7 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(colorError = null)
         validateFormState = validateFormState.copy(completedPrePaymentError = null)
         validateFormState = validateFormState.copy(completedPaymentError = null)
+        validateFormState = validateFormState.copy(completedPledgeError = null)
     }
 
 
@@ -189,9 +199,11 @@ class ClientViewModel @Inject constructor(
         viewModelScope.launch {
             _uiClientState.value = clientRepository.getClientByPhone(clientPhone)
             getPaymentDebt()
-            _isPrePaymentComplete.value = _uiClientState.value!!.prePayment == _uiClientState.value!!.completedPrePayment
+            _isPrePaymentComplete.value =
+                _uiClientState.value!!.prePayment == _uiClientState.value!!.completedPrePayment
             _isPaymentComplete.value = _paymentDebt.value == _uiClientState.value!!.completedPayment
-
+            _isPledgeComplete.value =
+                _uiClientState.value!!.pledge == _uiClientState.value!!.completedPledge
         }
     }
 
@@ -201,12 +213,16 @@ class ClientViewModel @Inject constructor(
                 ?: 0)
     }
 
-    fun setActivePrePaymentTextField(){
+    fun setActivePrePaymentTextField() {
         _isPrePaymentComplete.value = !_isPrePaymentComplete.value!!
     }
 
-    fun setActivePaymentYTextField(){
+    fun setActivePaymentTextField() {
         _isPaymentComplete.value = !_isPaymentComplete.value!!
+    }
+
+    fun setActivePledgeTextField() {
+        _isPledgeComplete.value = !_isPledgeComplete.value!!
     }
 
     fun getAppatmentClients(appatmentName: String) {
@@ -315,6 +331,14 @@ class ClientViewModel @Inject constructor(
                 validateFormState = validateFormState.copy(pricePerDay = event.pricePerDay)
             }
 
+            is ValidationFormEvent.PledgeChanged -> {
+                validateFormState = validateFormState.copy(pledge = event.pledge)
+            }
+
+            is ValidationFormEvent.CompletedPledgeChanged -> {
+                validateFormState = validateFormState.copy(completedPledge = event.completedPledge)
+            }
+
             is ValidationFormEvent.OverPaymentChanged -> {
                 validateFormState = validateFormState.copy(overPayment = event.overPayment)
             }
@@ -383,12 +407,19 @@ class ClientViewModel @Inject constructor(
 
         val overMembersResult = membersValidationField.execute(validateFormState.overMembers)
 
-        val pricePerDay = pricePerDayValidationField.execute(
+        val pricePerDayResult = pricePerDayValidationField.execute(
             validateFormState
         )
+
+        val pledgeResult = pledgeValidationField.execute(
+            validateFormState.pledge
+        )
+
         val prePaymentResult = prePaymentValidationField.execute(
             validateFormState
         )
+
+
         val overPaymentResult = overPaymentValidation.execute(
             validateFormState.overPayment
         )
@@ -406,8 +437,9 @@ class ClientViewModel @Inject constructor(
             membersResult,
             overMembersResult,
             prePaymentResult,
-            pricePerDay,
-            overPaymentResult
+            pricePerDayResult,
+            overPaymentResult,
+            pledgeResult
         ).any { !it!!.successful }
 
         if (hasError) {
@@ -425,14 +457,13 @@ class ClientViewModel @Inject constructor(
                 dateOutLongError = dateOutLongResult.errorMessage,
                 dateInLongError = dateInLongResult.errorMessage,
                 prePaymentPercentError = prePaymentResult.errorMessage,
-                pricePerDayError = pricePerDay.errorMessage,
+                pricePerDayError = pricePerDayResult.errorMessage,
                 overPaymentError = overPaymentResult.errorMessage,
+                pledgeError = pledgeResult.errorMessage
             )
             return
         }
         viewModelScope.launch {
-
-
             addClient(
                 Client(
                     status = validateFormState.status,
@@ -453,11 +484,12 @@ class ClientViewModel @Inject constructor(
                     prePaymentPercent = validateFormState.prePaymentPercent.trim().toInt(),
                     prePayment = prePaymentCalculation(validateFormState),
                     pricePerDay = validateFormState.pricePerDay.trim().toInt(),
+                    pledge = validateFormState.pledge.trim().toInt(),
 
                     completedPayment = validateFormState.completedPayment.trim().toInt(),
                     completedPrePayment = validateFormState.completedPrePayment.trim().toInt(),
                     completedOverPayment = validateFormState.completedOverPayment.trim().toInt(),
-                    pledge = validateFormState.pledge.trim().toInt(),
+                    completedPledge = validateFormState.completedPledge.trim().toInt(),
 
                     clientColor = validateFormState.color.toArgb(),
                     transferInfo = validateFormState.transferInfo,
@@ -500,6 +532,10 @@ class ClientViewModel @Inject constructor(
         val pricePerDayResult = pricePerDayValidationField.execute(
             validateFormState
         )
+        val pledgeResult = pledgeValidationField.execute(
+            validateFormState.pledge
+        )
+
         val overPaymentResult = overPaymentValidation.execute(
             validateFormState.overPayment
         )
@@ -509,6 +545,9 @@ class ClientViewModel @Inject constructor(
         )
         val completedPaymentResult = completedPaymentValidationField.execute(
             validateFormState, paymentDebt.value!!
+        )
+        val completedPledgeResult = pledgeValidationField.execute(
+            validateFormState.pledge
         )
 
         val hasErrorList = listOf(
@@ -526,9 +565,11 @@ class ClientViewModel @Inject constructor(
             overMembersResult,
             prePaymentResult,
             overPaymentResult,
+            pledgeResult,
             pricePerDayResult,
             completedPrePaymentResult,
-            completedPaymentResult
+            completedPaymentResult,
+            completedPledgeResult
         )
 
         val hasError: Boolean = hasErrorList.any { !it!!.successful }
@@ -550,9 +591,11 @@ class ClientViewModel @Inject constructor(
                 dateInLongError = dateInLongResult.errorMessage,
                 prePaymentPercentError = prePaymentResult.errorMessage,
                 pricePerDayError = pricePerDayResult.errorMessage,
+                pledgeError = pledgeResult.errorMessage,
                 overPaymentError = overPaymentResult.errorMessage,
                 completedPrePaymentError = completedPrePaymentResult.errorMessage,
-                completedPaymentError = completedPaymentResult.errorMessage
+                completedPaymentError = completedPaymentResult.errorMessage,
+                completedPledgeError = completedPledgeResult.errorMessage
             )
             viewModelScope.launch {
                 validationEventChannel.send(ValidatAllFieldsResultEvent.UpdateWrong(hasErrorList = hasErrorList))
@@ -576,23 +619,22 @@ class ClientViewModel @Inject constructor(
                         members = validateFormState.members.trim().toInt(),
                         overMembers = validateFormState.overMembers.trim().toInt(),
                         overPayment = validateFormState.overPayment.trim().toInt(),
-
                         priceOfStay = priceOfStayCalculation(validateFormState),
-//                        priceOfStay = priceOfStayCalculation(validateFormState),
                         daysOfStay = daysCalculation(validateFormState),
                         prePaymentPercent = validateFormState.prePaymentPercent.trim().toInt(),
                         prePayment = prePaymentCalculation(validateFormState),
                         pricePerDay = validateFormState.pricePerDay.trim().toInt(),
-
+                        pledge = validateFormState.pledge.trim().toInt(),
 
                         completedPayment = if (validateFormState.completedPayment == "") 0 else validateFormState.completedPayment.trim()
                             .toInt(),
                         completedPrePayment = if (validateFormState.completedPrePayment == "") 0 else validateFormState.completedPrePayment.trim()
-                            .toInt()
+                            .toInt(),
+                        completedPledge = if (validateFormState.completedPledge == "") 0 else validateFormState.completedPledge.trim()
                             .toInt(),
                         completedOverPayment = validateFormState.completedOverPayment.trim()
                             .toInt(),
-                        pledge = validateFormState.pledge.trim().toInt(),
+
                         clientColor = validateFormState.color.toArgb(),
                         transferInfo = validateFormState.transferInfo,
                         referer = validateFormState.referer,

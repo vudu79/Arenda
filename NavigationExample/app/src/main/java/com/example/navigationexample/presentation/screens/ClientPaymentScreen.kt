@@ -52,6 +52,11 @@ fun ClientPaymentScreen(
         mutableStateOf(false)
     }
 
+    var showCustomDialogPledge by remember {
+        mutableStateOf(false)
+    }
+
+
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
     val inputValidateState = viewModelClient.validateFormState
     val paymentDebt = viewModelClient.paymentDebt
@@ -296,7 +301,6 @@ fun ClientPaymentScreen(
                 }
             }
 //    полная стоимость проживания
-//            if (isPaymentActive) {
             item {
                 Column(
                     horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
@@ -452,76 +456,167 @@ fun ClientPaymentScreen(
                     Spacer(modifier = Modifier.padding(15.dp))
                 }
             }
-//            }
+//    залог
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Залог/обеспечительный платеж  ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 20.sp,
+                            color = Color(223, 75, 0)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
+
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                    ) {
+                        Text(
+                            text = "Должен - ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = clientDBState.value?.pledge.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 19.sp,
+                            color = Color(255, 255, 255, 255)
+                        )
+
+                        Text(
+                            text = "Заплатил - ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = clientDBState.value?.completedPledge.toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 19.sp,
+                            color = if (viewModelClient.isPledgeComplete.value == true) Color(
+                                9,
+                                202,
+                                17,
+                                255
+                            ) else Color(254, 253, 253, 255)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.padding(10.dp))
+
+                    OutlinedTextField(
+                        value = inputValidateState.completedPledge,
+                        onValueChange = {
+//                            prePaymentMoment = if (it == "") "0" else it
+                            viewModelClient.onFormEvent(
+                                ValidationFormEvent.CompletedPledgeChanged(
+                                    it
+                                )
+                            )
+                        },
+                        enabled = !viewModelClient.isPledgeComplete.value!!,
+                        placeholder = { Text(text = "Внесение залога", color = Color.Black) },
+                        isError = inputValidateState.completedPledgeError != null,
+                        singleLine = false,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                top = 1.dp,
+                                bottom = 5.dp,
+                                start = 5.dp,
+                                end = 5.dp
+                            ),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            unfocusedBorderColor = Color.Black,
+                            focusedBorderColor = Color(223, 75, 0),
+                            textColor = Color.Black,
+                            backgroundColor = Color(142, 143, 138)
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Number,
+                            capitalization = KeyboardCapitalization.None,
+                            autoCorrect = true,
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }),
+                    )
+
+                    if (inputValidateState.completedPledgeError != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = inputValidateState.completedPledgeError!!,
+                                color = MaterialTheme.colors.error,
+                                modifier = Modifier.align(Alignment.BottomStart)
+                            )
+                        }
+                    }
+                    if (!viewModelClient.isPledgeComplete.value!!) {
+                        GradientButton(
+                            "Сохранить",
+                            listOf(
+                                Color(0xFF292929),
+                                Color(0xFF0BDE13),
+                                Color(0xFF292929),
+                            ),
+
+                            ) {
+                            viewModelClient.onFormEvent(
+                                ValidationFormEvent.onSubmitUpdate(
+                                    SourceEvent.PAYMENTUPDATE
+                                )
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.padding(3.dp))
+
+                    if (viewModelClient.isPledgeComplete.value!!) {
+                        GradientButton(
+                            "Очистить",
+                            listOf(
+                                Color(0xFF292929),
+                                Color(0xFFF81403),
+                                Color(0xFF292929),
+                            ),
+                        ) {
+                            showCustomDialogPledge = !showCustomDialogPledge
+                        }
+                    }
+                    Spacer(modifier = Modifier.padding(15.dp))
+                }
+            }
 
 
-//    полная стоимость брони
-//            item {
-//                Column(
-//                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
-//                ) {
-//                    Row(
-//                        verticalAlignment = Alignment.Top,
-//                        horizontalArrangement = Arrangement.Start,
-//                    ) {
-//                        Text(
-//                            text = "Полная стоимость проживания ",
-//                            maxLines = 1,
-//                            modifier = Modifier
-//                                .background(Color(41, 41, 41))
-//                                .padding(start = 5.dp),
-//                            fontSize = 19.sp,
-//                            color = Color(223, 75, 0)
-//                        )
-//
-//                        Text(
-//                            text = totalCoast.toString(),
-//                            maxLines = 1,
-//                            modifier = Modifier
-//                                .background(Color(41, 41, 41))
-//                                .padding(start = 5.dp),
-//
-//                            fontSize = 18.sp,
-//                            color = Color(254, 253, 253, 255)
-//                        )
-//                    }
-//                    Spacer(modifier = Modifier.padding(10.dp))
-//                }
-//            }
-
-//    полная стоимость брони с учетом залога
-//            item {
-//                Column(
-//                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
-//                ) {
-//                    Row(
-//                        verticalAlignment = Alignment.Top,
-//                        horizontalArrangement = Arrangement.Start,
-//                    ) {
-//                        Text(
-//                            text = "Стоимость с учетом залога ",
-//                            maxLines = 1,
-//                            modifier = Modifier
-//                                .background(Color(41, 41, 41))
-//                                .padding(start = 5.dp),
-//                            fontSize = 19.sp,
-//                            color = Color(223, 75, 0)
-//                        )
-//
-//                        Text(
-//                            text = (totalCoast - prepayment).toString(),
-//                            maxLines = 1,
-//                            modifier = Modifier
-//                                .background(Color(41, 41, 41))
-//                                .padding(start = 5.dp),
-//
-//                            fontSize = 18.sp,
-//                            color = Color(254, 253, 253, 255)
-//                        )
-//                    }
-//                    Spacer(modifier = Modifier.padding(10.dp))
-//                }
-//            }
 
             item {
                 Spacer(modifier = Modifier.padding(10.dp))
@@ -595,9 +690,26 @@ fun ClientPaymentScreen(
                 )
             )
             viewModelClient.onFormEvent(ValidationFormEvent.onSubmitUpdate(SourceEvent.PAYMENTUPDATE))
-            viewModelClient.setActivePaymentYTextField()
+            viewModelClient.setActivePaymentTextField()
         },
             message = "Вы уверены? Даные оплаты будут удалены."
+        )
+    }
+
+    if (showCustomDialogPledge) {
+        CustomAlertDialog(onDismiss = {
+            showCustomDialogPledge = !showCustomDialogPledge
+        }, onOk = {
+            showCustomDialogPledge = !showCustomDialogPledge
+            viewModelClient.onFormEvent(
+                ValidationFormEvent.CompletedPledgeChanged(
+                    "0"
+                )
+            )
+            viewModelClient.onFormEvent(ValidationFormEvent.onSubmitUpdate(SourceEvent.PAYMENTUPDATE))
+            viewModelClient.setActivePledgeTextField()
+        },
+            message = "Вы уверены? Даные о внесенном залоге будут удалены."
         )
     }
 }
