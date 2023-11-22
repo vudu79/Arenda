@@ -238,6 +238,9 @@ fun LazyItemScope.ClientItemRow(
                 }
                 DropdownMenu(
                     expanded = expanded,
+                    modifier = Modifier
+                        .background(Color(128, 107, 90))
+                        .border(2.dp, Color.Black),
                     onDismissRequest = { expanded = false }
                 ) {
                     Text(

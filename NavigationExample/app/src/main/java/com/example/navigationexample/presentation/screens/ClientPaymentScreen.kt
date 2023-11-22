@@ -33,6 +33,7 @@ import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsR
 import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
 import com.example.navigationexample.domain.usecase.validation.ValidationFormState
 import com.example.navigationexample.presentation.navigation.Routs
+import com.example.navigationexample.presentation.screens.common.CustomAlertDialog
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -43,6 +44,13 @@ fun ClientPaymentScreen(
     viewModelAppatment: AppatmentViewModel,
     clientPhone: String
 ) {
+    var showCustomDialogPrePayment by remember {
+        mutableStateOf(false)
+    }
+
+    var showCustomDialogPayment by remember {
+        mutableStateOf(false)
+    }
 
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
     val inputValidateState = viewModelClient.validateFormState
@@ -51,16 +59,13 @@ fun ClientPaymentScreen(
 //    val (selectedOption, onOptionSelected) = remember { mutableStateOf(ClientStatus.statusList[0]) }
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    var isPrePaymentActive = true
-    var isPaymentActive = false
-    var isPledgeActive = false
+
 
 
     LaunchedEffect(key1 = context) {
         viewModelClient.validationEvents.collect { event ->
             when (event) {
                 is ValidatAllFieldsResultEvent.UpdateSuccess -> {
-                    isPaymentActive = true
                     Toast.makeText(
                         context, "Данные по оплате обновлены!", Toast.LENGTH_SHORT
                     ).show()
@@ -211,7 +216,7 @@ fun ClientPaymentScreen(
                             )
                         },
                         enabled = !viewModelClient.isPrePaymentComplete.value!!,
-                        placeholder = { Text(text = "Предоплата", color = Color.Black) },
+                        placeholder = { Text(text = "Оплата бронирования", color = Color.Black) },
                         isError = inputValidateState.completedPrePaymentError != null,
                         singleLine = false,
                         modifier = Modifier
@@ -251,18 +256,43 @@ fun ClientPaymentScreen(
                             )
                         }
                     }
-                    GradientButton(
-                        "Сохранить"
-                    ) {
+                    if (!viewModelClient.isPrePaymentComplete.value!!) {
+                        GradientButton(
+                            "Сохранить",
+                            listOf(
+                                Color(0xFF292929),
+                                Color(0xFF0BDE13),
+                                Color(0xFF292929),
+                            ),
+
+                            ) {
 //                      viewModelClient.onFormEvent(
 //                                ValidationFormEvent.PrePaymentChanged(
 //                                    (inputValidateState.prePayment.toInt() - prePaymentMoment.toInt()).toString()
 //                                )
 //                            )
-                        viewModelClient.onFormEvent(ValidationFormEvent.onSubmitUpdate(SourceEvent.PAYMENTUPDATE))
-                        isPaymentActive = true
+                            viewModelClient.onFormEvent(
+                                ValidationFormEvent.onSubmitUpdate(
+                                    SourceEvent.PAYMENTUPDATE
+                                )
+                            )
+                        }
                     }
-                    Spacer(modifier = Modifier.padding(20.dp))
+                    Spacer(modifier = Modifier.padding(3.dp))
+
+                    if (viewModelClient.isPrePaymentComplete.value!!) {
+                        GradientButton(
+                            "Очистить",
+                            listOf(
+                                Color(0xFF292929),
+                                Color(0xFFF81403),
+                                Color(0xFF292929),
+                            ),
+                        ) {
+                            showCustomDialogPrePayment = !showCustomDialogPrePayment
+                        }
+                    }
+                    Spacer(modifier = Modifier.padding(15.dp))
                 }
             }
 //    полная стоимость проживания
@@ -351,7 +381,7 @@ fun ClientPaymentScreen(
                             )
                         },
                         enabled = viewModelClient.isPrePaymentComplete.value!! and !viewModelClient.isPaymentComplete.value!!,
-                        placeholder = { Text(text = "Залог", color = Color.Black) },
+                        placeholder = { Text(text = "Оплата клиента", color = Color.Black) },
                         isError = inputValidateState.completedPaymentError != null,
                         singleLine = false,
                         modifier = Modifier
@@ -391,16 +421,35 @@ fun ClientPaymentScreen(
                             )
                         }
                     }
-                    GradientButton(
-                        "Сохранить"
-                    ) {
-                        viewModelClient.onFormEvent(
-                            ValidationFormEvent.onSubmitUpdate(
-                                SourceEvent.PAYMENTUPDATE
+                    if (viewModelClient.isPrePaymentComplete.value!! and !viewModelClient.isPaymentComplete.value!!) {
+                        GradientButton(
+                            "Сохранить",
+                            listOf(
+                                Color(0xFF292929),
+                                Color(0xFF0BDE13),
+                                Color(0xFF292929),
+                            ),
+                        ) {
+                            viewModelClient.onFormEvent(
+                                ValidationFormEvent.onSubmitUpdate(
+                                    SourceEvent.PAYMENTUPDATE
+                                )
                             )
-                        )
-
+                        }
                     }
+                    Spacer(modifier = Modifier.padding(3.dp))
+                    if ( viewModelClient.isPaymentComplete.value!!) {
+                        GradientButton(
+                            "Очистить", listOf(
+                                Color(0xFF292929),
+                                Color(0xFFF81403),
+                                Color(0xFF292929),
+                            )
+                        ) {
+                            showCustomDialogPayment = !showCustomDialogPayment
+                        }
+                    }
+                    Spacer(modifier = Modifier.padding(15.dp))
                 }
             }
 //            }
@@ -517,11 +566,45 @@ fun ClientPaymentScreen(
             }
         }
     }
+
+    if (showCustomDialogPrePayment) {
+        CustomAlertDialog(onDismiss = {
+            showCustomDialogPrePayment = !showCustomDialogPrePayment
+        }, onOk = {
+            showCustomDialogPrePayment = !showCustomDialogPrePayment
+            viewModelClient.onFormEvent(
+                ValidationFormEvent.CompletedPrePaymentChanged(
+                    "0"
+                )
+            )
+            viewModelClient.onFormEvent(ValidationFormEvent.onSubmitUpdate(SourceEvent.PAYMENTUPDATE))
+            viewModelClient.setActivePrePaymentTextField()
+        },
+            message = "Вы уверены? Даные оплаты бронирования будут удалены."
+        )
+    }
+
+    if (showCustomDialogPayment) {
+        CustomAlertDialog(onDismiss = {
+            showCustomDialogPayment = !showCustomDialogPayment
+        }, onOk = {
+            showCustomDialogPayment = !showCustomDialogPayment
+            viewModelClient.onFormEvent(
+                ValidationFormEvent.CompletedPaymentChanged(
+                    "0"
+                )
+            )
+            viewModelClient.onFormEvent(ValidationFormEvent.onSubmitUpdate(SourceEvent.PAYMENTUPDATE))
+            viewModelClient.setActivePaymentYTextField()
+        },
+            message = "Вы уверены? Даные оплаты будут удалены."
+        )
+    }
 }
 
 
 fun makeFullName(state: ValidationFormState): String {
-    val fName = state.firstName ?: ""
+    val fName = state.firstName
     val sName = state.secondName ?: ""
     val lName = state.lastName ?: ""
     return "$fName $sName $lName"
@@ -542,26 +625,32 @@ fun makeFullName(state: ValidationFormState): String {
 
 
 @Composable
-fun GradientButton(buttonText: String, onClick: () -> Unit) {
+fun GradientButton(
+    buttonText: String,
+    colors: List<Color>,
+    onClick: () -> Unit
+) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.Transparent,
             contentColor = Color.White,
-            disabledBackgroundColor = Color.LightGray,
+            disabledBackgroundColor = Color(0xF4A6E7A8),
             disabledContentColor = Color.Gray,
         ),
+//        enabled = isEnabled,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 5.dp)
-            .clip(RoundedCornerShape(10.dp))
+            .padding(
+                top = 1.dp,
+                bottom = 5.dp,
+                start = 5.dp,
+                end = 5.dp
+            )
+            .clip(RoundedCornerShape(5.dp))
             .background(
                 brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        Color(0xFF292929),
-                        Color(0xFFDF4B00),
-                        Color(0xFF292929),
-                    )
+                    colors = colors
                 )
             ),
     ) {
@@ -597,7 +686,7 @@ fun GradientOutlinedTextField(
         placeholder = { Text(text = placeholder, color = Color.Gray) },
         textStyle = TextStyle(fontSize = 14.sp, color = Color.White),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+    )
 
 
-        )
 }

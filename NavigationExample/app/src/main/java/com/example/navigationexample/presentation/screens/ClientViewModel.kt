@@ -157,8 +157,8 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(prePaymentPercent = "")
         validateFormState = validateFormState.copy(prePayment = "")
         validateFormState = validateFormState.copy(priceOfStay = "")
-        validateFormState = validateFormState.copy(completedPrePayment = "")
-        validateFormState = validateFormState.copy(completedPayment = "")
+        validateFormState = validateFormState.copy(completedPrePayment = "0")
+        validateFormState = validateFormState.copy(completedPayment = "0")
         validateFormState = validateFormState.copy(transferInfo = "")
         validateFormState = validateFormState.copy(referer = "")
         validateFormState =
@@ -201,6 +201,13 @@ class ClientViewModel @Inject constructor(
                 ?: 0)
     }
 
+    fun setActivePrePaymentTextField(){
+        _isPrePaymentComplete.value = !_isPrePaymentComplete.value!!
+    }
+
+    fun setActivePaymentYTextField(){
+        _isPaymentComplete.value = !_isPaymentComplete.value!!
+    }
 
     fun getAppatmentClients(appatmentName: String) {
         clientRepository.getAppatmentClients(appatmentName)
