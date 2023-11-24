@@ -213,8 +213,11 @@ fun ClientDitailsScreen(
                                 .padding(start = 5.dp),
 
                             fontSize = 16.sp,
-                            color = Color(5, 224, 14, 255)
-                        )
+                            color = if (viewModelClient.isPledgeComplete.value == true) {
+                                Color(5, 224, 14, 255)
+                            } else {
+                                Color(247, 21, 4, 255)
+                            }                        )
                     }
                     Spacer(modifier = Modifier.padding(10.dp))
                 }
@@ -310,6 +313,40 @@ fun ClientDitailsScreen(
 
                         Text(
                             text = (totalCoast - prepayment).toString(),
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+
+                            fontSize = 16.sp,
+                            color = Color(254, 253, 253, 255)
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
+                }
+            }
+
+//    размер залога на имущество
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        Text(
+                            text = "Размер залога (обеспечительный платеж) ",
+                            maxLines = 1,
+                            modifier = Modifier
+                                .background(Color(41, 41, 41))
+                                .padding(start = 5.dp),
+                            fontSize = 16.sp,
+                            color = Color(223, 75, 0)
+                        )
+
+                        Text(
+                            text = state.value?.pledge.toString(),
                             maxLines = 1,
                             modifier = Modifier
                                 .background(Color(41, 41, 41))

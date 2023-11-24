@@ -598,7 +598,7 @@ fun AddClientScreen(
                 }
 
 
-//стоимость доп меств
+//стоимость доп места
                 item {
                     OutlinedTextField(
                         value = state.overPayment,
@@ -649,7 +649,7 @@ fun AddClientScreen(
                             viewModelClient.onFormEvent(ValidationFormEvent.PledgeChanged(it))
                         },
 
-                        placeholder = { Text(text = "Размер залога", color = Black) },
+                        placeholder = { Text(text = "Размер залога/обесп. платежа", color = Black) },
                         isError = state.pledgeError != null,
                         singleLine = true,
                         modifier = Modifier

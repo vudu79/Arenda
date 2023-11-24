@@ -64,7 +64,9 @@ fun ClientPaymentScreen(
 //    val (selectedOption, onOptionSelected) = remember { mutableStateOf(ClientStatus.statusList[0]) }
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-
+    var monkState by remember {
+        mutableStateOf(true)
+    }
 
 
     LaunchedEffect(key1 = context) {
@@ -80,8 +82,8 @@ fun ClientPaymentScreen(
                     viewModelClient.getAppatmentClients(currentAppatment!!.name)
                     viewModelClient.getClientState(clientPhone = clientPhone)
                     viewModelClient.getClientStateForValidation(clientPhone)
-
-                    mainNavController.navigate("${Routs.clientPaymentScreen}/${clientPhone}")
+                    monkState = !monkState
+//                    mainNavController.navigate("${Routs.clientPaymentScreen}/${clientPhone}")
 
 //                    mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
                 }
