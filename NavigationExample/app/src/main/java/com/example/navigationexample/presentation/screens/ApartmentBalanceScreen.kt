@@ -19,19 +19,20 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ApartmentBalanceScreen(
-    viewModel: BalanceViewModel,
+    viewModelBalance: BalanceViewModel,
+
 //    mainNavController: NavHostController,
 //    viewModelClient: ClientViewModel,
 //    viewModelAppatment: AppatmentViewModel,
 //    clientPhone: String
 ) {
-    val tabIndex = viewModel.tabIndex.observeAsState()
+    val tabIndex = viewModelBalance.tabIndex.observeAsState()
     Column(modifier = Modifier.fillMaxWidth()) {
         TabRow(selectedTabIndex = tabIndex.value!!) {
-            viewModel.tabs.forEachIndexed { index, title ->
+            viewModelBalance.tabs.forEachIndexed { index, title ->
                 Tab(text = { Text(title) },
                     selected = tabIndex.value!! == index,
-                    onClick = { viewModel.updateTabIndex(index) },
+                    onClick = { viewModelBalance.updateTabIndex(index) },
                     icon = {
                         when (index) {
                             0 -> Icon(imageVector = Icons.Default.Home, contentDescription = null)
@@ -43,8 +44,8 @@ fun ApartmentBalanceScreen(
         }
 
         when (tabIndex.value) {
-            0 -> HomeScreen(viewModel = viewModel)
-            1 -> AboutScreen(viewModel = viewModel)
+            0 -> HomeScreen(viewModel = viewModelBalance)
+            1 -> AboutScreen(viewModel = viewModelBalance)
         }
     }
 }

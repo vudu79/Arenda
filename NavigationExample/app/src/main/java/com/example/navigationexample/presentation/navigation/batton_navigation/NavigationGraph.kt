@@ -13,6 +13,7 @@ fun NavigationGraph(
     viewModelAppatment: AppatmentViewModel,
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
+    viewModelBalance: BalanceViewModel,
     appatmentName: String
 ) {
     NavHost(clientNavController, startDestination = BottomNavItems.Clients.screen_route) {
@@ -34,12 +35,13 @@ fun NavigationGraph(
             )
         }
         composable(BottomNavItems.Ballance.screen_route) {
-//            SetDatePeriodScreen(
+            ApartmentBalanceScreen(
 //                navController = mainNavController,
 //                viewModelClient = viewModelClient,
 //                viewModelCalendar = viewModelCalendar,
 //                appatmentName = appatmentName
-//            )
+                viewModelBalance = viewModelBalance,
+            )
         }
         composable(BottomNavItems.Appatments.screen_route) {
             AppartmentsScreen(

@@ -19,6 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.navigationexample.presentation.navigation.NavHostView
 import com.example.navigationexample.presentation.screens.AppatmentViewModel
+import com.example.navigationexample.presentation.screens.BalanceViewModel
 import com.example.navigationexample.presentation.screens.CalendarViewModel
 import com.example.navigationexample.presentation.screens.ClientViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +31,7 @@ class MainActivity : ComponentActivity() {
     private val viewModelAppat: AppatmentViewModel by viewModels()
     private val viewModelClient: ClientViewModel by viewModels()
     private val viewModelCalendar: CalendarViewModel by viewModels()
+    private val viewModelBalance: BalanceViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +52,9 @@ class MainActivity : ComponentActivity() {
             NavHostView(
                 viewModelAppatment = viewModelAppat,
                 viewModelClient = viewModelClient,
-                viewModelCalendar = viewModelCalendar
+                viewModelCalendar = viewModelCalendar,
+                viewModelBalance = viewModelBalance,
+
             )
         }
     }

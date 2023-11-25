@@ -14,7 +14,8 @@ import com.example.navigationexample.presentation.screens.*
 fun NavHostView(
     viewModelAppatment: AppatmentViewModel,
     viewModelClient: ClientViewModel,
-    viewModelCalendar: CalendarViewModel
+    viewModelCalendar: CalendarViewModel,
+    viewModelBalance: BalanceViewModel
 ) {
     val mainNavController = rememberNavController()
     NavHost(navController = mainNavController, startDestination = Routs.home) {
@@ -46,6 +47,7 @@ fun NavHostView(
                     viewModelClient = viewModelClient,
                     viewModelCalendar = viewModelCalendar,
                     appatmentName = appatment_name,
+                    viewModelBalance = viewModelBalance
                 )
             }
         }
