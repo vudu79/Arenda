@@ -14,8 +14,10 @@ import com.example.navigationexample.presentation.screens.*
 fun NavHostView(
     viewModelAppatment: AppatmentViewModel,
     viewModelClient: ClientViewModel,
-    viewModelCalendar: CalendarViewModel
-) {
+    viewModelCalendar: CalendarViewModel,
+    balanceViewModel: BalanceViewModel,
+
+    ) {
     val mainNavController = rememberNavController()
     NavHost(navController = mainNavController, startDestination = Routs.home) {
         composable(Routs.home) {
@@ -46,6 +48,7 @@ fun NavHostView(
                     viewModelClient = viewModelClient,
                     viewModelCalendar = viewModelCalendar,
                     appatmentName = appatment_name,
+                    balanceViewModel = balanceViewModel
                 )
             }
         }

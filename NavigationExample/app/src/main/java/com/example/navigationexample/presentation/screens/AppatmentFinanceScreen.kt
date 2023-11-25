@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.navigationexample.presentation.screens.AppatmentViewModel
+import com.example.navigationexample.presentation.screens.BalanceViewModel
 import com.example.navigationexample.presentation.screens.CalendarViewModel
 import com.example.navigationexample.presentation.screens.ClientViewModel
 
@@ -19,8 +20,10 @@ fun AppatmentFinanceScreen(
     viewModelAppatment: AppatmentViewModel,
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
-    appatmentName: String
-) {
+    appatmentName: String,
+    balanceViewModel: BalanceViewModel,
+
+    ) {
     val clientNavController = rememberNavController()
     val navBackStackEntry by mainNavController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -39,9 +42,9 @@ fun AppatmentFinanceScreen(
                 viewModelAppatment = viewModelAppatment,
                 viewModelClient = viewModelClient,
                 viewModelCalendar =viewModelCalendar,
-                appatmentName=appatmentName
-
-            )
+                appatmentName=appatmentName,
+                balanceViewModel= balanceViewModel,
+                )
         }
     }
 }
