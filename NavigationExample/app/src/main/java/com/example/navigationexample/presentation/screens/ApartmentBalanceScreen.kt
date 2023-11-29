@@ -131,26 +131,8 @@ fun HomeScreen(viewModel: BalanceViewModel) {
     ) {
 
         TableScreen(
-            listOf(0.7f, 0.3f), listOf(
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
-                listOf("sadfasdfasdf", "234234"),
+            listOf(0.6f, 0.2f, 0.2f), listOf(
+                listOf("sadfasdfasdf", "234234", "234234"),
             )
         )
 
@@ -198,7 +180,8 @@ fun TableScreen(weight: List<Float>, data: List<List<String>>) {
         item {
             Row(Modifier.background(color = Color(red = 41, green = 41, blue = 41))) {
                 TableCell(text = "Клиент", weight = weight[0], Color(0xFFDF4B00))
-                TableCell(text = "Доход", weight = weight[1], Color(0xFFDF4B00))
+                TableCell(text = "Расход", weight = weight[1], Color(0xFFDF4B00))
+                TableCell(text = "Доход", weight = weight[2], Color(0xFFDF4B00))
             }
         }
         // Here are all the lines of your table.
@@ -206,7 +189,8 @@ fun TableScreen(weight: List<Float>, data: List<List<String>>) {
 //            val (id, text) = it
             Row(Modifier.fillMaxWidth()) {
                 TableCell(text = it[0], weight = weight[0], Color(0xFFBEBCBA))
-                TableCell(text = it[1], weight = weight[1], Color(0xFFBEBCBA))
+                TableCell(text = it[1], weight = weight[1], Color(0xFFF11505))
+                TableCell(text = it[1], weight = weight[2], Color(0xFF08E511))
             }
         }
     }
