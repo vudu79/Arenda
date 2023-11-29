@@ -17,12 +17,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.CalendarState
@@ -50,6 +54,26 @@ fun Modifier.clickable(
         onClick = onClick,
     )
 }
+
+
+fun Modifier.bottomBorder(strokeWidth: Dp, color: Color) = composed(
+    factory = {
+        val density = LocalDensity.current
+        val strokeWidthPx = density.run { strokeWidth.toPx() }
+
+        Modifier.drawBehind {
+            val width = size.width
+            val height = size.height - strokeWidthPx/2
+
+            drawLine(
+                color = color,
+                start = Offset(x = 0f, y = height),
+                end = Offset(x = width , y = height),
+                strokeWidth = strokeWidthPx
+            )
+        }
+    }
+)
 
 
 @Composable

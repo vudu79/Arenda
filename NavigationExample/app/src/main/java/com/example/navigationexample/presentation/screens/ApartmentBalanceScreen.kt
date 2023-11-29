@@ -5,6 +5,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -18,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.navigationexample.presentation.screens.common.bottomBorder
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -47,12 +50,13 @@ fun ApartmentBalanceScreen(
                     .fillMaxWidth()
                     .padding(10.dp)
                     .border(
-                        1.dp, Color(223, 75, 0)
+                        1.dp,
+                        SolidColor(Color(223, 75, 0)),
+                        shape = RoundedCornerShape(10.dp)
                     ),
 
                 elevation = 8.dp,
                 onClick = {}
-
             ) {
                 Box(
                     modifier = Modifier
@@ -64,15 +68,16 @@ fun ApartmentBalanceScreen(
                 }
             }
         }
-
-
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+
         ) {
             val gradientColors = listOf(Color(0xFFDF4B00), Color(0xFF292929))
             TabRow(
                 selectedTabIndex = tabIndex.value!!,
                 backgroundColor = Color(red = 41, green = 41, blue = 41),
+                modifier = Modifier
+                    .padding(start = 5.dp, end = 5.dp)
             ) {
                 viewModelBalance.tabs.forEachIndexed { index, title ->
                     val isSelected = index == tabIndex.value!!
@@ -124,13 +129,85 @@ fun HomeScreen(viewModel: BalanceViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Text(
-                text = "Welcome Home!",
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+
+        TableScreen(
+            listOf(0.7f, 0.3f), listOf(
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
+                listOf("sadfasdfasdf", "234234"),
             )
+        )
+
+
+    }
+}
+
+@Composable
+fun RowScope.TableCell(
+    text: String,
+    weight: Float,
+    textColor: Color
+) {
+    Text(
+        text = text,
+        Modifier
+            .bottomBorder(1.dp, Color.Black)
+            .weight(weight)
+            .padding(10.dp),
+        color = textColor,
+    )
+}
+
+@Composable
+fun TableScreen(weight: List<Float>, data: List<List<String>>) {
+    // Just a fake data... a Pair of Int and String
+//    val tableData = (1..100).mapIndexed { index, item ->
+//        index to "Item $index"
+//    }
+    // Each cell of a column must have the same weight.
+//    val column1Weight = .3f // 30%
+//    val column2Weight = .7f // 70%
+    // The LazyColumn will be our table. Notice the use of the weights below
+    LazyColumn(
+        Modifier
+            .fillMaxSize()
+            .padding(10.dp)
+            .border(
+                1.dp,
+                SolidColor(Color(223, 75, 0)),
+                shape = RoundedCornerShape(10.dp)
+            ),
+    ) {
+        // Here is the header
+        item {
+            Row(Modifier.background(color = Color(red = 41, green = 41, blue = 41))) {
+                TableCell(text = "Клиент", weight = weight[0], Color(0xFFDF4B00))
+                TableCell(text = "Доход", weight = weight[1], Color(0xFFDF4B00))
+            }
+        }
+        // Here are all the lines of your table.
+        items(data) {
+//            val (id, text) = it
+            Row(Modifier.fillMaxWidth()) {
+                TableCell(text = it[0], weight = weight[0], Color(0xFFBEBCBA))
+                TableCell(text = it[1], weight = weight[1], Color(0xFFBEBCBA))
+            }
         }
     }
 }
@@ -162,26 +239,5 @@ fun AboutScreen(viewModel: BalanceViewModel) {
                 fontWeight = FontWeight.Bold
             )
         }
-    }
-}
-
-@Composable
-fun CustomTabRowIndicator(
-    tabPositions: List<TabPosition>,
-    selectedTabIndex: Int
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 2.dp)
-    ) {
-        Divider(
-            color = Color(223, 75, 0),
-            modifier = Modifier
-                .height(2.dp)
-                .align(Alignment.BottomStart)
-                .width(tabPositions[selectedTabIndex].width)
-                .offset(x = tabPositions[selectedTabIndex].left)
-        )
     }
 }
