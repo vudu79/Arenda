@@ -19,7 +19,7 @@ class BalanceViewModel @Inject constructor(
 ) : ViewModel() {
     private val _tabIndex: MutableLiveData<Int> = MutableLiveData(0)
     val tabIndex: LiveData<Int> = _tabIndex
-    val tabs = listOf("День", "Неделя", "Месяц", "Год")
+    val tabs = listOf("День", "Неделя", "Месяц", "Год", "Период")
 
     var isSwipeToTheLeft: Boolean = false
     private val draggableState = DraggableState { delta ->

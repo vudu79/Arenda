@@ -5,18 +5,15 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,11 +41,15 @@ fun ApartmentBalanceScreen(
     ) {
         Row {
             Card(
+                shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
                     .fillMaxHeight(0.4f)
                     .fillMaxWidth()
-                    .padding(10.dp),
-                shape = RoundedCornerShape(10.dp),
+                    .padding(10.dp)
+                    .border(
+                        1.dp, Color(223, 75, 0)
+                    ),
+
                 elevation = 8.dp,
                 onClick = {}
 
@@ -57,9 +58,7 @@ fun ApartmentBalanceScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color(red = 41, green = 41, blue = 41))
-                        .border(
-                            1.dp, Color(223, 75, 0)
-                        )
+
                 ) {
                     Text(text = "Ballance", fontSize = 20.sp)
                 }
@@ -67,58 +66,46 @@ fun ApartmentBalanceScreen(
         }
 
 
-
-        TabRow(selectedTabIndex = tabIndex.value!!,
-            backgroundColor = Color(red = 41, green = 41, blue = 41),
-
-            modifier = Modifier
-                .fillMaxHeight(0.1f)
-                .padding(vertical = 1.dp, horizontal = 1.dp)
-                .clip(RoundedCornerShape(20)),
-            indicator = { tabPositions: List<TabPosition> ->
-                Box {}
-            }
-
+        Row(
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            viewModelBalance.tabs.forEachIndexed { index, title ->
-                val selected = tabIndex.value!! == index
-                Tab(
-                    modifier = if (selected) Modifier
-                        .border(2.dp, Color(223, 75, 0))
-
-                        .clip(RoundedCornerShape(20))
-                        .background(
-                            Color.Gray
+            val gradientColors = listOf(Color(0xFFDF4B00), Color(0xFF292929))
+            TabRow(
+                selectedTabIndex = tabIndex.value!!,
+                backgroundColor = Color(red = 41, green = 41, blue = 41),
+            ) {
+                viewModelBalance.tabs.forEachIndexed { index, title ->
+                    val isSelected = index == tabIndex.value!!
+                    val backgroundShader =
+                        if (isSelected) Brush.horizontalGradient(gradientColors) else SolidColor(
+                            Color.Transparent
                         )
-                    else Modifier
-                        .clip(RoundedCornerShape(20))
-                        .background(
-                            Color(red = 41, green = 41, blue = 41),
-                        ),
-
-                    text = { Text(title, fontSize = 14.sp, color = Color.White, modifier = Modifier
-                        .padding(bottom = 10.dp)
-
-
-                    ) },
-                    selected = tabIndex.value!! == index,
-                    onClick = { viewModelBalance.updateTabIndex(index) },
-                    icon = {}
-//                        when (index) {
-//                            0 -> Icon(imageVector = Icons.Default.Home, contentDescription = null)
-//                            1 -> Icon(imageVector = Icons.Default.Info, contentDescription = null)
-//                        }
-//                    }
-                )
+                    Tab(
+                        selected = isSelected,
+                        onClick = { viewModelBalance.updateTabIndex(index) },
+                        modifier = Modifier
+                            .padding(vertical = 3.dp)
+                            .height(40.dp)
+                            .padding(horizontal = 3.dp)
+                            .background(brush = backgroundShader, shape = RoundedCornerShape(8.dp))
+                    ) {
+                        Text(
+                            text = title,
+                            color = if (isSelected) Color.White else Color.Gray,
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    }
+                }
             }
-        }
 
+        }
         when (tabIndex.value) {
             0 -> HomeScreen(viewModel = viewModelBalance)
             1 -> AboutScreen(viewModel = viewModelBalance)
         }
     }
 }
+
 
 @Composable
 fun HomeScreen(viewModel: BalanceViewModel) {
@@ -175,5 +162,26 @@ fun AboutScreen(viewModel: BalanceViewModel) {
                 fontWeight = FontWeight.Bold
             )
         }
+    }
+}
+
+@Composable
+fun CustomTabRowIndicator(
+    tabPositions: List<TabPosition>,
+    selectedTabIndex: Int
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 2.dp)
+    ) {
+        Divider(
+            color = Color(223, 75, 0),
+            modifier = Modifier
+                .height(2.dp)
+                .align(Alignment.BottomStart)
+                .width(tabPositions[selectedTabIndex].width)
+                .offset(x = tabPositions[selectedTabIndex].left)
+        )
     }
 }

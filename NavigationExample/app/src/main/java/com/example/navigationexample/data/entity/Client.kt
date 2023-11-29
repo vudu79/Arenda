@@ -80,11 +80,21 @@ class Client {
     @ColumnInfo(name = "completed_payment")
     var completedPayment: Int = 0
 
+    @ColumnInfo(name = "completed_pledge")
+    var completedPledge: Int = 0
+
     @ColumnInfo(name = "completed_over_payment")
     var completedOverPayment: Int = 0
 
-    @ColumnInfo(name = "completed_pledge")
-    var completedPledge: Int = 0
+
+    @ColumnInfo(name = "date_completed_pre_payment")
+    var dateOfCompletedPrePayment: Long = 0
+
+    @ColumnInfo(name = "date_completed_payment")
+    var dateOfCompletedPayment: Long = 0
+
+    @ColumnInfo(name = "date_completed_pledge")
+    var dateOfCompletedPledge: Long = 0
 
 
     @ColumnInfo(name = "client_color")
@@ -136,9 +146,13 @@ class Client {
 
         completedPrePayment: Int,
         completedPayment: Int,
-        completedOverPayment: Int,
         completedPledge: Int,
 
+        dateOfCompletedPrePayment: Long,
+        dateOfCompletedPayment: Long,
+        dateOfCompletedPledge: Long,
+
+        completedOverPayment: Int,
         clientColor: Int,
         transferInfo: String?,
         referer: String?,
@@ -165,9 +179,13 @@ class Client {
 
         this.completedPrePayment = completedPrePayment
         this.completedPayment = completedPayment
-        this.completedOverPayment = completedOverPayment
         this.completedPledge = completedPledge
 
+        this.dateOfCompletedPrePayment = dateOfCompletedPrePayment
+        this.dateOfCompletedPayment = dateOfCompletedPayment
+        this.dateOfCompletedPledge = dateOfCompletedPledge
+
+        this.completedOverPayment = completedOverPayment
         this.clientColor = clientColor
         this.transferInfo = transferInfo
         this.referer = referer
@@ -197,9 +215,13 @@ class Client {
 
         completedPrePayment: Int,
         completedPayment: Int,
-        completedOverPayment: Int,
         completedPledge: Int,
 
+        dateOfCompletedPrePayment: Long,
+        dateOfCompletedPayment: Long,
+        dateOfCompletedPledge: Long,
+
+        completedOverPayment: Int,
         clientColor: Int,
         transferInfo: String?,
         referer: String?,
@@ -227,9 +249,15 @@ class Client {
 
         this.completedPrePayment = completedPrePayment
         this.completedPayment = completedPayment
-        this.completedOverPayment = completedOverPayment
         this.completedPledge = completedPledge
 
+
+        this.dateOfCompletedPrePayment = dateOfCompletedPrePayment
+        this.dateOfCompletedPayment = dateOfCompletedPayment
+        this.dateOfCompletedPledge = dateOfCompletedPledge
+
+
+        this.completedOverPayment = completedOverPayment
         this.clientColor = clientColor
         this.transferInfo = transferInfo
         this.referer = referer

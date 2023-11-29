@@ -130,12 +130,20 @@ class ClientViewModel @Inject constructor(
         validateFormState =
             validateFormState.copy(completedPayment = client.completedPayment.toString())
         validateFormState =
-            validateFormState.copy(completedOverPayment = client.completedOverPayment.toString())
+            validateFormState.copy(dateOfCompletedPayment = client.dateOfCompletedPayment)
+
         validateFormState =
             validateFormState.copy(completedPrePayment = client.completedPrePayment.toString())
         validateFormState =
-            validateFormState.copy(completedPledge = client.completedPledge.toString())
+            validateFormState.copy(dateOfCompletedPrePayment = client.dateOfCompletedPrePayment)
 
+        validateFormState =
+            validateFormState.copy(completedPledge = client.completedPledge.toString())
+        validateFormState =
+            validateFormState.copy(dateOfCompletedPledge = client.dateOfCompletedPledge)
+
+        validateFormState =
+            validateFormState.copy(completedOverPayment = client.completedOverPayment.toString())
         validateFormState = validateFormState.copy(transferInfo = client.transferInfo)
         validateFormState = validateFormState.copy(referer = client.referer)
         validateFormState = validateFormState.copy(color = Color(client.clientColor))
@@ -165,9 +173,15 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(prePaymentPercent = "")
         validateFormState = validateFormState.copy(prePayment = "")
         validateFormState = validateFormState.copy(priceOfStay = "")
+
         validateFormState = validateFormState.copy(completedPrePayment = "0")
         validateFormState = validateFormState.copy(completedPayment = "0")
         validateFormState = validateFormState.copy(completedPledge = "0")
+
+        validateFormState = validateFormState.copy(dateOfCompletedPrePayment = 0)
+        validateFormState = validateFormState.copy(dateOfCompletedPayment = 0)
+        validateFormState = validateFormState.copy(dateOfCompletedPledge = 0)
+
         validateFormState = validateFormState.copy(transferInfo = "")
         validateFormState = validateFormState.copy(referer = "")
         validateFormState =
@@ -192,6 +206,7 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(completedPrePaymentError = null)
         validateFormState = validateFormState.copy(completedPaymentError = null)
         validateFormState = validateFormState.copy(completedPledgeError = null)
+
     }
 
 
@@ -335,10 +350,6 @@ class ClientViewModel @Inject constructor(
                 validateFormState = validateFormState.copy(pledge = event.pledge)
             }
 
-            is ValidationFormEvent.CompletedPledgeChanged -> {
-                validateFormState = validateFormState.copy(completedPledge = event.completedPledge)
-            }
-
             is ValidationFormEvent.OverPaymentChanged -> {
                 validateFormState = validateFormState.copy(overPayment = event.overPayment)
             }
@@ -347,12 +358,32 @@ class ClientViewModel @Inject constructor(
             is ValidationFormEvent.CompletedPrePaymentChanged -> {
                 validateFormState =
                     validateFormState.copy(completedPrePayment = event.completedPrepayment)
+
+                validateFormState =
+                    validateFormState.copy(
+                        dateOfCompletedPrePayment = LocalDate.now().toEpochDay()
+                    )
             }
 
             is ValidationFormEvent.CompletedPaymentChanged -> {
                 validateFormState =
                     validateFormState.copy(completedPayment = event.completedPayment)
+
+                validateFormState =
+                    validateFormState.copy(
+                        dateOfCompletedPayment = LocalDate.now().toEpochDay()
+                    )
             }
+
+            is ValidationFormEvent.CompletedPledgeChanged -> {
+                validateFormState = validateFormState.copy(completedPledge = event.completedPledge)
+
+                validateFormState =
+                    validateFormState.copy(
+                        dateOfCompletedPledge = LocalDate.now().toEpochDay()
+                    )
+            }
+
 
             is ValidationFormEvent.CompletedOverPaymentChanged -> {
                 validateFormState =
@@ -488,9 +519,13 @@ class ClientViewModel @Inject constructor(
 
                     completedPayment = validateFormState.completedPayment.trim().toInt(),
                     completedPrePayment = validateFormState.completedPrePayment.trim().toInt(),
-                    completedOverPayment = validateFormState.completedOverPayment.trim().toInt(),
                     completedPledge = validateFormState.completedPledge.trim().toInt(),
 
+                    dateOfCompletedPayment = validateFormState.dateOfCompletedPayment,
+                    dateOfCompletedPrePayment = validateFormState.dateOfCompletedPrePayment,
+                    dateOfCompletedPledge = validateFormState.dateOfCompletedPledge,
+
+                    completedOverPayment = validateFormState.completedOverPayment.trim().toInt(),
                     clientColor = validateFormState.color.toArgb(),
                     transferInfo = validateFormState.transferInfo,
                     referer = validateFormState.referer,
@@ -634,6 +669,10 @@ class ClientViewModel @Inject constructor(
                             .toInt(),
                         completedOverPayment = validateFormState.completedOverPayment.trim()
                             .toInt(),
+
+                        dateOfCompletedPayment = validateFormState.dateOfCompletedPayment,
+                        dateOfCompletedPrePayment = validateFormState.dateOfCompletedPrePayment,
+                        dateOfCompletedPledge = validateFormState.dateOfCompletedPledge,
 
                         clientColor = validateFormState.color.toArgb(),
                         transferInfo = validateFormState.transferInfo,
