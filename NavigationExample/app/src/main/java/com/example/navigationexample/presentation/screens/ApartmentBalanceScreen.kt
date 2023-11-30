@@ -42,6 +42,10 @@ fun ApartmentBalanceScreen(
             .background(Color(red = 41, green = 41, blue = 41))
 
     ) {
+        Row() {
+            DropdownButtonWithMultipleSelection()
+        }
+
         Row {
             Card(
                 shape = RoundedCornerShape(10.dp),
@@ -71,7 +75,7 @@ fun ApartmentBalanceScreen(
         Row(
             verticalAlignment = Alignment.CenterVertically,
 
-        ) {
+            ) {
             val gradientColors = listOf(Color(0xFFDF4B00), Color(0xFF292929))
             TabRow(
                 selectedTabIndex = tabIndex.value!!,
@@ -102,13 +106,13 @@ fun ApartmentBalanceScreen(
                     }
                 }
             }
-
         }
         when (tabIndex.value) {
             0 -> HomeScreen(viewModel = viewModelBalance)
             1 -> AboutScreen(viewModel = viewModelBalance)
         }
     }
+
 }
 
 
@@ -222,6 +226,71 @@ fun AboutScreen(viewModel: BalanceViewModel) {
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
+        }
+    }
+}
+
+@Composable
+fun DropdownButtonWithMultipleSelection() {
+    // Список элементов для выпадающего списка
+    val items = listOf("Элемент 1", "Элемент 2", "Элемент 3", "Элемент 4")
+
+    // Состояние для отслеживания выбранных элементов из списка
+    val selectedItems: MutableState<List<String>> = remember { mutableStateOf(emptyList()) }
+
+    // Состояние для отслеживания раскрытия или сворачивания списка
+    val isExpanded = remember {
+        mutableStateOf(false)
+    }
+
+    Column(
+        modifier = Modifier.padding(5.dp)
+    ) {
+        // Кнопка для раскрытия или сворачивания списка
+
+        GradientButton(
+            buttonText = "Выберите обьекты",
+            colors = listOf(
+                Color(0xFF292929),
+                Color(0xFFDF4B00),
+                Color(0xFF292929),
+            ),
+        ) {
+            isExpanded.value = !isExpanded.value
+        }
+
+        // Компонент списка
+        if (isExpanded.value) {
+            LazyColumn(
+                modifier = Modifier.padding(top = 3.dp),
+                contentPadding = PaddingValues(bottom = 3.dp)
+            ) {
+                // Пункты списка с названием элементов и чекбоксами
+                items(items) { item ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(
+                            checked = selectedItems.value.contains(item),
+                            onCheckedChange = {
+                                // Добавление или удаление элемента из выбранных
+                                if (selectedItems.value.contains(item)) {
+                                    selectedItems.value = selectedItems.value - item
+                                } else {
+                                    selectedItems.value = selectedItems.value + item
+                                }
+                            },
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = Color(0xFFDF4B00),  // Цвет для выбранного чекбокса
+                                uncheckedColor = Color(0xFFBEBCBA), // Цвет для не выбранного чекбокса
+                                checkmarkColor = Color(0xFFDF4B00) // Цвет для галочки внутри чекбокса (при выборе)
+                            )
+                        )
+                        Text(text = item, modifier = Modifier.padding(start = 5.dp), color=Color(0xFFBEBCBA))
+                    }
+                }
+            }
         }
     }
 }

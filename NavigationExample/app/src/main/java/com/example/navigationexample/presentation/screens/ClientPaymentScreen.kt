@@ -725,18 +725,6 @@ fun makeFullName(state: ValidationFormState): String {
 }
 
 
-//fun dateToString(longDate: Long?): String {
-//    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-//    return longDate?.let { LocalDate.ofEpochDay(it).format(formatter) }.toString()
-//}
-
-//
-//@Preview
-//@Composable
-//private fun ClientDitailsScreen() {
-//    ClientDitailsScreen()
-//}
-
 
 @Composable
 fun GradientButton(
