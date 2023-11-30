@@ -16,28 +16,52 @@ class BalanceViewModel @Inject constructor(
     private val clientRepository: ClientsRepositoryImpl,
     private val daysRepository: DaysRepositoryImpl,
 
-) : ViewModel() {
-    private val _tabIndex: MutableLiveData<Int> = MutableLiveData(0)
-    val tabIndex: LiveData<Int> = _tabIndex
-    val tabs = listOf("День", "Неделя", "Месяц", "Год", "Период")
+    ) : ViewModel() {
 
-    var isSwipeToTheLeft: Boolean = false
-    private val draggableState = DraggableState { delta ->
-        isSwipeToTheLeft = delta > 0
+    //    Переменные для вкладок периодов выборки
+    private val _tabIndexPeriod: MutableLiveData<Int> = MutableLiveData(0)
+    val tabIndexPeriod: LiveData<Int> = _tabIndexPeriod
+    val tabsPeriod = listOf("День", "Неделя", "Месяц", "Год", "Период")
+
+    var isSwipeToTheLeftPeriod: Boolean = false
+    private val draggableStatePeriod = DraggableState { delta ->
+        isSwipeToTheLeftPeriod = delta > 0
     }
 
-    private val _dragState = MutableLiveData<DraggableState>(draggableState)
-    val dragState: LiveData<DraggableState> = _dragState
-
-    fun updateTabIndexBasedOnSwipe() {
-        _tabIndex.value = when (isSwipeToTheLeft) {
-            true -> Math.floorMod(_tabIndex.value!!.plus(1), tabs.size)
-            false -> Math.floorMod(_tabIndex.value!!.minus(1), tabs.size)
+    private val _dragStatePeriod = MutableLiveData<DraggableState>(draggableStatePeriod)
+    val dragStatePeriod: LiveData<DraggableState> = _dragStatePeriod
+    fun updateTabIndexBasedOnSwipePeriod() {
+        _tabIndexPeriod.value = when (isSwipeToTheLeftPeriod) {
+            true -> Math.floorMod(_tabIndexPeriod.value!!.plus(1), tabsPeriod.size)
+            false -> Math.floorMod(_tabIndexPeriod.value!!.minus(1), tabsPeriod.size)
         }
     }
+    fun updateTabIndexPeriod(i: Int) {
+        _tabIndexPeriod.value = i
+    }
 
-    fun updateTabIndex(i: Int) {
-        _tabIndex.value = i
+
+
+    //    переменные для вкладок расходы и доходы
+    private val _tabIndexExpenses: MutableLiveData<Int> = MutableLiveData(0)
+    val tabIndexExpenses: LiveData<Int> = _tabIndexExpenses
+    val tabsExpenses = listOf("Доходы", "Расходы")
+
+    var isSwipeToTheLeftExpenses: Boolean = false
+    private val draggableStateExpenses = DraggableState { delta ->
+        isSwipeToTheLeftExpenses = delta > 0
+    }
+
+    private val _dragStateExpenses = MutableLiveData<DraggableState>(draggableStateExpenses)
+    val dragStateExpenses: LiveData<DraggableState> = _dragStateExpenses
+    fun updateTabIndexBasedOnSwipeExpenses() {
+        _tabIndexExpenses.value = when (isSwipeToTheLeftExpenses) {
+            true -> Math.floorMod(_tabIndexExpenses.value!!.plus(1), tabsExpenses.size)
+            false -> Math.floorMod(_tabIndexExpenses.value!!.minus(1), tabsExpenses.size)
+        }
+    }
+    fun updateTabIndexExpenses(i: Int) {
+        _tabIndexExpenses.value = i
     }
 
 }

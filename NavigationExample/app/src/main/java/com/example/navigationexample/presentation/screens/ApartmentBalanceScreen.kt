@@ -33,8 +33,10 @@ fun ApartmentBalanceScreen(
 //    viewModelAppatment: AppatmentViewModel,
 //    clientPhone: String
 ) {
-    val tabIndex = viewModelBalance.tabIndex.observeAsState()
+    val gradientColors = listOf(Color(0xFFDF4B00), Color(0xFF292929))
 
+    val tabIndexPeriod = viewModelBalance.tabIndexPeriod.observeAsState()
+    val tabIndexExpenses = viewModelBalance.tabIndexExpenses.observeAsState()
 
     Column(
         modifier = Modifier
@@ -45,69 +47,82 @@ fun ApartmentBalanceScreen(
         Row() {
             DropdownButtonWithMultipleSelection()
         }
-
-        Row {
-            Card(
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .fillMaxHeight(0.4f)
-                    .fillMaxWidth()
-                    .padding(10.dp)
-                    .border(
-                        1.dp,
-                        SolidColor(Color(223, 75, 0)),
-                        shape = RoundedCornerShape(10.dp)
-                    ),
-
-                elevation = 8.dp,
-                onClick = {}
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color(red = 41, green = 41, blue = 41))
-
-                ) {
-                    Text(text = "Ballance", fontSize = 20.sp)
-                }
-            }
-        }
         Row(
             verticalAlignment = Alignment.CenterVertically,
-
             ) {
-            val gradientColors = listOf(Color(0xFFDF4B00), Color(0xFF292929))
             TabRow(
-                selectedTabIndex = tabIndex.value!!,
+                selectedTabIndex = tabIndexExpenses.value!!,
                 backgroundColor = Color(red = 41, green = 41, blue = 41),
                 modifier = Modifier
                     .padding(start = 5.dp, end = 5.dp)
             ) {
-                viewModelBalance.tabs.forEachIndexed { index, title ->
-                    val isSelected = index == tabIndex.value!!
-                    val backgroundShader =
-                        if (isSelected) Brush.horizontalGradient(gradientColors) else SolidColor(
+                viewModelBalance.tabsExpenses.forEachIndexed { indexExpenses, titleExpenses ->
+                    val isSelectedExpenses = indexExpenses == tabIndexExpenses.value!!
+                    val backgroundShaderExpenses =
+                        if (isSelectedExpenses) Brush.horizontalGradient(gradientColors) else SolidColor(
                             Color.Transparent
                         )
                     Tab(
-                        selected = isSelected,
-                        onClick = { viewModelBalance.updateTabIndex(index) },
+                        selected = isSelectedExpenses,
+                        onClick = { viewModelBalance.updateTabIndexExpenses(indexExpenses) },
                         modifier = Modifier
                             .padding(vertical = 3.dp)
                             .height(40.dp)
                             .padding(horizontal = 3.dp)
-                            .background(brush = backgroundShader, shape = RoundedCornerShape(8.dp))
+                            .background(brush = backgroundShaderExpenses, shape = RoundedCornerShape(8.dp))
                     ) {
                         Text(
-                            text = title,
-                            color = if (isSelected) Color.White else Color.Gray,
+                            text = titleExpenses,
+                            color = if (isSelectedExpenses) Color.White else Color.Gray,
                             modifier = Modifier.padding(8.dp)
                         )
                     }
                 }
             }
         }
-        when (tabIndex.value) {
+        Row {
+            when (tabIndexExpenses.value) {
+                0 -> ExpensesCard("Доходы")
+                1 -> ExpensesCard("Расходы")
+            }
+        }
+
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+
+            ) {
+            TabRow(
+                selectedTabIndex = tabIndexPeriod.value!!,
+                backgroundColor = Color(red = 41, green = 41, blue = 41),
+                modifier = Modifier
+                    .padding(start = 5.dp, end = 5.dp)
+            ) {
+                viewModelBalance.tabsPeriod.forEachIndexed { index, title ->
+                    val isSelectedPeriod = index == tabIndexPeriod.value!!
+                    val backgroundShaderPeriod =
+                        if (isSelectedPeriod) Brush.horizontalGradient(gradientColors) else SolidColor(
+                            Color.Transparent
+                        )
+                    Tab(
+                        selected = isSelectedPeriod,
+                        onClick = { viewModelBalance.updateTabIndexPeriod(index) },
+                        modifier = Modifier
+                            .padding(vertical = 3.dp)
+                            .height(40.dp)
+                            .padding(horizontal = 3.dp)
+                            .background(brush = backgroundShaderPeriod, shape = RoundedCornerShape(8.dp))
+                    ) {
+                        Text(
+                            text = title,
+                            color = if (isSelectedPeriod) Color.White else Color.Gray,
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    }
+                }
+            }
+        }
+        when (tabIndexPeriod.value) {
             0 -> HomeScreen(viewModel = viewModelBalance)
             1 -> AboutScreen(viewModel = viewModelBalance)
         }
@@ -124,11 +139,11 @@ fun HomeScreen(viewModel: BalanceViewModel) {
             .background(Color(red = 41, green = 41, blue = 41))
 
             .draggable(
-                state = viewModel.dragState.value!!,
+                state = viewModel.dragStatePeriod.value!!,
                 orientation = Orientation.Horizontal,
                 onDragStarted = { },
                 onDragStopped = {
-                    viewModel.updateTabIndexBasedOnSwipe()
+                    viewModel.updateTabIndexBasedOnSwipePeriod()
                 }),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -210,11 +225,11 @@ fun AboutScreen(viewModel: BalanceViewModel) {
             .background(Color(red = 41, green = 41, blue = 41))
 
             .draggable(
-                state = viewModel.dragState.value!!,
+                state = viewModel.dragStatePeriod.value!!,
                 orientation = Orientation.Horizontal,
                 onDragStarted = { },
                 onDragStopped = {
-                    viewModel.updateTabIndexBasedOnSwipe()
+                    viewModel.updateTabIndexBasedOnSwipePeriod()
                 }),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -287,10 +302,42 @@ fun DropdownButtonWithMultipleSelection() {
                                 checkmarkColor = Color(0xFFDF4B00) // Цвет для галочки внутри чекбокса (при выборе)
                             )
                         )
-                        Text(text = item, modifier = Modifier.padding(start = 5.dp), color=Color(0xFFBEBCBA))
+                        Text(
+                            text = item,
+                            modifier = Modifier.padding(start = 5.dp),
+                            color = Color(0xFFBEBCBA)
+                        )
                     }
                 }
             }
+        }
+    }
+}
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun ExpensesCard(text:String){
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier
+            .fillMaxHeight(0.4f)
+            .fillMaxWidth()
+            .padding(10.dp)
+            .border(
+                1.dp,
+                SolidColor(Color(223, 75, 0)),
+                shape = RoundedCornerShape(10.dp)
+            ),
+
+        elevation = 8.dp,
+        onClick = {}
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(red = 41, green = 41, blue = 41))
+
+        ) {
+            Text(text = text, fontSize = 20.sp, color=Color.White)
         }
     }
 }
