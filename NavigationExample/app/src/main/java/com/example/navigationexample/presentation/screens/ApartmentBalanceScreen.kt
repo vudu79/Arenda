@@ -1,5 +1,6 @@
 package com.example.navigationexample.presentation.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.Orientation
@@ -35,18 +36,18 @@ fun ApartmentBalanceScreen(
 //    viewModelClient: ClientViewModel,
 //    clientPhone: String
 ) {
-    LaunchedEffect(key1 = Unit) {
-        viewModelBalance.initSelectedApartment()
-    }
 
     val gradientColors = listOf(Color(0xFFDF4B00), Color(0xFF292929))
 
     val tabIndexPeriod = viewModelBalance.tabIndexPeriod.observeAsState()
     val tabIndexExpenses = viewModelBalance.tabIndexExpenses.observeAsState()
 
-    val itemsApartments1 = viewModelBalance.allApartments.value ?: emptyList()
-    val itemsApartments = itemsApartments1.map { it.name }
-    val selectedApartments = viewModelBalance.selectedApartments
+    val itemsApartments by viewModelBalance.allApartments.observeAsState(listOf())
+    val currentApart by viewModelBalance.currentApartment.observeAsState()
+    val selectedApartments by viewModelBalance.selectedApartments.observeAsState(listOf())
+
+    Log.d("MyTag", "Лист -  $itemsApartments")
+    Log.d("MyTag", "Текуший -  ${currentApart}")
 
     val isExpanded = remember {
         mutableStateOf(false)
@@ -81,7 +82,7 @@ fun ApartmentBalanceScreen(
                             .fillMaxWidth(.8f)
                             .padding(3.dp)
                     ) {
-                        selectedApartments.value.forEach {
+                        selectedApartments.forEach {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
@@ -108,11 +109,11 @@ fun ApartmentBalanceScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Checkbox(
-                                    checked = selectedApartments.value.contains(item),
+                                    checked = selectedApartments.contains(item),
                                     onCheckedChange = {
                                         // Добавление или удаление элемента из выбранных
-                                        if (selectedApartments.value.contains(item)) {
-                                            selectedApartments.value =
+                                        if (selectedApartments.contains(item)) {
+                                            selectedApartments =
                                                 selectedApartments.value - item
                                         } else {
                                             selectedApartments.value =

@@ -73,17 +73,17 @@ class BalanceViewModel @Inject constructor(
     }
 
     //    функционал для блока с выбором аппартаментов
-    val allApartments: MutableLiveData<List<Appatment>>
-    val currentApartment: LiveData<String>
-    val selectedApartments: MutableState<List<String>> = mutableStateOf(emptyList())
+    private var _allApartments: MutableLiveData<List<Appatment>> = MutableLiveData()
+    val allApartments: LiveData<List<Appatment>> = _allApartments
+    var selectedApartments = MutableLiveData<List<String>>()
+
+    private var _currentApartment: MutableLiveData<String> = MutableLiveData()
+    val currentApartment: LiveData<String> = _currentApartment
 
     init {
-        allApartments = apartmentRepository.allApartmentsList
-        currentApartment = apartmentRepository.currentApartment
-    }
-
-    fun initSelectedApartment() {
-        selectedApartments.value = selectedApartments.value + currentApartment.value!!
+        _allApartments = apartmentRepository.allApartmentsLD
+        _currentApartment = apartmentRepository.currentApartment
+        selectedApartments.value = selectedApartments.value?.plus(_currentApartment.value!!)
     }
 
 }

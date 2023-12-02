@@ -53,7 +53,7 @@ fun ClientsScreen(
     appatmentName: String
 ) {
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
-    val appatmentClients by viewModelClient.allApartmentClients.observeAsState(listOf())
+    val apartmentClients by viewModelClient.allApartmentClients.observeAsState(listOf())
     val isLoading: Boolean by viewModelClient.isLoadingForUpdateClient
 
     if (isLoading) {
@@ -77,7 +77,7 @@ fun ClientsScreen(
                     .fillMaxHeight(0.74f)
                     .padding(3.dp)
             ) {
-                items(appatmentClients) { item ->
+                items(apartmentClients) { item ->
                     ClientItemRow(
                         client = item,
                         navcontroller = mainNavController,

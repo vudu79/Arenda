@@ -20,7 +20,7 @@ class ApartmentViewModel @Inject constructor(
 
     init {
 //        allApartments = apartmentRepository.allApartmentsLiveData
-        allApartments = apartmentRepository.allApartmentsList
+        allApartments = apartmentRepository.allApartmentsLD
     }
 
     fun getAllApartments(){

@@ -1,6 +1,5 @@
 package com.example.navigationexample.data.repository
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.navigationexample.data.dao.AppatmentDao
 import com.example.navigationexample.data.entity.Appatment
@@ -14,11 +13,9 @@ import javax.inject.Inject
 
 class ApartmentRepositoryImpl @Inject constructor(private val apartmentDao: AppatmentDao) {
 
-    //    private val allApartmentVal: List<Appatment> = apartmentDao.getAllApartment()
-    var allApartmentsList = MutableLiveData<List<Appatment>>()
-//    val allApartmentsLiveData: LiveData<List<Appatment>> = MutableLiveData(allApartmentsList)
-//    private val allApartmentNamesList = allApartmentsList.map { it.name }
-//    val allApartmentsNamesLiveData: LiveData<List<String>> = MutableLiveData(allApartmentNamesList)
+    var allApartmentsLD = MutableLiveData<List<Appatment>>()
+
+    val allApartmentNamesList = allApartmentsLD.value?.map { it.name }
 
     var currentApartment = MutableLiveData<String>()
 
@@ -46,7 +43,7 @@ class ApartmentRepositoryImpl @Inject constructor(private val apartmentDao: Appa
 
     fun getAllApartments() {
         coroutineScope.launch(Dispatchers.Main) {
-            allApartmentsList.value = asyncFindAllApartments().await()
+            allApartmentsLD.value = asyncFindAllApartments().await()
         }
     }
 
