@@ -35,6 +35,7 @@ fun NavigationGraph(
             )
         }
         composable(BottomNavItems.Ballance.screen_route) {
+            viewModelBalance.getAllApartments()
             ApartmentBalanceScreen(
 //                navController = mainNavController,
 //                viewModelClient = viewModelClient,

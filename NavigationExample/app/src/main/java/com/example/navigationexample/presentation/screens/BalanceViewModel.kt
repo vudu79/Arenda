@@ -2,8 +2,6 @@ package com.example.navigationexample.presentation.screens
 
 
 import androidx.compose.foundation.gestures.DraggableState
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -73,17 +71,19 @@ class BalanceViewModel @Inject constructor(
     }
 
     //    функционал для блока с выбором аппартаментов
-    private var _allApartments: MutableLiveData<List<Appatment>> = MutableLiveData()
-    val allApartments: LiveData<List<Appatment>> = _allApartments
-    var selectedApartments = MutableLiveData<List<String>>()
+
+    fun getAllApartments(){
+        apartmentRepository.getAllApartments()
+    }
+
+    var allApartments: LiveData<List<Appatment>>
 
     private var _currentApartment: MutableLiveData<String> = MutableLiveData()
     val currentApartment: LiveData<String> = _currentApartment
 
     init {
-        _allApartments = apartmentRepository.allApartmentsLD
+        allApartments = apartmentRepository.allApartmentsLD
         _currentApartment = apartmentRepository.currentApartment
-        selectedApartments.value = selectedApartments.value?.plus(_currentApartment.value!!)
     }
 
 }

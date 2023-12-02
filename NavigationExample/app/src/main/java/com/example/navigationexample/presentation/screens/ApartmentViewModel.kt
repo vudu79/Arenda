@@ -19,7 +19,6 @@ class ApartmentViewModel @Inject constructor(
 
 
     init {
-//        allApartments = apartmentRepository.allApartmentsLiveData
         allApartments = apartmentRepository.allApartmentsLD
     }
 

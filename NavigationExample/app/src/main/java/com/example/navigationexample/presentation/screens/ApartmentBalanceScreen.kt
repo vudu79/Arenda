@@ -43,11 +43,11 @@ fun ApartmentBalanceScreen(
     val tabIndexExpenses = viewModelBalance.tabIndexExpenses.observeAsState()
 
     val itemsApartments by viewModelBalance.allApartments.observeAsState(listOf())
-    val currentApart by viewModelBalance.currentApartment.observeAsState()
-    val selectedApartments by viewModelBalance.selectedApartments.observeAsState(listOf())
+//    val currentApart by viewModelBalance.currentApartment.observeAsState()
+    val selectedApartments: MutableState<List<String>> = remember { mutableStateOf(emptyList()) }
 
     Log.d("MyTag", "Лист -  $itemsApartments")
-    Log.d("MyTag", "Текуший -  ${currentApart}")
+//    Log.d("MyTag", "Текуший -  ${currentApart}")
 
     val isExpanded = remember {
         mutableStateOf(false)
@@ -82,7 +82,7 @@ fun ApartmentBalanceScreen(
                             .fillMaxWidth(.8f)
                             .padding(3.dp)
                     ) {
-                        selectedApartments.forEach {
+                        selectedApartments.value.forEach {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
@@ -109,15 +109,15 @@ fun ApartmentBalanceScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Checkbox(
-                                    checked = selectedApartments.contains(item),
+                                    checked = selectedApartments.value.contains(item.name),
                                     onCheckedChange = {
                                         // Добавление или удаление элемента из выбранных
-                                        if (selectedApartments.contains(item)) {
-                                            selectedApartments =
-                                                selectedApartments.value - item
+                                        if (selectedApartments.value.contains(item.name)) {
+                                            selectedApartments.value =
+                                                selectedApartments.value - item.name
                                         } else {
                                             selectedApartments.value =
-                                                selectedApartments.value + item
+                                                selectedApartments.value + item.name
                                         }
                                     },
                                     colors = CheckboxDefaults.colors(
@@ -127,7 +127,7 @@ fun ApartmentBalanceScreen(
                                     )
                                 )
                                 Text(
-                                    text = item,
+                                    text = item.name,
                                     modifier = Modifier.padding(start = 5.dp),
                                     color = Color(0xFFBEBCBA)
                                 )
@@ -140,8 +140,8 @@ fun ApartmentBalanceScreen(
             Spacer(modifier = Modifier.padding(2.dp))
             Box(
                 modifier = Modifier
-                    .width(50.dp)
-                    .height(50.dp)
+                    .width(40.dp)
+                    .height(40.dp)
             ) {
                 IconButton(
                     onClick = {
@@ -397,7 +397,7 @@ fun DropdownButtonWithMultipleSelection() {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(it.toString())
+                        Text(it)
                     }
                 }
             }
