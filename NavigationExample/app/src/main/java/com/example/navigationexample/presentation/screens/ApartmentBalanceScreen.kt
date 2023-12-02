@@ -16,10 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.navigationexample.R
 import com.example.navigationexample.presentation.screens.common.bottomBorder
 
 
@@ -27,29 +29,140 @@ import com.example.navigationexample.presentation.screens.common.bottomBorder
 @Composable
 fun ApartmentBalanceScreen(
     viewModelBalance: BalanceViewModel,
-
+    viewModelApartment: ApartmentViewModel,
+    apartmentName: String
 //    mainNavController: NavHostController,
 //    viewModelClient: ClientViewModel,
-//    viewModelAppatment: AppatmentViewModel,
 //    clientPhone: String
 ) {
+    LaunchedEffect(key1 = Unit) {
+        viewModelBalance.initSelectedApartment()
+    }
+
     val gradientColors = listOf(Color(0xFFDF4B00), Color(0xFF292929))
 
     val tabIndexPeriod = viewModelBalance.tabIndexPeriod.observeAsState()
     val tabIndexExpenses = viewModelBalance.tabIndexExpenses.observeAsState()
 
+    val itemsApartments1 = viewModelBalance.allApartments.value ?: emptyList()
+    val itemsApartments = itemsApartments1.map { it.name }
+    val selectedApartments = viewModelBalance.selectedApartments
+
+    val isExpanded = remember {
+        mutableStateOf(false)
+    }
+
+
+//главная колонка
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color(red = 41, green = 41, blue = 41))
 
     ) {
-        Row() {
-            DropdownButtonWithMultipleSelection()
+// ряд с блоком апартаментов
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp)
+                .border(
+                    1.dp,
+                    SolidColor(Color(223, 75, 0)),
+                    shape = RoundedCornerShape(10.dp)
+                ),
+        ) {
+            Column(
+                modifier = Modifier.padding(5.dp)
+            ) {
+
+                Row {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(.8f)
+                            .padding(3.dp)
+                    ) {
+                        selectedApartments.value.forEach {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = it,
+                                    color = Color(0xFFBEBCBA),
+                                    modifier = Modifier.padding(start = 5.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+
+                if (isExpanded.value) {
+                    LazyColumn(
+                        modifier = Modifier.padding(top = 3.dp),
+                        contentPadding = PaddingValues(bottom = 1.dp)
+                    ) {
+                        // Пункты списка с названием элементов и чекбоксами
+                        items(itemsApartments) { item ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Checkbox(
+                                    checked = selectedApartments.value.contains(item),
+                                    onCheckedChange = {
+                                        // Добавление или удаление элемента из выбранных
+                                        if (selectedApartments.value.contains(item)) {
+                                            selectedApartments.value =
+                                                selectedApartments.value - item
+                                        } else {
+                                            selectedApartments.value =
+                                                selectedApartments.value + item
+                                        }
+                                    },
+                                    colors = CheckboxDefaults.colors(
+                                        checkedColor = Color(0xFFDF4B00),  // Цвет для выбранного чекбокса
+                                        uncheckedColor = Color(0xFFBEBCBA), // Цвет для не выбранного чекбокса
+                                        checkmarkColor = Color(0xFFDF4B00) // Цвет для галочки внутри чекбокса (при выборе)
+                                    )
+                                )
+                                Text(
+                                    text = item,
+                                    modifier = Modifier.padding(start = 5.dp),
+                                    color = Color(0xFFBEBCBA)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.padding(2.dp))
+            Box(
+                modifier = Modifier
+                    .width(50.dp)
+                    .height(50.dp)
+            ) {
+                IconButton(
+                    onClick = {
+                        isExpanded.value = !isExpanded.value
+                    }
+                )
+                {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_add_circle_24),
+                        contentDescription = "Добавить объект",
+                        modifier = Modifier.size(50.dp),
+                        tint = Color(223, 75, 0)
+                    )
+                }
+            }
         }
+
+
+//        ряд с вкладками Доходы и Расходы
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            ) {
+        ) {
             TabRow(
                 selectedTabIndex = tabIndexExpenses.value!!,
                 backgroundColor = Color(red = 41, green = 41, blue = 41),
@@ -58,8 +171,11 @@ fun ApartmentBalanceScreen(
             ) {
                 viewModelBalance.tabsExpenses.forEachIndexed { indexExpenses, titleExpenses ->
                     val isSelectedExpenses = indexExpenses == tabIndexExpenses.value!!
+                    val gColor =
+                        if (indexExpenses == 0) gradientColors else gradientColors.reversed()
+
                     val backgroundShaderExpenses =
-                        if (isSelectedExpenses) Brush.horizontalGradient(gradientColors) else SolidColor(
+                        if (isSelectedExpenses) Brush.horizontalGradient(gColor) else SolidColor(
                             Color.Transparent
                         )
                     Tab(
@@ -69,7 +185,10 @@ fun ApartmentBalanceScreen(
                             .padding(vertical = 3.dp)
                             .height(40.dp)
                             .padding(horizontal = 3.dp)
-                            .background(brush = backgroundShaderExpenses, shape = RoundedCornerShape(8.dp))
+                            .background(
+                                brush = backgroundShaderExpenses,
+                                shape = RoundedCornerShape(8.dp)
+                            )
                     ) {
                         Text(
                             text = titleExpenses,
@@ -80,6 +199,7 @@ fun ApartmentBalanceScreen(
                 }
             }
         }
+//        ряд с центральным блоком (Card) балланса и цифрой расхода или дохода
         Row {
             when (tabIndexExpenses.value) {
                 0 -> ExpensesCard("Доходы")
@@ -87,7 +207,7 @@ fun ApartmentBalanceScreen(
             }
         }
 
-
+// ряд с вкладками периодов выборки
         Row(
             verticalAlignment = Alignment.CenterVertically,
 
@@ -111,7 +231,10 @@ fun ApartmentBalanceScreen(
                             .padding(vertical = 3.dp)
                             .height(40.dp)
                             .padding(horizontal = 3.dp)
-                            .background(brush = backgroundShaderPeriod, shape = RoundedCornerShape(8.dp))
+                            .background(
+                                brush = backgroundShaderPeriod,
+                                shape = RoundedCornerShape(8.dp)
+                            )
                     ) {
                         Text(
                             text = title,
@@ -122,6 +245,8 @@ fun ApartmentBalanceScreen(
                 }
             }
         }
+
+// экраны для списков расходов и доходов
         when (tabIndexPeriod.value) {
             0 -> HomeScreen(viewModel = viewModelBalance)
             1 -> AboutScreen(viewModel = viewModelBalance)
@@ -261,65 +386,100 @@ fun DropdownButtonWithMultipleSelection() {
     Column(
         modifier = Modifier.padding(5.dp)
     ) {
-        // Кнопка для раскрытия или сворачивания списка
 
-        GradientButton(
-            buttonText = "Выберите обьекты",
-            colors = listOf(
-                Color(0xFF292929),
-                Color(0xFFDF4B00),
-                Color(0xFF292929),
-            ),
-        ) {
-            isExpanded.value = !isExpanded.value
-        }
-
-        // Компонент списка
-        if (isExpanded.value) {
-            LazyColumn(
-                modifier = Modifier.padding(top = 3.dp),
-                contentPadding = PaddingValues(bottom = 3.dp)
+        Row {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(.8f)
             ) {
-                // Пункты списка с названием элементов и чекбоксами
-                items(items) { item ->
+                selectedItems.value.forEach {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Checkbox(
-                            checked = selectedItems.value.contains(item),
-                            onCheckedChange = {
-                                // Добавление или удаление элемента из выбранных
-                                if (selectedItems.value.contains(item)) {
-                                    selectedItems.value = selectedItems.value - item
-                                } else {
-                                    selectedItems.value = selectedItems.value + item
-                                }
-                            },
-                            colors = CheckboxDefaults.colors(
-                                checkedColor = Color(0xFFDF4B00),  // Цвет для выбранного чекбокса
-                                uncheckedColor = Color(0xFFBEBCBA), // Цвет для не выбранного чекбокса
-                                checkmarkColor = Color(0xFFDF4B00) // Цвет для галочки внутри чекбокса (при выборе)
-                            )
-                        )
-                        Text(
-                            text = item,
-                            modifier = Modifier.padding(start = 5.dp),
-                            color = Color(0xFFBEBCBA)
-                        )
+                        Text(it.toString())
                     }
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(.2f)
+            ) {
+                IconButton(
+                    onClick = {
+                        isExpanded.value = !isExpanded.value
+                    }
+                )
+                {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_add_circle_24),
+                        contentDescription = "Добавить объект",
+                        modifier = Modifier.size(30.dp),
+                        tint = Color(223, 75, 0)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.padding(2.dp))
+        }
+    }
+//        GradientButton(
+//            buttonText = "Выберите обьекты",
+//            colors = listOf(
+//                Color(0xFF292929),
+//                Color(0x80DF4B00),
+//                Color(0xFF292929),
+//            ),
+//        ) {
+//            isExpanded.value = !isExpanded.value
+//        }
+
+    // Компонент списка
+    if (isExpanded.value) {
+        LazyColumn(
+            modifier = Modifier.padding(top = 3.dp),
+            contentPadding = PaddingValues(bottom = 3.dp)
+        ) {
+            // Пункты списка с названием элементов и чекбоксами
+            items(items) { item ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = selectedItems.value.contains(item),
+                        onCheckedChange = {
+                            // Добавление или удаление элемента из выбранных
+                            if (selectedItems.value.contains(item)) {
+                                selectedItems.value = selectedItems.value - item
+                            } else {
+                                selectedItems.value = selectedItems.value + item
+                            }
+                        },
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = Color(0xFFDF4B00),  // Цвет для выбранного чекбокса
+                            uncheckedColor = Color(0xFFBEBCBA), // Цвет для не выбранного чекбокса
+                            checkmarkColor = Color(0xFFDF4B00) // Цвет для галочки внутри чекбокса (при выборе)
+                        )
+                    )
+                    Text(
+                        text = item,
+                        modifier = Modifier.padding(start = 5.dp),
+                        color = Color(0xFFBEBCBA)
+                    )
                 }
             }
         }
     }
 }
+
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ExpensesCard(text:String){
+fun ExpensesCard(text: String) {
     Card(
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier
-            .fillMaxHeight(0.4f)
+            .fillMaxHeight(0.3f)
             .fillMaxWidth()
             .padding(10.dp)
             .border(
@@ -337,7 +497,7 @@ fun ExpensesCard(text:String){
                 .background(Color(red = 41, green = 41, blue = 41))
 
         ) {
-            Text(text = text, fontSize = 20.sp, color=Color.White)
+            Text(text = text, fontSize = 20.sp, color = Color.White)
         }
     }
 }

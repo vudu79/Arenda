@@ -10,7 +10,7 @@ import com.example.navigationexample.presentation.screens.*
 fun NavigationGraph(
     mainNavController: NavHostController,
     clientNavController: NavHostController,
-    viewModelAppatment: AppatmentViewModel,
+    viewModelApartment: ApartmentViewModel,
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
     viewModelBalance: BalanceViewModel,
@@ -21,7 +21,7 @@ fun NavigationGraph(
             ClientsScreen(
                 mainNavController = mainNavController,
                 viewModelClient = viewModelClient,
-                viewModelAppatment = viewModelAppatment,
+                viewModelAppatment = viewModelApartment,
                 viewModelCalendar = viewModelCalendar,
                 appatmentName = appatmentName
             )
@@ -39,14 +39,15 @@ fun NavigationGraph(
 //                navController = mainNavController,
 //                viewModelClient = viewModelClient,
 //                viewModelCalendar = viewModelCalendar,
-//                appatmentName = appatmentName
+                apartmentName = appatmentName,
+                viewModelApartment = viewModelApartment,
                 viewModelBalance = viewModelBalance,
             )
         }
         composable(BottomNavItems.Appatments.screen_route) {
             AppartmentsScreen(
                 mainNavController = mainNavController,
-                viewModelAppatment = viewModelAppatment,
+                viewModelAppatment = viewModelApartment,
                 viewModelClient = viewModelClient,
                 viewModelCalendar = viewModelCalendar
             )

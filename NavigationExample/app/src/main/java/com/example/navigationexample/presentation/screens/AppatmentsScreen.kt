@@ -32,12 +32,12 @@ import com.example.navigationexample.presentation.screens.common.CustomAlertDial
 @Composable
 fun AppartmentsScreen(
     mainNavController: NavHostController,
-    viewModelAppatment: AppatmentViewModel,
+    viewModelAppatment: ApartmentViewModel,
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel
 ) {
 
-    val allAppatment by viewModelAppatment.allApartments.observeAsState(listOf())
+    val allApartments by viewModelAppatment.allApartments.observeAsState(listOf())
 
 //    Image(
 //        painter = painterResource(
@@ -73,7 +73,7 @@ fun AppartmentsScreen(
                 .padding(3.dp)
 
         ) {
-            items(allAppatment) { item ->
+            items(allApartments) { item ->
 //                // Log.d("myTag", allAppatment.toString())
                 AppatmentItemRow(
                     appatmentItem = item,
@@ -139,7 +139,7 @@ fun AppartmentsScreen(
 fun AppatmentItemRow(
     appatmentItem: Appatment,
     navcontroller: NavController,
-    viewModelAppatment: AppatmentViewModel,
+    viewModelAppatment: ApartmentViewModel,
     viewModelCalendar: CalendarViewModel,
     viewModelClient: ClientViewModel
 ) {
@@ -179,8 +179,8 @@ fun AppatmentItemRow(
                 .combinedClickable(
                     onClick = {
                         Log .d("myTag","апартаменты - ${appatmentItem.name}" )
-                        viewModelClient.getAppatmentClients(appatmentItem.name)
-                        viewModelAppatment.setCurrentAppatment(appatmentItem)
+                        viewModelClient.getApartmentClients(appatmentItem.name)
+                        viewModelAppatment.setCurrentApartment(appatmentItem)
                         viewModelCalendar.updateApartmentPlanedDays(appatmentItem.name)
                         viewModelCalendar.updateDaysMapForCalendar(appatmentItem.name)
                         navcontroller.navigate(route = "${Routs.mainScreenClients}/${appatmentItem.name}")

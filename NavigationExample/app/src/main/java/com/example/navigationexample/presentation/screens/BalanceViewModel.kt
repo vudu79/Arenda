@@ -2,9 +2,13 @@ package com.example.navigationexample.presentation.screens
 
 
 import androidx.compose.foundation.gestures.DraggableState
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.navigationexample.data.entity.Appatment
+import com.example.navigationexample.data.repository.ApartmentRepositoryImpl
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
 import com.example.navigationexample.data.repository.DaysRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,8 +19,9 @@ import javax.inject.Inject
 class BalanceViewModel @Inject constructor(
     private val clientRepository: ClientsRepositoryImpl,
     private val daysRepository: DaysRepositoryImpl,
+    private val apartmentRepository: ApartmentRepositoryImpl,
+) : ViewModel() {
 
-    ) : ViewModel() {
 
     //    Переменные для вкладок периодов выборки
     private val _tabIndexPeriod: MutableLiveData<Int> = MutableLiveData(0)
@@ -30,16 +35,18 @@ class BalanceViewModel @Inject constructor(
 
     private val _dragStatePeriod = MutableLiveData<DraggableState>(draggableStatePeriod)
     val dragStatePeriod: LiveData<DraggableState> = _dragStatePeriod
+
+
     fun updateTabIndexBasedOnSwipePeriod() {
         _tabIndexPeriod.value = when (isSwipeToTheLeftPeriod) {
             true -> Math.floorMod(_tabIndexPeriod.value!!.plus(1), tabsPeriod.size)
             false -> Math.floorMod(_tabIndexPeriod.value!!.minus(1), tabsPeriod.size)
         }
     }
+
     fun updateTabIndexPeriod(i: Int) {
         _tabIndexPeriod.value = i
     }
-
 
 
     //    переменные для вкладок расходы и доходы
@@ -60,8 +67,23 @@ class BalanceViewModel @Inject constructor(
             false -> Math.floorMod(_tabIndexExpenses.value!!.minus(1), tabsExpenses.size)
         }
     }
+
     fun updateTabIndexExpenses(i: Int) {
         _tabIndexExpenses.value = i
+    }
+
+    //    функционал для блока с выбором аппартаментов
+    val allApartments: MutableLiveData<List<Appatment>>
+    val currentApartment: LiveData<String>
+    val selectedApartments: MutableState<List<String>> = mutableStateOf(emptyList())
+
+    init {
+        allApartments = apartmentRepository.allApartmentsList
+        currentApartment = apartmentRepository.currentApartment
+    }
+
+    fun initSelectedApartment() {
+        selectedApartments.value = selectedApartments.value + currentApartment.value!!
     }
 
 }

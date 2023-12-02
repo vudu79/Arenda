@@ -86,7 +86,7 @@ class ClientViewModel @Inject constructor(
     val isLoadingForUpdateClient: State<Boolean> get() = _isLoadingForUpdateClient
 
     init {
-        allApartmentClients = clientRepository.allAppatmentClients
+        allApartmentClients = clientRepository.allApartmentClients
     }
 
     private val validationEventChannel = Channel<ValidatAllFieldsResultEvent>()
@@ -240,8 +240,8 @@ class ClientViewModel @Inject constructor(
         _isPledgeComplete.value = !_isPledgeComplete.value!!
     }
 
-    fun getAppatmentClients(appatmentName: String) {
-        clientRepository.getAppatmentClients(appatmentName)
+    fun getApartmentClients(apartmentName: String) {
+        clientRepository.getApartmentClients(apartmentName)
     }
 
 
@@ -532,7 +532,7 @@ class ClientViewModel @Inject constructor(
                     appatmentName = apartmentName
                 )
             )
-            clientRepository.getAppatmentClients(apartmentName)
+            clientRepository.getApartmentClients(apartmentName)
             validationEventChannel.send(ValidatAllFieldsResultEvent.InsertSuccess)
         }
     }

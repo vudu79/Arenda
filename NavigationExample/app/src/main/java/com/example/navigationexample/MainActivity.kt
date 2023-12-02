@@ -1,34 +1,20 @@
 package com.example.navigationexample
 
-import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.example.navigationexample.presentation.navigation.NavHostView
-import com.example.navigationexample.presentation.screens.AppatmentViewModel
+import com.example.navigationexample.presentation.screens.ApartmentViewModel
 import com.example.navigationexample.presentation.screens.BalanceViewModel
 import com.example.navigationexample.presentation.screens.CalendarViewModel
 import com.example.navigationexample.presentation.screens.ClientViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.security.AccessController.getContext
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModelAppat: AppatmentViewModel by viewModels()
+    private val viewModelApartment: ApartmentViewModel by viewModels()
     private val viewModelClient: ClientViewModel by viewModels()
     private val viewModelCalendar: CalendarViewModel by viewModels()
     private val viewModelBalance: BalanceViewModel by viewModels()
@@ -50,7 +36,7 @@ class MainActivity : ComponentActivity() {
 //                )
 //            }
             NavHostView(
-                viewModelAppatment = viewModelAppat,
+                viewModelApartment = viewModelApartment,
                 viewModelClient = viewModelClient,
                 viewModelCalendar = viewModelCalendar,
                 viewModelBalance = viewModelBalance,

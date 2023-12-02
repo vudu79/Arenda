@@ -12,7 +12,7 @@ import com.example.navigationexample.presentation.screens.*
 
 @Composable
 fun NavHostView(
-    viewModelAppatment: AppatmentViewModel,
+    viewModelApartment: ApartmentViewModel,
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
     viewModelBalance: BalanceViewModel
@@ -20,9 +20,16 @@ fun NavHostView(
     val mainNavController = rememberNavController()
     NavHost(navController = mainNavController, startDestination = Routs.home) {
         composable(Routs.home) {
+            LaunchScreen(
+                mainNavController,
+                viewModelApartment = viewModelApartment,
+            )
+        }
+
+        composable(Routs.allApartmentsScreen) {
             AppartmentsScreen(
                 mainNavController,
-                viewModelAppatment = viewModelAppatment,
+                viewModelAppatment = viewModelApartment,
                 viewModelClient = viewModelClient,
                 viewModelCalendar = viewModelCalendar
             )
@@ -31,7 +38,7 @@ fun NavHostView(
         composable(Routs.addAppatmentScreen) {
             AddAppatmentScreen(
                 navController = mainNavController,
-                viewModelAppatment,
+                viewModel= viewModelApartment,
                 onHome = { mainNavController.navigate(Routs.home) })
 
         }
@@ -43,7 +50,7 @@ fun NavHostView(
             appatment_name?.let {
                 AppatmentFinanceScreen(
                     mainNavController = mainNavController,
-                    viewModelAppatment = viewModelAppatment,
+                    viewModelApartment = viewModelApartment,
                     viewModelClient = viewModelClient,
                     viewModelCalendar = viewModelCalendar,
                     appatmentName = appatment_name,
@@ -60,7 +67,7 @@ fun NavHostView(
                 AddClientScreen(
                     navController = mainNavController,
                     viewModelClient = viewModelClient,
-                    viewModelAppatment = viewModelAppatment,
+                    viewModelAppatment = viewModelApartment,
                     appatmentName = appatment_name
                 )
             }
@@ -106,7 +113,7 @@ fun NavHostView(
                 ClientUpdateScreen(
                     mainNavController = mainNavController,
                     viewModelClient = viewModelClient,
-                    viewModelAppatment = viewModelAppatment,
+                    viewModelAppatment = viewModelApartment,
                     clientPhone = clientPhone
                 )
             }
@@ -122,7 +129,7 @@ fun NavHostView(
                 ClientDitailsScreen(
                     mainNavController = mainNavController,
                     viewModelClient = viewModelClient,
-                    viewModelAppatment = viewModelAppatment,
+                    viewModelAppatment = viewModelApartment,
                     clientPhone = clientPhone
                 )
             }
@@ -140,7 +147,7 @@ fun NavHostView(
                 ClientPaymentScreen(
                     mainNavController = mainNavController,
                     viewModelClient = viewModelClient,
-                    viewModelAppatment = viewModelAppatment,
+                    viewModelAppatment = viewModelApartment,
                     clientPhone = clientPhone
                 )
             }

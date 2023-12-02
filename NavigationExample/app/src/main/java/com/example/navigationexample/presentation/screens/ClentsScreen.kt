@@ -48,7 +48,7 @@ fun parseDate(date: Long): String {
 fun ClientsScreen(
     mainNavController: NavHostController,
     viewModelClient: ClientViewModel,
-    viewModelAppatment: AppatmentViewModel,
+    viewModelAppatment: ApartmentViewModel,
     viewModelCalendar: CalendarViewModel,
     appatmentName: String
 ) {
@@ -344,7 +344,7 @@ fun LazyItemScope.ClientItemRow(
             showCustomDialog = !showCustomDialog
 
             viewModelClient.deleteClient(client.id)
-            viewModelClient.getAppatmentClients(client.appatmentName)
+            viewModelClient.getApartmentClients(client.appatmentName)
             viewModelCalendar.updateDaysMapForCalendar(client.appatmentName)
         },
             message = "Клиент будет безвозвратно удален. Вы уверены?"

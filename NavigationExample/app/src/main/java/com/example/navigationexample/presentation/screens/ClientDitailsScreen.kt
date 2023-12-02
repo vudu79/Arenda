@@ -27,7 +27,7 @@ import java.time.temporal.ChronoUnit
 fun ClientDitailsScreen(
     mainNavController: NavHostController,
     viewModelClient: ClientViewModel,
-    viewModelAppatment: AppatmentViewModel,
+    viewModelAppatment: ApartmentViewModel,
     clientPhone: String
 ) {
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()

@@ -34,7 +34,7 @@ import com.example.navigationexample.presentation.screens.common.*
 @Composable
 fun AddAppatmentScreen(
     navController: NavHostController,
-    viewModel: AppatmentViewModel,
+    viewModel: ApartmentViewModel,
 
     onHome: () -> Unit
 ) {

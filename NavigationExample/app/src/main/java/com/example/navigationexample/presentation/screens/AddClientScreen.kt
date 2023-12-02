@@ -44,7 +44,7 @@ import java.time.format.DateTimeFormatter
 fun AddClientScreen(
     navController: NavHostController,
     viewModelClient: ClientViewModel,
-    viewModelAppatment: AppatmentViewModel,
+    viewModelAppatment: ApartmentViewModel,
     appatmentName: String,
 ) {
 
@@ -752,7 +752,7 @@ fun AddClientScreen(
                         ) {
                             IconButton(modifier = Modifier.padding(end = 80.dp),
                                 onClick = {
-                                    viewModelClient.getAppatmentClients(appatmentName)
+                                    viewModelClient.getApartmentClients(appatmentName)
                                     navController.navigate("${Routs.mainScreenClients}/${appatmentName}")
                                 })
                             {

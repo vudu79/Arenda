@@ -41,7 +41,7 @@ import com.example.navigationexample.presentation.screens.common.CustomAlertDial
 fun ClientPaymentScreen(
     mainNavController: NavHostController,
     viewModelClient: ClientViewModel,
-    viewModelAppatment: AppatmentViewModel,
+    viewModelAppatment: ApartmentViewModel,
     clientPhone: String
 ) {
     var showCustomDialogPrePayment by remember {
@@ -79,7 +79,7 @@ fun ClientPaymentScreen(
 //                    viewModelClient.getClient(clientPhone)
 //                    viewModelClient.getClientState(clientPhone)
                     viewModelClient.resetClientStateForValidation()
-                    viewModelClient.getAppatmentClients(currentAppatment!!.name)
+                    viewModelClient.getApartmentClients(currentAppatment!!.name)
                     viewModelClient.getClientState(clientPhone = clientPhone)
                     viewModelClient.getClientStateForValidation(clientPhone)
                     monkState = !monkState
@@ -633,7 +633,7 @@ fun ClientPaymentScreen(
                     ) {
                         IconButton(modifier = Modifier.padding(end = 80.dp),
                             onClick = {
-                                viewModelClient.getAppatmentClients(currentAppatment!!.name)
+                                viewModelClient.getApartmentClients(currentAppatment!!.name)
                                 mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
                             })
                         {

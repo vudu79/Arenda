@@ -7,7 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.navigationexample.presentation.screens.AppatmentViewModel
+import com.example.navigationexample.presentation.screens.ApartmentViewModel
 import com.example.navigationexample.presentation.screens.BalanceViewModel
 import com.example.navigationexample.presentation.screens.CalendarViewModel
 import com.example.navigationexample.presentation.screens.ClientViewModel
@@ -17,7 +17,7 @@ import com.example.navigationexample.presentation.screens.ClientViewModel
 @Composable
 fun AppatmentFinanceScreen(
     mainNavController: NavHostController,
-    viewModelAppatment: AppatmentViewModel,
+    viewModelApartment: ApartmentViewModel,
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
     viewModelBalance: BalanceViewModel,
@@ -38,7 +38,7 @@ fun AppatmentFinanceScreen(
             NavigationGraph(
                 mainNavController = mainNavController,
                 clientNavController = clientNavController,
-                viewModelAppatment = viewModelAppatment,
+                viewModelApartment = viewModelApartment,
                 viewModelClient = viewModelClient,
                 viewModelCalendar =viewModelCalendar,
                 viewModelBalance = viewModelBalance,

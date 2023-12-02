@@ -1,11 +1,7 @@
 package com.example.navigationexample
 
 import android.app.Application
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.navigationexample.data.repository.AppatmentRepositoryImpl
-import com.example.navigationexample.data.repository.ClientsRepositoryImpl
-import com.example.navigationexample.presentation.screens.AppatmentViewModel
 
 
 class AppatmentViewModelFactory(val application: Application) :

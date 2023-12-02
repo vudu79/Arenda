@@ -25,8 +25,8 @@ interface ClientDao {
     @Query("SELECT * FROM clients")
     fun getAllClients(): LiveData<List<Client>>
 
-    @Query("SELECT * FROM clients WHERE appatment_name = :appatmentName")
-    fun getAppatmentClients(appatmentName: String): List<Client>
+    @Query("SELECT * FROM clients WHERE appatment_name = :apartmentName")
+    fun getApartmentClients(apartmentName: String): List<Client>
 
     @Update
     suspend fun updateClient(client: Client): Int

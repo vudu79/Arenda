@@ -9,14 +9,16 @@ import com.example.navigationexample.data.entity.Appatment
 
 @Dao
 interface AppatmentDao {
+    @Query("SELECT * FROM appatments WHERE name = :name")
+    fun getApartmentByName(name: String): Appatment
 
     @Insert
-    fun insertAppatment(appatment: Appatment)
+    fun insertApartment(appatment: Appatment)
 
     @Query("DELETE FROM appatments WHERE name = :name")
-    fun deleteAppatment(name: String)
+    fun deleteApartment(name: String)
 
     @Query("SELECT * FROM appatments")
-    fun getAllAppatment(): LiveData<List<Appatment>>
+    fun getAllApartment(): List<Appatment>
 
 }

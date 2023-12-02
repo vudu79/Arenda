@@ -46,7 +46,7 @@ import com.example.navigationexample.presentation.screens.common.PhoneField
 fun ClientUpdateScreen(
     mainNavController: NavHostController,
     viewModelClient: ClientViewModel,
-    viewModelAppatment: AppatmentViewModel,
+    viewModelAppatment: ApartmentViewModel,
     clientPhone: String
 ) {
     val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
@@ -173,7 +173,7 @@ fun ClientUpdateScreen(
                     Toast.makeText(
                         context, "Клиент обновлен!", Toast.LENGTH_SHORT
                     ).show()
-                    viewModelClient.getAppatmentClients(currentAppatment!!.name)
+                    viewModelClient.getApartmentClients(currentAppatment!!.name)
                     mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
                 }
 
