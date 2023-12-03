@@ -1,5 +1,6 @@
 package com.example.navigationexample.presentation.screens
 
+import android.graphics.Typeface
 import android.text.TextUtils
 import android.util.Log
 import androidx.compose.foundation.background
@@ -23,7 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import co.yml.charts.common.components.Legends
 import co.yml.charts.common.utils.DataUtils
 import co.yml.charts.ui.piechart.charts.PieChart
 import co.yml.charts.ui.piechart.models.PieChartConfig
@@ -89,10 +89,8 @@ fun ApartmentBalanceScreen(
                         ),
                         shape = RoundedCornerShape(8.dp)
                     ),
-
-                 horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center
             ) {
-
                 Text(
                     "01.12 - 02.23",
                     fontSize = 25.sp,
@@ -211,12 +209,11 @@ fun ApartmentBalanceScreen(
                         modifier = Modifier
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
-
                     ) {
                         Box(
                             modifier = Modifier
-                                .width(40.dp)
-                                .height(40.dp)
+                                .width(45.dp)
+                                .height(45.dp)
                                 .padding(top = 5.dp, start = 10.dp, bottom = 5.dp)
                         ) {
                             IconButton(
@@ -227,21 +224,18 @@ fun ApartmentBalanceScreen(
                             {
                                 Icon(
                                     painter = painterResource(
-                                        id = if (!isExpanded.value) R.drawable.baseline_add_circle_outline_plus
-                                        else R.drawable.baseline_remove_circle_outline_minus
+                                        id = if (!isExpanded.value) R.drawable.baseline_add_circle_35
+                                        else R.drawable.baseline_remove_circle_35
                                     ),
                                     contentDescription = "Добавить объект",
-                                    modifier = Modifier.size(50.dp),
-                                    tint = Color(223, 75, 0, 236)
+                                    modifier = Modifier.size(35.dp),
+                                    tint = Color(0xFFF16022)
                                 )
                             }
                         }
                     }
-
                 }
-
             }
-
 
 //        ряд с вкладками Доходы и Расходы
             Row(
@@ -337,8 +331,6 @@ fun ApartmentBalanceScreen(
             }
         }
     }
-//главная колонка
-
 }
 
 
@@ -348,7 +340,6 @@ fun HomeScreen(viewModel: BalanceViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(red = 41, green = 41, blue = 41))
-
             .draggable(
                 state = viewModel.dragStatePeriod.value!!,
                 orientation = Orientation.Horizontal,
@@ -359,14 +350,11 @@ fun HomeScreen(viewModel: BalanceViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
         TableScreen(
             listOf(0.6f, 0.2f, 0.2f), listOf(
                 listOf("sadfasdfasdf", "234234", "234234"),
             )
         )
-
-
     }
 }
 
@@ -429,12 +417,10 @@ fun TableScreen(weight: List<Float>, data: List<List<String>>) {
 
 @Composable
 fun AboutScreen(viewModel: BalanceViewModel) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(red = 41, green = 41, blue = 41))
-
             .draggable(
                 state = viewModel.dragStatePeriod.value!!,
                 orientation = Orientation.Horizontal,
@@ -472,7 +458,6 @@ fun DropdownButtonWithMultipleSelection() {
     Column(
         modifier = Modifier.padding(5.dp)
     ) {
-
         Row {
             Column(
                 modifier = Modifier
@@ -486,7 +471,6 @@ fun DropdownButtonWithMultipleSelection() {
                     }
                 }
             }
-
             Box(
                 modifier = Modifier
                     .fillMaxWidth(.2f)
@@ -498,10 +482,10 @@ fun DropdownButtonWithMultipleSelection() {
                 )
                 {
                     Icon(
-                        painter = painterResource(id = R.drawable.baseline_add_circle_24),
+                        painter = painterResource(id = R.drawable.baseline_add_circle_35),
                         contentDescription = "Добавить объект",
-                        modifier = Modifier.size(30.dp),
-                        tint = Color(223, 75, 0)
+                        modifier = Modifier.size(35.dp),
+                        tint = Color(0xFFF16022)
                     )
                 }
             }
@@ -573,7 +557,6 @@ fun ExpensesCard(text: String) {
                 SolidColor(Color(223, 75, 0)),
                 shape = RoundedCornerShape(10.dp)
             ),
-
         elevation = 8.dp,
         onClick = {}
     ) {
@@ -583,7 +566,6 @@ fun ExpensesCard(text: String) {
                 .background(Color(red = 41, green = 41, blue = 41))
 
         ) {
-
             SimplePiechart()
 //            Text(text = text, fontSize = 20.sp, color = Color.White)
         }
@@ -596,28 +578,77 @@ private fun SimplePiechart() {
     val pieChartData = DataUtils.getPieChartData()
     val pieChartConfig =
         PieChartConfig(
-            strokeWidth = 500f,
-            labelVisible = true,
+            sliceLabelTextSize = 10.sp,
+            sliceLabelTextColor = Color.Black,
             activeSliceAlpha = .9f,
             isEllipsizeEnabled = true,
-            sliceLabelEllipsizeAt = TextUtils.TruncateAt.MIDDLE,
+            sliceLabelEllipsizeAt = TextUtils.TruncateAt.START,
+            sliceLabelTypeface = Typeface.defaultFromStyle(Typeface.NORMAL),
             isAnimationEnable = true,
-            chartPadding = 10,
+            chartPadding = 1,
+            showSliceLabels = true,
+            labelVisible = true,
             backgroundColor = Color(0xFF292929),
-            showSliceLabels = false,
             animationDuration = 1500
         )
     Column(modifier = Modifier.height(200.dp)) {
-        PieChart(
-            modifier = Modifier
-                .background(Color(0xFF292929))
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(end = 100.dp),
-            pieChartData,
-            pieChartConfig
-        ) { slice ->
-            Log.d("sdf", "$slice")
+        Row {
+            PieChart(
+                modifier = Modifier
+                    .background(Color(0xFF292929))
+
+                    .height(200.dp)
+                    .width(200.dp)
+                    .padding(5.dp),
+
+                pieChartData,
+                pieChartConfig
+            ) { slice ->
+                Log.d("sdf", "$slice")
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(1.dp),
+                verticalArrangement = Arrangement.SpaceAround,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxSize(.8f)
+                ) {
+                    Text(
+                        "2342342",
+                        fontSize = 20.sp,
+                        color = Color(7, 227, 16, 255),
+                        modifier = Modifier
+                            .padding(top = 15.dp)
+                    )
+                }
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.Bottom,
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    IconButton(
+                        modifier = Modifier
+                            .padding(bottom = 5.dp),
+                        onClick = {
+                        }
+                    )
+                    {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_add_circle_35),
+                            contentDescription = "Изменить данные клиента",
+                            modifier = Modifier.size(45.dp),
+                            tint = Color(0xFFF16022)
+                        )
+                    }
+                }
+            }
         }
     }
 }

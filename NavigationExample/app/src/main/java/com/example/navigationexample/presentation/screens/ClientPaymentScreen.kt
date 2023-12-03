@@ -743,6 +743,7 @@ fun GradientButton(
 //        enabled = isEnabled,
         modifier = Modifier
             .fillMaxWidth()
+            .height(50.dp)
             .padding(
                 top = 1.dp,
                 bottom = 5.dp,
