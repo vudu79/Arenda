@@ -1,5 +1,6 @@
 package com.example.navigationexample.presentation.screens
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -12,10 +13,21 @@ fun LaunchScreen(
     mainNavController: NavHostController,
     viewModelApartment: ApartmentViewModel
 ) {
-    Button(onClick = {
-        viewModelApartment.getAllApartments()
-        mainNavController.navigate(Routs.allApartmentsScreen)
-    }) {
-        Text(text="Start")
+
+    Column {
+        Button(onClick = {
+            viewModelApartment.getAllApartments()
+            mainNavController.navigate(Routs.allApartmentsScreen)
+        }) {
+            Text(text = "Start")
+        }
+
+        Button(onClick = {
+            viewModelApartment.getAllApartments()
+            mainNavController.navigate(Routs.chartsScreen)
+        }) {
+            Text(text = "charts")
+        }
     }
+
 }

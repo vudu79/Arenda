@@ -13,5 +13,6 @@ sealed class Routs() {
         val clientUpdateScreen: String = "client_update_screen"
         val clientDitailsScreen: String = "client_diteils_screen"
         val clientPaymentScreen: String = "client_payment_screen"
+        val chartsScreen: String = "charts_screen"
     }
 }

@@ -1,5 +1,6 @@
 package com.example.navigationexample.presentation.screens
 
+import android.text.TextUtils
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,6 +23,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import co.yml.charts.common.components.Legends
+import co.yml.charts.common.utils.DataUtils
+import co.yml.charts.ui.piechart.charts.PieChart
+import co.yml.charts.ui.piechart.models.PieChartConfig
 import com.example.navigationexample.R
 import com.example.navigationexample.presentation.screens.common.bottomBorder
 
@@ -72,7 +77,7 @@ fun ApartmentBalanceScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
+                    .padding(start = 10.dp, end = 10.dp)
                     .background(
                         brush = Brush.horizontalGradient(
                             listOf(
@@ -103,7 +108,7 @@ fun ApartmentBalanceScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
+                    .padding(start = 10.dp, end = 10.dp, bottom = 5.dp)
 //                    .border(
 //                        1.dp,
 //                        SolidColor(Color(223, 75, 0)),
@@ -113,13 +118,12 @@ fun ApartmentBalanceScreen(
             ) {
                 Text(
                     "Баланс", fontSize = 25.sp, color = Color(0xFFBEBCBA), modifier = Modifier
-                        .padding(15.dp)
+                        .padding(5.dp)
                 )
                 Text(
                     "2342342", fontSize = 25.sp, color = Color(7, 227, 16, 255), modifier = Modifier
-                        .padding(15.dp)
+                        .padding(5.dp)
                 )
-
             }
 
 // ряд с блоком апартаментов
@@ -561,7 +565,7 @@ fun ExpensesCard(text: String) {
     Card(
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier
-            .fillMaxHeight(0.25f)
+            .fillMaxHeight(0.4f)
             .fillMaxWidth()
             .padding(10.dp)
             .border(
@@ -579,7 +583,41 @@ fun ExpensesCard(text: String) {
                 .background(Color(red = 41, green = 41, blue = 41))
 
         ) {
-            Text(text = text, fontSize = 20.sp, color = Color.White)
+
+            SimplePiechart()
+//            Text(text = text, fontSize = 20.sp, color = Color.White)
+        }
+    }
+}
+
+
+@Composable
+private fun SimplePiechart() {
+    val pieChartData = DataUtils.getPieChartData()
+    val pieChartConfig =
+        PieChartConfig(
+            strokeWidth = 500f,
+            labelVisible = true,
+            activeSliceAlpha = .9f,
+            isEllipsizeEnabled = true,
+            sliceLabelEllipsizeAt = TextUtils.TruncateAt.MIDDLE,
+            isAnimationEnable = true,
+            chartPadding = 10,
+            backgroundColor = Color(0xFF292929),
+            showSliceLabels = false,
+            animationDuration = 1500
+        )
+    Column(modifier = Modifier.height(200.dp)) {
+        PieChart(
+            modifier = Modifier
+                .background(Color(0xFF292929))
+                .fillMaxWidth()
+                .height(200.dp)
+                .padding(end = 100.dp),
+            pieChartData,
+            pieChartConfig
+        ) { slice ->
+            Log.d("sdf", "$slice")
         }
     }
 }

@@ -152,7 +152,10 @@ fun NavHostView(
             }
         }
 
-
+        composable(Routs.chartsScreen) {
+            CharsScreen(
+            )
+        }
 
 
 
