@@ -56,226 +56,282 @@ fun ApartmentBalanceScreen(
 
 
 //    Колонка для заднего фона
-    Column (modifier = Modifier
-        .fillMaxSize()
-        .background(Color(red = 41, green = 41, blue = 41))){
-
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(.94f)
-
+            .fillMaxSize()
+            .background(Color(red = 41, green = 41, blue = 41))
     ) {
-// ряд с блоком апартаментов
-        Row(
+//общая колонка
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
-                .border(
-                    1.dp,
-                    SolidColor(Color(223, 75, 0)),
-                    shape = RoundedCornerShape(10.dp)
-                ),
+                .fillMaxHeight(.94f)
+
         ) {
-            Column(
+//            рая для цифры периода
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth(.85f)
-                    .padding(5.dp)
-            ) {
-
-                Row {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth(.8f)
-                            .padding(3.dp)
-                    ) {
-                        selectedApartments.value.forEach {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = it,
-                                    color = Color(0xFFBEBCBA),
-                                    modifier = Modifier.padding(start = 5.dp),
-                                    fontSize = 20.sp
-                                )
-                            }
-                        }
-                    }
-                }
-
-                if (isExpanded.value) {
-                    LazyColumn(
-                        modifier = Modifier.padding(top = 3.dp),
-                        contentPadding = PaddingValues(bottom = 1.dp)
-                    ) {
-                        // Пункты списка с названием элементов и чекбоксами
-                        items(itemsApartments) { item ->
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Checkbox(
-                                    checked = selectedApartments.value.contains(item.name),
-                                    onCheckedChange = {
-                                        // Добавление или удаление элемента из выбранных
-                                        if (selectedApartments.value.contains(item.name)) {
-                                            selectedApartments.value =
-                                                selectedApartments.value - item.name
-                                        } else {
-                                            selectedApartments.value =
-                                                selectedApartments.value + item.name
-                                        }
-                                    },
-                                    colors = CheckboxDefaults.colors(
-                                        checkedColor = Color(0xFFDF4B00),  // Цвет для выбранного чекбокса
-                                        uncheckedColor = Color(0xFFBEBCBA), // Цвет для не выбранного чекбокса
-                                        checkmarkColor = Color(0xFFDF4B00) // Цвет для галочки внутри чекбокса (при выборе)
-                                    )
-                                )
-                                Text(
-                                    text = item.name,
-                                    modifier = Modifier.padding(start = 5.dp),
-                                    color = Color(0xFFBEBCBA)
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .width(40.dp)
-                            .height(40.dp)
-                            .padding(top = 5.dp, start = 10.dp, bottom = 5.dp)
-                    ) {
-                        IconButton(
-                            onClick = {
-                                isExpanded.value = !isExpanded.value
-                            }
-                        )
-                        {
-                            Icon(
-                                painter = painterResource(
-                                    id = if (!isExpanded.value) R.drawable.baseline_add_circle_outline_plus
-                                    else R.drawable.baseline_remove_circle_outline_minus
-                                ),
-                                contentDescription = "Добавить объект",
-                                modifier = Modifier.size(50.dp),
-                                tint = Color(223, 75, 0, 236)
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            listOf(
+                                Color(0xFFDF4B00),
+                                Color(0xFF292929),
+                                Color(0xFF292929),
+                                Color(0xFFDF4B00),
                             )
-                        }
-                    }
-                }
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    ),
+
+                 horizontalArrangement = Arrangement.Center
+            ) {
+
+                Text(
+                    "01.12 - 02.23",
+                    fontSize = 25.sp,
+                    color = Color(190, 188, 186, 255),
+                    modifier = Modifier
+                        .padding(5.dp)
+                )
 
             }
 
-        }
+
+//        рая для цифры баланса
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
+//                    .border(
+//                        1.dp,
+//                        SolidColor(Color(223, 75, 0)),
+//                        shape = RoundedCornerShape(10.dp)
+//                    ),
+                , horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    "Баланс", fontSize = 25.sp, color = Color(0xFFBEBCBA), modifier = Modifier
+                        .padding(15.dp)
+                )
+                Text(
+                    "2342342", fontSize = 25.sp, color = Color(7, 227, 16, 255), modifier = Modifier
+                        .padding(15.dp)
+                )
+
+            }
+
+// ряд с блоком апартаментов
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
+                    .border(
+                        1.dp,
+                        SolidColor(Color(223, 75, 0)),
+                        shape = RoundedCornerShape(10.dp)
+                    ),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(.85f)
+                        .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
+                ) {
+
+                    Row {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth(.8f)
+                                .padding(3.dp)
+                        ) {
+                            selectedApartments.value.forEach {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = it,
+                                        color = Color(0xFFBEBCBA),
+                                        modifier = Modifier.padding(start = 5.dp),
+                                        fontSize = 20.sp
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    if (isExpanded.value) {
+                        LazyColumn(
+                            modifier = Modifier.padding(top = 3.dp),
+                            contentPadding = PaddingValues(bottom = 1.dp)
+                        ) {
+                            // Пункты списка с названием элементов и чекбоксами
+                            items(itemsApartments) { item ->
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Checkbox(
+                                        checked = selectedApartments.value.contains(item.name),
+                                        onCheckedChange = {
+                                            // Добавление или удаление элемента из выбранных
+                                            if (selectedApartments.value.contains(item.name)) {
+                                                selectedApartments.value =
+                                                    selectedApartments.value - item.name
+                                            } else {
+                                                selectedApartments.value =
+                                                    selectedApartments.value + item.name
+                                            }
+                                        },
+                                        colors = CheckboxDefaults.colors(
+                                            checkedColor = Color(0xFFDF4B00),  // Цвет для выбранного чекбокса
+                                            uncheckedColor = Color(0xFFBEBCBA), // Цвет для не выбранного чекбокса
+                                            checkmarkColor = Color(0xFFDF4B00) // Цвет для галочки внутри чекбокса (при выборе)
+                                        )
+                                    )
+                                    Text(
+                                        text = item.name,
+                                        modifier = Modifier.padding(start = 5.dp),
+                                        color = Color(0xFFBEBCBA)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .width(40.dp)
+                                .height(40.dp)
+                                .padding(top = 5.dp, start = 10.dp, bottom = 5.dp)
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    isExpanded.value = !isExpanded.value
+                                }
+                            )
+                            {
+                                Icon(
+                                    painter = painterResource(
+                                        id = if (!isExpanded.value) R.drawable.baseline_add_circle_outline_plus
+                                        else R.drawable.baseline_remove_circle_outline_minus
+                                    ),
+                                    contentDescription = "Добавить объект",
+                                    modifier = Modifier.size(50.dp),
+                                    tint = Color(223, 75, 0, 236)
+                                )
+                            }
+                        }
+                    }
+
+                }
+
+            }
 
 
 //        ряд с вкладками Доходы и Расходы
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            TabRow(
-                selectedTabIndex = tabIndexExpenses.value!!,
-                backgroundColor = Color(red = 41, green = 41, blue = 41),
-                modifier = Modifier
-                    .padding(start = 5.dp, end = 5.dp)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                viewModelBalance.tabsExpenses.forEachIndexed { indexExpenses, titleExpenses ->
-                    val isSelectedExpenses = indexExpenses == tabIndexExpenses.value!!
-                    val gColor =
-                        if (indexExpenses == 0) gradientColors else gradientColors.reversed()
+                TabRow(
+                    selectedTabIndex = tabIndexExpenses.value!!,
+                    backgroundColor = Color(red = 41, green = 41, blue = 41),
+                    modifier = Modifier
+                        .padding(start = 5.dp, end = 5.dp)
+                ) {
+                    viewModelBalance.tabsExpenses.forEachIndexed { indexExpenses, titleExpenses ->
+                        val isSelectedExpenses = indexExpenses == tabIndexExpenses.value!!
+                        val gColor =
+                            if (indexExpenses == 0) gradientColors else gradientColors.reversed()
 
-                    val backgroundShaderExpenses =
-                        if (isSelectedExpenses) Brush.horizontalGradient(gColor) else SolidColor(
-                            Color.Transparent
-                        )
-                    Tab(
-                        selected = isSelectedExpenses,
-                        onClick = { viewModelBalance.updateTabIndexExpenses(indexExpenses) },
-                        modifier = Modifier
-                            .padding(vertical = 3.dp)
-                            .height(40.dp)
-                            .padding(horizontal = 3.dp)
-                            .background(
-                                brush = backgroundShaderExpenses,
-                                shape = RoundedCornerShape(8.dp)
+                        val backgroundShaderExpenses =
+                            if (isSelectedExpenses) Brush.horizontalGradient(gColor) else SolidColor(
+                                Color.Transparent
                             )
-                    ) {
-                        Text(
-                            text = titleExpenses,
-                            color = if (isSelectedExpenses) Color.White else Color.Gray,
-                            modifier = Modifier.padding(8.dp)
-                        )
+                        Tab(
+                            selected = isSelectedExpenses,
+                            onClick = { viewModelBalance.updateTabIndexExpenses(indexExpenses) },
+                            modifier = Modifier
+                                .padding(vertical = 3.dp)
+                                .height(40.dp)
+                                .padding(horizontal = 3.dp)
+                                .background(
+                                    brush = backgroundShaderExpenses,
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                        ) {
+                            Text(
+                                text = titleExpenses,
+                                color = if (isSelectedExpenses) Color.White else Color.Gray,
+                                modifier = Modifier.padding(8.dp)
+                            )
+                        }
                     }
                 }
             }
-        }
 //        ряд с центральным блоком (Card) балланса и цифрой расхода или дохода
-        Row {
-            when (tabIndexExpenses.value) {
-                0 -> ExpensesCard("Доходы")
-                1 -> ExpensesCard("Расходы")
+            Row {
+                when (tabIndexExpenses.value) {
+                    0 -> ExpensesCard("Доходы")
+                    1 -> ExpensesCard("Расходы")
+                }
             }
-        }
 
 // ряд с вкладками периодов выборки
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
 
-            ) {
-            TabRow(
-                selectedTabIndex = tabIndexPeriod.value!!,
-                backgroundColor = Color(red = 41, green = 41, blue = 41),
-                modifier = Modifier
-                    .padding(start = 5.dp, end = 5.dp)
-            ) {
-                viewModelBalance.tabsPeriod.forEachIndexed { index, title ->
-                    val isSelectedPeriod = index == tabIndexPeriod.value!!
-                    val backgroundShaderPeriod =
-                        if (isSelectedPeriod) Brush.horizontalGradient(gradientColors) else SolidColor(
-                            Color.Transparent
-                        )
-                    Tab(
-                        selected = isSelectedPeriod,
-                        onClick = { viewModelBalance.updateTabIndexPeriod(index) },
-                        modifier = Modifier
-                            .padding(vertical = 3.dp)
-                            .height(40.dp)
-                            .padding(horizontal = 3.dp)
-                            .background(
-                                brush = backgroundShaderPeriod,
-                                shape = RoundedCornerShape(8.dp)
+                ) {
+                TabRow(
+                    selectedTabIndex = tabIndexPeriod.value!!,
+                    backgroundColor = Color(red = 41, green = 41, blue = 41),
+                    modifier = Modifier
+                        .padding(start = 5.dp, end = 5.dp)
+                ) {
+                    viewModelBalance.tabsPeriod.forEachIndexed { index, title ->
+                        val isSelectedPeriod = index == tabIndexPeriod.value!!
+                        val backgroundShaderPeriod =
+                            if (isSelectedPeriod) Brush.horizontalGradient(gradientColors) else SolidColor(
+                                Color.Transparent
                             )
-                    ) {
-                        Text(
-                            text = title,
-                            color = if (isSelectedPeriod) Color.White else Color.Gray,
-                            modifier = Modifier.padding(8.dp)
-                        )
+                        Tab(
+                            selected = isSelectedPeriod,
+                            onClick = { viewModelBalance.updateTabIndexPeriod(index) },
+                            modifier = Modifier
+                                .padding(vertical = 3.dp)
+                                .height(40.dp)
+                                .padding(horizontal = 3.dp)
+                                .background(
+                                    brush = backgroundShaderPeriod,
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                        ) {
+                            Text(
+                                text = title,
+                                color = if (isSelectedPeriod) Color.White else Color.Gray,
+                                modifier = Modifier.padding(8.dp)
+                            )
+                        }
                     }
                 }
             }
-        }
 
 // экраны для списков расходов и доходов
-        when (tabIndexPeriod.value) {
-            0 -> HomeScreen(viewModel = viewModelBalance)
-            1 -> AboutScreen(viewModel = viewModelBalance)
+            when (tabIndexPeriod.value) {
+                0 -> HomeScreen(viewModel = viewModelBalance)
+                1 -> AboutScreen(viewModel = viewModelBalance)
+            }
         }
-    }
     }
 //главная колонка
 
