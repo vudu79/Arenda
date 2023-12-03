@@ -44,7 +44,8 @@ fun ApartmentBalanceScreen(
 
     val itemsApartments by viewModelBalance.allApartments.observeAsState(listOf())
 //    val currentApart by viewModelBalance.currentApartment.observeAsState()
-    val selectedApartments: MutableState<List<String>> = remember { mutableStateOf(emptyList()) }
+    val selectedApartments: MutableState<List<String>> =
+        remember { mutableStateOf(listOf(apartmentName)) }
 
     Log.d("MyTag", "Лист -  $itemsApartments")
 //    Log.d("MyTag", "Текуший -  ${currentApart}")
@@ -54,18 +55,22 @@ fun ApartmentBalanceScreen(
     }
 
 
-//главная колонка
+//    Колонка для заднего фона
+    Column (modifier = Modifier
+        .fillMaxSize()
+        .background(Color(red = 41, green = 41, blue = 41))){
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(red = 41, green = 41, blue = 41))
+            .fillMaxHeight(.94f)
 
     ) {
 // ряд с блоком апартаментов
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(5.dp)
+                .padding(start = 10.dp, end = 10.dp, bottom = 10.dp)
                 .border(
                     1.dp,
                     SolidColor(Color(223, 75, 0)),
@@ -73,7 +78,9 @@ fun ApartmentBalanceScreen(
                 ),
         ) {
             Column(
-                modifier = Modifier.padding(5.dp)
+                modifier = Modifier
+                    .fillMaxWidth(.85f)
+                    .padding(5.dp)
             ) {
 
                 Row {
@@ -90,7 +97,8 @@ fun ApartmentBalanceScreen(
                                 Text(
                                     text = it,
                                     color = Color(0xFFBEBCBA),
-                                    modifier = Modifier.padding(start = 5.dp)
+                                    modifier = Modifier.padding(start = 5.dp),
+                                    fontSize = 20.sp
                                 )
                             }
                         }
@@ -136,27 +144,42 @@ fun ApartmentBalanceScreen(
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.padding(2.dp))
-            Box(
-                modifier = Modifier
-                    .width(40.dp)
-                    .height(40.dp)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                IconButton(
-                    onClick = {
-                        isExpanded.value = !isExpanded.value
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(40.dp)
+                            .height(40.dp)
+                            .padding(top = 5.dp, start = 10.dp, bottom = 5.dp)
+                    ) {
+                        IconButton(
+                            onClick = {
+                                isExpanded.value = !isExpanded.value
+                            }
+                        )
+                        {
+                            Icon(
+                                painter = painterResource(
+                                    id = if (!isExpanded.value) R.drawable.baseline_add_circle_outline_plus
+                                    else R.drawable.baseline_remove_circle_outline_minus
+                                ),
+                                contentDescription = "Добавить объект",
+                                modifier = Modifier.size(50.dp),
+                                tint = Color(223, 75, 0, 236)
+                            )
+                        }
                     }
-                )
-                {
-                    Icon(
-                        painter = painterResource(id = R.drawable.baseline_add_circle_24),
-                        contentDescription = "Добавить объект",
-                        modifier = Modifier.size(50.dp),
-                        tint = Color(223, 75, 0)
-                    )
                 }
+
             }
+
         }
 
 
@@ -253,6 +276,8 @@ fun ApartmentBalanceScreen(
             1 -> AboutScreen(viewModel = viewModelBalance)
         }
     }
+    }
+//главная колонка
 
 }
 
@@ -480,7 +505,7 @@ fun ExpensesCard(text: String) {
     Card(
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier
-            .fillMaxHeight(0.3f)
+            .fillMaxHeight(0.25f)
             .fillMaxWidth()
             .padding(10.dp)
             .border(
