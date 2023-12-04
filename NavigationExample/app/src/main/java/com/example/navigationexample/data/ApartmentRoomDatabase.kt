@@ -8,23 +8,27 @@ import com.example.navigationexample.data.entity.Appatment
 import com.example.navigationexample.data.dao.ApartmentDao
 import com.example.navigationexample.data.dao.ClientDao
 import com.example.navigationexample.data.dao.RentalDaysDao
+import com.example.navigationexample.data.dao.ScoresDao
 import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.data.entity.RentalDay
 import com.example.navigationexample.data.entity.Score
 import com.example.navigationexample.data.entity.ScoreCategory
 
 
-@Database(entities = [(Appatment::class),
-    (Client::class),
-    (RentalDay::class),
-    (Score::class),
-    (ScoreCategory::class)],
-    version =1)
-abstract class ApartmentRoomDatabase: RoomDatabase() {
+@Database(
+    entities = [(Appatment::class),
+        (Client::class),
+        (RentalDay::class),
+        (Score::class),
+        (ScoreCategory::class)],
+    version = 1
+)
+abstract class ApartmentRoomDatabase : RoomDatabase() {
 
     abstract fun getApartmentDao(): ApartmentDao
     abstract fun getClientDao(): ClientDao
     abstract fun getRentalDayDao(): RentalDaysDao
+    abstract fun getScoresDao(): ScoresDao
 
     companion object {
         private var INSTANCE: ApartmentRoomDatabase? = null
