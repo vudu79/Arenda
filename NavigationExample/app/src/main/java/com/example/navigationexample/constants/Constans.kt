@@ -19,6 +19,11 @@ sealed class Constans {
 }
 
 
+enum class ScoreType(){
+    INCOME, EXPENSES
+}
+
 enum class SourceEvent {
     CLIENTUPDATE, PAYMENTUPDATE
 }
+

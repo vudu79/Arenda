@@ -333,7 +333,6 @@ fun ApartmentBalanceScreen(
     }
 }
 
-
 @Composable
 fun HomeScreen(viewModel: BalanceViewModel) {
     Column(
@@ -542,7 +541,6 @@ fun DropdownButtonWithMultipleSelection() {
     }
 }
 
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ExpensesCard(text: String) {
@@ -571,7 +569,6 @@ fun ExpensesCard(text: String) {
         }
     }
 }
-
 
 @Composable
 private fun SimplePiechart() {
