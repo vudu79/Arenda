@@ -1,6 +1,5 @@
 package com.example.navigationexample.data.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -8,7 +7,7 @@ import com.example.navigationexample.data.entity.Appatment
 
 
 @Dao
-interface AppatmentDao {
+interface ApartmentDao {
     @Query("SELECT * FROM appatments WHERE name = :name")
     fun getApartmentByName(name: String): Appatment
 

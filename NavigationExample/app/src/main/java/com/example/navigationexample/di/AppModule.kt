@@ -2,7 +2,7 @@ package com.example.navigationexample.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.navigationexample.data.AppatmentRoomDatabase
+import com.example.navigationexample.data.ApartmentRoomDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,21 +21,21 @@ object AppModule {
         @ApplicationContext app: Context
     ) = Room.databaseBuilder(
         app,
-        AppatmentRoomDatabase::class.java,
+        ApartmentRoomDatabase::class.java,
         "product_database"
     ).fallbackToDestructiveMigration()
         .build() // The reason we can construct a database for the repo
 
     @Singleton
     @Provides
-    fun provideAppatmentDao(db: AppatmentRoomDatabase) = db.getAppatmentDao()
+    fun provideAppatmentDao(db: ApartmentRoomDatabase) = db.getApartmentDao()
 
     @Singleton
     @Provides
-    fun provideClientDao(db: AppatmentRoomDatabase) = db.getClientDao()
+    fun provideClientDao(db: ApartmentRoomDatabase) = db.getClientDao()
 
     @Singleton
     @Provides
-    fun provideRentalDayDao(db: AppatmentRoomDatabase) = db.getRentalDayDao()
+    fun provideRentalDayDao(db: ApartmentRoomDatabase) = db.getRentalDayDao()
 
 }

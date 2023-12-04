@@ -1,7 +1,7 @@
 package com.example.navigationexample.data.repository
 
 import androidx.lifecycle.MutableLiveData
-import com.example.navigationexample.data.dao.AppatmentDao
+import com.example.navigationexample.data.dao.ApartmentDao
 import com.example.navigationexample.data.entity.Appatment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class ApartmentRepositoryImpl @Inject constructor(private val apartmentDao: AppatmentDao) {
+class ApartmentRepositoryImpl @Inject constructor(private val apartmentDao: ApartmentDao) {
 
     var allApartmentsLD = MutableLiveData<List<Appatment>>()
 
