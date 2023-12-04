@@ -14,8 +14,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.navigationexample.constants.Constans
+import com.example.navigationexample.constants.ScoreType
 import com.example.navigationexample.constants.SourceEvent
+import com.example.navigationexample.data.dao.ScoresDao
 import com.example.navigationexample.data.entity.Client
+import com.example.navigationexample.data.entity.Score
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
 import com.example.navigationexample.data.repository.DaysRepositoryImpl
 import com.example.navigationexample.domain.models.ClientStatus
@@ -49,6 +52,7 @@ import javax.inject.Inject
 class ClientViewModel @Inject constructor(
     private val clientRepository: ClientsRepositoryImpl,
     private val daysRepository: DaysRepositoryImpl,
+    private val scoresDao: ScoresDao,
 
     private val nameValidationField: NameValidation = NameValidation(),
     private val phoneValidationField: PhoneValidation = PhoneValidation(),
@@ -680,6 +684,40 @@ class ClientViewModel @Inject constructor(
                         appatmentName = validateFormState.apartmentName!!
                     )
                 )
+
+
+
+                if (validateFormState.prePayment != "" && validateFormState.completedPrePayment != "" && validateFormState.prePayment.toInt() == validateFormState.completedPrePayment.toInt()) {
+                    scoresDao.insertScore(
+                        Score(
+                            validateFormState.completedPrePayment.toInt(),
+                            LocalDate.now().toEpochDay(),
+                            validateFormState.id,
+                            "clients",
+                            ScoreType.INCOME,
+                            validateFormState.apartmentName!!
+                        )
+                    )
+                }
+
+                if (validateFormState.priceOfStay != "" &&
+                    validateFormState.prePayment != "" &&
+                    validateFormState.completedPayment != "" &&
+                    (validateFormState.priceOfStay.toInt() - validateFormState.prePayment.toInt()) == validateFormState.completedPayment.toInt()
+                ) {
+                    scoresDao.insertScore(
+                        Score(
+                            validateFormState.completedPayment.toInt(),
+                            LocalDate.now().toEpochDay(),
+                            validateFormState.id,
+                            "clients",
+                            ScoreType.INCOME,
+                            validateFormState.apartmentName!!
+                        )
+                    )
+                }
+
+
             }
             validationEventChannel.send(ValidatAllFieldsResultEvent.UpdateSuccess(source))
         }
