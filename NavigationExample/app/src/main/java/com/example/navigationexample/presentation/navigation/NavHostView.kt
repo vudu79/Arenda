@@ -36,7 +36,7 @@ fun NavHostView(
         }
 
         composable(Routs.addAppatmentScreen) {
-            AddAppatmentScreen(
+            AddApartmentScreen(
                 navController = mainNavController,
                 viewModel= viewModelApartment,
                 onHome = { mainNavController.navigate(Routs.home) })

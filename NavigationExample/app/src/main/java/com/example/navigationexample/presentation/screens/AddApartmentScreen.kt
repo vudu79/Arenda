@@ -32,10 +32,9 @@ import com.example.navigationexample.presentation.screens.common.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun AddAppatmentScreen(
+fun AddApartmentScreen(
     navController: NavHostController,
     viewModel: ApartmentViewModel,
-
     onHome: () -> Unit
 ) {
     val context = LocalContext.current
