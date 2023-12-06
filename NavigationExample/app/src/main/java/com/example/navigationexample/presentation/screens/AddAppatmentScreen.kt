@@ -412,7 +412,7 @@ fun AddAppatmentScreen(
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
-                                viewModel.insertAppatment(
+                                viewModel.insertApartment(
                                     Appatment(
                                         nameAppat.value,
                                         addressAppat.value,
@@ -429,7 +429,7 @@ fun AddAppatmentScreen(
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
-                            navController.navigate(Routs.home)
+                            navController.navigate(Routs.allApartmentsScreen)
                         })
                         {
                             Icon(

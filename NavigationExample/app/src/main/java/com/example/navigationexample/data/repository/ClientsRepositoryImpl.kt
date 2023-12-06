@@ -18,7 +18,6 @@ class ClientsRepositoryImpl @Inject constructor(private val clientDao: ClientDao
             return@async clientDao.insertClient(newClient)
         }
 
-
     suspend fun getClientByPhone(phone: String): Client {
         return clientDao.getClientByPhone(phone)
     }

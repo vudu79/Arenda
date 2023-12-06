@@ -30,7 +30,7 @@ class ApartmentViewModel @Inject constructor(
         apartmentRepository.setCurrentApartmentInRepository(apartment.name)
     }
 
-    fun insertAppatment(apartment: Appatment) {
+    fun insertApartment(apartment: Appatment) {
         apartmentRepository.insertApartment(apartment)
     }
 

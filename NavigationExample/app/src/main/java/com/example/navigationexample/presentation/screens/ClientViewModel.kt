@@ -16,11 +16,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.navigationexample.constants.Constans
 import com.example.navigationexample.constants.ScoreType
 import com.example.navigationexample.constants.SourceEvent
-import com.example.navigationexample.data.dao.ScoresDao
 import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.data.entity.Score
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
 import com.example.navigationexample.data.repository.DaysRepositoryImpl
+import com.example.navigationexample.data.repository.ScoreRepositoryImpl
 import com.example.navigationexample.domain.models.ClientStatus
 import com.example.navigationexample.domain.usecase.validation.ValidatAllFieldsResultEvent
 import com.example.navigationexample.domain.usecase.validation.ValidationFormEvent
@@ -52,7 +52,7 @@ import javax.inject.Inject
 class ClientViewModel @Inject constructor(
     private val clientRepository: ClientsRepositoryImpl,
     private val daysRepository: DaysRepositoryImpl,
-    private val scoresDao: ScoresDao,
+    private val scoreRepositoryImpl: ScoreRepositoryImpl,
 
     private val nameValidationField: NameValidation = NameValidation(),
     private val phoneValidationField: PhoneValidation = PhoneValidation(),
@@ -687,8 +687,10 @@ class ClientViewModel @Inject constructor(
 
 
 
-                if (validateFormState.prePayment != "" && validateFormState.completedPrePayment != "" && validateFormState.prePayment.toInt() == validateFormState.completedPrePayment.toInt()) {
-                    scoresDao.insertScore(
+                if (validateFormState.prePayment != "" &&
+                    validateFormState.completedPrePayment != "" &&
+                    validateFormState.prePayment.toInt() == validateFormState.completedPrePayment.toInt()) {
+                    scoreRepositoryImpl.addScore(
                         Score(
                             validateFormState.completedPrePayment.toInt(),
                             LocalDate.now().toEpochDay(),
@@ -705,7 +707,7 @@ class ClientViewModel @Inject constructor(
                     validateFormState.completedPayment != "" &&
                     (validateFormState.priceOfStay.toInt() - validateFormState.prePayment.toInt()) == validateFormState.completedPayment.toInt()
                 ) {
-                    scoresDao.insertScore(
+                    scoreRepositoryImpl.addScore(
                         Score(
                             validateFormState.completedPayment.toInt(),
                             LocalDate.now().toEpochDay(),
@@ -718,6 +720,7 @@ class ClientViewModel @Inject constructor(
                 }
 
 
+                
             }
             validationEventChannel.send(ValidatAllFieldsResultEvent.UpdateSuccess(source))
         }

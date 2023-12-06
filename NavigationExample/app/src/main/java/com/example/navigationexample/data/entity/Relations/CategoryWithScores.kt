@@ -7,11 +7,11 @@ import com.example.navigationexample.data.entity.ScoreCategory
 
 data class CategoryWithScores(
     @Embedded
-    var scoreCategory: ScoreCategory,
+    val scoreCategory: ScoreCategory,
 
     @Relation(
         parentColumn = "category",
-        entityColumn = "scoreCategory"
+        entityColumn = "score_category"
     )
-    var scores: List<Score>
+    val scores: List<Score>
 )

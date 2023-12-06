@@ -6,16 +6,16 @@ import androidx.room.PrimaryKey
 import com.example.navigationexample.constants.ScoreType
 
 @Entity(tableName = "score_category")
-class ScoreCategory {
+data class ScoreCategory (
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("id")
-    var id:Int = 0
+    var id:Int = 0,
 
     @ColumnInfo("category")
-    var category:String = ""
+    var category:String = "",
 
     @ColumnInfo("type")
     var type: ScoreType = ScoreType.EXPENSES
 
-}
+)

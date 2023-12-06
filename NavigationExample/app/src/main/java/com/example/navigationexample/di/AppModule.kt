@@ -38,4 +38,8 @@ object AppModule {
     @Provides
     fun provideRentalDayDao(db: ApartmentRoomDatabase) = db.getRentalDayDao()
 
+    @Singleton
+    @Provides
+    fun provideScoreDao(db: ApartmentRoomDatabase) = db.getScoresDao()
+
 }
