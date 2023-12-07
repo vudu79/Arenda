@@ -21,7 +21,7 @@ import com.example.navigationexample.data.entity.ScoreCategory
         (RentalDay::class),
         (Score::class),
         (ScoreCategory::class)],
-    version = 8
+    version = 2
 )
 abstract class ApartmentRoomDatabase : RoomDatabase() {
 

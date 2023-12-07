@@ -77,8 +77,14 @@ class Client {
     @ColumnInfo(name = "completed_pre_payment")
     var completedPrePayment: Int = 0
 
+    @ColumnInfo(name = "pre_payment_done")
+    var prePaymentDone: Boolean = false
+
     @ColumnInfo(name = "completed_payment")
     var completedPayment: Int = 0
+
+    @ColumnInfo(name = "payment_done")
+    var paymentDone: Boolean = false
 
     @ColumnInfo(name = "completed_pledge")
     var completedPledge: Int = 0
@@ -145,7 +151,9 @@ class Client {
         pledge:Int,
 
         completedPrePayment: Int,
+        prePaymentDone: Boolean,
         completedPayment: Int,
+        paymentDone: Boolean,
         completedPledge: Int,
 
         dateOfCompletedPrePayment: Long,
@@ -178,7 +186,9 @@ class Client {
         this.pledge = pledge
 
         this.completedPrePayment = completedPrePayment
+        this.prePaymentDone = prePaymentDone
         this.completedPayment = completedPayment
+        this.paymentDone = paymentDone
         this.completedPledge = completedPledge
 
         this.dateOfCompletedPrePayment = dateOfCompletedPrePayment
@@ -214,7 +224,9 @@ class Client {
         pledge: Int,
 
         completedPrePayment: Int,
+        prePaymentDone:Boolean,
         completedPayment: Int,
+        paymentDone:Boolean,
         completedPledge: Int,
 
         dateOfCompletedPrePayment: Long,
@@ -248,9 +260,10 @@ class Client {
         this.pledge = pledge
 
         this.completedPrePayment = completedPrePayment
+        this.prePaymentDone = prePaymentDone
         this.completedPayment = completedPayment
+        this.paymentDone = paymentDone
         this.completedPledge = completedPledge
-
 
         this.dateOfCompletedPrePayment = dateOfCompletedPrePayment
         this.dateOfCompletedPayment = dateOfCompletedPayment

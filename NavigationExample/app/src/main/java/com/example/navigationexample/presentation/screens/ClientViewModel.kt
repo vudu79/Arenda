@@ -134,10 +134,15 @@ class ClientViewModel @Inject constructor(
         validateFormState =
             validateFormState.copy(completedPayment = client.completedPayment.toString())
         validateFormState =
+            validateFormState.copy(paymentDone = client.paymentDone)
+
+        validateFormState =
             validateFormState.copy(dateOfCompletedPayment = client.dateOfCompletedPayment)
 
         validateFormState =
             validateFormState.copy(completedPrePayment = client.completedPrePayment.toString())
+        validateFormState =
+            validateFormState.copy(prePaymentDone = client.prePaymentDone)
         validateFormState =
             validateFormState.copy(dateOfCompletedPrePayment = client.dateOfCompletedPrePayment)
 
@@ -179,7 +184,9 @@ class ClientViewModel @Inject constructor(
         validateFormState = validateFormState.copy(priceOfStay = "")
 
         validateFormState = validateFormState.copy(completedPrePayment = "0")
+        validateFormState = validateFormState.copy(prePaymentDone = false)
         validateFormState = validateFormState.copy(completedPayment = "0")
+        validateFormState = validateFormState.copy(paymentDone = false)
         validateFormState = validateFormState.copy(completedPledge = "0")
 
         validateFormState = validateFormState.copy(dateOfCompletedPrePayment = 0)
@@ -367,6 +374,13 @@ class ClientViewModel @Inject constructor(
                     validateFormState.copy(
                         dateOfCompletedPrePayment = LocalDate.now().toEpochDay()
                     )
+                validateFormState = validateFormState.copy(
+                    prePaymentDone =
+                    (validateFormState.prePayment != "0" &&
+                            validateFormState.prePayment != "" &&
+                            validateFormState.completedPrePayment != "" &&
+                            validateFormState.prePayment.toInt() == validateFormState.completedPrePayment.toInt())
+                )
             }
 
             is ValidationFormEvent.CompletedPaymentChanged -> {
@@ -377,6 +391,15 @@ class ClientViewModel @Inject constructor(
                     validateFormState.copy(
                         dateOfCompletedPayment = LocalDate.now().toEpochDay()
                     )
+
+                validateFormState = validateFormState.copy(
+                    paymentDone =
+                    (validateFormState.priceOfStay != "0" &&
+                            validateFormState.priceOfStay != "" &&
+                            validateFormState.prePayment != "" &&
+                            validateFormState.completedPayment != "" &&
+                            (validateFormState.priceOfStay.toInt() - validateFormState.prePayment.toInt()) == validateFormState.completedPayment.toInt())
+                )
             }
 
             is ValidationFormEvent.CompletedPledgeChanged -> {
@@ -524,6 +547,9 @@ class ClientViewModel @Inject constructor(
                     completedPayment = validateFormState.completedPayment.trim().toInt(),
                     completedPrePayment = validateFormState.completedPrePayment.trim().toInt(),
                     completedPledge = validateFormState.completedPledge.trim().toInt(),
+
+                    prePaymentDone = validateFormState.prePaymentDone,
+                    paymentDone = validateFormState.paymentDone,
 
                     dateOfCompletedPayment = validateFormState.dateOfCompletedPayment,
                     dateOfCompletedPrePayment = validateFormState.dateOfCompletedPrePayment,
@@ -674,6 +700,9 @@ class ClientViewModel @Inject constructor(
                         completedOverPayment = validateFormState.completedOverPayment.trim()
                             .toInt(),
 
+                        prePaymentDone = validateFormState.prePaymentDone,
+                        paymentDone = validateFormState.paymentDone,
+
                         dateOfCompletedPayment = validateFormState.dateOfCompletedPayment,
                         dateOfCompletedPrePayment = validateFormState.dateOfCompletedPrePayment,
                         dateOfCompletedPledge = validateFormState.dateOfCompletedPledge,
@@ -687,9 +716,13 @@ class ClientViewModel @Inject constructor(
 
 
 
-                if (validateFormState.prePayment != "" &&
-                    validateFormState.completedPrePayment != "" &&
-                    validateFormState.prePayment.toInt() == validateFormState.completedPrePayment.toInt()) {
+                if (validateFormState.prePaymentDone) {
+//                    val comp = validateFormState.completedPrePayment
+//                    val sett = validateFormState.prePayment
+//
+//                    Log.d("myTag", "комплит -  $comp")
+//                    Log.d("myTag", "задано - $sett")
+
                     scoreRepositoryImpl.addScore(
                         Score(
                             validateFormState.completedPrePayment.toInt(),
@@ -700,13 +733,18 @@ class ClientViewModel @Inject constructor(
                             validateFormState.apartmentName!!
                         )
                     )
+                    validateFormState = validateFormState.copy(prePaymentDone = false)
                 }
 
-                if (validateFormState.priceOfStay != "" &&
-                    validateFormState.prePayment != "" &&
-                    validateFormState.completedPayment != "" &&
-                    (validateFormState.priceOfStay.toInt() - validateFormState.prePayment.toInt()) == validateFormState.completedPayment.toInt()
-                ) {
+                if (validateFormState.paymentDone) {
+//                    val comp1 = validateFormState.completedPayment
+//                    val price = validateFormState.priceOfStay
+//                    val settt = validateFormState.prePayment
+//
+//                    Log.d("myTag", "TTTкомплит -  $comp1")
+//                    Log.d("myTag", "TTTзаданая полная -  $price")
+//                    Log.d("myTag", "TTTпредоплата - $settt")
+
                     scoreRepositoryImpl.addScore(
                         Score(
                             validateFormState.completedPayment.toInt(),
@@ -717,10 +755,8 @@ class ClientViewModel @Inject constructor(
                             validateFormState.apartmentName!!
                         )
                     )
+                    validateFormState = validateFormState.copy(paymentDone = false)
                 }
-
-
-                
             }
             validationEventChannel.send(ValidatAllFieldsResultEvent.UpdateSuccess(source))
         }

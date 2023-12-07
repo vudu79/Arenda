@@ -46,10 +46,12 @@ data class ValidationFormState(
     var priceOfStay: String = "0",
 
     var completedPrePayment: String = "0",
+    var prePaymentDone: Boolean = false,
     var dateOfCompletedPrePayment: Long = 0,
     var completedPrePaymentError: String? = null,
 
     var completedPayment: String = "0",
+    var paymentDone: Boolean = false,
     var dateOfCompletedPayment: Long = 0,
     var completedPaymentError: String? = null,
 
