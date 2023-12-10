@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.navigationexample.data.entity.Appatment
+import com.example.navigationexample.data.entity.Apartment
 import com.example.navigationexample.data.dao.ApartmentDao
 import com.example.navigationexample.data.dao.ClientDao
 import com.example.navigationexample.data.dao.RentalDaysDao
@@ -16,12 +16,12 @@ import com.example.navigationexample.data.entity.ScoreCategory
 
 
 @Database(
-    entities = [(Appatment::class),
+    entities = [(Apartment::class),
         (Client::class),
         (RentalDay::class),
         (Score::class),
         (ScoreCategory::class)],
-    version = 2
+    version = 1
 )
 abstract class ApartmentRoomDatabase : RoomDatabase() {
 

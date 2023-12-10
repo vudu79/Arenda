@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ScoresDao {
-    @Upsert()
-    suspend fun updateScore(score: Score): Long
+    @Query("UPDATE score SET score_value = :scoreVal, score_date=:date WHERE client_id=:clientId")
+    suspend fun updateClientIncomeScore(scoreVal: Int, date: Long, clientId: Long)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertScore(score: Score): Long

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.navigationexample.R
-import com.example.navigationexample.data.entity.Appatment
+import com.example.navigationexample.data.entity.Apartment
 import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.common.CustomAlertDialog
 
@@ -36,7 +36,6 @@ fun AppartmentsScreen(
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel
 ) {
-
     val allApartments by viewModelAppatment.allApartments.observeAsState(listOf())
 
 //    Image(
@@ -76,7 +75,7 @@ fun AppartmentsScreen(
             items(allApartments) { item ->
 //                // Log.d("myTag", allAppatment.toString())
                 AppatmentItemRow(
-                    appatmentItem = item,
+                    apartmentItem = item,
                     navcontroller = mainNavController,
                     viewModelAppatment = viewModelAppatment,
                     viewModelCalendar = viewModelCalendar,
@@ -137,7 +136,7 @@ fun AppartmentsScreen(
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun AppatmentItemRow(
-    appatmentItem: Appatment,
+    apartmentItem: Apartment,
     navcontroller: NavController,
     viewModelAppatment: ApartmentViewModel,
     viewModelCalendar: CalendarViewModel,
@@ -154,7 +153,7 @@ fun AppatmentItemRow(
         mutableStateOf<Int>(0)
     }
 
-    iconHomeType = when (appatmentItem.type) {
+    iconHomeType = when (apartmentItem.type) {
         "Квартира" -> R.drawable.baseline_cottage_24
         "Аппартаменты" -> R.drawable.baseline_cottage_24
         "Комерческое" -> R.drawable.baseline_home_work_24
@@ -178,19 +177,17 @@ fun AppatmentItemRow(
                 .background(Color(128, 107, 90))
                 .combinedClickable(
                     onClick = {
-                        Log .d("myTag","апартаменты - ${appatmentItem.name}" )
-                        viewModelClient.getApartmentClients(appatmentItem.name)
-                        viewModelAppatment.setCurrentApartment(appatmentItem)
-                        viewModelCalendar.updateApartmentPlanedDays(appatmentItem.name)
-                        viewModelCalendar.updateDaysMapForCalendar(appatmentItem.name)
-                        navcontroller.navigate(route = "${Routs.mainScreenClients}/${appatmentItem.name}")
+                        Log .d("myTag","апартаменты - ${apartmentItem.name}" )
+                        viewModelClient.getApartmentClients(apartmentItem.name)
+                        viewModelAppatment.setCurrentApartment(apartmentItem)
+                        viewModelCalendar.updateApartmentPlanedDays(apartmentItem.name)
+                        viewModelCalendar.updateDaysMapForCalendar(apartmentItem.name)
+                        navcontroller.navigate(route = "${Routs.mainScreenClients}/${apartmentItem.name}")
                     },
                     onLongClick = {
                         showCustomDialog = !showCustomDialog
                     }),
             verticalAlignment = Alignment.CenterVertically
-
-
         )
         {
             Image(
@@ -210,26 +207,28 @@ fun AppatmentItemRow(
 
                 ) {
                 Text(
-                    appatmentItem.name,
+                    apartmentItem.name,
                     modifier = Modifier.padding(1.dp),
                     fontSize = 25.sp,
                     textAlign = TextAlign.Justify,
                     color = Color(0, 0, 0)
                 )
+                apartmentItem.address?.let {
+                    Text(
+                        it,
+                        modifier = Modifier.padding(1.dp),
+                        maxLines = 2,
+                        fontSize = 10.sp
+                    )
+                }
                 Text(
-                    appatmentItem.address,
-                    modifier = Modifier.padding(1.dp),
-                    maxLines = 2,
-                    fontSize = 10.sp
-                )
-                Text(
-                    appatmentItem.type,
+                    apartmentItem.type,
                     modifier = Modifier.padding(1.dp),
                     maxLines = 1,
                     fontSize = 10.sp
                 )
                 Text(
-                    appatmentItem.rentalPeriod,
+                    apartmentItem.rentalPeriod,
                     modifier = Modifier.padding(
                         bottom = 5.dp,
                         start = 1.dp,
@@ -258,8 +257,8 @@ fun AppatmentItemRow(
             showCustomDialog = !showCustomDialog
         }, onOk = {
             showCustomDialog = !showCustomDialog
-            viewModelAppatment.deleteAppatment(appatmentItem.name)
-            viewModelCalendar.updateApartmentPlanedDays(appatmentItem.name)
+            viewModelAppatment.deleteApartment(apartmentItem.name)
+            viewModelCalendar.updateApartmentPlanedDays(apartmentItem.name)
         },
             message = "Объект недвижимости будет безвозвратно удален. Вы уверены?"
         )

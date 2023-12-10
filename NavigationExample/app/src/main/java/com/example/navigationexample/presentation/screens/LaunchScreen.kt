@@ -21,13 +21,5 @@ fun LaunchScreen(
         }) {
             Text(text = "Start")
         }
-
-        Button(onClick = {
-            viewModelApartment.getAllApartments()
-            mainNavController.navigate(Routs.chartsScreen)
-        }) {
-            Text(text = "charts")
-        }
     }
-
 }

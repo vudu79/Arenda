@@ -1,23 +1,21 @@
 package com.example.navigationexample.data.entity
 
-import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "appatments")
-class Appatment {
+@Entity(tableName = "apartments")
+class Apartment {
 
     @PrimaryKey(autoGenerate = true)
-    @NonNull
-    @ColumnInfo(name = "appatmentId")
+    @ColumnInfo(name = "apartmentId")
     var id: Int = 0
 
     @ColumnInfo(name = "name")
     var name: String = ""
 
     @ColumnInfo(name = "address")
-    var address: String= ""
+    var address: String? = ""
 
     @ColumnInfo(name = "type")
     var type: String= ""
@@ -26,18 +24,17 @@ class Appatment {
     var rentalPeriod: String= ""
 
     @ColumnInfo(name = "rooms")
-    var numRooms: Int = 0
+    var numRooms: Int? = 0
 
     @ColumnInfo(name = "beds")
-    var numBeds: Int = 0
+    var numBeds: Int? = 0
 
     @ColumnInfo(name = "square")
-    var square: Float = 0f
+    var square: Float? = 0f
 
     constructor() {}
 
     constructor(name: String, address: String, type: String, numRooms: Int, numBeds: Int, square: Float) {
-
         this.name = name
         this.address = address
         this.type = type

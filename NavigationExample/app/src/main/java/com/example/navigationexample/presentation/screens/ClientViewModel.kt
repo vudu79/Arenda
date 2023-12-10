@@ -254,10 +254,10 @@ class ClientViewModel @Inject constructor(
         clientRepository.getApartmentClients(apartmentName)
     }
 
-
-    suspend fun addClient(client: Client) {
+    suspend fun insertClient(client: Client): Long {
         val clientId = clientRepository.insertClient(client).await()
         daysRepository.insertClientDays(client, clientId)
+        return clientId
     }
 
     fun deleteClient(clientId: Long) {
@@ -521,7 +521,7 @@ class ClientViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
-            addClient(
+            val clientId = insertClient(
                 Client(
                     status = validateFormState.status,
                     firstName = validateFormState.firstName.trim(),
@@ -561,6 +561,19 @@ class ClientViewModel @Inject constructor(
                     appatmentName = apartmentName
                 )
             )
+
+            scoreRepositoryImpl.addScore(
+                Score(
+                    0,
+                    LocalDate.now().toEpochDay(),
+                    clientId,
+                    "clients",
+                    ScoreType.INCOME,
+                    "Предоплата",
+                    apartmentName
+                )
+            )
+
             clientRepository.getApartmentClients(apartmentName)
             validationEventChannel.send(ValidatAllFieldsResultEvent.InsertSuccess)
         }
@@ -713,50 +726,16 @@ class ClientViewModel @Inject constructor(
                     )
                 )
 
-
-
-                if (validateFormState.prePaymentDone) {
-//                    val comp = validateFormState.completedPrePayment
-//                    val sett = validateFormState.prePayment
-//
-//                    Log.d("myTag", "комплит -  $comp")
-//                    Log.d("myTag", "задано - $sett")
-
-                    scoreRepositoryImpl.updateScore(
-                        Score(
-                            validateFormState.completedPrePayment.toInt(),
-                            LocalDate.now().toEpochDay(),
-                            validateFormState.id,
-                            "clients",
-                            ScoreType.INCOME,
-                            validateFormState.apartmentName!!
-                        )
-                    )
-                    validateFormState = validateFormState.copy(prePaymentDone = false)
-                }
-
-                if (validateFormState.paymentDone) {
-//                    val comp1 = validateFormState.completedPayment
-//                    val price = validateFormState.priceOfStay
-//                    val settt = validateFormState.prePayment
-//
-//                    Log.d("myTag", "TTTкомплит -  $comp1")
-//                    Log.d("myTag", "TTTзаданая полная -  $price")
-//                    Log.d("myTag", "TTTпредоплата - $settt")
-
-                    scoreRepositoryImpl.updateScore(
-                        Score(
+                scoreRepositoryImpl.updateClientIncomeScore(
+                    scoreVal =
+                    validateFormState.completedPrePayment.toInt() +
                             validateFormState.completedPayment.toInt(),
-                            LocalDate.now().toEpochDay(),
-                            validateFormState.id,
-                            "clients",
-                            ScoreType.INCOME,
-                            validateFormState.apartmentName!!
-                        )
-                    )
-                    validateFormState = validateFormState.copy(paymentDone = false)
-                }
+                    date = LocalDate.now().toEpochDay(),
+                    clientId = validateFormState.id!!,
+                )
             }
+
+
             validationEventChannel.send(ValidatAllFieldsResultEvent.UpdateSuccess(source))
         }
     }

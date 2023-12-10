@@ -5,7 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.navigationexample.data.entity.Appatment
+import com.example.navigationexample.data.entity.Apartment
 import com.example.navigationexample.data.repository.DaysRepositoryImpl
 import com.example.navigationexample.domain.models.ClientMonk
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,7 +29,7 @@ class CalendarViewModel @Inject constructor(
     var allApartmentPlanedDays: Flow<List<LocalDate>> = flowOf()
     var localDayClientMocKMap: Flow<MutableMap<LocalDate, MutableSet<ClientMonk>>> = flowOf()
 
-    var currentApartment = MutableLiveData<Appatment>()
+    var currentApartment = MutableLiveData<Apartment>()
 
 
     fun updateApartmentPlanedDays(apartmentName: String) {

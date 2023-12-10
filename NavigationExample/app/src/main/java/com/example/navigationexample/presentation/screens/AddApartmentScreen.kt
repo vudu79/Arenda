@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.navigationexample.R
-import com.example.navigationexample.data.entity.Appatment
+import com.example.navigationexample.data.entity.Apartment
 import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.common.*
 
@@ -34,7 +34,7 @@ import com.example.navigationexample.presentation.screens.common.*
 @Composable
 fun AddApartmentScreen(
     navController: NavHostController,
-    viewModel: ApartmentViewModel,
+    apartmentViewModel: ApartmentViewModel,
     onHome: () -> Unit
 ) {
     val context = LocalContext.current
@@ -411,8 +411,8 @@ fun AddApartmentScreen(
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
-                                viewModel.insertApartment(
-                                    Appatment(
+                                apartmentViewModel.insertApartment(
+                                    Apartment(
                                         nameAppat.value,
                                         addressAppat.value,
                                         typeAppat.value,
@@ -428,6 +428,7 @@ fun AddApartmentScreen(
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
+                            apartmentViewModel.getAllApartments()
                             navController.navigate(Routs.allApartmentsScreen)
                         })
                         {

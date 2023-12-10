@@ -5,10 +5,9 @@ import androidx.compose.foundation.gestures.DraggableState
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.navigationexample.data.entity.Appatment
+import com.example.navigationexample.data.entity.Apartment
 import com.example.navigationexample.data.repository.ApartmentRepositoryImpl
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
-import com.example.navigationexample.data.repository.DaysRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -75,7 +74,7 @@ class BalanceViewModel @Inject constructor(
         apartmentRepository.getAllApartments()
     }
 
-    var allApartments: LiveData<List<Appatment>>
+    var allApartments: LiveData<List<Apartment>>
 
     private var _currentApartment: MutableLiveData<String> = MutableLiveData()
     val currentApartment: LiveData<String> = _currentApartment

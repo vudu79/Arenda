@@ -26,6 +26,9 @@ class Score {
     @ColumnInfo("score_type")
     var typeScore: ScoreType = ScoreType.EXPENSES
 
+    @ColumnInfo("score_description")
+    var scoreDescription: String? = ""
+
     @ColumnInfo("apartment")
     var apartment: String = ""
 
@@ -36,6 +39,7 @@ class Score {
         clientId: Long?,
         scoreCategory: String,
         typeScore: ScoreType,
+        scoreDescription: String,
         apartment: String
     ) {
         this.scoreValue = scoreValue
@@ -43,6 +47,7 @@ class Score {
         this.clientId = clientId
         this.scoreCategory = scoreCategory
         this.typeScore = typeScore
+        this.scoreDescription = scoreDescription
         this.apartment = apartment
     }
 }

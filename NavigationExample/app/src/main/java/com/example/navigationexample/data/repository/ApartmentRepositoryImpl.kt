@@ -2,7 +2,7 @@ package com.example.navigationexample.data.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.example.navigationexample.data.dao.ApartmentDao
-import com.example.navigationexample.data.entity.Appatment
+import com.example.navigationexample.data.entity.Apartment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -13,9 +13,7 @@ import javax.inject.Inject
 
 class ApartmentRepositoryImpl @Inject constructor(private val apartmentDao: ApartmentDao) {
 
-    var allApartmentsLD = MutableLiveData<List<Appatment>>()
-
-    val allApartmentNamesList = allApartmentsLD.value?.map { it.name }
+    var allApartmentsLD = MutableLiveData<List<Apartment>>()
 
     var currentApartment = MutableLiveData<String>()
 
@@ -25,11 +23,11 @@ class ApartmentRepositoryImpl @Inject constructor(private val apartmentDao: Apar
         currentApartment.value = apartment
     }
 
-    fun getApartmentByName(name: String): Appatment {
+    fun getApartmentByName(name: String): Apartment {
         return apartmentDao.getApartmentByName(name)
     }
 
-    fun insertApartment(newappatment: Appatment) {
+    fun insertApartment(newappatment: Apartment) {
         coroutineScope.launch(Dispatchers.IO) {
             apartmentDao.insertApartment(newappatment)
         }
@@ -47,7 +45,7 @@ class ApartmentRepositoryImpl @Inject constructor(private val apartmentDao: Apar
         }
     }
 
-    private fun asyncFindAllApartments(): Deferred<List<Appatment>?> =
+    private fun asyncFindAllApartments(): Deferred<List<Apartment>?> =
         coroutineScope.async(Dispatchers.IO) {
             return@async apartmentDao.getAllApartment()
         }

@@ -11,18 +11,15 @@ import javax.inject.Inject
 class ScoreRepositoryImpl @Inject constructor(private val scoresDao: ScoresDao) {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    fun addScore(score: Score){
+    fun addScore(score: Score) {
         coroutineScope.launch(Dispatchers.IO) {
-        scoresDao.insertScore(score)
+            scoresDao.insertScore(score)
         }
     }
 
-    fun updateScore(score: Score){
+    fun updateClientIncomeScore(scoreVal: Int, date: Long, clientId: Long) {
         coroutineScope.launch(Dispatchers.IO) {
-            scoresDao.updateScore(score)
+            scoresDao.updateClientIncomeScore(scoreVal, date, clientId)
         }
     }
-
-
-
 }

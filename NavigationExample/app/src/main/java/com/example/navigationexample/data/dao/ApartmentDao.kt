@@ -3,21 +3,21 @@ package com.example.navigationexample.data.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.navigationexample.data.entity.Appatment
+import com.example.navigationexample.data.entity.Apartment
 
 
 @Dao
 interface ApartmentDao {
-    @Query("SELECT * FROM appatments WHERE name = :name")
-    fun getApartmentByName(name: String): Appatment
+    @Query("SELECT * FROM apartments WHERE name = :name")
+    fun getApartmentByName(name: String): Apartment
 
     @Insert
-    fun insertApartment(appatment: Appatment)
+    fun insertApartment(apartment: Apartment)
 
-    @Query("DELETE FROM appatments WHERE name = :name")
+    @Query("DELETE FROM apartments WHERE name = :name")
     fun deleteApartment(name: String)
 
-    @Query("SELECT * FROM appatments")
-    fun getAllApartment(): List<Appatment>
+    @Query("SELECT * FROM apartments")
+    fun getAllApartment(): List<Apartment>
 
 }
