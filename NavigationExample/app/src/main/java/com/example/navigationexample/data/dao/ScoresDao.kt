@@ -10,8 +10,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ScoresDao {
+    @Upsert()
+    suspend fun updateScore(score: Score): Long
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addScore(score: Score): Long
+    suspend fun insertScore(score: Score): Long
 
     @Delete
     suspend fun deleteScore(score: Score)

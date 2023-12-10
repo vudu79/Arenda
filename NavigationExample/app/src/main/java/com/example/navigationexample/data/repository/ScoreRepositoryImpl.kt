@@ -13,7 +13,13 @@ class ScoreRepositoryImpl @Inject constructor(private val scoresDao: ScoresDao) 
 
     fun addScore(score: Score){
         coroutineScope.launch(Dispatchers.IO) {
-        scoresDao.addScore(score)
+        scoresDao.insertScore(score)
+        }
+    }
+
+    fun updateScore(score: Score){
+        coroutineScope.launch(Dispatchers.IO) {
+            scoresDao.updateScore(score)
         }
     }
 

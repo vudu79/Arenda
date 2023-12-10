@@ -220,7 +220,6 @@ class ClientViewModel @Inject constructor(
 
     }
 
-
     fun getClientState(clientPhone: String) {
         viewModelScope.launch {
             _uiClientState.value = clientRepository.getClientByPhone(clientPhone)
@@ -723,7 +722,7 @@ class ClientViewModel @Inject constructor(
 //                    Log.d("myTag", "комплит -  $comp")
 //                    Log.d("myTag", "задано - $sett")
 
-                    scoreRepositoryImpl.addScore(
+                    scoreRepositoryImpl.updateScore(
                         Score(
                             validateFormState.completedPrePayment.toInt(),
                             LocalDate.now().toEpochDay(),
@@ -745,7 +744,7 @@ class ClientViewModel @Inject constructor(
 //                    Log.d("myTag", "TTTзаданая полная -  $price")
 //                    Log.d("myTag", "TTTпредоплата - $settt")
 
-                    scoreRepositoryImpl.addScore(
+                    scoreRepositoryImpl.updateScore(
                         Score(
                             validateFormState.completedPayment.toInt(),
                             LocalDate.now().toEpochDay(),

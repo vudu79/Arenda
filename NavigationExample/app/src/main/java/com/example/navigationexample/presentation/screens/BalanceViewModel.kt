@@ -16,7 +16,6 @@ import javax.inject.Inject
 @HiltViewModel
 class BalanceViewModel @Inject constructor(
     private val clientRepository: ClientsRepositoryImpl,
-    private val daysRepository: DaysRepositoryImpl,
     private val apartmentRepository: ApartmentRepositoryImpl,
 ) : ViewModel() {
 
@@ -84,6 +83,12 @@ class BalanceViewModel @Inject constructor(
     init {
         allApartments = apartmentRepository.allApartmentsLD
         _currentApartment = apartmentRepository.currentApartment
+    }
+
+//    обновление счетов при апдейте оплаты клиента
+
+    fun clientScoresUpdate(){
+
     }
 
 }
