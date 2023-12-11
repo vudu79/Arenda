@@ -37,6 +37,7 @@ import com.kizitonwose.calendar.sample.shared.StatusBarColorLifecycleObserver
 import com.kizitonwose.calendar.sample.shared.findActivity
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
+import java.util.Random
 
 fun Modifier.clickable(
     enabled: Boolean = true,
@@ -234,5 +235,9 @@ fun hasWrongSimbols(word: String): Boolean {
     return false
 }
 
+val random = Random()
 
+fun rand(from: Int, to: Int) : Int {
+    return random.nextInt(to - from) + from
+}
 
