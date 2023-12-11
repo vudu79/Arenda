@@ -50,6 +50,7 @@ fun AddScoresScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(start = 25.dp, end = 25.dp)
                 .background(color = Color(red = 41, green = 41, blue = 41))
 //                .border(2.dp, color = Color.Gray)
             ,
@@ -75,7 +76,7 @@ fun AddScoresScreen(
             Text(
                 text = "Размер", fontSize = 20.sp, color = Color(223, 75, 0),
                 modifier = Modifier
-                    .padding(10.dp)
+                    .padding(top = 10.dp, end = 10.dp)
             )
             OutlinedTextField(
                 shape = RoundedCornerShape(25.dp),
@@ -86,7 +87,7 @@ fun AddScoresScreen(
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 20.dp, start = 45.dp, end = 45.dp),
+                    .padding(bottom = 20.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = Color(223, 75, 0).copy(alpha = ContentAlpha.disabled),
                     unfocusedBorderColor = Color(223, 75, 0).copy(alpha = ContentAlpha.high),
@@ -120,29 +121,17 @@ fun AddScoresScreen(
                         )
                     )
             )
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 25.dp, start = 15.dp, end = 15.dp)
-                .background(color = Color(red = 41, green = 41, blue = 41))
-//                .border(2.dp, color = Color.Gray)
-            ,
-
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
             Text(
                 text = "Категория", fontSize = 20.sp, color = Color(223, 75, 0),
                 modifier = Modifier
-                    .padding(10.dp)
+                    .padding(top = 10.dp, bottom = 10.dp)
             )
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.40f)
-                    .padding(bottom = 20.dp, start = 15.dp, end = 15.dp)
+                    .fillMaxHeight(0.38f)
+                    .padding(bottom = 20.dp)
             ) {
                 items(listMock) { item ->
                     CategoryItemRow(
@@ -150,6 +139,26 @@ fun AddScoresScreen(
                     )
                 }
             }
+
+            Button(
+                colors=ButtonDefaults.buttonColors(
+                    backgroundColor = Color(red = 41, green = 41, blue = 41),
+                    contentColor = Color(223, 75, 0),
+                ),
+
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+
+                    .padding(bottom = 20.dp),
+                border = BorderStroke(1.dp, Color(223, 75, 0)),
+                contentPadding = PaddingValues(10.dp),
+                onClick = { /*TODO*/ }
+
+            ) {
+                Text(text = "Добавить другую", fontSize = 20.sp)
+            }
+
             Divider(
 //                color = Color(223, 75, 0),
                 modifier = Modifier
@@ -169,6 +178,9 @@ fun AddScoresScreen(
     }
 }
 
+
+
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LazyItemScope.CategoryItemRow(
@@ -178,7 +190,7 @@ fun LazyItemScope.CategoryItemRow(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 15.dp, end = 15.dp, top = 5.dp, bottom = 5.dp),
+            .padding(top = 5.dp, bottom = 5.dp),
         shape = RoundedCornerShape(20.dp),
         elevation = 8.dp,
     ) {
@@ -220,7 +232,6 @@ fun LazyItemScope.CategoryItemRow(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(),
             ) {
                 Row(
                     modifier = Modifier
