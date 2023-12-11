@@ -24,10 +24,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import co.yml.charts.common.utils.DataUtils
 import co.yml.charts.ui.piechart.charts.PieChart
 import co.yml.charts.ui.piechart.models.PieChartConfig
 import com.example.navigationexample.R
+import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.screens.common.bottomBorder
 
 
@@ -36,8 +38,8 @@ import com.example.navigationexample.presentation.screens.common.bottomBorder
 fun ApartmentBalanceScreen(
     viewModelBalance: BalanceViewModel,
     viewModelApartment: ApartmentViewModel,
-    apartmentName: String
-//    mainNavController: NavHostController,
+    apartmentName: String,
+    mainNavController: NavHostController,
 //    viewModelClient: ClientViewModel,
 //    clientPhone: String
 ) {
@@ -280,8 +282,8 @@ fun ApartmentBalanceScreen(
 //        ряд с центральным блоком (Card) балланса и цифрой расхода или дохода
             Row {
                 when (tabIndexExpenses.value) {
-                    0 -> ExpensesCard("Доходы")
-                    1 -> ExpensesCard("Расходы")
+                    0 -> ExpensesCard("Доходы") { mainNavController.navigate(Routs.addScoresScreen) }
+                    1 -> ExpensesCard("Расходы") { mainNavController.navigate(Routs.addScoresScreen) }
                 }
             }
 
@@ -543,7 +545,7 @@ fun DropdownButtonWithMultipleSelection() {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ExpensesCard(text: String) {
+fun ExpensesCard(text: String, onClickPlus: () -> Unit) {
     Card(
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier
@@ -564,14 +566,14 @@ fun ExpensesCard(text: String) {
                 .background(Color(red = 41, green = 41, blue = 41))
 
         ) {
-            SimplePiechart()
+            SimplePiechart(onClickPlus)
 //            Text(text = text, fontSize = 20.sp, color = Color.White)
         }
     }
 }
 
 @Composable
-private fun SimplePiechart() {
+private fun SimplePiechart(onClickPlus: () -> Unit) {
     val pieChartData = DataUtils.getPieChartData()
     val pieChartConfig =
         PieChartConfig(
@@ -633,13 +635,13 @@ private fun SimplePiechart() {
                     IconButton(
                         modifier = Modifier
                             .padding(bottom = 5.dp),
-                        onClick = {
-                        }
+                        onClick =onClickPlus
+
                     )
                     {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_add_circle_35),
-                            contentDescription = "Изменить данные клиента",
+                            contentDescription = "Изменить доход",
                             modifier = Modifier.size(45.dp),
                             tint = Color(0xFFF16022)
                         )

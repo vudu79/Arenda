@@ -43,6 +43,7 @@ fun NavigationGraph(
                 apartmentName = appatmentName,
                 viewModelApartment = viewModelApartment,
                 viewModelBalance = viewModelBalance,
+                mainNavController = mainNavController
             )
         }
         composable(BottomNavItems.Appatments.screen_route) {

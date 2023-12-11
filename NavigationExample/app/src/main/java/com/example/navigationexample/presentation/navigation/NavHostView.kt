@@ -157,6 +157,11 @@ fun NavHostView(
             )
         }
 
+        composable(Routs.addScoresScreen) {
+            AddScoresScreen(
+            )
+        }
+
 
 
 
