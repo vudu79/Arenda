@@ -66,7 +66,7 @@ fun AddClientScreen(
                     Toast.makeText(
                         context, "Новый клиент зарегестрирован!", Toast.LENGTH_SHORT
                     ).show()
-                    navController.navigate(route = "${Routs.mainScreenClients}/$appatmentName")
+                    navController.navigate(route = "${Routs.apartmentFinanceScreen}/$appatmentName")
                 }
                 is ValidatAllFieldsResultEvent.UpdateSuccess -> {
 
@@ -753,7 +753,7 @@ fun AddClientScreen(
                             IconButton(modifier = Modifier.padding(end = 80.dp),
                                 onClick = {
                                     viewModelClient.getApartmentClients(appatmentName)
-                                    navController.navigate("${Routs.mainScreenClients}/${appatmentName}")
+                                    navController.navigate("${Routs.apartmentFinanceScreen}/${appatmentName}")
                                 })
                             {
                                 Icon(

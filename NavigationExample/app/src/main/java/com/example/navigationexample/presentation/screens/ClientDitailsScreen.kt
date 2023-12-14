@@ -776,7 +776,7 @@ fun ClientDitailsScreen(
                     ) {
                         IconButton(onClick = {
 //                            viewModelClient.getAppatmentClients(appatmentName)
-                            mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
+                            mainNavController.navigate(route = "${Routs.apartmentFinanceScreen}/${currentAppatment?.name}")
                         }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.baseline_arrow_back_24),

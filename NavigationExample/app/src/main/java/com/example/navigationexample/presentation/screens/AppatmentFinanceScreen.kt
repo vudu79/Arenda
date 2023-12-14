@@ -33,7 +33,6 @@ fun AppatmentFinanceScreen(
                     BottomNavigation(navController = clientNavController)
                 }
             }
-
         ) {
             NavigationGraph(
                 mainNavController = mainNavController,
@@ -43,7 +42,6 @@ fun AppatmentFinanceScreen(
                 viewModelCalendar =viewModelCalendar,
                 viewModelBalance = viewModelBalance,
                 appatmentName=appatmentName
-
             )
         }
     }

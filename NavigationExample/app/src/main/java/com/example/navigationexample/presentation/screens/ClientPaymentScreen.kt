@@ -634,7 +634,7 @@ fun ClientPaymentScreen(
                         IconButton(modifier = Modifier.padding(end = 80.dp),
                             onClick = {
                                 viewModelClient.getApartmentClients(currentAppatment!!.name)
-                                mainNavController.navigate(route = "${Routs.mainScreenClients}/${currentAppatment?.name}")
+                                mainNavController.navigate(route = "${Routs.apartmentFinanceScreen}/${currentAppatment?.name}")
                             })
                         {
                             Icon(

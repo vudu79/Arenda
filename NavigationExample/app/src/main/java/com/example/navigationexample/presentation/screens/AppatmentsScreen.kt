@@ -182,7 +182,7 @@ fun AppatmentItemRow(
                         viewModelAppatment.setCurrentApartment(apartmentItem)
                         viewModelCalendar.updateApartmentPlanedDays(apartmentItem.name)
                         viewModelCalendar.updateDaysMapForCalendar(apartmentItem.name)
-                        navcontroller.navigate(route = "${Routs.mainScreenClients}/${apartmentItem.name}")
+                        navcontroller.navigate(route = "${Routs.apartmentFinanceScreen}/${apartmentItem.name}")
                     },
                     onLongClick = {
                         showCustomDialog = !showCustomDialog

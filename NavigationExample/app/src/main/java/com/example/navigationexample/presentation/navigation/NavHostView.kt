@@ -44,7 +44,7 @@ fun NavHostView(
         }
 
         composable(
-            route = "${Routs.mainScreenClients}/{apartment_name}",
+            route = "${Routs.apartmentFinanceScreen}/{apartment_name}",
         ) { navBackStackEntry ->
             val appatment_name = navBackStackEntry.arguments?.getString("apartment_name")
             appatment_name?.let {
