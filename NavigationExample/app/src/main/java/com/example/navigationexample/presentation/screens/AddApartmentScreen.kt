@@ -27,7 +27,7 @@ import androidx.navigation.NavHostController
 import com.example.navigationexample.R
 import com.example.navigationexample.data.entity.Apartment
 import com.example.navigationexample.presentation.navigation.Routs
-import com.example.navigationexample.presentation.screens.common.*
+import com.example.navigationexample.presentation.utils.*
 import com.example.navigationexample.presentation.viewmodels.ApartmentViewModel
 
 

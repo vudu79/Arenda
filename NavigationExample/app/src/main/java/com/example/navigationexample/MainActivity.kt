@@ -120,8 +120,8 @@ class MainActivity : ComponentActivity() {
 
 //                        bottomBar = { BottomAppBar() },
                         snackbarHost = { state -> MySnackHost(state) },
-                        isFloatingActionButtonDocked = true,
-                        floatingActionButtonPosition = FabPosition.Center,
+                        isFloatingActionButtonDocked = false,
+                        floatingActionButtonPosition = FabPosition.End,
                         floatingActionButton = { FloatingActionButtonSample(scaffoldState) }
                     ){
                         NavHostView(
