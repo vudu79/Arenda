@@ -88,7 +88,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MyScaffoldLayout()
+                    MyScaffoldLayout(
+                        viewModelApartment = viewModelApartment,
+                        viewModelClient = viewModelClient,
+                        viewModelCalendar = viewModelCalendar,
+                        viewModelBalance = viewModelBalance,
+                    )
                 }
             }
         }
@@ -97,7 +102,12 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun MyScaffoldLayout() {
+fun MyScaffoldLayout(
+    viewModelApartment: ApartmentViewModel,
+    viewModelClient: ClientViewModel,
+    viewModelCalendar: CalendarViewModel,
+    viewModelBalance: BalanceViewModel
+) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
     LocalContext.current.applicationContext
