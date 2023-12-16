@@ -1,46 +1,57 @@
 package com.example.navigationexample
 
-import android.annotation.SuppressLint
+
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.DrawerValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FabPosition
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.SnackbarResult
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.rememberDrawerState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,25 +63,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.jetpackcomposescaffoldlayout.Navigations
 import com.example.navigationexample.presentation.navigation.NavHostView
 import com.example.navigationexample.presentation.viewmodels.ApartmentViewModel
 import com.example.navigationexample.presentation.viewmodels.BalanceViewModel
 import com.example.navigationexample.presentation.viewmodels.CalendarViewModel
 import com.example.navigationexample.presentation.viewmodels.ClientViewModel
 import com.example.navigationexample.ui.theme.RentierTheme
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModelApartment: ApartmentViewModel by viewModels()
     private val viewModelClient: ClientViewModel by viewModels()
@@ -78,232 +80,199 @@ class MainActivity : ComponentActivity() {
     private val viewModelBalance: BalanceViewModel by viewModels()
 
 
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
-//            val owner = LocalViewModelStoreOwner.current
-//            owner?.let {
-//                val viewModel: AppatmentViewModel = viewModel(
-//                    it,
-//                    "MainViewModel",
-//                    AppatmentViewModelFactory(
-//                        LocalContext.current.applicationContext
-//                                as Application
-//                    )
-//                )
-//            }
-
             RentierTheme {
-
-                Surface(color = MaterialTheme.colors.background) {
-                    var toolbarTitle by remember {
-                        mutableStateOf("Home")
-                    }
-                    val scaffoldState =
-                        rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
-                    val scope = rememberCoroutineScope()
-
-                    Scaffold(
-                        modifier = Modifier.background(Color.White),
-                        scaffoldState = scaffoldState,
-                        topBar = {
-                            AppToolbar(
-                                scaffoldState = scaffoldState,
-                                scope = scope,
-                                toolbarTitle = toolbarTitle
-                            )
-                        }, drawerContent = {
-                            DrawerContent(scaffoldState = scaffoldState, scope = scope)
-                        },
-
-//                        bottomBar = { BottomAppBar() },
-                        snackbarHost = { state -> MySnackHost(state) },
-                        isFloatingActionButtonDocked = false,
-                        floatingActionButtonPosition = FabPosition.End,
-                        floatingActionButton = { FloatingActionButtonSample(scaffoldState) }
-                    ){
-                        NavHostView(
-                            viewModelApartment = viewModelApartment,
-                            viewModelClient = viewModelClient,
-                            viewModelCalendar = viewModelCalendar,
-                            viewModelBalance = viewModelBalance,
-                        )
-                    }
-
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    MyScaffoldLayout()
                 }
-
-
-
-
             }
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TopAppBarSample() {
-    val scaffoldState =
-        rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
-    val scope = rememberCoroutineScope()
-    AppToolbar(scaffoldState = scaffoldState, scope = scope, toolbarTitle = "Home")
-}
 
 @Composable
-fun AppToolbar(scaffoldState: ScaffoldState, scope: CoroutineScope, toolbarTitle: String) {
-    TopAppBar(
-        title = { Text(text = toolbarTitle) },
-        modifier = Modifier.background(Color(0xFF008800)),
-        navigationIcon = {
-            Icon(
-                Icons.Filled.Menu,
-                contentDescription = "Menu", modifier = Modifier.clickable {
-                    scope.launch {
-                        scaffoldState.drawerState.open()
+fun MyScaffoldLayout() {
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val coroutineScope = rememberCoroutineScope()
+    LocalContext.current.applicationContext
+
+    val drawerItemList = prepareNavigationDrawerItems()
+    val selectedItem = remember { mutableStateOf(drawerItemList[0]) }
+    val contextForToast = LocalContext.current.applicationContext
+    val snackbarHostState = remember { SnackbarHostState() }
+    var clickCount by remember {
+        mutableStateOf(0) // or use mutableStateOf(0)
+    }
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet {
+                // add drawer content here
+                // this is a column scope
+                // so, if you add multiple elements, they are placed vertically
+                Spacer(Modifier.height(12.dp))
+                drawerItemList.forEach { item ->
+                    NavigationDrawerItem(
+                        icon = { Icon(imageVector = item.icon, contentDescription = null) },
+                        label = { Text(text = item.label) },
+                        selected = (item == selectedItem.value),
+                        onClick = {
+                            coroutineScope.launch {
+                                drawerState.close()
+                            }
+                            selectedItem.value = item
+                        },
+                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                    )
+                }
+            }
+        }
+    ) {
+        // app content
+        // add scaffold here
+        Scaffold(
+            topBar = {
+                MyTopAppBar {
+                    coroutineScope.launch {
+                        drawerState.open()
                     }
                 }
-            )
-        },
-        actions = {
-            val context = LocalContext.current
-            Icon(
-                Icons.Filled.Settings,
-                contentDescription = "Setting", modifier = Modifier.clickable {
-                    Toast.makeText(context, "Open Setting", Toast.LENGTH_SHORT).show()
-                }
-            )
+            },
+            bottomBar = { MyBottomBar(contextForToast = contextForToast) },
+            floatingActionButton = { MyFAB(contextForToast = contextForToast) },
+            floatingActionButtonPosition = FabPosition.End,
+            snackbarHost = { SnackbarHost(snackbarHostState) }
+        ) { paddingValues ->
+            // rest of the app's UI
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues = paddingValues),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+//                Text(text = "Rest of the app UI")
+//                Button(
+//                    onClick = {
+//                        coroutineScope.launch {
+//                            snackbarHostState.showSnackbar(
+//                                message = "Snackbar # ${++clickCount}",
+//                                duration = SnackbarDuration.Short
+//                            )
+//                        }
+//                    }
+//                ) {
+//                    Text(text = "Show Snackbar")
+//                }
+
+
+                NavHostView(
+                    viewModelApartment = viewModelApartment,
+                    viewModelClient = viewModelClient,
+                    viewModelCalendar = viewModelCalendar,
+                    viewModelBalance = viewModelBalance,
+                )
+            }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyTopAppBar(onNavIconClick: () -> Unit) {
+    TopAppBar(
+        title = { Text(text = "SemicolonSpace") },
+        navigationIcon = {
+            IconButton(
+                onClick = {
+                    onNavIconClick()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = "Open Navigation Items"
+                )
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f)
+        )
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DrawerContentSample() {
-    val scaffoldState =
-        rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
-    val scope = rememberCoroutineScope()
-    DrawerContent(scaffoldState,scope)
+private fun prepareNavigationDrawerItems(): List<NavigationDrawerData> {
+    val drawerItemsList = arrayListOf<NavigationDrawerData>()
+
+    // add items
+    drawerItemsList.add(NavigationDrawerData(label = "Home", icon = Icons.Filled.Home))
+    drawerItemsList.add(NavigationDrawerData(label = "Profile", icon = Icons.Filled.Person))
+    drawerItemsList.add(NavigationDrawerData(label = "Cart", icon = Icons.Filled.ShoppingCart))
+    drawerItemsList.add(NavigationDrawerData(label = "Settings", icon = Icons.Filled.Settings))
+
+    return drawerItemsList
 }
 
+data class NavigationDrawerData(val label: String, val icon: ImageVector)
+
+
 @Composable
-fun DrawerContent(scaffoldState: ScaffoldState, scope: CoroutineScope) {
+fun MyBottomBar(contextForToast: Context) {
+    val bottomBarItemsList = mutableListOf<BottomBarItem>()
+    bottomBarItemsList.add(BottomBarItem(icon = Icons.Default.Home, name = "Home"))
+    bottomBarItemsList.add(BottomBarItem(icon = Icons.Default.Person, name = "Profile"))
+    bottomBarItemsList.add(BottomBarItem(icon = Icons.Default.Favorite, name = "Favorites"))
 
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Image(
-            painter = painterResource(id = R.drawable.baseline_home_work_24),
-            modifier = Modifier
-                .size(100.dp)
-                .align(Alignment.CenterHorizontally), contentDescription = "Face"
-        )
+    var selectedItem by remember { mutableStateOf(0) }
 
-        Spacer(modifier = Modifier.padding(4.dp))
-        Text(
-            text = "Velmurugan",
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.align(
-                Alignment.CenterHorizontally
-            )
-        )
-        Spacer(modifier = Modifier.padding(4.dp))
-        Text(text = "User1",
-            Modifier
-                .fillMaxWidth()
-                .background(Color.Gray)
-                .padding(8.dp, 4.dp)
-                .clickable {
-                    scope.launch {
-                        scaffoldState.drawerState.close()
-                    }
-                })
-        Spacer(modifier = Modifier.padding(4.dp))
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun BottomAppBar() {
-    data class MenuItem(val title: String, val icon: ImageVector)
-
-    fun getMenuList() : List<MenuItem> {
-        val menuItems = mutableListOf<MenuItem>()
-        menuItems.add(MenuItem(Navigations.HOME.name, Icons.Filled.Home))
-        menuItems.add(MenuItem(Navigations.SEARCH.name, Icons.Filled.Search))
-        menuItems.add(MenuItem(Navigations.FAVORITE.name, Icons.Filled.Favorite))
-        menuItems.add(MenuItem(Navigations.SETTINGS.name, Icons.Filled.Settings))
-        return menuItems
-    }
-
-    val bottomMenuList = getMenuList()
-
-    BottomNavigation {
-        bottomMenuList.forEach { bottomMenu ->
-            BottomNavigationItem(
-                selected = bottomMenu.title == "Home",
+    NavigationBar {
+        bottomBarItemsList.forEachIndexed { index, item ->
+            NavigationBarItem(
+                icon = { Icon(item.icon, contentDescription = null) },
+                label = { Text(item.name) },
+                selected = selectedItem == index,
                 onClick = {
-                },
-                icon = {
-                    Icon(
-                        imageVector = bottomMenu.icon,
-                        contentDescription = bottomMenu.title
-                    )
-                })
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun MySnackHost(state: SnackbarHostState) {
-    SnackbarHost(
-        state,
-        snackbar = { data ->
-            Snackbar(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .background(Color.Black, RoundedCornerShape(8.dp)),
-                action = {
-                    Text(
-                        text = "HIDE",
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .clickable {
-                                state.currentSnackbarData?.dismiss()
-                            },
-                        style = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colors.primary,
-                            fontSize = 18.sp
-                        )
-                    )
+                    selectedItem = index
+                    Toast.makeText(contextForToast, item.name, Toast.LENGTH_SHORT).show()
                 }
-            ) {
-                Text(text = data.message)
-            }
-        })
+            )
+        }
+    }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+data class BottomBarItem(val icon: ImageVector, val name: String)
+
 @Composable
-fun FloatingActionButtonSample(scaffoldState: ScaffoldState) {
-    val scope = rememberCoroutineScope()
-    FloatingActionButton(onClick = {
-        scope.launch {
-            when (scaffoldState.snackbarHostState.showSnackbar(
-                message = "Jetpack Compose Snackbar",
-                actionLabel = "Ok"
-            )) {
-                SnackbarResult.Dismissed ->
-                    Log.d("TAB", "Dismissed")
-                SnackbarResult.ActionPerformed ->
-                    Log.d("TAB", "Action!")
-            }
+fun MyFAB(contextForToast: Context) {
+    FloatingActionButton(
+        onClick = {
+            Toast.makeText(contextForToast, "FAB", Toast.LENGTH_SHORT)
+                .show()
         }
-    }) {
-        Text("X")
+    ) {
+        Icon(imageVector = Icons.Default.Add, contentDescription = "add icon")
     }
 }
 
 
+//@AndroidEntryPoint
+//class MainActivity : ComponentActivity() {
+//    private val viewModelApartment: ApartmentViewModel by viewModels()
+//    private val viewModelClient: ClientViewModel by viewModels()
+//    private val viewModelCalendar: CalendarViewModel by viewModels()
+//    private val viewModelBalance: BalanceViewModel by viewModels()
+//
+//
+//    NavHostView(
+//    viewModelApartment = viewModelApartment,
+//    viewModelClient = viewModelClient,
+//    viewModelCalendar = viewModelCalendar,
+//    viewModelBalance = viewModelBalance,
+//    )
+//
