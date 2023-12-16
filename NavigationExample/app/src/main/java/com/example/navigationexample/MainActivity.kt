@@ -70,9 +70,10 @@ import com.example.navigationexample.presentation.viewmodels.BalanceViewModel
 import com.example.navigationexample.presentation.viewmodels.CalendarViewModel
 import com.example.navigationexample.presentation.viewmodels.ClientViewModel
 import com.example.navigationexample.ui.theme.RentierTheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModelApartment: ApartmentViewModel by viewModels()
     private val viewModelClient: ClientViewModel by viewModels()
