@@ -1,4 +1,5 @@
 package com.example.navigationexample.ui.theme
+
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -70,17 +71,19 @@ val DarkColors = darkColorScheme(
 )
 
 @Composable
-fun RentieTheme(
+fun RentierTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        } else {
-            if (darkTheme) DarkColors else LightColors
-        }
+//    val colorScheme =
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            val context = LocalContext.current
+//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+//        } else {
+//            if (darkTheme) DarkColors else LightColors
+//        }
+    val colorScheme = if (darkTheme) DarkColors else LightColors
+
 
     MaterialTheme(
         colorScheme = colorScheme,

@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -58,7 +59,7 @@ import com.example.navigationexample.presentation.viewmodels.ApartmentViewModel
 import com.example.navigationexample.presentation.viewmodels.BalanceViewModel
 import com.example.navigationexample.presentation.viewmodels.CalendarViewModel
 import com.example.navigationexample.presentation.viewmodels.ClientViewModel
-import com.example.navigationexample.ui.theme.RentieTheme
+import com.example.navigationexample.ui.theme.RentierTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -72,7 +73,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            RentieTheme {
+            RentierTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -112,7 +113,10 @@ fun MyScaffoldLayout(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            ModalDrawerSheet {
+            ModalDrawerSheet(
+                drawerContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                drawerContentColor = MaterialTheme.colorScheme.primary
+            ) {
                 // add drawer content here
                 // this is a column scope
                 // so, if you add multiple elements, they are placed vertically
@@ -128,6 +132,12 @@ fun MyScaffoldLayout(
                             }
                             selectedItem.value = item
                         },
+                        colors = NavigationDrawerItemDefaults.colors(
+                            selectedContainerColor = MaterialTheme.colorScheme.primary,
+                            unselectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                            selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                            unselectedTextColor = MaterialTheme.colorScheme.onPrimary
+                        ),
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                     )
                 }
@@ -187,22 +197,31 @@ fun MyScaffoldLayout(
 @Composable
 fun MyTopAppBar(onNavIconClick: () -> Unit) {
     TopAppBar(
-        title = { Text(text = "SemicolonSpace") },
-        navigationIcon = {
-            IconButton(
-                onClick = {
-                    onNavIconClick()
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = "Open Navigation Items"
-                )
-            }
+        title = {
+            Text(
+                text = "Моя недвижимость",
+                modifier = Modifier
+                    .padding(top = 10.dp)
+            )
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f)
-        )
+
+    navigationIcon = {
+        IconButton(
+            onClick = {
+                onNavIconClick()
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Menu,
+                contentDescription = "Open Navigation Items"
+            )
+        }
+    },
+    colors = TopAppBarDefaults.topAppBarColors(
+        containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+    ),
+    modifier = Modifier
+        .fillMaxHeight(0.08f)
     )
 }
 
