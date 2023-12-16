@@ -79,7 +79,6 @@ class MainActivity : ComponentActivity() {
     private val viewModelCalendar: CalendarViewModel by viewModels()
     private val viewModelBalance: BalanceViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
