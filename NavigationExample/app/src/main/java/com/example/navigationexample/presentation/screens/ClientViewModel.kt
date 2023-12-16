@@ -13,9 +13,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.navigationexample.constants.Constans
-import com.example.navigationexample.constants.ScoreType
-import com.example.navigationexample.constants.SourceEvent
+import com.example.navigationexample.domain.constants.Constans
+import com.example.navigationexample.domain.constants.ScoreType
+import com.example.navigationexample.domain.constants.SourceEvent
 import com.example.navigationexample.data.entity.Client
 import com.example.navigationexample.data.entity.Score
 import com.example.navigationexample.data.repository.ClientsRepositoryImpl
