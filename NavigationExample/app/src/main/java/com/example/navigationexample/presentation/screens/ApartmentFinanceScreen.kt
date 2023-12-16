@@ -15,21 +15,21 @@ import com.example.navigationexample.presentation.viewmodels.ClientViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun AppatmentFinanceScreen(
+fun ApartmentFinanceScreen(
     mainNavController: NavHostController,
     viewModelApartment: ApartmentViewModel,
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
     viewModelBalance: BalanceViewModel,
-    appatmentName: String
+    apartmentName: String
 ) {
     val clientNavController = rememberNavController()
     val navBackStackEntry by mainNavController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    if (currentRoute != BottomNavItems.Appatments.screen_route) {
+    if (currentRoute != BottomNavItems.Appatments.screenRoute) {
         Scaffold(
             bottomBar = {
-                if (clientNavController.currentBackStackEntryAsState().value?.destination?.route != BottomNavItems.Appatments.screen_route) {
+                if (clientNavController.currentBackStackEntryAsState().value?.destination?.route != BottomNavItems.Appatments.screenRoute) {
                     BottomNavigation(navController = clientNavController)
                 }
             }
@@ -41,7 +41,7 @@ fun AppatmentFinanceScreen(
                 viewModelClient = viewModelClient,
                 viewModelCalendar =viewModelCalendar,
                 viewModelBalance = viewModelBalance,
-                appatmentName=appatmentName
+                apartmentName=apartmentName
             )
         }
     }
