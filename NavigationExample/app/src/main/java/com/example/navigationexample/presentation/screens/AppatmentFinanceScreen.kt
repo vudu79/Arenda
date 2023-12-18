@@ -15,13 +15,13 @@ import com.example.navigationexample.presentation.viewmodels.ClientViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun AppatmentFinanceScreen(
+fun ApartmentFinanceScreen(
     mainNavController: NavHostController,
     viewModelApartment: ApartmentViewModel,
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
     viewModelBalance: BalanceViewModel,
-    appatmentName: String
+    apartmentName: String
 ) {
     val clientNavController = rememberNavController()
     val navBackStackEntry by mainNavController.currentBackStackEntryAsState()
@@ -41,7 +41,7 @@ fun AppatmentFinanceScreen(
                 viewModelClient = viewModelClient,
                 viewModelCalendar =viewModelCalendar,
                 viewModelBalance = viewModelBalance,
-                appatmentName=appatmentName
+                appatmentName=apartmentName
             )
         }
     }
