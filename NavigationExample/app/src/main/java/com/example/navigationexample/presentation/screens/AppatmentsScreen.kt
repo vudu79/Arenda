@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -55,18 +56,18 @@ fun AppartmentsScreen(
 
     Column(
         modifier = Modifier
-            .background(Color(red = 41, green = 41, blue = 41))
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(
-            "Арендуемые объекты",
-            modifier = Modifier.padding(10.dp),
-            fontSize = 22.sp,
-            color = Color(223, 75, 0).copy(alpha = 0.5f),
-            fontWeight = FontWeight.Bold,
-        )
+//        Text(
+//            "Арендуемые объекты",
+//            modifier = Modifier.padding(10.dp),
+//            fontSize = 22.sp,
+//            color = Color(223, 75, 0).copy(alpha = 0.5f),
+//            fontWeight = FontWeight.Bold,
+//        )
         LazyColumn(
 
             modifier = Modifier
