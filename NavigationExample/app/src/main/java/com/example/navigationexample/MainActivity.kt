@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +24,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Snackbar
@@ -58,13 +58,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.MaterialTheme
 import com.example.jetpackcomposescaffoldlayout.Navigations
 import com.example.navigationexample.presentation.navigation.NavHostView
+import com.example.navigationexample.presentation.utils.bottomBorder
 import com.example.navigationexample.presentation.viewmodels.ApartmentViewModel
 import com.example.navigationexample.presentation.viewmodels.BalanceViewModel
 import com.example.navigationexample.presentation.viewmodels.CalendarViewModel
 import com.example.navigationexample.presentation.viewmodels.ClientViewModel
-import com.example.navigationexample.ui.theme.RentierTheme
+import com.example.navigationexample.ui.theme.RentieTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -83,30 +85,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-//            val owner = LocalViewModelStoreOwner.current
-//            owner?.let {
-//                val viewModel: AppatmentViewModel = viewModel(
-//                    it,
-//                    "MainViewModel",
-//                    AppatmentViewModelFactory(
-//                        LocalContext.current.applicationContext
-//                                as Application
-//                    )
-//                )
-//            }
+            RentieTheme {
 
-            RentierTheme {
-
-                Surface(color = MaterialTheme.colors.background) {
-                    var toolbarTitle by remember {
-                        mutableStateOf("Home")
+                Surface(color = MaterialTheme.colorScheme.primaryContainer) {
+                    val toolbarTitle by remember {
+                        mutableStateOf("Моя недвижимость")
                     }
                     val scaffoldState =
                         rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
                     val scope = rememberCoroutineScope()
 
                     Scaffold(
-                        modifier = Modifier.background(Color.White),
+                        modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer),
                         scaffoldState = scaffoldState,
                         topBar = {
                             AppToolbar(
@@ -123,7 +113,7 @@ class MainActivity : ComponentActivity() {
                         isFloatingActionButtonDocked = false,
                         floatingActionButtonPosition = FabPosition.End,
                         floatingActionButton = { FloatingActionButtonSample(scaffoldState) }
-                    ){
+                    ) {
                         NavHostView(
                             viewModelApartment = viewModelApartment,
                             viewModelClient = viewModelClient,
@@ -131,12 +121,7 @@ class MainActivity : ComponentActivity() {
                             viewModelBalance = viewModelBalance,
                         )
                     }
-
                 }
-
-
-
-
             }
         }
     }
@@ -151,11 +136,15 @@ fun TopAppBarSample() {
     AppToolbar(scaffoldState = scaffoldState, scope = scope, toolbarTitle = "Home")
 }
 
+
+
+
 @Composable
 fun AppToolbar(scaffoldState: ScaffoldState, scope: CoroutineScope, toolbarTitle: String) {
     TopAppBar(
         title = { Text(text = toolbarTitle) },
-        modifier = Modifier.background(Color(0xFF008800)),
+        modifier = Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+            .bottomBorder(1.dp, MaterialTheme.colorScheme.primary),
         navigationIcon = {
             Icon(
                 Icons.Filled.Menu,
@@ -169,9 +158,9 @@ fun AppToolbar(scaffoldState: ScaffoldState, scope: CoroutineScope, toolbarTitle
         actions = {
             val context = LocalContext.current
             Icon(
-                Icons.Filled.Settings,
-                contentDescription = "Setting", modifier = Modifier.clickable {
-                    Toast.makeText(context, "Open Setting", Toast.LENGTH_SHORT).show()
+                Icons.Filled.Search,
+                contentDescription = "Search", modifier = Modifier.clickable {
+                    Toast.makeText(context, "Searching", Toast.LENGTH_SHORT).show()
                 }
             )
         }
@@ -184,13 +173,19 @@ fun DrawerContentSample() {
     val scaffoldState =
         rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
     val scope = rememberCoroutineScope()
-    DrawerContent(scaffoldState,scope)
+    DrawerContent(scaffoldState, scope)
 }
 
 @Composable
 fun DrawerContent(scaffoldState: ScaffoldState, scope: CoroutineScope) {
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .border(1.dp, MaterialTheme.colorScheme.primary)
+    ) {
+
         Image(
             painter = painterResource(id = R.drawable.baseline_home_work_24),
             modifier = Modifier
@@ -199,15 +194,62 @@ fun DrawerContent(scaffoldState: ScaffoldState, scope: CoroutineScope) {
         )
 
         Spacer(modifier = Modifier.padding(4.dp))
-        Text(
-            text = "Velmurugan",
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.align(
-                Alignment.CenterHorizontally
-            )
-        )
+        Text(text = "Валюта",
+            Modifier
+                .fillMaxWidth()
+                .background(Color.Gray)
+                .padding(8.dp, 4.dp)
+                .clickable {
+                    scope.launch {
+                        scaffoldState.drawerState.close()
+                    }
+                })
         Spacer(modifier = Modifier.padding(4.dp))
-        Text(text = "User1",
+        Text(text = "Напоминания",
+            Modifier
+                .fillMaxWidth()
+                .background(Color.Gray)
+                .padding(8.dp, 4.dp)
+                .clickable {
+                    scope.launch {
+                        scaffoldState.drawerState.close()
+                    }
+                })
+        Spacer(modifier = Modifier.padding(4.dp))
+        Text(text = "Резервная копия",
+            Modifier
+                .fillMaxWidth()
+                .background(Color.Gray)
+                .padding(8.dp, 4.dp)
+                .clickable {
+                    scope.launch {
+                        scaffoldState.drawerState.close()
+                    }
+                })
+        Spacer(modifier = Modifier.padding(4.dp))
+        Text(text = "Рассылка",
+            Modifier
+                .fillMaxWidth()
+                .background(Color.Gray)
+                .padding(8.dp, 4.dp)
+                .clickable {
+                    scope.launch {
+                        scaffoldState.drawerState.close()
+                    }
+                })
+        Spacer(modifier = Modifier.padding(4.dp))
+        Text(text = "Настройки",
+            Modifier
+                .fillMaxWidth()
+                .background(Color.Gray)
+                .padding(8.dp, 4.dp)
+                .clickable {
+                    scope.launch {
+                        scaffoldState.drawerState.close()
+                    }
+                })
+        Spacer(modifier = Modifier.padding(4.dp))
+        Text(text = "Связаться с разработчиком",
             Modifier
                 .fillMaxWidth()
                 .background(Color.Gray)
@@ -227,7 +269,7 @@ fun DrawerContent(scaffoldState: ScaffoldState, scope: CoroutineScope) {
 fun BottomAppBar() {
     data class MenuItem(val title: String, val icon: ImageVector)
 
-    fun getMenuList() : List<MenuItem> {
+    fun getMenuList(): List<MenuItem> {
         val menuItems = mutableListOf<MenuItem>()
         menuItems.add(MenuItem(Navigations.HOME.name, Icons.Filled.Home))
         menuItems.add(MenuItem(Navigations.SEARCH.name, Icons.Filled.Search))
@@ -243,6 +285,7 @@ fun BottomAppBar() {
             BottomNavigationItem(
                 selected = bottomMenu.title == "Home",
                 onClick = {
+
                 },
                 icon = {
                     Icon(
@@ -263,7 +306,7 @@ fun MySnackHost(state: SnackbarHostState) {
             Snackbar(
                 modifier = Modifier
                     .padding(8.dp)
-                    .background(Color.Black, RoundedCornerShape(8.dp)),
+                    .background(Color.Gray, RoundedCornerShape(8.dp)),
                 action = {
                     Text(
                         text = "HIDE",
@@ -274,7 +317,7 @@ fun MySnackHost(state: SnackbarHostState) {
                             },
                         style = TextStyle(
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colors.primary,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 18.sp
                         )
                     )
@@ -297,6 +340,7 @@ fun FloatingActionButtonSample(scaffoldState: ScaffoldState) {
             )) {
                 SnackbarResult.Dismissed ->
                     Log.d("TAB", "Dismissed")
+
                 SnackbarResult.ActionPerformed ->
                     Log.d("TAB", "Action!")
             }

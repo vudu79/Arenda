@@ -18,39 +18,39 @@ fun NavigationGraph(
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
     viewModelBalance: BalanceViewModel,
-    appatmentName: String
+    apartmentName: String
 ) {
-    NavHost(clientNavController, startDestination = BottomNavItems.Clients.screen_route) {
-        composable(BottomNavItems.Clients.screen_route) {
+    NavHost(clientNavController, startDestination = BottomNavItems.Clients.screenRoute) {
+        composable(BottomNavItems.Clients.screenRoute) {
             ClientsScreen(
                 mainNavController = mainNavController,
                 viewModelClient = viewModelClient,
                 viewModelAppatment = viewModelApartment,
                 viewModelCalendar = viewModelCalendar,
-                appatmentName = appatmentName
+                appatmentName = apartmentName
             )
         }
-        composable(BottomNavItems.Calendar.screen_route) {
+        composable(BottomNavItems.Calendar.screenRoute) {
             CalendarScreen(
                 navController = mainNavController,
                 viewModelCalendar = viewModelCalendar,
                 viewModelClient = viewModelClient,
-                appatmentName = appatmentName
+                appatmentName = apartmentName
             )
         }
-        composable(BottomNavItems.Ballance.screen_route) {
+        composable(BottomNavItems.Ballance.screenRoute) {
             viewModelBalance.getAllApartments()
             ApartmentBalanceScreen(
 //                navController = mainNavController,
 //                viewModelClient = viewModelClient,
 //                viewModelCalendar = viewModelCalendar,
-                apartmentName = appatmentName,
+                apartmentName = apartmentName,
                 viewModelApartment = viewModelApartment,
                 viewModelBalance = viewModelBalance,
                 mainNavController = mainNavController
             )
         }
-        composable(BottomNavItems.Appatments.screen_route) {
+        composable(BottomNavItems.Appatments.screenRoute) {
             AppartmentsScreen(
                 mainNavController = mainNavController,
                 viewModelAppatment = viewModelApartment,

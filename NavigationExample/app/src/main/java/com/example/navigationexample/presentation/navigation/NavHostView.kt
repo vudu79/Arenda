@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.navigationexample.presentation.navigation.batton_navigation.AppatmentFinanceScreen
+import com.example.navigationexample.presentation.navigation.batton_navigation.ApartmentFinanceScreen
 import com.example.navigationexample.presentation.screens.*
 import com.example.navigationexample.presentation.viewmodels.ApartmentViewModel
 import com.example.navigationexample.presentation.viewmodels.BalanceViewModel
@@ -52,12 +52,12 @@ fun NavHostView(
         ) { navBackStackEntry ->
             val appatment_name = navBackStackEntry.arguments?.getString("apartment_name")
             appatment_name?.let {
-                AppatmentFinanceScreen(
+                ApartmentFinanceScreen(
                     mainNavController = mainNavController,
                     viewModelApartment = viewModelApartment,
                     viewModelClient = viewModelClient,
                     viewModelCalendar = viewModelCalendar,
-                    appatmentName = appatment_name,
+                    apartmentName = appatment_name,
                     viewModelBalance = viewModelBalance
                 )
             }
