@@ -62,6 +62,11 @@ import com.example.navigationexample.presentation.viewmodels.CalendarViewModel
 import com.example.navigationexample.presentation.viewmodels.ClientViewModel
 import kotlinx.coroutines.launch
 
+data class ScaffoldSet(
+    var isTopBarActive: Boolean = false,
+    var isBottomBarActive: Boolean = false,
+    var isFABActive: Boolean = false
+)
 
 @Composable
 fun MyScaffoldLayout(

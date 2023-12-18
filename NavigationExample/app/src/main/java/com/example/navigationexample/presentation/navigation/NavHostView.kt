@@ -1,13 +1,24 @@
 package com.example.navigationexample.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.navigationexample.presentation.navigation.batton_navigation.ApartmentFinanceScreen
-import com.example.navigationexample.presentation.screens.*
+import com.example.navigationexample.presentation.screens.AddApartmentScreen
+import com.example.navigationexample.presentation.screens.AddClientScreen
+import com.example.navigationexample.presentation.screens.AddScoresScreen
+import com.example.navigationexample.presentation.screens.ApartmentsScreen
+import com.example.navigationexample.presentation.screens.CharsScreen
+import com.example.navigationexample.presentation.screens.ClientDitailsScreen
+import com.example.navigationexample.presentation.screens.ClientPaymentScreen
+import com.example.navigationexample.presentation.screens.ClientUpdateScreen
+import com.example.navigationexample.presentation.screens.LaunchScreen
+import com.example.navigationexample.presentation.screens.SetDatePeriodScreen
 import com.example.navigationexample.presentation.viewmodels.ApartmentViewModel
 import com.example.navigationexample.presentation.viewmodels.BalanceViewModel
 import com.example.navigationexample.presentation.viewmodels.CalendarViewModel
@@ -19,11 +30,13 @@ fun NavHostView(
     viewModelApartment: ApartmentViewModel,
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
-    viewModelBalance: BalanceViewModel
+    viewModelBalance: BalanceViewModel,
 ) {
     val mainNavController = rememberNavController()
+
     NavHost(navController = mainNavController, startDestination = Routs.home) {
         composable(Routs.home) {
+            viewModelApartment.setScaffoldSettings(top = false, bottom = false, fab = false)
             LaunchScreen(
                 mainNavController,
                 viewModelApartment = viewModelApartment,
@@ -31,6 +44,7 @@ fun NavHostView(
         }
 
         composable(Routs.allApartmentsScreen) {
+            viewModelApartment.setScaffoldSettings(top = true, bottom = false, fab = true)
             ApartmentsScreen(
                 mainNavController,
                 viewModelApartment = viewModelApartment,
@@ -42,7 +56,7 @@ fun NavHostView(
         composable(Routs.addAppatmentScreen) {
             AddApartmentScreen(
                 navController = mainNavController,
-                apartmentViewModel= viewModelApartment,
+                apartmentViewModel = viewModelApartment,
                 onHome = { mainNavController.navigate(Routs.home) })
 
         }
@@ -165,8 +179,6 @@ fun NavHostView(
             AddScoresScreen(
             )
         }
-
-
 
 
 //        composable("settings") {

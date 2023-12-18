@@ -8,9 +8,11 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.navigationexample.presentation.navigation.Routs
 import com.example.navigationexample.presentation.viewmodels.ApartmentViewModel
 

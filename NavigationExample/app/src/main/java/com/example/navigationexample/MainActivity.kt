@@ -76,6 +76,7 @@ class MainActivity : ComponentActivity() {
     private val viewModelCalendar: CalendarViewModel by viewModels()
     private val viewModelBalance: BalanceViewModel by viewModels()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -103,10 +104,9 @@ fun MyScaffoldLayout(
     viewModelApartment: ApartmentViewModel,
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
-    viewModelBalance: BalanceViewModel
+    viewModelBalance: BalanceViewModel,
 ) {
-    val isTopBarActive = false
-    val isBottomBarActive = false
+
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
     LocalContext.current.applicationContext
@@ -158,7 +158,7 @@ fun MyScaffoldLayout(
         // add scaffold here
         Scaffold(
             topBar = {
-                if (isTopBarActive) {
+                if (viewModelApartment.scaffoldSettings.value!!.isTopBarActive) {
                     MyTopAppBar {
                         coroutineScope.launch {
                             drawerState.open()
@@ -168,12 +168,17 @@ fun MyScaffoldLayout(
             },
 
             bottomBar = {
-                if (isBottomBarActive) {
+                if (viewModelApartment.scaffoldSettings.value!!.isBottomBarActive) {
                     MyBottomBar(contextForToast = contextForToast)
                 }
             },
 
-            floatingActionButton = { MyFAB(contextForToast = contextForToast) },
+            floatingActionButton = {
+                if (viewModelApartment.scaffoldSettings.value!!.isBottomBarActive) {
+                    MyFAB(contextForToast = contextForToast)
+                }
+            },
+
             floatingActionButtonPosition = FabPosition.End,
             snackbarHost = { SnackbarHost(snackbarHostState) }
         ) { paddingValues ->
