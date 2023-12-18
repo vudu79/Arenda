@@ -14,7 +14,7 @@ import com.example.navigationexample.presentation.viewmodels.ClientViewModel
 fun NavigationGraph(
     mainNavController: NavHostController,
     clientNavController: NavHostController,
-    viewModelApartment: ApartmentViewModel,
+    viewModelApartment:ApartmentViewModel,
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
     viewModelBalance: BalanceViewModel,
@@ -34,6 +34,7 @@ fun NavigationGraph(
             CalendarScreen(
                 navController = mainNavController,
                 viewModelCalendar = viewModelCalendar,
+                viewModelApartment = viewModelApartment,
                 viewModelClient = viewModelClient,
                 appatmentName = appatmentName
             )
@@ -51,9 +52,9 @@ fun NavigationGraph(
             )
         }
         composable(BottomNavItems.Appatments.screen_route) {
-            AppartmentsScreen(
+            ApartmentsScreen(
                 mainNavController = mainNavController,
-                viewModelAppatment = viewModelApartment,
+                viewModelApartment = viewModelApartment,
                 viewModelClient = viewModelClient,
                 viewModelCalendar = viewModelCalendar
             )

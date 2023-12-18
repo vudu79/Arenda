@@ -45,7 +45,7 @@ fun ApartmentBalanceScreen(
 //    viewModelClient: ClientViewModel,
 //    clientPhone: String
 ) {
-
+    val currentApartment = viewModelApartment.currentApartment.value!!.name
     val gradientColors = listOf(Color(0xFFDF4B00), Color(0xFF292929))
 
     val tabIndexPeriod = viewModelBalance.tabIndexPeriod.observeAsState()
@@ -54,7 +54,7 @@ fun ApartmentBalanceScreen(
     val itemsApartments by viewModelBalance.allApartments.observeAsState(listOf())
 //    val currentApart by viewModelBalance.currentApartment.observeAsState()
     val selectedApartments: MutableState<List<String>> =
-        remember { mutableStateOf(listOf(apartmentName)) }
+        remember { mutableStateOf(listOf(currentApartment)) }
 
     Log.d("MyTag", "Лист -  $itemsApartments")
 //    Log.d("MyTag", "Текуший -  ${currentApart}")

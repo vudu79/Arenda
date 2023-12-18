@@ -23,6 +23,7 @@ fun ApartmentFinanceScreen(
     viewModelBalance: BalanceViewModel,
     apartmentName: String
 ) {
+    val currentApartment = viewModelApartment.currentApartment
     val clientNavController = rememberNavController()
     val navBackStackEntry by mainNavController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -41,7 +42,7 @@ fun ApartmentFinanceScreen(
                 viewModelClient = viewModelClient,
                 viewModelCalendar =viewModelCalendar,
                 viewModelBalance = viewModelBalance,
-                appatmentName=apartmentName
+                appatmentName=currentApartment.value!!.name
             )
         }
     }

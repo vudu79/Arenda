@@ -31,9 +31,9 @@ fun NavHostView(
         }
 
         composable(Routs.allApartmentsScreen) {
-            AppartmentsScreen(
+            ApartmentsScreen(
                 mainNavController,
-                viewModelAppatment = viewModelApartment,
+                viewModelApartment = viewModelApartment,
                 viewModelClient = viewModelClient,
                 viewModelCalendar = viewModelCalendar
             )

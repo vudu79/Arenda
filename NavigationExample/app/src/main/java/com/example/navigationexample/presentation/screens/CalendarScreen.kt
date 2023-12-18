@@ -31,6 +31,7 @@ import com.example.navigationexample.presentation.utils.StatusBarColorUpdateEffe
 import com.example.navigationexample.presentation.utils.rememberFirstCompletelyVisibleMonth
 import com.example.navigationexample.presentation.viewmodels.CalendarViewModel
 import com.example.navigationexample.presentation.viewmodels.ClientViewModel
+import com.example.navigationexample.presentation.viewmodels.ApartmentViewModel
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.*
@@ -53,11 +54,14 @@ fun CalendarScreen(
     navController: NavHostController,
     viewModelCalendar: CalendarViewModel,
     viewModelClient: ClientViewModel,
+    viewModelApartment: ApartmentViewModel,
     appatmentName: String
 ) {
 //    LaunchedEffect(Unit) {
-    viewModelCalendar.updateApartmentPlanedDays(appatmentName)
-    viewModelCalendar.updateDaysMapForCalendar(appatmentName)
+    val currentApartment = viewModelApartment.currentApartment.value!!.name
+
+    viewModelCalendar.updateApartmentPlanedDays(currentApartment)
+    viewModelCalendar.updateDaysMapForCalendar(currentApartment)
 //    }
 
     val localDateClientMap: MutableMap<LocalDate, MutableSet<ClientMonk>> by viewModelCalendar.localDayClientMocKMap.collectAsState(

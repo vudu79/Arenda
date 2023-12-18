@@ -1,12 +1,9 @@
-package com.example.navigationexample
+@file:Suppress("UNUSED_EXPRESSION")
 
+package com.example.navigationexample.presentation.screens.common
 
 import android.content.Context
-import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
@@ -40,7 +38,6 @@ import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -56,46 +53,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.navigationexample.presentation.navigation.NavHostView
 import com.example.navigationexample.presentation.navigation.batton_navigation.BottomNavItems
-import com.example.navigationexample.presentation.utils.bottomBorder
 import com.example.navigationexample.presentation.viewmodels.ApartmentViewModel
 import com.example.navigationexample.presentation.viewmodels.BalanceViewModel
 import com.example.navigationexample.presentation.viewmodels.CalendarViewModel
 import com.example.navigationexample.presentation.viewmodels.ClientViewModel
-import com.example.navigationexample.ui.theme.RentierTheme
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
-@AndroidEntryPoint
-class MainActivity : ComponentActivity() {
-    private val viewModelApartment: ApartmentViewModel by viewModels()
-    private val viewModelClient: ClientViewModel by viewModels()
-    private val viewModelCalendar: CalendarViewModel by viewModels()
-    private val viewModelBalance: BalanceViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            RentierTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.primaryContainer
-                ) {
-
-                    MyScaffoldLayout(
-                        viewModelApartment = viewModelApartment,
-                        viewModelClient = viewModelClient,
-                        viewModelCalendar = viewModelCalendar,
-                        viewModelBalance = viewModelBalance,
-                    )
-                }
-            }
-        }
-    }
-}
 
 
 @Composable
@@ -103,10 +68,9 @@ fun MyScaffoldLayout(
     viewModelApartment: ApartmentViewModel,
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
-    viewModelBalance: BalanceViewModel
+    viewModelBalance: BalanceViewModel,
+    scaffoldContent: @Composable () -> Unit
 ) {
-    val isTopBarActive = false
-    val isBottomBarActive = false
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
     LocalContext.current.applicationContext
@@ -118,7 +82,6 @@ fun MyScaffoldLayout(
     var clickCount by remember {
         mutableStateOf(0) // or use mutableStateOf(0)
     }
-
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -158,21 +121,14 @@ fun MyScaffoldLayout(
         // add scaffold here
         Scaffold(
             topBar = {
-                if (isTopBarActive) {
-                    MyTopAppBar {
-                        coroutineScope.launch {
-                            drawerState.open()
-                        }
+                MyTopAppBar {
+                    coroutineScope.launch {
+                        drawerState.open()
                     }
                 }
             },
-
             bottomBar = {
-                if (isBottomBarActive) {
-                    MyBottomBar(contextForToast = contextForToast)
-                }
-            },
-
+                MyBottomBar(contextForToast = contextForToast) },
             floatingActionButton = { MyFAB(contextForToast = contextForToast) },
             floatingActionButtonPosition = FabPosition.End,
             snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -208,12 +164,7 @@ fun MyScaffoldLayout(
 
                 )
 
-                NavHostView(
-                    viewModelApartment = viewModelApartment,
-                    viewModelClient = viewModelClient,
-                    viewModelCalendar = viewModelCalendar,
-                    viewModelBalance = viewModelBalance,
-                )
+                scaffoldContent
 
                 Divider(
                     modifier =
@@ -299,25 +250,22 @@ fun MyBottomBar(contextForToast: Context) {
 
     NavigationBar(
         modifier = Modifier
-            .fillMaxHeight(0.13f),
+            .fillMaxHeight(0.13f)
+        ,
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         contentColor = MaterialTheme.colorScheme.primary,
     ) {
         bottomBarItemsList.forEachIndexed { index, item ->
             NavigationBarItem(
-                icon = {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = "Open Navigation Items"
-                    )
+                icon = { Icon(
+                    imageVector = item.icon,
+                    contentDescription = "Open Navigation Items"
+                )
                 },
-                label = {
-                    Text(
-                        text = item.title,
+                label = { Text(text = item.title,
 //                    modifier = Modifier
 //                        .padding(top = 10.dp)
-                    )
-                },
+                ) },
                 selected = selectedItem == index,
                 onClick = {
                     selectedItem = index
@@ -335,8 +283,6 @@ fun MyBottomBar(contextForToast: Context) {
     }
 }
 
-data class BottomBarItem(val icon: ImageVector, val name: String)
-
 @Composable
 fun MyFAB(contextForToast: Context) {
     FloatingActionButton(
@@ -349,26 +295,3 @@ fun MyFAB(contextForToast: Context) {
     }
 }
 
-
-//@AndroidEntryPoint
-//class MainActivity : ComponentActivity() {
-//    private val viewModelApartment: ApartmentViewModel by viewModels()
-//    private val viewModelClient: ClientViewModel by viewModels()
-//    private val viewModelCalendar: CalendarViewModel by viewModels()
-//    private val viewModelBalance: BalanceViewModel by viewModels()
-//
-//
-//    NavHostView(
-//    viewModelApartment = viewModelApartment,
-//    viewModelClient = viewModelClient,
-//    viewModelCalendar = viewModelCalendar,
-//    viewModelBalance = viewModelBalance,
-//    )
-//
-
-//@Preview
-//@Composable
-//fun MyScaffoldLayoutPrew(){
-//    MyScaffoldLayout()
-//
-//}

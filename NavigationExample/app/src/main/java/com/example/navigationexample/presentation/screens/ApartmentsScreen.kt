@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,26 +32,20 @@ import com.example.navigationexample.presentation.viewmodels.CalendarViewModel
 import com.example.navigationexample.presentation.viewmodels.ClientViewModel
 
 
+
+
+
+
+
+
 @Composable
-fun AppartmentsScreen(
+fun ApartmentsScreen(
     mainNavController: NavHostController,
-    viewModelAppatment: ApartmentViewModel,
+    viewModelApartment: ApartmentViewModel,
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel
 ) {
-    val allApartments by viewModelAppatment.allApartments.observeAsState(listOf())
-
-//    Image(
-//        painter = painterResource(
-//            id = R.drawable.sky
-//        ),
-//        contentDescription = "im1",
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .alpha(0.5f),
-//        contentScale = ContentScale.FillBounds
-//    )
-
+    val allApartments by viewModelApartment.allApartments.observeAsState(listOf())
 
     Column(
         modifier = Modifier
@@ -60,16 +53,7 @@ fun AppartmentsScreen(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-//        Text(
-//            "Арендуемые объекты",
-//            modifier = Modifier.padding(10.dp),
-//            fontSize = 22.sp,
-//            color = Color(223, 75, 0).copy(alpha = 0.5f),
-//            fontWeight = FontWeight.Bold,
-//        )
         LazyColumn(
-
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.87f)
@@ -78,16 +62,15 @@ fun AppartmentsScreen(
         ) {
             items(allApartments) { item ->
 //                // Log.d("myTag", allAppatment.toString())
-                AppatmentItemRow(
+                ApartmentItemRow(
                     apartmentItem = item,
                     navcontroller = mainNavController,
-                    viewModelAppatment = viewModelAppatment,
+                    viewModelAppatment = viewModelApartment,
                     viewModelCalendar = viewModelCalendar,
                     viewModelClient = viewModelClient
                 )
             }
         }
-
 
         IconButton(onClick = {
             mainNavController.navigate(Routs.addAppatmentScreen)
@@ -102,44 +85,13 @@ fun AppartmentsScreen(
                 tint = Color(223, 75, 0)
 
             )
-
         }
-
-
-//        Button(
-//            onClick = {
-//                mainNavController.navigate(Routs.addAppatmentScreen)
-//            },
-//            shape = RoundedCornerShape(30.dp),
-//            modifier = Modifier
-//                .fillMaxWidth(0.6f)
-//                .fillMaxHeight(),
-//            colors = ButtonDefaults.buttonColors(backgroundColor = Color(223, 75, 0))
-//        ) {
-//            Text(text = "Добавить объект")
-//        }
-
-
-//        Button(
-//            onClick = {
-//                navController.navigate(Routs.addAppatmentScreen)
-//            }, modifier = Modifier
-//                .fillMaxWidth()
-//                .fillMaxHeight()
-//                .padding(6.dp)
-//        ) {
-//            Text("Добавить объект")
-//        }
-
-
     }
-
 }
-
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun AppatmentItemRow(
+fun ApartmentItemRow(
     apartmentItem: Apartment,
     navcontroller: NavController,
     viewModelAppatment: ApartmentViewModel,
@@ -267,5 +219,4 @@ fun AppatmentItemRow(
             message = "Объект недвижимости будет безвозвратно удален. Вы уверены?"
         )
     }
-
 }
