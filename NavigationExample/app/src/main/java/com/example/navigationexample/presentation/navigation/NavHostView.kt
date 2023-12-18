@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.navigationexample.presentation.navigation.batton_navigation.AppatmentFinanceScreen
+import com.example.navigationexample.presentation.navigation.batton_navigation.BottomNavItems
 import com.example.navigationexample.presentation.screens.*
 import com.example.navigationexample.presentation.viewmodels.ApartmentViewModel
 import com.example.navigationexample.presentation.viewmodels.BalanceViewModel
@@ -166,7 +167,43 @@ fun NavHostView(
             )
         }
 
-
+        composable(BottomNavItems.Clients.screen_route) {
+            ClientsScreen(
+                mainNavController = mainNavController,
+                viewModelClient = viewModelClient,
+                viewModelAppatment = viewModelApartment,
+                viewModelCalendar = viewModelCalendar,
+                appatmentName = appatmentName
+            )
+        }
+        composable(BottomNavItems.Calendar.screen_route) {
+            CalendarScreen(
+                navController = mainNavController,
+                viewModelCalendar = viewModelCalendar,
+                viewModelClient = viewModelClient,
+                appatmentName = appatmentName
+            )
+        }
+        composable(BottomNavItems.Ballance.screen_route) {
+            viewModelBalance.getAllApartments()
+            ApartmentBalanceScreen(
+//                navController = mainNavController,
+//                viewModelClient = viewModelClient,
+//                viewModelCalendar = viewModelCalendar,
+                apartmentName = appatmentName,
+                viewModelApartment = viewModelApartment,
+                viewModelBalance = viewModelBalance,
+                mainNavController = mainNavController
+            )
+        }
+        composable(BottomNavItems.Appatments.screen_route) {
+            AppartmentsScreen(
+                mainNavController = mainNavController,
+                viewModelAppatment = viewModelApartment,
+                viewModelClient = viewModelClient,
+                viewModelCalendar = viewModelCalendar
+            )
+        }
 
 
 //        composable("settings") {

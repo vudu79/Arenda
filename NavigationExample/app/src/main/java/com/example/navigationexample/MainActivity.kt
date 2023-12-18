@@ -202,6 +202,7 @@ fun MyScaffoldLayout(
                     viewModelCalendar = viewModelCalendar,
                     viewModelBalance = viewModelBalance,
                 )
+
                 Divider(
                     modifier =
                     Modifier
