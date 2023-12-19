@@ -59,6 +59,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.navigationexample.presentation.navigation.NavHostView
 import com.example.navigationexample.presentation.navigation.batton_navigation.BottomNavItems
 import com.example.navigationexample.presentation.utils.bottomBorder
@@ -111,6 +113,7 @@ fun MyScaffoldLayout(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
     LocalContext.current.applicationContext
+    val mainNavController = rememberNavController()
 
     val drawerItemList = prepareNavigationDrawerItems()
     val selectedItem = remember { mutableStateOf(drawerItemList[0]) }
@@ -170,7 +173,10 @@ fun MyScaffoldLayout(
 
             bottomBar = {
                 if (scaffoldSet.value.isBottomBarActive) {
-                    MyBottomBar(contextForToast = contextForToast)
+                    MyBottomBar(
+                        contextForToast = contextForToast,
+                        mainNavController = mainNavController
+                    )
                 }
             },
 
@@ -219,6 +225,7 @@ fun MyScaffoldLayout(
                     viewModelClient = viewModelClient,
                     viewModelCalendar = viewModelCalendar,
                     viewModelBalance = viewModelBalance,
+                    mainNavController = mainNavController
                 )
 
                 Divider(
@@ -291,7 +298,9 @@ data class NavigationDrawerData(val label: String, val icon: ImageVector)
 
 
 @Composable
-fun MyBottomBar(contextForToast: Context) {
+fun MyBottomBar(
+    contextForToast: Context, mainNavController: NavHostController
+) {
 
     val bottomBarItemsList = listOf(
         BottomNavItems.Clients,
@@ -326,7 +335,8 @@ fun MyBottomBar(contextForToast: Context) {
                 selected = selectedItem == index,
                 onClick = {
                     selectedItem = index
-                    Toast.makeText(contextForToast, item.title, Toast.LENGTH_SHORT).show()
+                    mainNavController.navigate(item.screen_route)
+//                    Toast.makeText(contextForToast, item.title, Toast.LENGTH_SHORT).show()
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedTextColor = MaterialTheme.colorScheme.onPrimary,

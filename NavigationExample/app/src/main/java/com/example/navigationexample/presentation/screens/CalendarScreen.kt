@@ -55,7 +55,6 @@ fun CalendarScreen(
     viewModelCalendar: CalendarViewModel,
     viewModelClient: ClientViewModel,
     viewModelApartment: ApartmentViewModel,
-    appatmentName: String
 ) {
 //    LaunchedEffect(Unit) {
     val currentApartment = viewModelApartment.currentApartment.value!!.name

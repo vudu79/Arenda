@@ -53,9 +53,8 @@ fun ClientsScreen(
     viewModelClient: ClientViewModel,
     viewModelAppatment: ApartmentViewModel,
     viewModelCalendar: CalendarViewModel,
-    appatmentName: String
 ) {
-    val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
+    val currentApartment by viewModelAppatment.currentApartment.observeAsState()
     val apartmentClients by viewModelClient.allApartmentClients.observeAsState(listOf())
     val isLoading: Boolean by viewModelClient.isLoadingForUpdateClient
 
@@ -69,7 +68,7 @@ fun ClientsScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Клиенты для ${currentAppatment?.name ?: "_"}",
+                text = "Клиенты для ${currentApartment?.name ?: "_"}",
                 modifier = Modifier.padding(top = 5.dp, bottom = 10.dp),
                 fontSize = 20.sp,
                 color = Color(223, 75, 0)
@@ -92,7 +91,7 @@ fun ClientsScreen(
 
             IconButton(onClick = {
                 viewModelClient.resetClientStateForValidation()
-                mainNavController.navigate(route = "${Routs.addClientScreen}/$appatmentName")
+                mainNavController.navigate(route = Routs.addClientScreen)
             })
             {
                 Icon(

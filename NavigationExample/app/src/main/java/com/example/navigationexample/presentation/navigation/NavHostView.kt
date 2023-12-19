@@ -1,22 +1,24 @@
 package com.example.navigationexample.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.navigationexample.presentation.navigation.batton_navigation.ApartmentFinanceScreen
+import com.example.navigationexample.presentation.navigation.batton_navigation.BottomNavItems
 import com.example.navigationexample.presentation.screens.AddApartmentScreen
 import com.example.navigationexample.presentation.screens.AddClientScreen
 import com.example.navigationexample.presentation.screens.AddScoresScreen
+import com.example.navigationexample.presentation.screens.ApartmentBalanceScreen
 import com.example.navigationexample.presentation.screens.ApartmentsScreen
-import com.example.navigationexample.presentation.screens.CharsScreen
+import com.example.navigationexample.presentation.screens.CalendarScreen
 import com.example.navigationexample.presentation.screens.ClientDitailsScreen
 import com.example.navigationexample.presentation.screens.ClientPaymentScreen
 import com.example.navigationexample.presentation.screens.ClientUpdateScreen
+import com.example.navigationexample.presentation.screens.ClientsScreen
 import com.example.navigationexample.presentation.screens.LaunchScreen
 import com.example.navigationexample.presentation.screens.SetDatePeriodScreen
 import com.example.navigationexample.presentation.viewmodels.ApartmentViewModel
@@ -31,8 +33,9 @@ fun NavHostView(
     viewModelClient: ClientViewModel,
     viewModelCalendar: CalendarViewModel,
     viewModelBalance: BalanceViewModel,
-) {
-    val mainNavController = rememberNavController()
+    mainNavController: NavHostController,
+
+    ) {
 
     NavHost(navController = mainNavController, startDestination = Routs.home) {
         composable(Routs.home) {
@@ -54,7 +57,7 @@ fun NavHostView(
         }
 
         composable(Routs.addAppatmentScreen) {
-            viewModelApartment.setScaffoldSettings(top = true, bottom = false, fab = false)
+            viewModelApartment.setScaffoldSettings(top = true, bottom = false, fab = true)
 
             AddApartmentScreen(
                 navController = mainNavController,
@@ -68,6 +71,8 @@ fun NavHostView(
         ) { navBackStackEntry ->
             val appatment_name = navBackStackEntry.arguments?.getString("apartment_name")
             appatment_name?.let {
+                viewModelApartment.setScaffoldSettings(top = true, bottom = true, fab = false)
+
                 ApartmentFinanceScreen(
                     mainNavController = mainNavController,
                     viewModelApartment = viewModelApartment,
@@ -80,15 +85,16 @@ fun NavHostView(
         }
 
         composable(
-            route = "${Routs.addClientScreen}/{apartment_name}"
+            route = Routs.addClientScreen
         ) { navBackStackEntry ->
             val appatment_name = navBackStackEntry.arguments?.getString("apartment_name")
             appatment_name?.let {
+                viewModelApartment.setScaffoldSettings(top = true, bottom = false, fab = false)
+
                 AddClientScreen(
                     navController = mainNavController,
                     viewModelClient = viewModelClient,
                     viewModelAppatment = viewModelApartment,
-                    appatmentName = appatment_name
                 )
             }
         }
@@ -98,6 +104,8 @@ fun NavHostView(
         ) { navBackStackEntry ->
             val appatment_name = navBackStackEntry.arguments?.getString("apartment_name")
             appatment_name?.let {
+                viewModelApartment.setScaffoldSettings(top = true, bottom = true, fab = false)
+
                 SetDatePeriodScreen(
                     navController = mainNavController,
                     viewModelClient = viewModelClient,
@@ -130,6 +138,8 @@ fun NavHostView(
             val arguments = requireNotNull(backStackEntry.arguments)
             arguments.getString("client_phone")?.let { cp ->
                 val clientPhone = cp
+                viewModelApartment.setScaffoldSettings(top = true, bottom = true, fab = false)
+
                 ClientUpdateScreen(
                     mainNavController = mainNavController,
                     viewModelClient = viewModelClient,
@@ -146,6 +156,8 @@ fun NavHostView(
             val arguments = requireNotNull(backStackEntry.arguments)
             arguments.getString("client_phone")?.let { cp ->
                 val clientPhone = cp
+                viewModelApartment.setScaffoldSettings(top = true, bottom = true, fab = false)
+
                 ClientDitailsScreen(
                     mainNavController = mainNavController,
                     viewModelClient = viewModelClient,
@@ -163,6 +175,8 @@ fun NavHostView(
             val arguments = requireNotNull(backStackEntry.arguments)
             arguments.getString("client_phone")?.let { cp ->
                 val clientPhone = cp
+                viewModelApartment.setScaffoldSettings(top = true, bottom = true, fab = false)
+
                 ClientPaymentScreen(
                     mainNavController = mainNavController,
                     viewModelClient = viewModelClient,
@@ -172,16 +186,47 @@ fun NavHostView(
             }
         }
 
-        composable(Routs.chartsScreen) {
-            CharsScreen(
-            )
-        }
 
         composable(Routs.addScoresScreen) {
             AddScoresScreen(
             )
         }
 
+        composable(BottomNavItems.Clients.screen_route) {
+            ClientsScreen(
+                mainNavController = mainNavController,
+                viewModelClient = viewModelClient,
+                viewModelAppatment = viewModelApartment,
+                viewModelCalendar = viewModelCalendar,
+            )
+        }
+        composable(BottomNavItems.Calendar.screen_route) {
+            CalendarScreen(
+                navController = mainNavController,
+                viewModelCalendar = viewModelCalendar,
+                viewModelApartment = viewModelApartment,
+                viewModelClient = viewModelClient,
+                            )
+        }
+        composable(BottomNavItems.Ballance.screen_route) {
+            viewModelBalance.getAllApartments()
+            ApartmentBalanceScreen(
+//                navController = mainNavController,
+//                viewModelClient = viewModelClient,
+//                viewModelCalendar = viewModelCalendar,
+                viewModelApartment = viewModelApartment,
+                viewModelBalance = viewModelBalance,
+                mainNavController = mainNavController
+            )
+        }
+        composable(BottomNavItems.Appatments.screen_route) {
+            ApartmentsScreen(
+                mainNavController = mainNavController,
+                viewModelApartment = viewModelApartment,
+                viewModelClient = viewModelClient,
+                viewModelCalendar = viewModelCalendar
+            )
+        }
 
 //        composable("settings") {
 //            SettingsScreen(

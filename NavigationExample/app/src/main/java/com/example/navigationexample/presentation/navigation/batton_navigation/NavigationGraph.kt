@@ -27,7 +27,6 @@ fun NavigationGraph(
                 viewModelClient = viewModelClient,
                 viewModelAppatment = viewModelApartment,
                 viewModelCalendar = viewModelCalendar,
-                appatmentName = appatmentName
             )
         }
         composable(BottomNavItems.Calendar.screen_route) {
@@ -36,7 +35,6 @@ fun NavigationGraph(
                 viewModelCalendar = viewModelCalendar,
                 viewModelApartment = viewModelApartment,
                 viewModelClient = viewModelClient,
-                appatmentName = appatmentName
             )
         }
         composable(BottomNavItems.Ballance.screen_route) {
@@ -45,7 +43,6 @@ fun NavigationGraph(
 //                navController = mainNavController,
 //                viewModelClient = viewModelClient,
 //                viewModelCalendar = viewModelCalendar,
-                apartmentName = appatmentName,
                 viewModelApartment = viewModelApartment,
                 viewModelBalance = viewModelBalance,
                 mainNavController = mainNavController

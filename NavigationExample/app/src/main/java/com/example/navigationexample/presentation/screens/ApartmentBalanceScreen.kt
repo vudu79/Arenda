@@ -40,7 +40,6 @@ import com.example.navigationexample.presentation.viewmodels.BalanceViewModel
 fun ApartmentBalanceScreen(
     viewModelBalance: BalanceViewModel,
     viewModelApartment: ApartmentViewModel,
-    apartmentName: String,
     mainNavController: NavHostController,
 //    viewModelClient: ClientViewModel,
 //    clientPhone: String

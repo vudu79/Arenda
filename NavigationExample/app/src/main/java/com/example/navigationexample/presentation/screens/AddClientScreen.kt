@@ -49,14 +49,13 @@ fun AddClientScreen(
     navController: NavHostController,
     viewModelClient: ClientViewModel,
     viewModelAppatment: ApartmentViewModel,
-    appatmentName: String,
 ) {
 
 //    val currentAppatment by viewModelClient.currentApartment.observeAsState()
     val focusManager = LocalFocusManager.current
     val state = viewModelClient.validateFormState
     val context = LocalContext.current
-    val currentAppatment by viewModelAppatment.currentApartment.observeAsState()
+    val currentApartment by viewModelAppatment.currentApartment.observeAsState()
     val expanded = remember { mutableStateOf(false) }
     val items = ClientStatus.statusList
     val disabledValue = "B"
@@ -70,7 +69,7 @@ fun AddClientScreen(
                     Toast.makeText(
                         context, "Новый клиент зарегестрирован!", Toast.LENGTH_SHORT
                     ).show()
-                    navController.navigate(route = "${Routs.apartmentFinanceScreen}/$appatmentName")
+                    navController.navigate(route = "${Routs.apartmentFinanceScreen}/$currentApartment")
                 }
                 is ValidatAllFieldsResultEvent.UpdateSuccess -> {
 
@@ -117,7 +116,7 @@ fun AddClientScreen(
                             color = Color(223, 75, 0).copy(alpha = 0.9f)
                         )
                         Text(
-                            text = "объект: \"${currentAppatment?.name ?: "_"}\"",
+                            text = "объект: \"${currentApartment?.name ?: "_"}\"",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(top = 1.dp, bottom = 1.dp),
@@ -408,7 +407,7 @@ fun AddClientScreen(
                             .clickable {
                                 navController.navigate(
                                     route =
-                                    "${Routs.setClientPeriodFromAddClient}/$appatmentName"
+                                    "${Routs.setClientPeriodFromAddClient}/$currentApartment"
                                 )
 //                                viewModel.showDatePickerDialog(context, "in")
 
@@ -756,8 +755,8 @@ fun AddClientScreen(
                         ) {
                             IconButton(modifier = Modifier.padding(end = 80.dp),
                                 onClick = {
-                                    viewModelClient.getApartmentClients(appatmentName)
-                                    navController.navigate("${Routs.apartmentFinanceScreen}/${appatmentName}")
+                                    viewModelClient.getApartmentClients(currentApartment!!.name)
+                                    navController.navigate("${Routs.apartmentFinanceScreen}/${currentApartment}")
                                 })
                             {
                                 Icon(
@@ -770,7 +769,7 @@ fun AddClientScreen(
                             IconButton(
                                 onClick = {
 //                                    // Log.d("myTag", "аппат с представл - $appatmentName")
-                                    viewModelClient.onFormEvent(ValidationFormEvent.onSubmitInsert(appatmentName))
+                                    viewModelClient.onFormEvent(ValidationFormEvent.onSubmitInsert(currentApartment!!.name))
                                 }
                             )
                             {
