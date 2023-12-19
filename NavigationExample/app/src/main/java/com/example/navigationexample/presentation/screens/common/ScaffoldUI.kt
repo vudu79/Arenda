@@ -63,8 +63,8 @@ import com.example.navigationexample.presentation.viewmodels.ClientViewModel
 import kotlinx.coroutines.launch
 
 data class ScaffoldSet(
-    var isTopBarActive: Boolean = false,
-    var isBottomBarActive: Boolean = false,
+    var isTopBarActive: Boolean = true,
+    var isBottomBarActive: Boolean = true,
     var isFABActive: Boolean = false
 )
 

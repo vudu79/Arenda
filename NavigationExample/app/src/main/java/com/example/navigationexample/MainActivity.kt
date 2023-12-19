@@ -46,6 +46,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -118,7 +119,7 @@ fun MyScaffoldLayout(
     var clickCount by remember {
         mutableStateOf(0) // or use mutableStateOf(0)
     }
-
+    var scaffoldSet = viewModelApartment.scaffoldSettings.collectAsState()
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -158,7 +159,7 @@ fun MyScaffoldLayout(
         // add scaffold here
         Scaffold(
             topBar = {
-                if (viewModelApartment.scaffoldSettings.value!!.isTopBarActive) {
+                if (scaffoldSet.value.isTopBarActive) {
                     MyTopAppBar {
                         coroutineScope.launch {
                             drawerState.open()
@@ -168,13 +169,13 @@ fun MyScaffoldLayout(
             },
 
             bottomBar = {
-                if (viewModelApartment.scaffoldSettings.value!!.isBottomBarActive) {
+                if (scaffoldSet.value.isBottomBarActive) {
                     MyBottomBar(contextForToast = contextForToast)
                 }
             },
 
             floatingActionButton = {
-                if (viewModelApartment.scaffoldSettings.value!!.isBottomBarActive) {
+                if (scaffoldSet.value.isBottomBarActive) {
                     MyFAB(contextForToast = contextForToast)
                 }
             },
@@ -237,7 +238,6 @@ fun MyScaffoldLayout(
 @Composable
 fun MyTopAppBar(onNavIconClick: () -> Unit) {
     TopAppBar(
-
         title = {
             Text(
                 textAlign = TextAlign.Center,

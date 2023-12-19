@@ -54,6 +54,8 @@ fun NavHostView(
         }
 
         composable(Routs.addAppatmentScreen) {
+            viewModelApartment.setScaffoldSettings(top = true, bottom = false, fab = false)
+
             AddApartmentScreen(
                 navController = mainNavController,
                 apartmentViewModel = viewModelApartment,
